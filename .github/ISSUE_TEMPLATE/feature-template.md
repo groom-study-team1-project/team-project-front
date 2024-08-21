@@ -16,7 +16,7 @@ assignees: ''
 - [ ] Common Components: 여러 페이지나 기능에서 재사용되는 공통 컴포넌트들
 - [ ] Feature-Specific Components: 특정 기능이나 페이지에만 사용되는 컴포넌트들
 - [ ] Layout Components: 페이지 전체의 레이아웃을 구성하는 컴포넌트들
-- [ ] Pages: 특정 페이지에서 사용되는 컴포넌트들
+- [ ] Pages: 개별 페이지 전체를 구성하는 컴포넌트
 
 ## 작업 상세 내용
 
