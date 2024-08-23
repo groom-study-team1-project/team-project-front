@@ -3,6 +3,7 @@
   justify-content: center;
   position: fixed;
   width: 100%;
+  border: 1px solid #111;
 }
 
 .navbar__inner {
@@ -11,7 +12,6 @@
   align-items: center;
   width: 1440px;
   height: 80px;
-  border: 1px solid #111;
 }
 
 .navbar__logo {
@@ -33,11 +33,10 @@
   margin-right: 20px;
 }
 
-.navbar__login_signup {
+.navbar__button {
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 168px;
   height: 32px;
   border: 1px solid #111;
 }
