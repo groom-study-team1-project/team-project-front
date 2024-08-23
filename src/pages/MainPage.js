@@ -5,7 +5,7 @@ function MainPage() {
   return (
     <>
       <div>
-        <Navbar />
+        <Navbar isMainPage={true} isLoggedIn={false} />
       </div>
     </>
   );
