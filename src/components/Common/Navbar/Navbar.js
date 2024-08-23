@@ -1,15 +1,16 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import styles from "./Navbar.module.css";
-
-const menuItems = [
-  { id: 1, item: "Dummy" },
-  { id: 2, item: "Dummy" },
-  { id: 3, item: "Dummy" },
-  { id: 4, item: "Dummy" },
-  { id: 5, item: "Dummy" },
-];
+import { fetchMenuItems } from "../../../services/api";
 
 function Navbar() {
+  const [menuItems, setMenuItems] = useState([]);
+
+  useEffect(() => {
+    fetchMenuItems()
+      .then((menuItems) => setMenuItems(menuItems))
+      .catch((err) => console.log(err.message));
+  });
+
   return (
     <nav className={styles.navbar}>
       <div className={styles.navbar__inner}>
