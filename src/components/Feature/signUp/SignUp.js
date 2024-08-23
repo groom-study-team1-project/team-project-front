@@ -1,7 +1,9 @@
 import React, { useState } from "react";
 import styles from "./SignUp.module.css";
+import profileIcon from "../../../assets/images/profileIcon.png";
 
 export default function SignUp() {
+  const [profileImg, setProfileImg] = useState(null);
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -10,38 +12,50 @@ export default function SignUp() {
 
   const handleSignUp = (e) => {
     e.preventDefault();
+    // 회원가입 로직
+  };
 
-    // todo: 회원가입 로직
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      const imageUrl = URL.createObjectURL(file);
+      setProfileImg(imageUrl);
+    }
   };
 
   return (
-    <div className="signUp">
-      {/* SignUp */}
-      <div className="signUpHeader">
+    <div>
+      <div>
         <h1>회원가입</h1>
       </div>
-      <form action="" method="post" onSubmit={handleSignUp}>
-        <div className="name">
+      <form onSubmit={handleSignUp}>
+        <div>
+          <img src={profileImg ? profileImg : profileIcon} alt="프로필사진" />
+          <div>
+            <input type="file" onChange={handleImageChange} />
+          </div>
+        </div>
+        <div>
           <p>닉네임</p>
           <input type="text" value={name} />
         </div>
-        <div className="email">
+        <div>
           <p>이메일</p>
           <input type="email" value={email} />
         </div>
-        <div className="password">
+        <div>
           <p>비밀번호</p>
           <input type="password" value={password} />
         </div>
-        <div className="confirmPassword">
+        <div>
           <p>비밀번호 확인</p>
           <input type="password" value={confirmPassword} />
         </div>
-        <div className="phoneNum">
+        <div>
           <p>휴대폰 번호</p>
           <input type="tel" value={phoneNum} />
         </div>
-        <div className="createAuthBtn">
+        <div>
           <button type="submit">계정 생성하기</button>
         </div>
       </form>
