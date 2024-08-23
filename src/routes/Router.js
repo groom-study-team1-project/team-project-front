@@ -8,6 +8,7 @@ import MyPage from "../pages/MyPage";
 import DetailPage from "../pages/DetailPage";
 import AuthPage from "../pages/AuthPage";
 import Login from "../components/Feature/login/Login";
+import SignUp from "../components/Feature/signUp/SignUp";
 
 function Router() {
   return (
@@ -22,6 +23,7 @@ function Router() {
         <Route path="/detail" element={<DetailPage />} />
         <Route path="/auth" element={<AuthPage />} />
         <Route path="/join" element={<Login />} />
+        <Route path="/sign-up" element={<SignUp />} />
       </Routes>
     </BrowserRouter>
   );
