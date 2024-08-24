@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import styles from "./SignUp.module.css";
 import profileIcon from "../../../assets/images/profileIcon.png";
+import { signup } from "../../../services/api";
 
 export default function SignUp() {
   const [profileImg, setProfileImg] = useState(null);
@@ -10,10 +11,25 @@ export default function SignUp() {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [phoneNum, setPhoneNum] = useState("");
 
-  const handleSignUp = (e) => {
+  async function handleSignUp(e) {
     e.preventDefault();
-    // 회원가입 로직
-  };
+
+    try {
+      const data = await signup(
+        profileImg,
+        name,
+        email,
+        password,
+        confirmPassword,
+        phoneNum
+      );
+      console.log("success", data);
+
+      // todo: 회원가입 로직
+    } catch (error) {
+      console.log("failed", error);
+    }
+  }
 
   const handleImageChange = (e) => {
     const file = e.target.files[0];

@@ -1,15 +1,22 @@
 import React, { useState } from "react";
-import styles from "./Login.module.css";
+import { join } from "../../../services/api";
 
 export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const handleLogin = (e) => {
+  async function handleLogin(e) {
     e.preventDefault();
 
+    try {
+      const data = await join(email, password);
+      console.log("success", data);
+    } catch (error) {
+      console.log("failed", error);
+    }
+
     // todo: 로그인 로직
-  };
+  }
 
   return (
     <div className="login">
