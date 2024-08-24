@@ -36,14 +36,14 @@ const PostActions = styled.div`
   margin: 10px 0;
 `;
 
-function PostCard({ title, content, name, job }) {
+function PostCard({ title, content, name, job, count }) {
   return (
     <PostCardWrapper>
       <InnerContainer>
         <Thumbnail />
         <Body>
           <PostActions>
-            <Interaction />
+            <Interaction count={count} />
             <ArrowButton />
           </PostActions>
           <PostContent title={title} content={content} />
