@@ -19,7 +19,22 @@ const Header = styled.header`
 const Content = styled.main`
   padding: 20px;
   margin-top: 155px;
+  display: flex;
+  justify-content: space-around;
   text-align: center;
+  border: 1px solid black;
+`;
+
+const LeftArea = styled.div`
+  width: 400px;
+  max-width: 520px;
+  border: 1px solid black;
+`;
+
+const RightArea = styled.div`
+  width: 800px;
+  max-height: 500px;
+  padding: 20px;
   border: 1px solid black;
 `;
 
@@ -28,7 +43,10 @@ function MainPage() {
     <>
       <Container>
         <Header>네브바</Header>
-        <Content>Content</Content>
+        <Content>
+          <LeftArea>LeftArea</LeftArea>
+          <RightArea>RightArea</RightArea>
+        </Content>
       </Container>
     </>
   );
