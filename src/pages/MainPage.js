@@ -1,9 +1,10 @@
 import React from 'react';
 import styled from 'styled-components';
+import { Link } from 'react-router-dom';
 
 const Container = styled.div`
   max-width: 1920px;
-  height: 95vh;
+  height: 96vh;
   max-height: 100vh;
   margin: 0 auto;
   padding-top: 20px;
@@ -50,7 +51,26 @@ const SubTitle = styled.h1`
 
 const Detail = styled.p`
   font-size: 10px;
+  margin-top: 20px;
+  margin-bottom: 20px;
   border: 1px solid black;
+`;
+
+const Button = styled(Link)`
+  width: 220px;
+  color: #000000;
+  padding: 5px 10px;
+  border: 1px solid black;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  font-size: 14px;
+  cursor: pointer;
+
+  &:hover {
+    background-color: #ededed;
+  }
 `;
 
 const RightArea = styled.div`
@@ -109,6 +129,7 @@ function MainPage() {
               <br /> 네트워크, 유익한 자료와 활동으로 커뮤니티에서 유익한 시간을
               보내세요.
             </Detail>
+            <Button to="/community/free">DeepDivers 게시판으로 바로가기</Button>
           </LeftArea>
           <RightArea>
             <FirstPostCard>PostCard1</FirstPostCard>
