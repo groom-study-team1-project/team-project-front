@@ -1,5 +1,28 @@
 import React, { useState } from "react";
 import { join } from "../../../services/api";
+import styled from "styled-components";
+
+const LoginDiv = styled.div`
+  height: 90vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+`;
+const Input = styled.input`
+  width: 400px;
+  height: 36px;
+  margin-bottom: ${(props) => props.marginBtm};
+`;
+const Btns = styled.div`
+  text-align: center;
+`;
+const Btn = styled.button`
+  margin: 1rem 0;
+  width: 404px;
+  height: 40px;
+  cursor: pointer;
+`;
 
 export default function Login() {
   const [email, setEmail] = useState("");
@@ -19,7 +42,7 @@ export default function Login() {
   }
 
   return (
-    <div className="login">
+    <LoginDiv>
       {/* Login */}
       <div className="logo">
         <h1>로고 이미지</h1>
@@ -27,21 +50,21 @@ export default function Login() {
       <form action="" method="post" onSubmit={handleLogin}>
         <div className="email">
           <p>이메일</p>
-          <input type="email" value={email} />
+          <Input type="email" value={email} />
         </div>
         <div className="password">
           <p>비밀번호</p>
-          <input type="password" value={password} />
+          <Input type="password" value={password} marginBtm="1rem" />
         </div>
-        <div className="btns">
+        <Btns>
           <div className="loginBtn">
-            <button type="submit">로그인</button>
+            <Btn type="submit">로그인</Btn>
           </div>
           <div className="signUpBtn">
-            <button>회원가입</button>
+            <Btn>회원가입</Btn>
           </div>
-        </div>
+        </Btns>
       </form>
-    </div>
+    </LoginDiv>
   );
 }
