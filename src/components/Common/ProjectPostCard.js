@@ -36,7 +36,7 @@ const PostActions = styled.div`
   margin: 10px 0;
 `;
 
-function PostCard({ title, content, name, job, count }) {
+function ProjectPostCard({ title, content, name, job, count }) {
   return (
     <PostCardWrapper>
       <InnerContainer>
@@ -54,4 +54,4 @@ function PostCard({ title, content, name, job, count }) {
   );
 }
 
-export default PostCard;
+export default ProjectPostCard;
