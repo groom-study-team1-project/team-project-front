@@ -23,6 +23,13 @@ const Content = styled.main`
   justify-content: space-around;
   border: 1px solid black;
 `;
+
+const LeftArea = styled.div`
+  width: 500px;
+  max-width: 520px;
+  border: 1px solid black;
+`;
+
 const Title = styled.h2`
   font-size: 2.5rem;
   color: #343a40;
@@ -40,12 +47,6 @@ const SubTitle = styled.h1`
 
 const Detail = styled.p`
   font-size: 10px;
-  border: 1px solid black;
-`;
-
-const LeftArea = styled.div`
-  width: 400px;
-  max-width: 520px;
   border: 1px solid black;
 `;
 
