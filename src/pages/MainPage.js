@@ -20,6 +20,7 @@ const Content = styled.main`
   padding: 20px;
   margin-top: 155px;
   display: flex;
+  align-items: center;
   justify-content: space-around;
   border: 1px solid black;
 `;
@@ -27,6 +28,8 @@ const Content = styled.main`
 const LeftArea = styled.div`
   width: 500px;
   max-width: 520px;
+  height: 100%;
+  margin-top: -100px;
   border: 1px solid black;
 `;
 
@@ -53,7 +56,32 @@ const Detail = styled.p`
 const RightArea = styled.div`
   width: 800px;
   max-height: 500px;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-rows: repeat(3, 1fr);
+  gap: 20px;
   padding: 20px;
+  border: 1px solid black;
+`;
+
+const FirstPostCard = styled.div`
+  grid-column: 1 / 2;
+  grid-row: 1 / 3;
+  border: 1px solid black;
+`;
+
+const SecondPostCard = styled.div`
+  height: 200px;
+  grid-column: 2 / 4;
+  grid-row: 2 / 3;
+  border: 1px solid black;
+  align-self: end;
+`;
+
+const ThirdPostCard = styled.div`
+  height: 200px;
+  grid-column: 1 / 3;
+  grid-row: 3 / 4;
   border: 1px solid black;
 `;
 
@@ -82,7 +110,11 @@ function MainPage() {
               보내세요.
             </Detail>
           </LeftArea>
-          <RightArea>RightArea</RightArea>
+          <RightArea>
+            <FirstPostCard>PostCard1</FirstPostCard>
+            <SecondPostCard>PostCard2</SecondPostCard>
+            <ThirdPostCard>PostCard3</ThirdPostCard>
+          </RightArea>
         </Content>
       </Container>
     </>
