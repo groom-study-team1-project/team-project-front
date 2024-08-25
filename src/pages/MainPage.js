@@ -4,9 +4,9 @@ import { Link } from 'react-router-dom';
 
 const Container = styled.div`
   max-width: 1920px;
-  height: 96vh;
+  height: auto;
   max-height: 100vh;
-  margin: 0 auto;
+  margin: 0;
   padding-top: 20px;
   border: 1px solid black;
 `;
