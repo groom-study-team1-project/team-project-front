@@ -4,11 +4,12 @@ import { Link } from 'react-router-dom';
 
 const Container = styled.div`
   max-width: 1920px;
-  height: auto;
+  height: 954px;
   max-height: 100vh;
   margin: 0;
   padding-top: 20px;
   border: 1px solid black;
+  overflow: hidden;
 `;
 
 const Header = styled.header`
@@ -75,7 +76,7 @@ const Button = styled(Link)`
 
 const RightArea = styled.div`
   width: 800px;
-  max-height: 500px;
+  height: 500px;
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
   grid-template-rows: repeat(3, 1fr);
