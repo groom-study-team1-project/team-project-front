@@ -1,9 +1,13 @@
 import React from "react";
+import SideBar from "../components/Common/SideBar";
 
 function FreeBoard() {
   return (
     <>
-      <div>FreeBoard</div>
+      <div>
+        {/* FreeBoard */}
+        <SideBar />
+      </div>
     </>
   );
 }
