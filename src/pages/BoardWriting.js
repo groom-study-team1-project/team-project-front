@@ -1,4 +1,5 @@
 import React, { useRef, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { CKEditor } from "@ckeditor/ckeditor5-react";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import styled, { createGlobalStyle } from "styled-components";
@@ -100,6 +101,7 @@ const ImgAdd = styled.div`
 `;
 
 function BoardWrite() {
+  const navigate = useNavigate();
   const [selectedCategory, setSelectedCategory] = useState("");
   const [imgUrls, setImgUrls] = useState([]); // State to store multiple image URLs
   const fileInput = useRef(null);
@@ -136,6 +138,9 @@ function BoardWrite() {
           <BackImg
             src={require("../assets/images/back-removebg-preview.png")}
             alt="뒤로 가기"
+            onClick={() => {
+              navigate(-1);
+            }}
           />
           <Write>글 쓰기</Write>
         </WriteWrap>
