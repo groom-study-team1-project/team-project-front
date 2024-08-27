@@ -12,22 +12,27 @@ const PopularPostCard = () => {
         if (data && data.length > 0) {
           setPosts(data);
         } else {
-          setPosts(
-            Array.from({ length: 5 }, () => ({ id: 0, title: 'DeepDivers' }))
-          );
+          setPosts([]);
         }
       })
       .catch((error) => {
-        console.error((err) => console.log(err.message));
+        console.error('Failed to fetch popular posts:', error);
+        setPosts([]);
       });
   }, []);
 
+  const renderMenuBars = () => {
+    const menuBars = [];
+    for (let i = 0; i < 5; i++) {
+      menuBars.push(
+        <PopularPostMenubar key={i} text={posts[i] ? posts[i].title : '제목'} />
+      );
+    }
+    return menuBars;
+  };
+
   return (
-    <PopularContainer text="인기 게시글">
-      {posts.map((post) => (
-        <PopularPostMenubar key={post.id} text={post.title} />
-      ))}
-    </PopularContainer>
+    <PopularContainer text="인기 게시글">{renderMenuBars()}</PopularContainer>
   );
 };
 
