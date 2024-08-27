@@ -7,8 +7,8 @@ import NoticeBoard from "../pages/NoticeBoard";
 import MyPage from "../pages/MyPage";
 import DetailPage from "../pages/DetailPage";
 import AuthPage from "../pages/AuthPage";
-import Login from "../components/Feature/login/Login";
-import SignUp from "../components/Feature/signUp/SignUp";
+import Login from "../components/Feature/Login";
+import SignUp from "../components/Feature/SignUp";
 
 function Router() {
   return (
