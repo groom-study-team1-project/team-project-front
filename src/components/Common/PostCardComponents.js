@@ -34,17 +34,17 @@ const MirroredArrow = styled(DefaultArrow)`
 `;
 
 const ContentContainer = styled.div`
-  width: 100%;
+  flex-grow: 1;
   height: 120px;
   border-top: 1px solid;
   border-bottom: 1px solid;
   padding: 10px 0;
+  margin: 10px 0 10px 0;
 `;
 
 const ProfileWrapper = styled.div`
   display: flex;
   width: 100%;
-  margin-top: 10px;
 `;
 
 const ProfileImage = styled.div`
