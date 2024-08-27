@@ -15,9 +15,7 @@ function FreeBoard() {
   return (
     <>
       {/* FreeBoard */}
-      <div>
-        <SideBar />
-      </div>
+      <SideBar />
       {postItems.map((post) => (
         <ProjectPostCard
           key={post.id}
