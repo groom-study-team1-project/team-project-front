@@ -69,7 +69,7 @@ function DetailPage() {
           <CKEditor
             editor={ClassicEditor}
             data={"<p>Hello World</p>"}
-            disabled="true"
+            disabled={false}
             styled={{ margintop: "100px" }}
           />
         </div>

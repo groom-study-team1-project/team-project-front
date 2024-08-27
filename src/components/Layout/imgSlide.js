@@ -6,8 +6,10 @@ import "slick-carousel/slick/slick-theme.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faAngleRight, faAngleLeft } from "@fortawesome/free-solid-svg-icons";
 
+// Styled components for slider and arrows
 const CustomSlider = styled(Slider)`
   margin: 25px;
+
   .slick-slide img {
     display: block;
     padding: 15px;
@@ -16,15 +18,8 @@ const CustomSlider = styled(Slider)`
     height: 176px;
     object-fit: cover;
   }
-  .slick-prev::before,
-  .slick-next::before {
-    display: none;
-  }
-  .slick-prev:hover,
-  .slick-next:hover {
-    color: #000;
-  }
 `;
+
 const CustomArrow = styled.div`
   width: 30px;
   height: 30px;
@@ -34,19 +29,32 @@ const CustomArrow = styled.div`
   font-size: 30px;
   color: #000;
   cursor: pointer;
+  z-index: 3;
+  transition: color 0.3s ease; // Color transition on hover
+
+  &:hover {
+    color: #000; // Keep color on hover
+  }
 `;
 
 function Slide({ imgUrls }) {
+  const SlickButtonFix = ({ currentSlide, slideCount, children, ...props }) => (
+    <span {...props}>{children}</span>
+  );
   const settings = {
     nextArrow: (
-      <CustomArrow>
-        <FontAwesomeIcon icon={faAngleRight} />
-      </CustomArrow>
+      <SlickButtonFix>
+        <CustomArrow>
+          <FontAwesomeIcon icon={faAngleRight} />
+        </CustomArrow>
+      </SlickButtonFix>
     ),
     prevArrow: (
-      <CustomArrow>
-        <FontAwesomeIcon icon={faAngleLeft} />
-      </CustomArrow>
+      <SlickButtonFix>
+        <CustomArrow>
+          <FontAwesomeIcon icon={faAngleLeft} />
+        </CustomArrow>
+      </SlickButtonFix>
     ),
     dots: true,
     speed: 500,
