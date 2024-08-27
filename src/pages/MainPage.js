@@ -4,21 +4,22 @@ import { Link } from 'react-router-dom';
 
 const Container = styled.div`
   max-width: 1920px;
-  height: 954px;
   max-height: 100vh;
   margin: 0;
   padding-top: 20px;
   border: 1px solid black;
-  overflow: hidden;
 `;
 
+//네브바
 const Header = styled.header`
   padding: 20px;
   text-align: center;
   border: 1px solid black;
 `;
 
+// 콘텐츠
 const Content = styled.main`
+  height: auto;
   padding: 20px;
   margin-top: 155px;
   display: flex;
@@ -27,10 +28,11 @@ const Content = styled.main`
   border: 1px solid black;
 `;
 
+// 왼쪽 콘텐츠(타이틀&게시판버튼)
 const LeftArea = styled.div`
   width: 500px;
   max-width: 520px;
-  height: 100%;
+  height: auto;
   margin-top: -100px;
   border: 1px solid black;
 `;
@@ -74,10 +76,10 @@ const Button = styled(Link)`
   }
 `;
 
+// 오른쪽 콘텐츠(포스트카드)
 const RightArea = styled.div`
   width: 800px;
-  height: 500px;
-  display: grid;
+  height: auto;
   grid-template-columns: 1fr 1fr 1fr;
   grid-template-rows: repeat(3, 1fr);
   gap: 20px;
@@ -85,25 +87,27 @@ const RightArea = styled.div`
   border: 1px solid black;
 `;
 
-const FirstPostCard = styled.div`
-  grid-column: 1 / 2;
-  grid-row: 1 / 3;
+const PostCardLine = styled.div`
+  display: flex;
   border: 1px solid black;
+
+  & > div:nth-child(2) {
+    width: 480px;
+    height: 200px;
+  }
+
+  &:nth-of-type(2) > div:nth-child(1) {
+    width: 450px;
+    height: 140px;
+  }
 `;
 
-const SecondPostCard = styled.div`
-  height: 200px;
-  grid-column: 2 / 4;
-  grid-row: 2 / 3;
+const PostCard = styled.div`
+  width: 200px;
+  height: 300px;
+  margin: 10px;
   border: 1px solid black;
-  align-self: end;
-`;
-
-const ThirdPostCard = styled.div`
-  height: 200px;
-  grid-column: 1 / 3;
-  grid-row: 3 / 4;
-  border: 1px solid black;
+  align-self: flex-end;
 `;
 
 function MainPage() {
@@ -133,9 +137,13 @@ function MainPage() {
             <Button to="/community/free">DeepDivers 게시판으로 바로가기</Button>
           </LeftArea>
           <RightArea>
-            <FirstPostCard>PostCard1</FirstPostCard>
-            <SecondPostCard>PostCard2</SecondPostCard>
-            <ThirdPostCard>PostCard3</ThirdPostCard>
+            <PostCardLine>
+              <PostCard>Postcard1</PostCard>
+              <PostCard>Postcard2</PostCard>
+            </PostCardLine>
+            <PostCardLine>
+              <PostCard>Postcard3</PostCard>
+            </PostCardLine>
           </RightArea>
         </Content>
       </Container>
