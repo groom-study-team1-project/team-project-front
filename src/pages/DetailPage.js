@@ -2,7 +2,7 @@ import React from "react";
 import styled, { createGlobalStyle } from "styled-components";
 import { CKEditor } from "@ckeditor/ckeditor5-react";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
-
+import Slide from "../components/Layout/imgSlide";
 const Wrap = styled.div`
   width: 1028px;
   margin: auto auto;
@@ -26,6 +26,27 @@ const Profile = styled.div`
 const ProfileImg = styled.img`
   border-radius: 50%;
 `;
+
+const PostWrap = styled.div`
+  background: black;
+  padding: 100px;
+`;
+
+const SlideImg = [
+  {
+    id: 1,
+    url: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS6KVvlziiJYFxZZIq3Xc_dVuzIbSLrgvtHPA&s",
+  },
+  {
+    id: 2,
+    url: "https://www.shutterstock.com/ko/blog/wp-content/uploads/sites/17/2021/01/2021-graphic-design-banner.jpg",
+  },
+  {
+    id: 3,
+    url: "https://img1.daumcdn.net/thumb/R1280x0/?fname=http://t1.daumcdn.net/brunch/service/user/6H5a/image/VbC1Pts-64VW9-xWDV3qad5cLok.jpg",
+  },
+];
+
 function DetailPage() {
   return (
     <>
@@ -42,11 +63,14 @@ function DetailPage() {
               <div>작성자 소개</div>
             </div>
           </Profile>
-          <div>이미지 슬라이더</div>
+          <div>
+            <Slide imgUrls={SlideImg} />
+          </div>
           <CKEditor
             editor={ClassicEditor}
             data={"<p>Hello World</p>"}
             disabled="true"
+            styled={{ margintop: "100px" }}
           />
         </div>
         <div>
