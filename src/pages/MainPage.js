@@ -1,11 +1,11 @@
 import React from 'react';
-import Navbar from '../components/Common/Navbar';
+import Navbar from '../components/Common/PopularPostMenubar';
 
 function MainPage() {
   return (
     <>
       <div>
-        <Navbar isMainPage={true} isLoggedIn={false} />
+        <Navbar />
       </div>
     </>
   );
