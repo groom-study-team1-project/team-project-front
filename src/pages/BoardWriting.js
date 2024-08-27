@@ -1,4 +1,5 @@
 import React, { useRef, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { CKEditor } from "@ckeditor/ckeditor5-react";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import styled, { createGlobalStyle } from "styled-components";
@@ -100,7 +101,9 @@ const ImgAdd = styled.div`
 `;
 
 function BoardWrite() {
-  const [selectedCategory, setSelectedCategory] = useState("");
+  const navigate = useNavigate();
+  const [form, setValue] = useState({ title: "", content: "", hasgtags: [] });
+  const [selectedCategory, setSelectedCategory] = useState("자유게시판");
   const [imgUrls, setImgUrls] = useState([]); // State to store multiple image URLs
   const fileInput = useRef(null);
 
@@ -119,7 +122,7 @@ function BoardWrite() {
     files.forEach((file) => {
       const reader = new FileReader();
       reader.onloadend = () => {
-        newImgUrls.push(reader.result); // Add to newImgUrls array
+        newImgUrls.push(reader.result);
         if (newImgUrls.length === files.length) {
           setImgUrls((prevImgUrls) => [...prevImgUrls, ...newImgUrls]); // Append new images to the existing array
         }
@@ -127,7 +130,29 @@ function BoardWrite() {
       reader.readAsDataURL(file);
     });
   };
+  const handlehashtag = (e) => {
+    const hashtagStr = e.target.value;
+    const hashtagArray = hashtagStr
+      .split(" ")
+      .filter((item) => item.startsWith("#"));
+    setValue({ ...form, hasgtags: hashtagArray });
+  };
 
+  const onChange = (e) => {
+    setValue({ ...form, title: e.target.value });
+  };
+
+  const onSubmit = async (e) => {
+    await e.preventDefault();
+    const { title, content, hasgtags } = form;
+    let body = {};
+    if (selectedCategory === "프로젝트 자랑 게시판") {
+      body = { title, content, hasgtags, selectedCategory, imgUrls };
+    } else {
+      body = { title, content, hasgtags, selectedCategory };
+    }
+    console.log(body);
+  };
   return (
     <>
       <GlobalStyle />
@@ -136,27 +161,36 @@ function BoardWrite() {
           <BackImg
             src={require("../assets/images/back-removebg-preview.png")}
             alt="뒤로 가기"
+            onClick={() => {
+              navigate(-1);
+            }}
           />
           <Write>글 쓰기</Write>
         </WriteWrap>
-        <form>
+        <form onSubmit={onSubmit}>
           <TitleWrap>
             <span>
-              <Titleinput type="text" placeholder="제목을 입력하세요" />
+              <Titleinput
+                type="text"
+                placeholder="제목을 입력하세요"
+                onChange={onChange}
+              />
             </span>
             <span>
               <Categoryselect
                 onChange={handleCategoryChange}
                 value={selectedCategory}
               >
-                <option value="free">자유 게시판</option>
-                <option value="questions">질문 게시판</option>
-                <option value="project">프로젝트 자랑 게시판</option>
-                <option value="notice">공지 게시판</option>
+                <option value="자유 게시판">자유 게시판</option>
+                <option value="질문 게시판">질문 게시판</option>
+                <option value="프로젝트 자랑 게시판">
+                  프로젝트 자랑 게시판
+                </option>
+                <option value="공지 게시판">공지 게시판</option>
               </Categoryselect>
             </span>
           </TitleWrap>
-          {selectedCategory === "project" && (
+          {selectedCategory === "프로젝트 자랑 게시판" && (
             <ImgWrap>
               {imgUrls.map((url, index) => (
                 <ImgPreview key={index} src={url} alt={`Preview ${index}`} />
@@ -191,18 +225,23 @@ function BoardWrite() {
               console.log({ event, editor, data });
             }}
             onBlur={(event, editor) => {
-              console.log("Blur.", editor);
+              const data = editor.getData();
+              setValue({ ...form, content: data });
             }}
             onFocus={(event, editor) => {
               console.log("Focus.", editor);
             }}
           />
-          <Hashtag type="text" placeholder="#태그입력" />
+          <Hashtag
+            type="text"
+            placeholder="#태그입력"
+            onChange={handlehashtag}
+          />
           <SubmitBtnWrap>
             <SubmitBtn $borderColor="#929292" $bgColor="transparent">
               임시저장
             </SubmitBtn>
-            <SubmitBtn $borderColor="#86FDE8" $bgColor="#86FDE8">
+            <SubmitBtn $borderColor="#86FDE8" $bgColor="#86FDE8" type="submit">
               확인
             </SubmitBtn>
           </SubmitBtnWrap>
