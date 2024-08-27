@@ -1,5 +1,6 @@
 import React, { useState } from "react";
-import { join } from "../../../services/api";
+import { useNavigate } from "react-router-dom";
+import { join } from "../../services/api";
 import styled from "styled-components";
 
 const ContainerDiv = styled.div`
@@ -36,10 +37,17 @@ const Btn = styled.button`
   height: 40px;
   cursor: pointer;
 `;
+const FindUserBtn = styled.button`
+  border: none;
+  background: none;
+  cursor: pointer;
+`;
 
 export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+
+  const navigate = useNavigate();
 
   async function handleLogin(e) {
     e.preventDefault();
@@ -53,6 +61,14 @@ export default function Login() {
 
     // todo: 로그인 로직
   }
+
+  const handleFindUserId = () => {
+    navigate("/find-user-id");
+  };
+
+  const handleFindUserPw = () => {
+    navigate("/find-user-pw");
+  };
 
   return (
     <ContainerDiv>
@@ -71,6 +87,15 @@ export default function Login() {
             <Input type="password" value={password} marginBtm="1rem" />
           </div>
           <div className="btns">
+            <div
+              className="findUserBtns"
+              style={{ display: "flex", justifyContent: "flex-end" }}
+            >
+              <FindUserBtn onClick={handleFindUserId}>아이디 찾기</FindUserBtn>
+              <FindUserBtn onClick={handleFindUserPw}>
+                비밀번호 찾기
+              </FindUserBtn>
+            </div>
             <div style={{ borderBottom: "1px solid darkgray" }}>
               <Btn type="submit" id="loginBtn">
                 로그인
