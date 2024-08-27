@@ -1,3 +1,4 @@
+import styled from "styled-components";
 import eyeIcon from "../../assets/images/eye.png";
 import heartIcon from "../../assets/images/heart.png";
 import commentIcon from "../../assets/images/comment.png";

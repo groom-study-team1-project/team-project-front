@@ -1,3 +1,4 @@
+import styled from "styled-components";
 import {
   PostCardWrapper,
   InnerContainer,
@@ -9,13 +10,13 @@ import { Interaction, ArrowButton } from "./Interactions";
 
 const CustomPostActions = styled(PostActions)`
   align-items: center;
-  margin: 10px 0;
+  margin-top: 10px;
 `;
 
 function ProjectPostCard({ title, content, name, job, count }) {
   return (
-    <PostCardWrapper>
-      <InnerContainer>
+    <PostCardWrapper width="280px" height="440px">
+      <InnerContainer direction="column">
         <Thumbnail />
         <Body>
           <CustomPostActions>
