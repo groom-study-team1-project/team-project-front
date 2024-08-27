@@ -72,7 +72,7 @@ export default function FindUserId() {
             <Input type="text" value={phoneNum} marginBtm="1rem" />
           </div>
           <div>
-            <Btn type="submit">아이디 찾기</Btn>
+            <Btn onClick={handleFindUserId}>아이디 찾기</Btn>
           </div>
         </Form>
       </FindUserIdDiv>
