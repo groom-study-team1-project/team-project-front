@@ -14,8 +14,30 @@ const FindUserIdDiv = styled.div`
   height: 628px;
   width: 530px;
   margin: auto;
+  margin-top: 10rem;
   padding-top: 10rem;
   box-sizing: border-box;
+`;
+const Logo = styled.div`
+  text-align: left;
+  margin-left: 4rem;
+  margin-bottom: 4rem;
+`;
+const Form = styled.form`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+`;
+const Input = styled.input`
+  width: 400px;
+  height: 36px;
+  margin-bottom: ${(props) => props.marginBtm};
+`;
+const Btn = styled.button`
+  margin: 1rem 0;
+  width: 404px;
+  height: 40px;
+  cursor: pointer;
 `;
 
 export default function FindUserId() {
@@ -36,24 +58,24 @@ export default function FindUserId() {
   return (
     <ContainerDiv>
       {/* FindUserId */}
-      <FindUserId>
-        <div>
+      <FindUserIdDiv>
+        <Logo>
           <h2>아이디 찾기</h2>
-        </div>
-        <form action="">
+        </Logo>
+        <Form action="">
           <div>
             <p>닉네임</p>
-            <input type="text" value={name} />
+            <Input type="text" value={name} />
           </div>
-          <div>
+          <div style={{ borderBottom: "1px solid darkgray" }}>
             <p>휴대폰 번호</p>
-            <input type="text" value={phoneNum} />
+            <Input type="text" value={phoneNum} marginBtm="1rem" />
           </div>
           <div>
-            <button type="submit">아이디 찾기</button>
+            <Btn type="submit">아이디 찾기</Btn>
           </div>
-        </form>
-      </FindUserId>
+        </Form>
+      </FindUserIdDiv>
     </ContainerDiv>
   );
 }
