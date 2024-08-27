@@ -7,7 +7,8 @@ import NoticeBoard from "../pages/NoticeBoard";
 import MyPage from "../pages/MyPage";
 import DetailPage from "../pages/DetailPage";
 import AuthPage from "../pages/AuthPage";
-import BoardWrite from "../pages/BoardWritng";
+import BoardWrite from "../pages/BoardWriting";
+
 function Router() {
   return (
     <BrowserRouter>
