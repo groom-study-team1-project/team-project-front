@@ -15,11 +15,6 @@ const ContainerTitle = styled.h2`
   color: #333;
 `;
 
-const Content = styled.div`
-  height: 300px;
-  text-align: center;
-`;
-
 const Divider = styled.div`
   margin-top: 10px;
   margin-bottom: 10px;
@@ -32,12 +27,12 @@ const Divider = styled.div`
   );
 `;
 
-const PopularContainer = () => {
+const PopularContainer = ({ children }) => {
   return (
     <Container>
-      <ContainerTitle>인기 ________</ContainerTitle>
+      <ContainerTitle>인기 _____</ContainerTitle>
       <Divider />
-      <Content>Content</Content>
+      {children}
       <Divider />
     </Container>
   );
