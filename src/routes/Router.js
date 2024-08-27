@@ -1,12 +1,14 @@
-import { BrowserRouter, Route, Routes } from "react-router-dom";
-import MainPage from "../pages/MainPage";
-import FreeBoard from "../pages/FreeBoard";
-import QuestionBoard from "../pages/QuestionBoard";
-import ProjectBoard from "../pages/ProjectBoard";
-import NoticeBoard from "../pages/NoticeBoard";
-import MyPage from "../pages/MyPage";
-import DetailPage from "../pages/DetailPage";
-import AuthPage from "../pages/AuthPage";
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import MainPage from '../pages/MainPage';
+import FreeBoard from '../pages/FreeBoard';
+import QuestionBoard from '../pages/QuestionBoard';
+import ProjectBoard from '../pages/ProjectBoard';
+import NoticeBoard from '../pages/NoticeBoard';
+import MyPage from '../pages/MyPage';
+import DetailPage from '../pages/DetailPage';
+import AuthPage from '../pages/AuthPage';
+import Login from '../components/Feature/Login';
+import SignUp from '../components/Feature/SignUp';
 
 function Router() {
   return (
@@ -20,6 +22,8 @@ function Router() {
         <Route path="/my-page" element={<MyPage />} />
         <Route path="/detail" element={<DetailPage />} />
         <Route path="/auth" element={<AuthPage />} />
+        <Route path="/join" element={<Login />} />
+        <Route path="/sign-up" element={<SignUp />} />
       </Routes>
     </BrowserRouter>
   );
