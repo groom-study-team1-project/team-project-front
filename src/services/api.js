@@ -54,3 +54,13 @@ export async function fetchPopularPostItems() {
     },
   ];
 }
+
+export async function fetchPopularHashItems() {
+  return [
+    {
+      id: 1,
+      hashtag: '해시태그',
+      count: 12,
+    },
+  ];
+}
