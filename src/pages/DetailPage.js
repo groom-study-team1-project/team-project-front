@@ -3,6 +3,11 @@ import styled, { createGlobalStyle } from "styled-components";
 import { CKEditor } from "@ckeditor/ckeditor5-react";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import Slide from "../components/Layout/imgSlide";
+import comment from "../assets/images/comment.png";
+import eye from "../assets/images/eye.png";
+import heart from "../assets/images/heart.png";
+import profileIcon from "../assets/images/profileIcon.png";
+
 const Wrap = styled.div`
   width: 1028px;
   margin: auto auto;
@@ -24,12 +29,15 @@ const Profile = styled.div`
 `;
 
 const ProfileImg = styled.img`
+  width: 60px;
+  height: 60px;
   border-radius: 50%;
 `;
 
 const PostWrap = styled.div`
-  background: black;
-  padding: 100px;
+  border: 1px solid black;
+  padding: 10px;
+  border-radius: 10px;
 `;
 
 const SlideImg = [
@@ -50,14 +58,11 @@ const SlideImg = [
 function DetailPage() {
   return (
     <>
+      <CategotyWrap>게시판 이름</CategotyWrap>
       <Wrap>
-        <CategotyWrap>게시판 이름</CategotyWrap>
-        <div>
+        <PostWrap>
           <Profile>
-            <ProfileImg
-              src={require("../assets/images/profileIcon.png")}
-              alt="프로필 이미지"
-            />
+            <ProfileImg src={profileIcon} alt="프로필 이미지" />
             <div>
               <div>작성자 이름</div>
               <div>작성자 소개</div>
@@ -69,21 +74,23 @@ function DetailPage() {
           <CKEditor
             editor={ClassicEditor}
             data={"<p>Hello World</p>"}
-            disabled={false}
-            styled={{ margintop: "100px" }}
+            config={{
+              toolbar: [],
+            }}
+            disabled={true}
           />
-        </div>
+        </PostWrap>
         <div>
           <div>
-            <img src={require("../assets/images/eye.png")} alt="조회수" />
+            <img src={eye} alt="조회수" />
             12
           </div>
           <div>
-            <img src={require("../assets/images/heart.png")} alt="좋아요" />
+            <img src={heart} alt="좋아요" />
             12
           </div>
           <div>
-            <img src={require("../assets/images/comment.png")} alt="댓글수" />
+            <img src={comment} alt="댓글수" />
             12
           </div>
         </div>

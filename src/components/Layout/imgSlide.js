@@ -18,6 +18,14 @@ const CustomSlider = styled(Slider)`
     height: 176px;
     object-fit: cover;
   }
+
+  .slick-arrow {
+    display: none;
+  }
+
+  .slick-arrow::before {
+    display: none;
+  }
 `;
 
 const CustomArrow = styled.div`
