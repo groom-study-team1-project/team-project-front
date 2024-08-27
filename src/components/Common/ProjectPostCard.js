@@ -1,39 +1,16 @@
 import styled from 'styled-components';
 import {
-  Interaction,
-  ArrowButton,
-  PostProfile,
-  PostContent,
-} from './PostCardComponents';
+  PostCardWrapper,
+  InnerContainer,
+  Body,
+  PostActions,
+} from './PostCardWrapper';
+import { PostProfile, PostContent, Thumbnail } from './PostCardComponents';
+import { Interaction, ArrowButton } from './Interactions';
 
-const PostCardWrapper = styled.div`
-  display: flex;
-  border: 1px solid;
-  width: 280px;
-  height: 440px;
-`;
-
-const InnerContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  flex-grow: 1;
-  margin: 10px;
-`;
-
-const Thumbnail = styled.div`
-  flex-grow: 1;
-  border: 1px solid;
-`;
-
-const Body = styled.div`
-  padding: 10px 10px 0;
-`;
-
-const PostActions = styled.div`
-  display: flex;
-  justify-content: space-between;
+const CustomPostActions = styled(PostActions)`
   align-items: center;
-  margin: 10px 0;
+  margin-top: 10px;
 `;
 
 function ProjectPostCard({
@@ -44,14 +21,14 @@ function ProjectPostCard({
   count = { view: 0, like: 0, comment: 0 },
 }) {
   return (
-    <PostCardWrapper>
-      <InnerContainer>
+    <PostCardWrapper width="280px" height="440px">
+      <InnerContainer direction="column">
         <Thumbnail />
         <Body>
-          <PostActions>
+          <CustomPostActions>
             <Interaction count={count} />
             <ArrowButton />
-          </PostActions>
+          </CustomPostActions>
           <PostContent title={title} content={content} />
           <PostProfile name={name} job={job} />
         </Body>
