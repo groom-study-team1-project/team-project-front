@@ -20,7 +20,7 @@ function Router() {
         <Route path="/my-page" element={<MyPage />} />
         <Route path="/detail" element={<DetailPage />} />
         <Route path="/auth" element={<AuthPage />} />
-        <Route path="/boradwrite" element={<BoardWrite />} />
+        <Route path="/boardwrite" element={<BoardWrite />} />
       </Routes>
     </BrowserRouter>
   );
