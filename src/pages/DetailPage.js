@@ -118,7 +118,7 @@ function DetailPage() {
   const [commentValue, setCommentValue] = useState("");
   const onSubmit = async (e) => {
     await e.preventDefault();
-    const body = {};
+    const body = { commentValue };
   };
   const onChange = (e) => {
     setCommentValue(e.target.value);
