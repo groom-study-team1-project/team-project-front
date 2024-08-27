@@ -1,3 +1,4 @@
+import styled from "styled-components";
 import {
   PostCardWrapper,
   InnerContainer,
@@ -14,7 +15,7 @@ export const CustomBody = styled(Body)`
 
 function CommunityPostCard({ title, content, name, job, count }) {
   return (
-    <PostCardWrapper>
+    <PostCardWrapper width="985px" height="232px">
       <InnerContainer>
         <Thumbnail />
         <CustomBody>

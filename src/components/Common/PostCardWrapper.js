@@ -9,7 +9,7 @@ export const PostCardWrapper = styled.div`
 
 export const InnerContainer = styled.div`
   display: flex;
-  flex-direction: ${({ direction }) => direction || "column"};
+  flex-direction: ${({ direction }) => direction || "row"};
   flex-grow: 1;
   margin: 10px;
 `;
