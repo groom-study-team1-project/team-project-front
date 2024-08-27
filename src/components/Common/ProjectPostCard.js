@@ -1,10 +1,10 @@
-import styled from "styled-components";
+import styled from 'styled-components';
 import {
   Interaction,
   ArrowButton,
   PostProfile,
   PostContent,
-} from "./PostCardComponents";
+} from './PostCardComponents';
 
 const PostCardWrapper = styled.div`
   display: flex;
@@ -36,7 +36,13 @@ const PostActions = styled.div`
   margin: 10px 0;
 `;
 
-function ProjectPostCard({ title, content, name, job, count }) {
+function ProjectPostCard({
+  title,
+  content,
+  name,
+  job,
+  count = { view: 0, like: 0, comment: 0 },
+}) {
   return (
     <PostCardWrapper>
       <InnerContainer>

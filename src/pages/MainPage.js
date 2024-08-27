@@ -2,6 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import Navbar from '../components/Common/Navbar';
+import ProjectPostCard from '../components/Common/ProjectPostCard';
 
 const Container = styled.div`
   max-width: 1920px;
@@ -85,6 +86,7 @@ const RightArea = styled.div`
   grid-template-rows: repeat(3, 1fr);
   gap: 20px;
   padding: 20px;
+  margin-right: 90px;
   border: 1px solid black;
 `;
 
@@ -95,6 +97,7 @@ const PostCardLine = styled.div`
   & > div:nth-child(2) {
     width: 480px;
     height: 200px;
+    align-self: flex-end;
   }
 
   &:nth-of-type(2) > div:nth-child(1) {
@@ -104,11 +107,8 @@ const PostCardLine = styled.div`
 `;
 
 const PostCard = styled.div`
-  width: 200px;
-  height: 300px;
   margin: 10px;
   border: 1px solid black;
-  align-self: flex-end;
 `;
 
 function MainPage() {
@@ -139,7 +139,9 @@ function MainPage() {
           </LeftArea>
           <RightArea>
             <PostCardLine>
-              <PostCard>Postcard1</PostCard>
+              <PostCard>
+                <ProjectPostCard />
+              </PostCard>
               <PostCard>Postcard2</PostCard>
             </PostCardLine>
             <PostCardLine>
