@@ -27,10 +27,10 @@ const Divider = styled.div`
   );
 `;
 
-const PopularContainer = ({ children }) => {
+const PopularContainer = ({ text, children }) => {
   return (
     <Container>
-      <ContainerTitle>인기 _____</ContainerTitle>
+      <ContainerTitle>{text}</ContainerTitle>
       <Divider />
       {children}
       <Divider />

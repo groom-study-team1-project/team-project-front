@@ -2,10 +2,10 @@ export async function fetchPostItems() {
   return [
     {
       id: 1,
-      title: "Title",
-      content: "This is content.",
-      name: "John Doe",
-      job: "Software Engineer",
+      title: 'Title',
+      content: 'This is content.',
+      name: 'John Doe',
+      job: 'Software Engineer',
       count: {
         view: 12,
         like: 23,
@@ -18,11 +18,11 @@ export async function fetchPostItems() {
 
 export async function fetchMenuItems() {
   return [
-    { id: 1, item: "Dummy" },
-    { id: 2, item: "Dummy" },
-    { id: 3, item: "Dummy" },
-    { id: 4, item: "Dummy" },
-    { id: 5, item: "Dummy" },
+    { id: 1, item: 'Dummy' },
+    { id: 2, item: 'Dummy' },
+    { id: 3, item: 'Dummy' },
+    { id: 4, item: 'Dummy' },
+    { id: 5, item: 'Dummy' },
   ];
 }
 
@@ -40,3 +40,17 @@ export const signup = async (
 ) => {
   // todo: 회원가입 api 호출 함수 구현(formData)
 };
+
+export async function fetchPopularPostItems() {
+  return [
+    {
+      id: 1,
+      title: 'Title',
+      count: {
+        view: 12,
+        like: 23,
+        comment: 20,
+      },
+    },
+  ];
+}

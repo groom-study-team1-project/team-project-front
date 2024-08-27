@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
+import { Interaction } from './Interactions';
 
 const Post = styled.div`
   background-color: white;
@@ -32,6 +33,10 @@ const PostStats = styled.div`
   align-items: center;
   font-size: 12px;
   color: #666;
+
+  & > *:not(:last-child) {
+    margin-right: 5px;
+  }
 `;
 
 const Icon = styled.span`
@@ -39,14 +44,15 @@ const Icon = styled.span`
   margin-right: 5px;
 `;
 
-const PopularPostMenuBar = () => {
+const PopularPostMenuBar = ({
+  text,
+  count = { view: 0, like: 0, comment: 0 },
+}) => {
   return (
     <Post>
-      <PostText>제목</PostText>
+      <PostText>{text}</PostText>
       <PostStats>
-        <Icon>❤️</Icon>10
-        <Icon>❤️</Icon>10
-        <Icon>❤️</Icon>10
+        <Interaction count={count} />
       </PostStats>
     </Post>
   );
