@@ -2,6 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import Navbar from '../components/Common/Navbar';
+import redirectIcon from '../assets/images/redirect-to-board.png';
 import ProjectPostCard from '../components/Common/ProjectPostCard';
 
 const Container = styled.div`
@@ -62,7 +63,7 @@ const Detail = styled.p`
 `;
 
 const Button = styled(Link)`
-  width: 220px;
+  width: 240px;
   color: #000000;
   padding: 5px 10px;
   border: 1px solid black;
@@ -75,6 +76,18 @@ const Button = styled(Link)`
 
   &:hover {
     background-color: #ededed;
+  }
+
+  img {
+    width: 16px;
+    height: 16px;
+    margin-left: 8px;
+    margin-top: 1px;
+    transition: transform 0.3s ease;
+  }
+
+  &:hover img {
+    transform: translateX(5px);
   }
 `;
 
@@ -135,7 +148,10 @@ function MainPage() {
               <br /> 네트워크, 유익한 자료와 활동으로 커뮤니티에서 유익한 시간을
               보내세요.
             </Detail>
-            <Button to="/community/free">DeepDivers 게시판으로 바로가기</Button>
+            <Button to="/community/free">
+              DeepDivers 게시판으로 바로가기
+              <img src={redirectIcon} alt="Redirect to board" />
+            </Button>
           </LeftArea>
           <RightArea>
             <PostCardLine>
