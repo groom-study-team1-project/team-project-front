@@ -7,8 +7,10 @@ import NoticeBoard from "../pages/NoticeBoard";
 import MyPage from "../pages/MyPage";
 import DetailPage from "../pages/DetailPage";
 import AuthPage from "../pages/AuthPage";
-import Login from "../components/Feature/login/Login";
-import SignUp from "../components/Feature/signUp/SignUp";
+import Login from "../components/Feature/Login";
+import SignUp from "../components/Feature/SignUp";
+import FindUserId from "../components/Feature/FindUserId";
+import FindUserPw from "../components/Feature/FindUserPw";
 
 function Router() {
   return (
@@ -24,6 +26,8 @@ function Router() {
         <Route path="/auth" element={<AuthPage />} />
         <Route path="/join" element={<Login />} />
         <Route path="/sign-up" element={<SignUp />} />
+        <Route path="/find-user-id" element={<FindUserId />} />
+        <Route path="/find-user-pw" element={<FindUserPw />} />
       </Routes>
     </BrowserRouter>
   );
