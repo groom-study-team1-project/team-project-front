@@ -1,5 +1,5 @@
 import React from 'react';
-import Navbar from '../components/Common/PopularPostCard';
+import Navbar from '../components/Common/PopularHashCard';
 
 function MainPage() {
   return (
