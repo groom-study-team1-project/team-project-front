@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import Navbar from '../components/Common/Navbar';
 import redirectIcon from '../assets/images/redirect-to-board.png';
 import ProjectPostCard from '../components/Common/ProjectPostCard';
-
+import CommunityPostCard from '../components/Common/CommunityPostCard';
 const Container = styled.div`
   max-width: 1920px;
   max-height: 100vh;
@@ -108,14 +108,7 @@ const PostCardLine = styled.div`
   border: 1px solid black;
 
   & > div:nth-child(2) {
-    width: 480px;
-    height: 200px;
     align-self: flex-end;
-  }
-
-  &:nth-of-type(2) > div:nth-child(1) {
-    width: 450px;
-    height: 140px;
   }
 `;
 
@@ -158,10 +151,14 @@ function MainPage() {
               <PostCard>
                 <ProjectPostCard />
               </PostCard>
-              <PostCard>Postcard2</PostCard>
+              <PostCard>
+                <CommunityPostCard />
+              </PostCard>
             </PostCardLine>
             <PostCardLine>
-              <PostCard>Postcard3</PostCard>
+              <PostCard>
+                <CommunityPostCard />
+              </PostCard>
             </PostCardLine>
           </RightArea>
         </Content>
