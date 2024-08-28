@@ -6,7 +6,6 @@ import "slick-carousel/slick/slick-theme.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faAngleRight, faAngleLeft } from "@fortawesome/free-solid-svg-icons";
 
-// Styled components for slider and arrows
 const CustomSlider = styled(Slider)`
   margin: 25px;
 
@@ -38,10 +37,9 @@ const CustomArrow = styled.div`
   color: #000;
   cursor: pointer;
   z-index: 3;
-  transition: color 0.3s ease; // Color transition on hover
 
   &:hover {
-    color: #000; // Keep color on hover
+    color: #000;
   }
 `;
 
