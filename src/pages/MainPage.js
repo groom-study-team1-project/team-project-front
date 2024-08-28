@@ -5,6 +5,7 @@ import Navbar from '../components/Common/Navbar';
 import redirectIcon from '../assets/images/redirect-to-board.png';
 import ProjectPostCard from '../components/Common/ProjectPostCard';
 import CommunityPostCard from '../components/Common/CommunityPostCard';
+
 const Container = styled.div`
   max-width: 1920px;
   max-height: 100vh;
@@ -93,11 +94,6 @@ const Button = styled(Link)`
 
 // 오른쪽 콘텐츠(포스트카드)
 const RightArea = styled.div`
-  width: 800px;
-  height: auto;
-  grid-template-columns: 1fr 1fr 1fr;
-  grid-template-rows: repeat(3, 1fr);
-  gap: 20px;
   padding: 20px;
   margin-right: 90px;
   border: 1px solid black;
@@ -106,15 +102,14 @@ const RightArea = styled.div`
 const PostCardLine = styled.div`
   display: flex;
   border: 1px solid black;
-
-  & > div:nth-child(2) {
-    align-self: flex-end;
-  }
 `;
 
 const PostCard = styled.div`
   margin: 10px;
   border: 1px solid black;
+  display: flex;
+  flex-direction: column;
+  align-self: flex-end;
 `;
 
 function MainPage() {
@@ -151,9 +146,7 @@ function MainPage() {
               <PostCard>
                 <ProjectPostCard />
               </PostCard>
-              <PostCard>
-                <CommunityPostCard />
-              </PostCard>
+              <PostCard>PostCard</PostCard>
             </PostCardLine>
             <PostCardLine>
               <PostCard>
