@@ -7,7 +7,6 @@ import NoticeBoard from "../pages/NoticeBoard";
 import MyPage from "../pages/MyPage";
 import DetailPage from "../pages/DetailPage";
 import AuthPage from "../pages/AuthPage";
-import BoardWrite from "../pages/BoardWriting";
 
 function Router() {
   return (
@@ -21,7 +20,6 @@ function Router() {
         <Route path="/my-page" element={<MyPage />} />
         <Route path="/detail" element={<DetailPage />} />
         <Route path="/auth" element={<AuthPage />} />
-        <Route path="/boardwrite" element={<BoardWrite />} />
       </Routes>
     </BrowserRouter>
   );
