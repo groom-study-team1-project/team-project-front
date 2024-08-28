@@ -1,3 +1,6 @@
+export const createPost = async (body) => {
+  //todo: 글 작성 api호출 구현
+};
 export async function fetchPostItems() {
   return [
     {
