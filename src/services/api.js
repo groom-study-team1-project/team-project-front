@@ -16,6 +16,20 @@ export async function fetchPostItems() {
   ];
 }
 
+export async function fetchNoticePostItems() {
+  return [
+    {
+      id: 1,
+      title: "Title",
+      date: "2024-08-28",
+      count: {
+        view: 12,
+      },
+      //+ 썸네일, 사용자 프로필 이미지
+    },
+  ];
+}
+
 export async function fetchMenuItems() {
   return [
     { id: 1, item: "Dummy" },
