@@ -11,8 +11,14 @@ import commentsubmit from "../assets/images/commentsubmit.png";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEllipsisVertical } from "@fortawesome/free-solid-svg-icons";
 import { fetchPostdetail, fetchcomment } from "../services/api";
-import { PostProfile } from "../components/Common/PostCardComponents";
-import { Interaction } from "../components/Common/Interactions";
+import {
+  PostProfile,
+  ProfileImage,
+} from "../components/Common/PostCardComponents";
+import {
+  Interaction,
+  InteractionItem,
+} from "../components/Common/Interactions";
 
 const CenteredContainer = styled.div`
   display: flex;
@@ -103,13 +109,14 @@ const CommentsWrap = styled.div`
 
 const CommentWrap = styled.div`
   width: 100%;
+  height: 65px;
   border: 1px solid black;
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 0px 12px;
   border-radius: 15px;
-  margin-top: 16px;
+  margin-bottom: 16px;
 `;
 
 const Comment = styled.div`
@@ -134,6 +141,7 @@ const TimeAndLike = styled.div`
 const CommentInputWrap = styled.div`
   position: relative;
   width: 100%;
+  margin-top: 16px;
 `;
 
 const CommentInput = styled.input`
@@ -283,11 +291,7 @@ function DetailPage() {
             {commentsData.result.map((commentData, index) => (
               <CommentWrap key={index}>
                 <Comment>
-                  <ProfileImg
-                    src={profileIcon}
-                    alt="프로필 이미지"
-                    style={{ marginTop: "20px" }}
-                  />
+                  <ProfileImage />
                   <CommentText>
                     <Bold>{commentData.memberInfo.nickname}</Bold>
                     <div>{commentData.commentInfo.content}</div>
@@ -297,8 +301,10 @@ function DetailPage() {
                   <TimeAndLike>
                     <div>{commentData.commentInfo.createdAt}</div>
                     <IconWrap>
-                      <Icon src={heart} alt="좋아요" />
-                      {` ${commentData.commentInfo.recommedCount}`}
+                      <InteractionItem
+                        icon={heart}
+                        count={commentData.commentInfo.recommedCount}
+                      />
                     </IconWrap>
                   </TimeAndLike>
                   {commentData.commentInfo.isModified && (

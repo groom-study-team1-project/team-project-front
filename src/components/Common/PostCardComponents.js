@@ -19,7 +19,7 @@ const ProfileWrapper = styled.div`
   width: 100%;
 `;
 
-const ProfileImage = styled.div`
+export const ProfileImage = styled.div`
   width: 30px;
   height: 30px;
   border: 1px solid;
