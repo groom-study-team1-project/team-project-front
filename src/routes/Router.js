@@ -7,6 +7,8 @@ import NoticeBoard from "../pages/NoticeBoard";
 import MyPage from "../pages/MyPage";
 import DetailPage from "../pages/DetailPage";
 import AuthPage from "../pages/AuthPage";
+import Login from "../components/Feature/Login";
+import SignUp from "../components/Feature/SignUp";
 import BoardWrite from "../pages/BoardWriting";
 
 function Router() {
@@ -21,6 +23,8 @@ function Router() {
         <Route path="/my-page" element={<MyPage />} />
         <Route path="/detail" element={<DetailPage />} />
         <Route path="/auth" element={<AuthPage />} />
+        <Route path="/join" element={<Login />} />
+        <Route path="/sign-up" element={<SignUp />} />
         <Route path="/boardwrite" element={<BoardWrite />} />
       </Routes>
     </BrowserRouter>
