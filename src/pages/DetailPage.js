@@ -23,7 +23,7 @@ const CenteredContainer = styled.div`
 
 const Wrap = styled.div`
   width: 1028px;
-  margin: auto;
+  margin: auto auto;
   font-size: 16px;
 `;
 
