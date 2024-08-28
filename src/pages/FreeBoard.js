@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
-import ProjectPostCard from "../components/Common/ProjectPostCard";
 import { fetchPostItems } from "../services/api";
+import CommunityPostCard from "../components/Common/CommunityPostCard";
 
 function FreeBoard() {
   const [postItems, setPostItems] = useState([]);
@@ -14,7 +14,7 @@ function FreeBoard() {
   return (
     <>
       {postItems.map((post) => (
-        <ProjectPostCard
+        <CommunityPostCard
           key={post.id}
           title={post.title}
           content={post.content}

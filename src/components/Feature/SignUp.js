@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import profileIcon from "../../../assets/images/profileIcon.png";
-import { signup } from "../../../services/api";
+import profileIcon from "../../assets/images/profileIcon.png";
+import { signup } from "../../services/api";
 import styled from "styled-components";
 
 const ContainerDiv = styled.div`
