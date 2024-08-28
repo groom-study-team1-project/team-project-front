@@ -1,3 +1,6 @@
+export const createPost = async (body) => {
+  //todo: 글 작성 api호출 구현
+};
 export async function fetchPostItems() {
   return [
     {
@@ -10,6 +13,20 @@ export async function fetchPostItems() {
         view: 12,
         like: 23,
         comment: 20,
+      },
+      //+ 썸네일, 사용자 프로필 이미지
+    },
+  ];
+}
+
+export async function fetchNoticePostItems() {
+  return [
+    {
+      id: 1,
+      title: "Title",
+      date: "2024-08-28",
+      count: {
+        view: 12,
       },
       //+ 썸네일, 사용자 프로필 이미지
     },
