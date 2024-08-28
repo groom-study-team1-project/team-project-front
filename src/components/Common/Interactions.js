@@ -33,7 +33,7 @@ const MirroredArrow = styled(DefaultArrow)`
   transform: scaleX(-1);
 `;
 
-const InteractionItem = ({ icon, count }) => (
+export const InteractionItem = ({ icon, count }) => (
   <InteractionItemWrapper>
     <Icon src={icon} />
     <IconText>{count}</IconText>
