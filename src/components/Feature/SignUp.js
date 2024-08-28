@@ -2,6 +2,13 @@ import React, { useState } from "react";
 import profileIcon from "../../assets/images/profileIcon.png";
 import { signup } from "../../services/api";
 import styled from "styled-components";
+import {
+  ContainerDiv,
+  Logo,
+  Form,
+  Input,
+  Btn,
+} from "../../assets/styles/AuthCommonStyles";
 
 const SignUpDiv = styled.div`
   height: 918px;
@@ -14,40 +21,6 @@ const SignUpDiv = styled.div`
 
 const ProfileImgDiv = styled.div`
   text-align: center;
-`;
-
-const ContainerDiv = styled.div`
-  max-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  overflow: hidden;
-`;
-
-const Logo = styled.div`
-  text-align: left;
-  margin-left: 4rem;
-  margin-bottom: 4rem;
-`;
-
-const Form = styled.form`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-`;
-
-const Input = styled.input`
-  width: 400px;
-  height: 36px;
-  margin-bottom: ${(props) => props.marginBtm};
-`;
-
-const Btn = styled.button`
-  margin: 1rem 0;
-  width: 404px;
-  height: 40px;
-  cursor: pointer;
 `;
 
 export default function SignUp() {
