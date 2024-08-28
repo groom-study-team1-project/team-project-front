@@ -8,27 +8,27 @@ import {
 import { PostProfile, PostContent, Thumbnail } from "./PostCardComponents";
 import { Interaction, ArrowButton } from "./Interactions";
 
-const CustomPostActions = styled(PostActions)`
-  align-items: center;
-  margin-top: 10px;
+export const CustomBody = styled(Body)`
+  flex-grow: 2;
+  padding: 10px 0 10px 10px;
 `;
 
-function ProjectPostCard({ title, content, name, job, count }) {
+function CommunityPostCard({ title, content, name, job, count }) {
   return (
-    <PostCardWrapper width="280px" height="440px">
-      <InnerContainer direction="column">
+    <PostCardWrapper width="985px" height="232px">
+      <InnerContainer>
         <Thumbnail />
-        <Body>
-          <CustomPostActions>
+        <CustomBody>
+          <PostActions>
+            <PostProfile name={name} job={job} />
             <Interaction count={count} />
-            <ArrowButton />
-          </CustomPostActions>
+          </PostActions>
           <PostContent title={title} content={content} />
-          <PostProfile name={name} job={job} />
-        </Body>
+          <ArrowButton />
+        </CustomBody>
       </InnerContainer>
     </PostCardWrapper>
   );
 }
 
-export default ProjectPostCard;
+export default CommunityPostCard;
