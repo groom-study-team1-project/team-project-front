@@ -14,13 +14,6 @@ const Container = styled.div`
   border: 1px solid black;
 `;
 
-//네브바
-const Header = styled.header`
-  padding: 20px;
-  text-align: center;
-  border: 1px solid black;
-`;
-
 // 콘텐츠
 const Content = styled.main`
   height: auto;
@@ -113,6 +106,7 @@ const PostCard = styled.div`
 `;
 
 function MainPage() {
+  console.log("b" + "a" + +"a");
   return (
     <>
       <Container>
