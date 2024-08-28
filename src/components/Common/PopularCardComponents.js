@@ -1,4 +1,3 @@
-import React from 'react';
 import styled from 'styled-components';
 import { Interaction } from './Interactions';
 
@@ -8,7 +7,6 @@ const Post = styled.div`
   border: 1px solid black;
   padding: 10px;
   margin-bottom: 10px;
-  display: column;
   justify-content: space-between;
   align-items: center;
   cursor: pointer;
@@ -16,6 +14,10 @@ const Post = styled.div`
   &:hover {
     background-color: #f1f1f1;
   }
+`;
+
+const Hash = styled(Post)`
+  display: flex;
 `;
 
 const PostText = styled.p`
@@ -39,18 +41,13 @@ const PostStats = styled.div`
   }
 `;
 
-const Icon = styled.span`
-  font-size: 12px;
-  margin-right: 5px;
-`;
-
-const PopularPostMenuBar = ({
-  text,
+export const PopularPost = ({
+  title,
   count = { view: 0, like: 0, comment: 0 },
 }) => {
   return (
     <Post>
-      <PostText>{text}</PostText>
+      <PostText>{title}</PostText>
       <PostStats>
         <Interaction count={count} />
       </PostStats>
@@ -58,4 +55,11 @@ const PopularPostMenuBar = ({
   );
 };
 
-export default PopularPostMenuBar;
+export const PopularHash = ({ hashtag, count }) => {
+  return (
+    <Hash>
+      <PostText>{`#${hashtag}`}</PostText>
+      <PostStats>{count}</PostStats>
+    </Hash>
+  );
+};

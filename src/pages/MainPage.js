@@ -1,11 +1,11 @@
 import React from 'react';
-import Navbar from '../components/Common/PopularHashCard';
+import Navbar from '../components/Common/Navbar';
 
 function MainPage() {
   return (
     <>
       <div>
-        <Navbar />
+        <Navbar isMainPage={true} isLoggedIn={false} />
       </div>
     </>
   );
