@@ -5,10 +5,10 @@ export async function fetchPostItems() {
   return [
     {
       id: 1,
-      title: 'Title',
-      content: 'This is content.',
-      name: 'John Doe',
-      job: 'Software Engineer',
+      title: "Title",
+      content: "This is content.",
+      name: "John Doe",
+      job: "Software Engineer",
       count: {
         view: 12,
         like: 23,
@@ -23,8 +23,8 @@ export async function fetchNoticePostItems() {
   return [
     {
       id: 1,
-      title: 'Title',
-      date: '2024-08-28',
+      title: "Title",
+      date: "2024-08-28",
       count: {
         view: 12,
       },
@@ -35,11 +35,11 @@ export async function fetchNoticePostItems() {
 
 export async function fetchMenuItems() {
   return [
-    { id: 1, item: 'Dummy' },
-    { id: 2, item: 'Dummy' },
-    { id: 3, item: 'Dummy' },
-    { id: 4, item: 'Dummy' },
-    { id: 5, item: 'Dummy' },
+    { id: 1, item: "Dummy" },
+    { id: 2, item: "Dummy" },
+    { id: 3, item: "Dummy" },
+    { id: 4, item: "Dummy" },
+    { id: 5, item: "Dummy" },
   ];
 }
 
@@ -62,7 +62,7 @@ export async function fetchPopularPostItems() {
   return [
     {
       id: 1,
-      title: 'Title 1',
+      title: "Title 1",
       count: {
         view: 1,
         like: 11,
@@ -71,7 +71,7 @@ export async function fetchPopularPostItems() {
     },
     {
       id: 2,
-      title: 'Title 2',
+      title: "Title 2",
       count: {
         view: 2,
         like: 22,
@@ -80,7 +80,7 @@ export async function fetchPopularPostItems() {
     },
     {
       id: 3,
-      title: 'Title 3',
+      title: "Title 3",
       count: {
         view: 3,
         like: 33,
@@ -89,7 +89,7 @@ export async function fetchPopularPostItems() {
     },
     {
       id: 4,
-      title: 'Title 4',
+      title: "Title 4",
       count: {
         view: 4,
         like: 44,
@@ -98,7 +98,7 @@ export async function fetchPopularPostItems() {
     },
     {
       id: 5,
-      title: 'Title 5',
+      title: "Title 5",
       count: {
         view: 5,
         like: 55,
@@ -112,27 +112,27 @@ export async function fetchPopularHashItems() {
   return [
     {
       id: 1,
-      hashtag: '해시태그 1',
+      hashtag: "해시태그 1",
       count: 11,
     },
     {
       id: 2,
-      hashtag: '해시태그 2',
+      hashtag: "해시태그 2",
       count: 22,
     },
     {
       id: 3,
-      hashtag: '해시태그 3',
+      hashtag: "해시태그 3",
       count: 33,
     },
     {
       id: 4,
-      hashtag: '해시태그 4',
+      hashtag: "해시태그 4",
       count: 44,
     },
     {
       id: 5,
-      hashtag: '해시태그 5',
+      hashtag: "해시태그 5",
       count: 55,
     },
   ];

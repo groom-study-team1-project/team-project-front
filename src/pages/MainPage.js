@@ -1,10 +1,10 @@
-import React from 'react';
-import styled from 'styled-components';
-import { Link } from 'react-router-dom';
-import Navbar from '../components/Common/Navbar';
-import redirectIcon from '../assets/images/redirect-to-board.png';
-import ProjectPostCard from '../components/Common/ProjectPostCard';
-import CommunityPostCard from '../components/Common/CommunityPostCard';
+import React from "react";
+import styled from "styled-components";
+import { Link } from "react-router-dom";
+import Navbar from "../components/Common/Navbar";
+import redirectIcon from "../assets/images/redirect-to-board.png";
+import ProjectPostCard from "../components/Common/ProjectPostCard";
+import CommunityPostCard from "../components/Common/CommunityPostCard";
 
 const Container = styled.div`
   max-width: 1920px;

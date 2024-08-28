@@ -1,14 +1,13 @@
-import { BrowserRouter, Route, Routes } from 'react-router-dom';
-import MainPage from '../pages/MainPage';
-import FreeBoard from '../pages/FreeBoard';
-import QuestionBoard from '../pages/QuestionBoard';
-import ProjectBoard from '../pages/ProjectBoard';
-import NoticeBoard from '../pages/NoticeBoard';
-import MyPage from '../pages/MyPage';
-import DetailPage from '../pages/DetailPage';
-import AuthPage from '../pages/AuthPage';
-import Login from '../components/Feature/Login';
-import SignUp from '../components/Feature/SignUp';
+import { BrowserRouter, Route, Routes } from "react-router-dom";
+import MainPage from "../pages/MainPage";
+import FreeBoard from "../pages/FreeBoard";
+import QuestionBoard from "../pages/QuestionBoard";
+import ProjectBoard from "../pages/ProjectBoard";
+import NoticeBoard from "../pages/NoticeBoard";
+import MyPage from "../pages/MyPage";
+import DetailPage from "../pages/DetailPage";
+import AuthPage from "../pages/AuthPage";
+import BoardWrite from "../pages/BoardWriting";
 
 function Router() {
   return (

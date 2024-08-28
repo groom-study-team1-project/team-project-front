@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from 'react';
-import { fetchPostItems } from '../services/api';
-import CommunityPostCard from '../components/Common/CommunityPostCard';
-import PopularPostCard from '../components/Common/PopularPostCard';
-import PopularHashCard from '../components/Common/PopularHashCard';
+import React, { useEffect, useState } from "react";
+import { fetchPostItems } from "../services/api";
+import CommunityPostCard from "../components/Common/CommunityPostCard";
+import PopularPostCard from "../components/Common/PopularPostCard";
+import PopularHashCard from "../components/Common/PopularHashCard";
 
 function FreeBoard() {
   const [postItems, setPostItems] = useState([]);

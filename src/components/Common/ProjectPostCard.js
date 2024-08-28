@@ -1,12 +1,12 @@
-import styled from 'styled-components';
+import styled from "styled-components";
 import {
   PostCardWrapper,
   InnerContainer,
   Body,
   PostActions,
-} from './PostCardWrapper';
-import { PostProfile, PostContent, Thumbnail } from './PostCardComponents';
-import { Interaction, ArrowButton } from './Interactions';
+} from "./PostCardWrapper";
+import { PostProfile, PostContent, Thumbnail } from "./PostCardComponents";
+import { Interaction, ArrowButton } from "./Interactions";
 
 const CustomPostActions = styled(PostActions)`
   align-items: center;
