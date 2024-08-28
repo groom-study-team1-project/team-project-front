@@ -15,10 +15,10 @@ import { fetchPostdetail, fetchcomment } from "../services/api";
 
 const CenteredContainer = styled.div`
   display: flex;
-  justify-content: center; /* 가로 중앙 정렬 */
-  align-items: center; /* 세로 중앙 정렬 */
-  height: 100vh; /* 화면 전체 높이 */
-  width: 100vw; /* 화면 전체 너비 */
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  width: 100vw;
 `;
 
 const Wrap = styled.div`
