@@ -41,7 +41,7 @@ export const signup = async (
   // todo: 회원가입 api 호출 함수 구현(formData)
 };
 
-export const createPost = (body) => {
+export const createPost = async (body) => {
   //todo: 글 작성 api호출 구현
 };
 export function fetchPostdetail() {
@@ -85,5 +85,42 @@ export function fetchPostdetail() {
         ],
       },
     },
+  };
+}
+
+export function fetchcomment() {
+  return {
+    code: 1301,
+    message: "댓글 조회에 성공하였습니다.",
+    result: [
+      {
+        memberInfo: {
+          Id: 0,
+          nickname: "ALee",
+          imageUrl: "~~~",
+        },
+        commentInfo: {
+          content: "comment test",
+          recommedCount: 0,
+          createdAt: new Date().toLocaleDateString(),
+          updatedAt: "수정일자",
+          isModified: true,
+        },
+      },
+      {
+        memberInfo: {
+          Id: 1,
+          nickname: "MogensEgeskov",
+          imageUrl: "~~~",
+        },
+        commentInfo: {
+          content: "comment test1",
+          recommedCount: 2,
+          createdAt: new Date().toLocaleDateString(),
+          updatedAt: "수정일자",
+          isModified: false,
+        },
+      },
+    ],
   };
 }

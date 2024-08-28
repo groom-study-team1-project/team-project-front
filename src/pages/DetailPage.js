@@ -10,8 +10,9 @@ import profileIcon from "../assets/images/profileIcon.png";
 import commentsubmit from "../assets/images/commentsubmit.png";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEllipsisVertical } from "@fortawesome/free-solid-svg-icons";
-
 import { fetchPostdetail, fetchcomment } from "../services/api";
+import { PostProfile } from "../components/Common/PostCardComponents";
+import { Interaction } from "../components/Common/Interactions";
 
 const CenteredContainer = styled.div`
   display: flex;
@@ -46,17 +47,16 @@ const Postheader = styled.div`
 
 const PostheaderRignt = styled.div`
   display: flex;
+  flex-wrap: nowrap;
   position: relative;
+  width: 100px;
+  margin-right: 10px;
 `;
 
 const Modify = styled.div`
   margin-left: 10px;
   cursor: pointer;
   position: relative;
-`;
-
-const Profile = styled.div`
-  display: flex;
 `;
 
 const ProfileImg = styled.img`
@@ -83,11 +83,8 @@ const PostFooter = styled.div`
   margin-top: 16px;
 `;
 
-const IconsWrap = styled.div`
-  display: flex;
-`;
-
 const IconWrap = styled.div`
+  margin-top: 10px;
   margin-left: 16px;
 `;
 
@@ -176,7 +173,10 @@ const Modal = styled.div`
     cursor: pointer;
   }
 `;
-
+const Bold = styled.div`
+  font-weight: bold;
+  margin-bottom: 5px;
+`;
 const CommnetModalIcon = styled.div`
   margin-left: 10px;
 `;
@@ -219,15 +219,10 @@ function DetailPage() {
 
           <PostWrap>
             <Postheader>
-              <Profile>
-                <ProfileImg src={profileIcon} alt="프로필 이미지" />
-                <div>
-                  <div>
-                    <b>{post.result.memberInfo.nickname}</b>
-                  </div>
-                  <div>{post.result.memberInfo.development}</div>
-                </div>
-              </Profile>
+              <PostProfile
+                name={post.result.memberInfo.nickname}
+                job={post.result.memberInfo.development}
+              />
               <div>
                 {post.result.postInfo.isModified ? (
                   <PostheaderRignt>
@@ -280,20 +275,7 @@ function DetailPage() {
                 <span key={index}>{hashtag}</span>
               ))}
             </div>
-            <IconsWrap>
-              <IconWrap>
-                <Icon src={eye} alt="조회수" />
-                {` ${post.result.postInfo.viewCount}`}
-              </IconWrap>
-              <IconWrap>
-                <Icon src={heart} alt="좋아요" />
-                {` ${post.result.postInfo.recommedCount}`}
-              </IconWrap>
-              <IconWrap>
-                <Icon src={comment} alt="댓글수" />
-                {` ${post.result.postInfo.commentCount}`}
-              </IconWrap>
-            </IconsWrap>
+            <Interaction count={{ view: 12, like: 12, comment: 12 }} />
           </PostFooter>
           <CommentsWrap>
             <div style={{ fontSize: "24px" }}>댓글</div>
@@ -307,7 +289,7 @@ function DetailPage() {
                     style={{ marginTop: "20px" }}
                   />
                   <CommentText>
-                    <b>{commentData.memberInfo.nickname}</b>
+                    <Bold>{commentData.memberInfo.nickname}</Bold>
                     <div>{commentData.commentInfo.content}</div>
                   </CommentText>
                 </Comment>
