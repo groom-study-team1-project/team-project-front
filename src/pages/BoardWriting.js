@@ -2,16 +2,10 @@ import React, { useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { CKEditor } from "@ckeditor/ckeditor5-react";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
-import styled, { createGlobalStyle } from "styled-components";
+import styled from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPhotoFilm } from "@fortawesome/free-solid-svg-icons";
-
-const GlobalStyle = createGlobalStyle`
-  .ck.ck-editor__editable:not(.ck-editor__nested-editable) {
-    min-height: 400px;
-    margin-bottom: 20px;
-  }
-`;
+import GlobalStyle from "../assets/styles/GlobalStyle";
 
 const Wrap = styled.div`
   width: 1028px;
