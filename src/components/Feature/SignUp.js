@@ -8,13 +8,14 @@ import {
   Form,
   Input,
   Btn,
-} from "../../assets/styles/AuthCommonStyles";
+} from "../Common/AuthCommonComponents";
 
 const SignUpDiv = styled.div`
   height: 918px;
   width: 530px;
   background-color: rgba(255, 255, 255, 0.5);
   margin: auto;
+  margin-top: 5rem;
   padding-top: 5rem;
   box-sizing: border-box;
 `;
