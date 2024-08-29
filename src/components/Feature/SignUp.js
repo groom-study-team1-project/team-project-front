@@ -14,14 +14,15 @@ const SignUpDiv = styled.div`
   height: 918px;
   width: 530px;
   background-color: rgba(255, 255, 255, 0.5);
-  margin: auto;
-  margin-top: 5rem;
-  padding-top: 5rem;
+  margin: 4rem 0;
+  padding: 4rem 0;
   box-sizing: border-box;
+  border: 1px solid black;
 `;
 
 const ProfileImgDiv = styled.div`
   text-align: center;
+  margin: 16px;
 `;
 
 export default function SignUp() {
@@ -93,7 +94,7 @@ export default function SignUp() {
             <p>휴대폰 번호</p>
             <Input type="tel" value={phoneNum} />
           </div>
-          <div style={{ borderTop: "1px solid darkgray", marginTop: "16px" }}>
+          <div style={{ borderTop: "1px solid darkgray", marginTop: "0" }}>
             <Btn type="submit">계정 생성하기</Btn>
           </div>
         </Form>
