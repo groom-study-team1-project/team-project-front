@@ -16,6 +16,7 @@ const FindUserPwDiv = styled.div`
   margin-top: 8rem;
   padding-top: 10rem;
   box-sizing: border-box;
+  border: 1px solid black;
 `;
 
 export default function FindUserPw() {
