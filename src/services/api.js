@@ -134,8 +134,10 @@ export async function fetchPopularHashItems() {
   ];
 }
 
-export const createPost = (body) => {
-  //todo: 글 작성 api호출 구현
+export const createPost = async (body) => {};
+
+export const createcomment = async (body) => {
+  await console.log(body);
 };
 
 export const fetchPostdetail = async () => {

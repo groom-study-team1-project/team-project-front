@@ -7,7 +7,7 @@ import heart from "../assets/images/heart.png";
 import commentsubmit from "../assets/images/commentsubmit.png";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEllipsisVertical } from "@fortawesome/free-solid-svg-icons";
-import { fetchPostdetail, fetchcomment } from "../services/api";
+import { fetchPostdetail, fetchcomment, createcomment } from "../services/api";
 import {
   PostProfile,
   ProfileImage,
@@ -197,10 +197,10 @@ function DetailPage() {
     fetchData();
   }, []);
 
-  const onSubmit = (e) => {
-    e.preventDefault();
+  const onSubmit = async (e) => {
+    await e.preventDefault();
     const body = { commentValue };
-    console.log(body);
+    await createcomment(body);
   };
 
   const onChange = (e) => {
