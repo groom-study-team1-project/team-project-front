@@ -2,11 +2,8 @@ import React, { useRef, useState, useEffect } from "react";
 import styled from "styled-components";
 import { CKEditor } from "@ckeditor/ckeditor5-react";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
-import Slide from "../components/Layout/imgSlide";
-import comment from "../assets/images/comment.png";
-import eye from "../assets/images/eye.png";
+import Slide from "../components/Common/imgSlide";
 import heart from "../assets/images/heart.png";
-import profileIcon from "../assets/images/profileIcon.png";
 import commentsubmit from "../assets/images/commentsubmit.png";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEllipsisVertical } from "@fortawesome/free-solid-svg-icons";
@@ -65,12 +62,6 @@ const Modify = styled.div`
   position: relative;
 `;
 
-const ProfileImg = styled.img`
-  width: 60px;
-  height: 60px;
-  border-radius: 50%;
-`;
-
 const PostWrap = styled.div`
   border: 1px solid black;
   padding: 10px;
@@ -92,10 +83,6 @@ const PostFooter = styled.div`
 const IconWrap = styled.div`
   margin-top: 10px;
   margin-left: 16px;
-`;
-
-const Icon = styled.img`
-  width: 16px;
 `;
 
 const CommetHr = styled.hr`
@@ -189,15 +176,29 @@ const CommnetModalIcon = styled.div`
   margin-left: 10px;
 `;
 function DetailPage() {
-  const post = fetchPostdetail();
-  const commentsData = fetchcomment();
-  console.log(commentsData);
+  const [post, setPost] = useState(null);
+  const [commentsData, setCommentData] = useState(null);
   const [commentValue, setCommentValue] = useState("");
   const [modalcurrent, setModalcurrnet] = useState(false);
   const modalRef = useRef(null);
 
-  const onSubmit = async (e) => {
-    await e.preventDefault();
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const postResponse = await fetchPostdetail();
+        const commentsResponse = await fetchcomment();
+
+        setPost(postResponse);
+        setCommentData(commentsResponse);
+      } catch (error) {
+        console.error("데이터를 가져오는데 실패", error);
+      }
+    };
+    fetchData();
+  }, []);
+
+  const onSubmit = (e) => {
+    e.preventDefault();
     const body = { commentValue };
     console.log(body);
   };
@@ -218,6 +219,10 @@ function DetailPage() {
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, []);
+
+  if (!post || !commentsData) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <>

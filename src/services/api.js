@@ -138,7 +138,7 @@ export const createPost = (body) => {
   //todo: 글 작성 api호출 구현
 };
 
-export function fetchPostdetail() {
+export const fetchPostdetail = async () => {
   return {
     code: 1201,
     message: "게시글 조회에 성공하였습니다.",
@@ -180,9 +180,9 @@ export function fetchPostdetail() {
       },
     },
   };
-}
+};
 
-export function fetchcomment() {
+export const fetchcomment = async () => {
   return {
     code: 1301,
     message: "댓글 조회에 성공하였습니다.",
@@ -217,4 +217,4 @@ export function fetchcomment() {
       },
     ],
   };
-}
+};
