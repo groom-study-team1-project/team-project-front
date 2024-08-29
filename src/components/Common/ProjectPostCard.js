@@ -13,7 +13,13 @@ const CustomPostActions = styled(PostActions)`
   margin-top: 10px;
 `;
 
-function ProjectPostCard({ title, content, name, job, count }) {
+function ProjectPostCard({
+  title,
+  content,
+  name,
+  job,
+  count = { view: 0, like: 0, comment: 0 },
+}) {
   return (
     <PostCardWrapper width="280px" height="440px">
       <InnerContainer direction="column">
