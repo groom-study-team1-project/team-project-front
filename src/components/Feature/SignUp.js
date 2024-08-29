@@ -1,16 +1,15 @@
-import React, { useState } from 'react';
-import profileIcon from '../../assets/images/profileIcon.png';
-import { signup } from '../../services/api';
-import styled from 'styled-components';
+import React, { useState } from "react";
+import profileIcon from "../../assets/images/profileIcon.png";
+import { signup } from "../../services/api";
+import styled from "styled-components";
+import {
+  ContainerDiv,
+  Logo,
+  Form,
+  Input,
+  Btn,
+} from "../Common/AuthCommonComponents";
 
-const ContainerDiv = styled.div`
-  max-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  overflow: hidden;
-`;
 const SignUpDiv = styled.div`
   height: 918px;
   width: 530px;
@@ -19,36 +18,18 @@ const SignUpDiv = styled.div`
   padding-top: 5rem;
   box-sizing: border-box;
 `;
-const Logo = styled.div`
-  text-align: left;
-  margin-left: 4rem;
-`;
-const Form = styled.form`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-`;
+
 const ProfileImgDiv = styled.div`
   text-align: center;
-`;
-const Input = styled.input`
-  width: 400px;
-  height: 36px;
-`;
-const Btn = styled.button`
-  margin: 1rem 0;
-  width: 404px;
-  height: 40px;
-  cursor: pointer;
 `;
 
 export default function SignUp() {
   const [profileImg, setProfileImg] = useState(null);
-  const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
-  const [phoneNum, setPhoneNum] = useState('');
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [phoneNum, setPhoneNum] = useState("");
 
   async function handleSignUp(e) {
     e.preventDefault();
@@ -62,11 +43,11 @@ export default function SignUp() {
         confirmPassword,
         phoneNum
       );
-      console.log('success', data);
+      console.log("success", data);
 
       // todo: 회원가입 로직
     } catch (error) {
-      console.log('failed', error);
+      console.log("failed", error);
     }
   }
 
@@ -111,7 +92,7 @@ export default function SignUp() {
             <p>휴대폰 번호</p>
             <Input type="tel" value={phoneNum} />
           </div>
-          <div style={{ borderTop: '1px solid darkgray', marginTop: '16px' }}>
+          <div style={{ borderTop: "1px solid darkgray", marginTop: "0" }}>
             <Btn type="submit">계정 생성하기</Btn>
           </div>
         </Form>
