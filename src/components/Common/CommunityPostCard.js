@@ -13,7 +13,13 @@ export const CustomBody = styled(Body)`
   padding: 10px 0 10px 10px;
 `;
 
-function CommunityPostCard({ title, content, name, job, count }) {
+function CommunityPostCard({
+  title,
+  content,
+  name,
+  job,
+  count = { view: 0, like: 0, comment: 0 },
+}) {
   return (
     <PostCardWrapper width="985px" height="232px">
       <InnerContainer>
