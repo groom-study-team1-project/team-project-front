@@ -1,7 +1,7 @@
-import React, { useState } from "react";
-import profileIcon from "../../assets/images/profileIcon.png";
-import { signup } from "../../services/api";
-import styled from "styled-components";
+import React, { useState } from 'react';
+import profileIcon from '../../assets/images/profileIcon.png';
+import { signup } from '../../services/api';
+import styled from 'styled-components';
 
 const ContainerDiv = styled.div`
   max-height: 100vh;
@@ -44,11 +44,11 @@ const Btn = styled.button`
 
 export default function SignUp() {
   const [profileImg, setProfileImg] = useState(null);
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
-  const [phoneNum, setPhoneNum] = useState("");
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const [phoneNum, setPhoneNum] = useState('');
 
   async function handleSignUp(e) {
     e.preventDefault();
@@ -62,11 +62,11 @@ export default function SignUp() {
         confirmPassword,
         phoneNum
       );
-      console.log("success", data);
+      console.log('success', data);
 
       // todo: 회원가입 로직
     } catch (error) {
-      console.log("failed", error);
+      console.log('failed', error);
     }
   }
 
@@ -111,7 +111,7 @@ export default function SignUp() {
             <p>휴대폰 번호</p>
             <Input type="tel" value={phoneNum} />
           </div>
-          <div style={{ borderTop: "1px solid darkgray", marginTop: "16px" }}>
+          <div style={{ borderTop: '1px solid darkgray', marginTop: '16px' }}>
             <Btn type="submit">계정 생성하기</Btn>
           </div>
         </Form>
