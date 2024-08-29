@@ -7,15 +7,15 @@ import {
   Form,
   Input,
   Btn,
-} from "../../assets/styles/AuthCommonStyles";
+} from "../Common/AuthCommonComponents";
 
 const FindUserPwDiv = styled.div`
   height: 628px;
   width: 530px;
-  margin: auto;
-  margin-top: 8rem;
-  padding-top: 10rem;
+  margin: 8rem 0;
+  padding: 7rem 0;
   box-sizing: border-box;
+  border: 1px solid black;
 `;
 
 export default function FindUserPw() {
