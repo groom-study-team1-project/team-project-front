@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { fetchSideBarMenuItems } from "../../services/api";
+import { fetchMenuItems } from "../../services/api";
 import styled from "styled-components";
 
 const ContainerDiv = styled.div`
@@ -45,17 +45,9 @@ export default function SideBar() {
   const [menuItems, setMenuItems] = useState([]);
 
   useEffect(() => {
-    const fetchMenuItems = async () => {
-      try {
-        const items = await fetchSideBarMenuItems();
-        setMenuItems(items);
-      } catch (error) {
-        console.error(error);
-        // 사용자에게 오류 메시지 표시를 고려할 수 있습니다.
-      }
-    };
-
-    fetchMenuItems();
+    fetchMenuItems()
+      .then((menuItems) => setMenuItems(menuItems))
+      .catch((err) => console.log(err.message));
   }, []);
 
   return (
