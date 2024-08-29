@@ -134,7 +134,9 @@ export async function fetchPopularHashItems() {
   ];
 }
 
-export const createPost = async (body) => {};
+export const createPost = async (body) => {
+  await console.log(body);
+};
 
 export const createcomment = async (body) => {
   await console.log(body);
