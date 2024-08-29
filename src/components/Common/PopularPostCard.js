@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from 'react';
-import PopularContainer from './PopularContainer';
-import { PopularPost } from './PopularCardComponents';
-import { fetchPopularPostItems } from '../../services/api';
+import React, { useEffect, useState } from "react";
+import PopularContainer from "./PopularContainer";
+import { PopularPost } from "./PopularCardComponents";
+import { fetchPopularPostItems } from "../../services/api";
 
 const PopularPostCard = () => {
   const [postItems, setPostItems] = useState([]);

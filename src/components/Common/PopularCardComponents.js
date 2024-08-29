@@ -1,5 +1,5 @@
-import styled from 'styled-components';
-import { Interaction } from './Interactions';
+import styled from "styled-components";
+import { Interaction } from "./Interactions";
 
 const Post = styled.div`
   background-color: white;

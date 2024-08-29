@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from 'react';
-import PopularContainer from './PopularContainer';
-import { PopularHash } from './PopularCardComponents';
-import { fetchPopularHashItems } from '../../services/api';
+import React, { useEffect, useState } from "react";
+import PopularContainer from "./PopularContainer";
+import { PopularHash } from "./PopularCardComponents";
+import { fetchPopularHashItems } from "../../services/api";
 
 const PopularHashCard = () => {
   const [hashItems, sethashItems] = useState([]);
