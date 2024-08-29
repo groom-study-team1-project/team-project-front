@@ -13,10 +13,10 @@ import {
 const LoginDiv = styled.div`
   height: 628px;
   width: 530px;
-  margin: auto;
-  margin-top: 8rem;
-  padding-top: 10rem;
+  margin: 8rem 0;
+  padding: 10rem 0;
   box-sizing: border-box;
+  border: 1px solid black;
 `;
 
 const FindUserBtn = styled.button`
@@ -56,7 +56,7 @@ export default function Login() {
     <ContainerDiv>
       <LoginDiv>
         {/* Login */}
-        <Logo>
+        <Logo style={{ textAlign: "center", marginLeft: "0" }}>
           <h1>로고 이미지</h1>
         </Logo>
         <Form action="" method="post" onSubmit={handleLogin}>
