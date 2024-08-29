@@ -14,13 +14,15 @@ const SignUpDiv = styled.div`
   height: 918px;
   width: 530px;
   background-color: rgba(255, 255, 255, 0.5);
-  margin: auto;
-  padding-top: 5rem;
+  margin: 5rem 0;
+  padding: 5rem 0;
   box-sizing: border-box;
+  border: 1px solid black;
 `;
 
 const ProfileImgDiv = styled.div`
   text-align: center;
+  padding-bottom: 16px;
 `;
 
 export default function SignUp() {
@@ -67,7 +69,11 @@ export default function SignUp() {
         </Logo>
         <Form onSubmit={handleSignUp}>
           <ProfileImgDiv>
-            <img src={profileImg ? profileImg : profileIcon} alt="프로필사진" />
+            <img
+              src={profileImg ? profileImg : profileIcon}
+              alt="프로필사진"
+              style={{ width: "100px", height: "100px" }}
+            />
             <div>
               <input type="file" onChange={handleImageChange} />
             </div>
