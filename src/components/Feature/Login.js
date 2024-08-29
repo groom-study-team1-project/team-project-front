@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
 import { join } from "../../services/api";
+import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import {
   ContainerDiv,
@@ -8,7 +8,7 @@ import {
   Form,
   Input,
   Btn,
-} from "../../assets/styles/AuthCommonStyles";
+} from "../Common/AuthCommonComponents";
 
 const LoginDiv = styled.div`
   height: 628px;
