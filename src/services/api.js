@@ -35,11 +35,11 @@ export async function fetchNoticePostItems() {
 
 export async function fetchMenuItems() {
   return [
-    { id: 1, item: "Dummy" },
-    { id: 2, item: "Dummy" },
-    { id: 3, item: "Dummy" },
-    { id: 4, item: "Dummy" },
-    { id: 5, item: "Dummy" },
+    { id: 1, item: "Dummy", link: "#" },
+    { id: 2, item: "Dummy", link: "#" },
+    { id: 3, item: "Dummy", link: "#" },
+    { id: 4, item: "Dummy", link: "#" },
+    { id: 5, item: "Dummy", link: "#" },
   ];
 }
 
