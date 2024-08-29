@@ -15,6 +15,7 @@ const LoginDiv = styled.div`
   margin: 8rem 0;
   padding: 8rem 0;
   box-sizing: border-box;
+  border: 1px solid black;
 `;
 
 export default function Login() {
