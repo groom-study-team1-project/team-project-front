@@ -10,8 +10,6 @@ import AuthPage from "../pages/AuthPage";
 import Login from "../components/Feature/Login";
 import SignUp from "../components/Feature/SignUp";
 import BoardWrite from "../pages/BoardWriting";
-import Login from "../components/Feature/Login";
-import SignUp from "../components/Feature/SignUp";
 
 function Router() {
   return (
