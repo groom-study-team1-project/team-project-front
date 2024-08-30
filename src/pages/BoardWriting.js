@@ -6,7 +6,7 @@ import styled from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPhotoFilm } from "@fortawesome/free-solid-svg-icons";
 import GlobalStyle from "../assets/styles/GlobalStyle";
-
+import { createPost } from "../services/api";
 const Wrap = styled.div`
   width: 1028px;
   margin: auto auto;
@@ -145,7 +145,7 @@ function BoardWrite() {
     } else {
       body = { title, content, hasgtags, selectedCategory };
     }
-    console.log(body);
+    await createPost(body);
   };
   return (
     <>

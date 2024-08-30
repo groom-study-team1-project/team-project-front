@@ -133,7 +133,6 @@ export async function fetchPopularHashItems() {
     },
   ];
 }
-
 export const createPost = async (body) => {
   await console.log(body);
 };
