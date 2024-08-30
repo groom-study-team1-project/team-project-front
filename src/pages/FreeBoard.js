@@ -3,6 +3,7 @@ import { fetchPostItems } from "../services/api";
 import CommunityPostCard from "../components/Common/CommunityPostCard";
 import PopularPostCard from "../components/Common/PopularPostCard";
 import PopularHashCard from "../components/Common/PopularHashCard";
+import SideBar from "../components/Common/SideBar";
 
 function FreeBoard() {
   const [postItems, setPostItems] = useState([]);
@@ -15,6 +16,8 @@ function FreeBoard() {
 
   return (
     <>
+      {/* FreeBoard */}
+      <SideBar />
       {postItems.map((post) => (
         <CommunityPostCard
           key={post.id}
