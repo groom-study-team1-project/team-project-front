@@ -31,19 +31,12 @@ const ProfileInfo = styled.div`
   flex-direction: column;
 `;
 
-const ProfileInput = styled.input`
-  &:disabled {
-    background-color: transparent;
-    border: none;
-  }
-`;
-
-export const PostProfile = ({ name, job, isDisabled = true }) => (
+export const PostProfile = ({ name, job }) => (
   <ProfileWrapper>
     <ProfileImage />
     <ProfileInfo>
-      <ProfileInput value={name} disabled={isDisabled} />
-      <ProfileInput value={job} disabled={isDisabled} />
+      <p>{name}</p>
+      <p>{job}</p>
     </ProfileInfo>
   </ProfileWrapper>
 );

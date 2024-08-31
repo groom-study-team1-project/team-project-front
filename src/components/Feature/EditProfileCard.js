@@ -4,7 +4,7 @@ import { PostProfile } from "../Common/PostCardComponents";
 function EditProfileCard({ name, job }) {
   return (
     <>
-      <PostProfile name={name} job={job} isDisabled={false} />
+      <PostProfile name={name} job={job} />
     </>
   );
 }
