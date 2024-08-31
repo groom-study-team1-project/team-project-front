@@ -152,7 +152,7 @@ export const fetchPostdetail = async () => {
       },
       memberInfo: {
         Id: 0,
-        nickname: " MogensEgeskov",
+        nickname: "MogensEgeskov",
         development: "iOS Developer",
         imageUrl: "~~~",
       },

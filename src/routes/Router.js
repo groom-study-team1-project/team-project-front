@@ -22,7 +22,7 @@ function Router() {
         <Route path="/community/projects" element={<ProjectBoard />} />
         <Route path="/community/notices" element={<NoticeBoard />} />
         <Route path="/my-page" element={<MyPage />} />
-        <Route path="/my-page/edit" element={<EditProfile />} />
+        <Route path="/edit" element={<EditProfile />} />
         <Route path="/detail" element={<DetailPage />} />
         <Route path="/auth" element={<AuthPage />} />
         <Route path="/join" element={<Login />} />

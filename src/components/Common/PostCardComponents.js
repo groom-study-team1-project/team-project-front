@@ -16,7 +16,6 @@ const ThumbnailWrapper = styled.div`
 
 const ProfileWrapper = styled.div`
   display: flex;
-  width: 100%;
 `;
 
 export const ProfileImage = styled.div`
@@ -29,16 +28,22 @@ export const ProfileImage = styled.div`
 
 const ProfileInfo = styled.div`
   display: flex;
-  flex-grow: 1;
   flex-direction: column;
 `;
 
-export const PostProfile = ({ name, job }) => (
+const ProfileInput = styled.input`
+  &:disabled {
+    background-color: transparent;
+    border: none;
+  }
+`;
+
+export const PostProfile = ({ name, job, isDisabled = true }) => (
   <ProfileWrapper>
     <ProfileImage />
     <ProfileInfo>
-      <p>{name}</p>
-      <p>{job}</p>
+      <ProfileInput value={name} disabled={isDisabled} />
+      <ProfileInput value={job} disabled={isDisabled} />
     </ProfileInfo>
   </ProfileWrapper>
 );
