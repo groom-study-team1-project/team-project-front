@@ -10,6 +10,8 @@ import AuthPage from "../pages/AuthPage";
 import Login from "../components/Feature/Login";
 import SignUp from "../components/Feature/SignUp";
 import BoardWrite from "../pages/BoardWriting";
+import FindUserId from "../components/Feature/FindUserId";
+import FindUserPw from "../components/Feature/FindUserPw";
 
 function Router() {
   return (
@@ -26,8 +28,8 @@ function Router() {
         <Route path="/join" element={<Login />} />
         <Route path="/sign-up" element={<SignUp />} />
         <Route path="/boardwrite" element={<BoardWrite />} />
-        <Route path="/join" element={<Login />} />
-        <Route path="/sign-up" element={<SignUp />} />
+        <Route path="/find-user-id" element={<FindUserId />} />
+        <Route path="/find-user-pw" element={<FindUserPw />} />
       </Routes>
     </BrowserRouter>
   );
