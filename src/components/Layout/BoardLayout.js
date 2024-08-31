@@ -1,5 +1,9 @@
 import React from "react";
 import styled from "styled-components";
+import NavBar from "../Common/Navbar";
+import Sidebar from "../Common/SideBar";
+import PopularPostCard from "../Common/PopularPostCard";
+import PopularHashCard from "../Common/PopularHashCard";
 
 const Container = styled.div`
   display: flex;
@@ -9,21 +13,19 @@ const Container = styled.div`
   height: 100vh;
 `;
 
-const NavBar = styled.div`
-  height: 50px;
-  background-color: yellow;
+const Navbar = styled(NavBar)`
   z-index: 1;
 `;
 
-const BodyContainer = styled.div`
+const MainContainer = styled.div`
+  width: 100%;
   display: flex;
   flex: 1;
   z-index: 2;
 `;
 
-const LeftSideBar = styled.div`
-  width: 200px;
-  background-color: pink;
+const LeftSideBar = styled(Sidebar)`
+  position: fixed;
 `;
 
 const Content = styled.div`
@@ -40,12 +42,12 @@ const RightSideBar = styled.div`
 function BoardLayout() {
   return (
     <Container>
-      <NavBar>NavBar</NavBar>
-      <BodyContainer>
-        <LeftSideBar>LeftSideBar</LeftSideBar>
+      <Navbar />
+      <MainContainer>
+        <LeftSideBar />
         <Content>Content</Content>
         <RightSideBar>RightSideBar</RightSideBar>
-      </BodyContainer>
+      </MainContainer>
     </Container>
   );
 }
