@@ -1,22 +1,13 @@
 import React, { useState } from "react";
 import { join } from "../../services/api";
-import styled from "styled-components";
 import {
-  ContainerDiv,
+  Container,
   Logo,
   Form,
-  Input,
   Btn,
+  FormInputField,
+  Divider,
 } from "../Common/AuthCommonComponents";
-
-const LoginDiv = styled.div`
-  height: 628px;
-  width: 530px;
-  margin: 8rem 0;
-  padding: 8rem 0;
-  box-sizing: border-box;
-  border: 1px solid black;
-`;
 
 export default function Login() {
   const [email, setEmail] = useState("");
@@ -36,33 +27,19 @@ export default function Login() {
   }
 
   return (
-    <ContainerDiv>
-      <LoginDiv>
-        {/* Login */}
-        <Logo>
-          <h1>로고 이미지</h1>
-        </Logo>
-        <Form action="" method="post" onSubmit={handleLogin}>
-          <div className="email">
-            <p>이메일</p>
-            <Input type="email" value={email} />
-          </div>
-          <div className="password">
-            <p>비밀번호</p>
-            <Input type="password" value={password} marginBtm="1rem" />
-          </div>
-          <div className="btns">
-            <div style={{ borderBottom: "1px solid darkgray" }}>
-              <Btn type="submit" id="loginBtn">
-                로그인
-              </Btn>
-            </div>
-            <div>
-              <Btn id="signUpBtn">회원가입</Btn>
-            </div>
-          </div>
-        </Form>
-      </LoginDiv>
-    </ContainerDiv>
+    <Container width="530px" height="628px">
+      <Logo>
+        <h1>로고 이미지</h1>
+      </Logo>
+      <Form action="" method="post" onSubmit={handleLogin}>
+        <FormInputField label={"이메일"} type={"email"} value={email} />
+        <FormInputField label={"비밀번호"} type={"password"} value={password} />
+        <Btn type="submit" id="loginBtn">
+          로그인
+        </Btn>
+        <Divider />
+        <Btn id="signUpBtn">회원가입</Btn>
+      </Form>
+    </Container>
   );
 }
