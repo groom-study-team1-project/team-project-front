@@ -35,8 +35,15 @@ const Content = styled.div`
 `;
 
 const RightSideBar = styled.div`
-  width: 200px;
-  background-color: lightgreen;
+  width: auto;
+  display: flex;
+  flex-direction: column;
+  margin-top: 224px;
+  margin-right: 94px;
+`;
+
+const Popularcard = styled.div`
+  margin-bottom: 40px;
 `;
 
 function BoardLayout() {
@@ -46,7 +53,14 @@ function BoardLayout() {
       <MainContainer>
         <LeftSideBar />
         <Content>Content</Content>
-        <RightSideBar>RightSideBar</RightSideBar>
+        <RightSideBar>
+          <Popularcard>
+            <PopularPostCard />
+          </Popularcard>
+          <Popularcard>
+            <PopularHashCard />
+          </Popularcard>
+        </RightSideBar>
       </MainContainer>
     </Container>
   );
