@@ -27,6 +27,12 @@ const Logo = styled.div`
   border: 1px solid #111;
 `;
 
+const nonLogo = styled(Logo)`
+  width: 0;
+  height: 0;
+  border: none;
+`;
+
 const Menu = styled.div`
   display: flex;
   align-items: center;
@@ -61,7 +67,7 @@ function Navbar({ isMainPage = true, isLoggedIn = true }) {
   return (
     <NavbarWrapper>
       <NavbarInner>
-        <Logo>로고</Logo>
+        {isMainPage ? <Logo>로고</Logo> : <nonLogo />}
 
         {isMainPage && (
           <Menu>
