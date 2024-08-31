@@ -7,14 +7,13 @@ import {
   Form,
   Input,
   Btn,
-} from "../../assets/styles/AuthCommonStyles";
+} from "../Common/AuthCommonComponents";
 
 const FindUserIdDiv = styled.div`
   height: 628px;
   width: 530px;
-  margin: auto;
-  margin-top: 10rem;
-  padding-top: 10rem;
+  margin: 10rem 0;
+  padding: 10rem 0;
   box-sizing: border-box;
   border: 1px solid black;
 `;
