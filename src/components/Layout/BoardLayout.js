@@ -52,7 +52,9 @@ const SearchSortWrapper = styled.div`
   height: 32px;
   display: flex;
   margin-top: 50px;
-  padding-left: 48px;
+  margin-left: 80px;
+  margin-right: 150px;
+  justify-content: space-between;
   border: 1px solid black;
 `;
 
@@ -65,7 +67,6 @@ const SearchBox = styled.div`
 const SortOption = styled.div`
   width: 80px;
   height: 24px;
-  margin-left: auto;
   border: 1px solid blue;
   align-self: flex-end;
 `;
@@ -132,7 +133,6 @@ function BoardLayout() {
           <SearchSortWrapper>
             <SearchBox>Search</SearchBox>
             <SortOption>최신순</SortOption>
-            <ContentWrapper></ContentWrapper>
           </SearchSortWrapper>
           <ContentWrapper>{renderPostCard()}</ContentWrapper>
         </ContentArea>
