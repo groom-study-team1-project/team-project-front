@@ -52,6 +52,12 @@ const ProfileButton = styled.button`
   }
 `;
 
+const PasswordButton = styled.button`
+  width: 120px;
+  height: 40px;
+  margin-top: 10px;
+`;
+
 const JobSelect = styled.select`
   width: 250px;
   height: 36px;
@@ -124,6 +130,7 @@ function EditProfileCard() {
           </FlexDiv>
         </EditProfileWrapper>
       </form>
+      <PasswordButton>비밀번호 변경</PasswordButton>
     </>
   );
 }
