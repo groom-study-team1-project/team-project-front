@@ -55,6 +55,8 @@ export const signup = async (
   // todo: 회원가입 api 호출 함수 구현(formData)
 };
 
+export const edit = async (profileImg, name, email, phoneNum) => {};
+
 export async function fetchPopularPostItems() {
   return [
     {

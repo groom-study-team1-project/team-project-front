@@ -65,9 +65,25 @@ const SelfIntroductionTextarea = styled.textarea`
 `;
 
 function EditProfileCard() {
+  const [profileImg, setProfileImg] = useState(null);
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [phoneNum, setPhoneNum] = useState("");
+
+  async function handleEdit(e) {
+    e.preventDefault();
+
+    try {
+      const data = await edit(profileImg, name, email, phoneNum);
+      console.log("success", data);
+    } catch (error) {
+      console.log("failed", error);
+    }
+  }
+
   return (
     <>
-      <form>
+      <form action="" method="post" onSubmit={handleEdit}>
         <EditProfileWrapper>
           <ProfileActionWrapper>
             <EditProfile name={"dd"} job={"ss"} />
