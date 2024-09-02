@@ -224,3 +224,11 @@ export const fetchcomment = async () => {
     ],
   };
 };
+
+export const findUserId = async (name, phoneNum) => {
+  // todo: 아이디 찾기 api 요청
+};
+
+export const findUserPw = async (email, name, phoneNum) => {
+  // todo: 비밀번호 찾기 api 요청
+};
