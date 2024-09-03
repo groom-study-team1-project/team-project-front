@@ -1,30 +1,31 @@
 import React, { useEffect, useState } from "react";
-import ProjectPostCard from "../components/Common/ProjectPostCard";
 import { fetchPostItems } from "../services/api";
+import BoardLayout from "../components/Layout/BoardLayout";
+import ProjectPostCard from "../components/Common/ProjectPostCard";
 
 function ProjectBoard() {
-  const [postItems, setPostItems] = useState([]);
+  const [postCards, setPostCards] = useState([]);
 
   useEffect(() => {
     fetchPostItems()
-      .then((postItems) => setPostItems(postItems))
+      .then((postItems) => {
+        // 받아온 데이터를 기반으로 PostCard 컴포넌트 생성
+        const cards = postItems.map((post) => (
+          <ProjectPostCard
+            key={post.id}
+            title={post.title}
+            content={post.content}
+            name={post.name}
+            job={post.job}
+            count={post.count}
+          />
+        ));
+        setPostCards(cards);
+      })
       .catch((err) => console.log(err));
-  });
+  }, []);
 
-  return (
-    <>
-      {postItems.map((post) => (
-        <ProjectPostCard
-          key={post.id}
-          title={post.title}
-          content={post.content}
-          name={post.name}
-          job={post.job}
-          count={post.count}
-        />
-      ))}
-    </>
-  );
+  return <BoardLayout postCards={postCards} />;
 }
 
 export default ProjectBoard;

@@ -1,6 +1,6 @@
 import React from "react";
 import { useLocation } from "react-router-dom";
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 import NavBar from "../Common/Navbar";
 import SideBar from "../Common/SideBar";
 import PopularPostCard from "../Common/PopularPostCard";
@@ -8,7 +8,6 @@ import PopularHashCard from "../Common/PopularHashCard";
 import ProjectPostCard from "../Common/ProjectPostCard";
 import CommunityPostCard from "../Common/CommunityPostCard";
 import NoticePostCard from "../Feature/NoticePostCard";
-import Navbar from "../Common/Navbar";
 
 const Container = styled.div`
   display: flex;
@@ -72,11 +71,19 @@ const SortOption = styled.div`
 `;
 
 const PostCardWrapper = styled.div`
-  width: auto;
-  height: auto;
+  width: 990px;
+  max-width: 1190px;
   margin-left: 80px;
   padding-top: 40px;
   margin-right: 150px;
+
+  ${(props) =>
+    props.isProjectBoard &&
+    css`
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 20px;
+    `}
 `;
 
 const RightSidebarWrapper = styled.div`
@@ -91,7 +98,7 @@ const PopularCardWrapper = styled.div`
   margin-bottom: 40px;
 `;
 
-function BoardLayout() {
+function BoardLayout({ postCards }) {
   const location = useLocation();
 
   const determineBoardTitle = () => {
@@ -108,21 +115,7 @@ function BoardLayout() {
         return null;
     }
   };
-
-  const renderPostCard = () => {
-    switch (location.pathname) {
-      case "/community/projects":
-        return <ProjectPostCard />;
-      case "/community/notices":
-        return <NoticePostCard />;
-      default:
-        if (location.pathname.startsWith("/community")) {
-          return <CommunityPostCard />;
-        }
-        return null;
-    }
-  };
-
+  const isProjectBoard = determineBoardTitle() === "프로젝트 게시판";
   return (
     <Container>
       <SidebarWrapper />
@@ -139,7 +132,9 @@ function BoardLayout() {
               <SortOption>최신순</SortOption>
             </SearchSortWrapper>
 
-            <PostCardWrapper>{renderPostCard()}</PostCardWrapper>
+            <PostCardWrapper isProjectBoard={isProjectBoard}>
+              {postCards}
+            </PostCardWrapper>
           </Content>
 
           <RightSidebarWrapper>
