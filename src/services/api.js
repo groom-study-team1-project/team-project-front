@@ -141,7 +141,7 @@ export const createcomment = async (body) => {
   await console.log(body);
 };
 
-export const fetchPostdetail = async () => {
+export const fetchPostdetail = async (postId) => {
   return {
     code: 1201,
     message: "게시글 조회에 성공하였습니다.",
@@ -185,7 +185,7 @@ export const fetchPostdetail = async () => {
   };
 };
 
-export const fetchcomment = async () => {
+export const fetchcomment = async (postId) => {
   return {
     code: 1301,
     message: "댓글 조회에 성공하였습니다.",
@@ -228,4 +228,93 @@ export const findUserId = async (name, phoneNum) => {
 
 export const findUserPw = async (email) => {
   // todo: 비밀번호 찾기 api 요청
+};
+
+export const fetchMyprofileData = async (userId) => {
+  return {
+    code: 1300,
+    message: "내 정보 불러오기에 성공하였습니다",
+    result: {
+      userInfo: {
+        nickName: "Mogens Egeskov",
+        userProfileUrl: "",
+        Job: "iOS Developer",
+        userIntroduce: "나는야 IOS 개발자",
+      },
+      Post: {
+        freeBoard: [
+          {
+            user: {
+              nickName: "Mogens Egeskov1",
+              userProfile: "",
+              Job: "iOS Developer1",
+            },
+            PostContent: {
+              title: "test",
+              count: { view: 12, like: 3, comment: 3 },
+            },
+          },
+          {
+            user: {
+              nickName: "Mogens Egeskov2",
+              userProfile: "",
+              Job: "Android Developer1",
+            },
+            PostContent: {
+              title: "test",
+              count: { view: 12, like: 3, comment: 3 },
+            },
+          },
+        ],
+        projectBoard: [
+          {
+            user: {
+              nickName: "Mogens Egeskov1",
+              userProfile: "",
+              Job: "iOS Developer1",
+            },
+            PostContent: {
+              title: "test",
+              count: { view: 12, like: 3, comment: 3 },
+            },
+          },
+          {
+            user: {
+              nickName: "Mogens Egeskov2",
+              userProfile: "",
+              Job: "Android Developer1",
+            },
+            PostContent: {
+              title: "test2",
+              count: { view: 12, like: 3, comment: 3 },
+            },
+          },
+          {
+            user: {
+              nickName: "Mogens Egeskov3",
+              userProfile: "",
+              Job: "iOS Developer2",
+            },
+            PostContent: {
+              title: "test",
+              count: { view: 12, like: 3, comment: 3 },
+            },
+          },
+        ],
+        questionBoard: [
+          {
+            user: {
+              nickName: "Mogens Egeskov1",
+              userProfile: "",
+              Job: "iOS Developer1",
+            },
+            PostContent: {
+              title: "test",
+              count: { view: 12, like: 3, comment: 3 },
+            },
+          },
+        ],
+      },
+    },
+  };
 };
