@@ -3,27 +3,20 @@ import profileIcon from "../../assets/images/profileIcon.png";
 import { signup } from "../../services/api";
 import styled from "styled-components";
 import {
-  ContainerDiv,
+  Container,
   Logo,
   Form,
-  Input,
+  FormInputField,
   Btn,
+  Divider,
 } from "../Common/AuthCommonComponents";
-
-const SignUpDiv = styled.div`
-  height: 918px;
-  width: 530px;
-  background-color: rgba(255, 255, 255, 0.5);
-  margin: 5rem 0;
-  padding: 5rem 0;
-  box-sizing: border-box;
-  border: 1px solid black;
-`;
 
 const ProfileImgDiv = styled.div`
   text-align: center;
   padding-bottom: 16px;
 `;
+
+const SignUpHeader = styled(Logo)``;
 
 export default function SignUp() {
   const [profileImg, setProfileImg] = useState(null);
@@ -62,11 +55,11 @@ export default function SignUp() {
   };
 
   return (
-    <ContainerDiv>
-      <SignUpDiv>
-        <Logo>
+    <Container width="530px" height="918px">
+      <div>
+        <SignUpHeader>
           <h1>회원가입</h1>
-        </Logo>
+        </SignUpHeader>
         <Form onSubmit={handleSignUp}>
           <ProfileImgDiv>
             <img
@@ -78,31 +71,23 @@ export default function SignUp() {
               <input type="file" onChange={handleImageChange} />
             </div>
           </ProfileImgDiv>
-          <div>
-            <p>닉네임</p>
-            <Input type="text" value={name} />
-          </div>
-          <div>
-            <p>이메일</p>
-            <Input type="email" value={email} />
-          </div>
-          <div>
-            <p>비밀번호</p>
-            <Input type="password" value={password} />
-          </div>
-          <div>
-            <p>비밀번호 확인</p>
-            <Input type="password" value={confirmPassword} />
-          </div>
-          <div>
-            <p>휴대폰 번호</p>
-            <Input type="tel" value={phoneNum} />
-          </div>
-          <div style={{ borderTop: "1px solid darkgray", marginTop: "0" }}>
-            <Btn type="submit">계정 생성하기</Btn>
-          </div>
+          <FormInputField label={"닉네임"} type={"text"} value={name} />
+          <FormInputField label={"이메일"} type={"email"} value={email} />
+          <FormInputField
+            label={"비밀번호"}
+            type={"password"}
+            value={password}
+          />
+          <FormInputField
+            label={"비밀번호 확인"}
+            type={"password"}
+            value={confirmPassword}
+          />
+          <FormInputField label={"휴대폰 번호"} type={"tel"} value={phoneNum} />
+          <Divider />
+          <Btn type="submit">계정 생성하기</Btn>
         </Form>
-      </SignUpDiv>
-    </ContainerDiv>
+      </div>
+    </Container>
   );
 }

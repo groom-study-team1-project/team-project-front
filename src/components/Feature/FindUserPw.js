@@ -2,21 +2,15 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import { findUserPw } from "../../services/api";
 import {
-  ContainerDiv,
+  Container,
   Logo,
   Form,
-  Input,
+  FormInputField,
+  Divider,
   Btn,
 } from "../Common/AuthCommonComponents";
 
-const FindUserPwDiv = styled.div`
-  height: 628px;
-  width: 530px;
-  margin: 8rem 0;
-  padding: 7rem 0;
-  box-sizing: border-box;
-  border: 1px solid black;
-`;
+const FindUserPwHeader = styled(Logo)``;
 
 export default function FindUserPw() {
   const [name, setName] = useState("");
@@ -25,7 +19,7 @@ export default function FindUserPw() {
 
   const handleFindUserPw = async () => {
     try {
-      const response = await findUserPw(email);
+      const response = await findUserPw(email, name, phoneNum);
 
       // todo: 비밀번호 처리 방안 검토 후 함수 구현
     } catch (error) {
@@ -34,30 +28,21 @@ export default function FindUserPw() {
   };
 
   return (
-    <ContainerDiv>
-      {/* FindUserPw */}
-      <FindUserPwDiv>
-        <Logo>
+    <Container width="530px" height="628px">
+      <div>
+        <FindUserPwHeader>
           <h2>비밀번호 찾기</h2>
-        </Logo>
+        </FindUserPwHeader>
         <Form action="">
-          <div>
-            <p>이메일</p>
-            <Input type="email" value={email} />
-          </div>
-          <div>
-            <p>닉네임</p>
-            <Input type="text" value={name} />
-          </div>
-          <div style={{ borderBottom: "1px solid darkgray" }}>
-            <p>휴대폰 번호</p>
-            <Input type="tel" value={phoneNum} marginBtm="1rem" />
-          </div>
-          <div>
-            <Btn onClick={handleFindUserPw}>비밀번호 찾기</Btn>
-          </div>
+          <FormInputField label={"이메일"} type={"email"} value={email} />
+          <FormInputField label={"닉네임"} type={"text"} value={name} />
+          <FormInputField label={"휴대폰 번호"} type={"tel"} value={phoneNum} />
+          <Divider />
+          <Btn onClick={handleFindUserPw} type="submit">
+            비밀번호 찾기
+          </Btn>
         </Form>
-      </FindUserPwDiv>
-    </ContainerDiv>
+      </div>
+    </Container>
   );
 }

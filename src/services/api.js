@@ -54,6 +54,9 @@ export const signup = async (
 ) => {
   // todo: 회원가입 api 호출 함수 구현(formData)
 };
+
+export const edit = async (profileImg, name, email, phoneNum) => {};
+
 export async function fetchPopularPostItems() {
   return [
     {
@@ -152,7 +155,7 @@ export const fetchPostdetail = async (postId) => {
       },
       memberInfo: {
         Id: 0,
-        nickname: " MogensEgeskov",
+        nickname: "MogensEgeskov",
         development: "iOS Developer",
         imageUrl: "~~~",
       },
@@ -226,7 +229,7 @@ export const findUserId = async (name, phoneNum) => {
   // todo: 아이디 찾기 api 요청
 };
 
-export const findUserPw = async (email) => {
+export const findUserPw = async (email, name, phoneNum) => {
   // todo: 비밀번호 찾기 api 요청
 };
 
