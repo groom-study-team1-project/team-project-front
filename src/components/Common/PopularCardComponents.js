@@ -2,8 +2,7 @@ import styled from "styled-components";
 import { Interaction } from "./Interactions";
 
 const Post = styled.div`
-width: ${(props) => (props.size === "project" ? "264px" : "200px")};
-  height:
+  height: 40px;
   background-color: white;
   border-radius: 8px;
   border: 1px solid black;
@@ -19,6 +18,7 @@ width: ${(props) => (props.size === "project" ? "264px" : "200px")};
 `;
 
 const Hash = styled(Post)`
+  height: 16px;
   display: flex;
 `;
 
@@ -30,6 +30,10 @@ const PostText = styled.p`
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+`;
+
+const HashText = styled(PostText)`
+  padding-top: 9px;
 `;
 
 const PostStats = styled.div`
@@ -60,7 +64,7 @@ export const PopularPost = ({
 export const PopularHash = ({ hashtag, count }) => {
   return (
     <Hash>
-      <PostText>{`#${hashtag}`}</PostText>
+      <HashText>{`#${hashtag}`}</HashText>
       <PostStats>{count}</PostStats>
     </Hash>
   );

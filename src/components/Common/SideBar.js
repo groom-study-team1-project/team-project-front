@@ -6,6 +6,7 @@ const ContainerDiv = styled.div`
   max-height: 1080px;
   height: 90vh;
   width: 314px;
+  position: fixed;
   // container border는 원래 없는 거라서 스켈레톤에서만 보임
   border-right: 1px solid gray;
 `;

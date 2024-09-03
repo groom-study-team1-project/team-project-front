@@ -2,18 +2,18 @@ import React from "react";
 import styled from "styled-components";
 
 const Container = styled.div`
-  width: 296px;
-  height: ${(props) => (props.size === "인기 게시글" ? "426px" : "306px")};
-  border-radius: 12px;
+  width: 256px;
+  height: ${(props) => (props.text === "인기 게시글" ? "406px" : "286px")};
+  border-radius: 10px;
   padding: 20px;
+  padding-top: 30px;
   border: 1px solid black;
 `;
 
 const ContainerTitle = styled.h2`
-  height: 20px;
   font-weight: bold;
   font-size: 16px;
-  margin-top: 20px;
+  margin-top: 4px;
   color: #333;
 `;
 
@@ -35,7 +35,7 @@ const Divider = styled.div`
 
 const PopularContainer = ({ text, children }) => {
   return (
-    <Container props={text}>
+    <Container text={text}>
       <ContainerTitle>{text}</ContainerTitle>
       <Divider />
       {children}

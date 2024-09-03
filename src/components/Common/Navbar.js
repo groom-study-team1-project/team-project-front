@@ -5,8 +5,8 @@ import { fetchMenuItems } from "../../services/api";
 const NavbarWrapper = styled.nav`
   display: flex;
   justify-content: center;
-  position: fixed;
   width: 100%;
+  height: 80px;
   border: 1px solid #111;
 `;
 
@@ -25,6 +25,12 @@ const Logo = styled.div`
   width: 136px;
   height: 38px;
   border: 1px solid #111;
+`;
+
+const nonLogo = styled(Logo)`
+  width: 0;
+  height: 0;
+  border: none;
 `;
 
 const Menu = styled.div`
@@ -61,7 +67,7 @@ function Navbar({ isMainPage = true, isLoggedIn = true }) {
   return (
     <NavbarWrapper>
       <NavbarInner>
-        <Logo>로고</Logo>
+        {isMainPage ? <Logo>로고</Logo> : <nonLogo />}
 
         {isMainPage && (
           <Menu>

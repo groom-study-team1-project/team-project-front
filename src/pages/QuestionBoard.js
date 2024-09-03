@@ -1,10 +1,10 @@
 import React from "react";
-import Boardlayout from "../components/Layout/BoardLayout";
+import BoardLayout from "../components/Layout/BoardLayout";
 
 function QuestionBoard() {
   return (
     <>
-      <Boardlayout />
+      <BoardLayout />
     </>
   );
 }
