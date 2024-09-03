@@ -1,17 +1,18 @@
 import styled from "styled-components";
 
-export const ContainerDiv = styled.div`
-  max-height: 100vh;
+export const Container = styled.div`
   display: flex;
   flex-direction: column;
-  align-items: center;
   justify-content: center;
-  overflow: hidden;
+  align-items: center;
+  width: ${({ width }) => width || "100%"};
+  height: ${({ height }) => height || "100%"};
+  background-color: rgba(255, 255, 255, 0.5);
+  box-sizing: border-box;
+  border: 1px solid black;
 `;
 
 export const Logo = styled.div`
-  text-align: left;
-  margin-left: 4rem;
   margin-bottom: 4rem;
 `;
 
@@ -21,7 +22,7 @@ export const Form = styled.form`
   align-items: center;
 `;
 
-export const Input = styled.input`
+const Input = styled.input`
   width: 400px;
   height: 36px;
   margin: 16px 0;
@@ -34,3 +35,16 @@ export const Btn = styled.button`
   height: 40px;
   cursor: pointer;
 `;
+
+export const Divider = styled.div`
+  width: 100%;
+  height: 1px;
+  background-color: darkgray;
+`;
+
+export const FormInputField = ({ label, type, value }) => (
+  <div>
+    <p>{label}</p>
+    <Input type={type} value={value} />
+  </div>
+);

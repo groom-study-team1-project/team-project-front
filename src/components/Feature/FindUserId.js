@@ -2,21 +2,15 @@ import React, { useState } from "react";
 import { findUserId } from "../../services/api";
 import styled from "styled-components";
 import {
-  ContainerDiv,
+  Container,
   Logo,
   Form,
-  Input,
+  FormInputField,
+  Divider,
   Btn,
 } from "../Common/AuthCommonComponents";
 
-const FindUserIdDiv = styled.div`
-  height: 628px;
-  width: 530px;
-  margin: 10rem 0;
-  padding: 10rem 0;
-  box-sizing: border-box;
-  border: 1px solid black;
-`;
+const FindUserIdHeader = styled(Logo)``;
 
 export default function FindUserId() {
   const [name, setName] = useState("");
@@ -34,26 +28,20 @@ export default function FindUserId() {
   };
 
   return (
-    <ContainerDiv>
-      {/* FindUserId */}
-      <FindUserIdDiv>
-        <Logo>
+    <Container width="530px" height="628px">
+      <div>
+        <FindUserIdHeader>
           <h2>아이디 찾기</h2>
-        </Logo>
+        </FindUserIdHeader>
         <Form action="">
-          <div>
-            <p>닉네임</p>
-            <Input type="text" value={name} />
-          </div>
-          <div style={{ borderBottom: "1px solid darkgray" }}>
-            <p>휴대폰 번호</p>
-            <Input type="text" value={phoneNum} marginBtm="1rem" />
-          </div>
-          <div>
-            <Btn onClick={handleFindUserId}>아이디 찾기</Btn>
-          </div>
+          <FormInputField label={"닉네임"} type={"text"} value={name} />
+          <FormInputField label={"휴대폰 번호"} type={"tel"} value={phoneNum} />
+          <Divider />
+          <Btn onClick={handleFindUserId} type="submit">
+            아이디 찾기
+          </Btn>
         </Form>
-      </FindUserIdDiv>
-    </ContainerDiv>
+      </div>
+    </Container>
   );
 }

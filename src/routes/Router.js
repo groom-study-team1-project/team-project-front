@@ -10,6 +10,7 @@ import AuthPage from "../pages/AuthPage";
 import Login from "../components/Feature/Login";
 import SignUp from "../components/Feature/SignUp";
 import BoardWrite from "../pages/BoardWriting";
+import EditProfile from "../pages/EditProfile";
 import FindUserId from "../components/Feature/FindUserId";
 import FindUserPw from "../components/Feature/FindUserPw";
 
@@ -23,6 +24,7 @@ function Router() {
         <Route path="/community/projects" element={<ProjectBoard />} />
         <Route path="/community/notices" element={<NoticeBoard />} />
         <Route path="/my-page" element={<MyPage />} />
+        <Route path="/edit" element={<EditProfile />} />
         <Route path="/detail" element={<DetailPage />} />
         <Route path="/auth" element={<AuthPage />} />
         <Route path="/join" element={<Login />} />
