@@ -1,0 +1,35 @@
+import styled from "styled-components";
+import {
+  PostCardWrapper,
+  InnerContainer,
+  Body,
+  PostActions,
+} from "./PostCardWrapper";
+import { PostProfile, PostContent, Thumbnail } from "./PostCardComponents";
+import { Interaction, ArrowButton } from "./Interactions";
+
+function ProjectPostCard({
+  title,
+  content,
+  name,
+  job,
+  count = { view: 0, like: 0, comment: 0 },
+}) {
+  return (
+    <PostCardWrapper width="280px" height="440px">
+      <InnerContainer direction="column">
+        <Thumbnail />
+        <Body>
+          <CustomPostActions>
+            <Interaction count={count} />
+            <ArrowButton />
+          </CustomPostActions>
+          <PostContent title={title} content={content} />
+          <PostProfile name={name} job={job} />
+        </Body>
+      </InnerContainer>
+    </PostCardWrapper>
+  );
+}
+
+export default ProjectPostCard;
