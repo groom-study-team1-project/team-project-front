@@ -1,3 +1,5 @@
+import styled from "styled-components";
+// Error > PostCardWrapper 에러 발생
 const CustomPostCardWrapper = styled(PostCardWrapper)`
   display: flex;
 `;

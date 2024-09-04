@@ -1,15 +1,15 @@
-import styled from "styled-components";
 import {
   PostCardWrapper,
   InnerContainer,
-  Body,
   PostActions,
 } from "../../Common/PostCardWrapper";
-import {
-  PostProfile,
-  PostContent,
-  Thumbnail,
-} from "../../Common/PostCardComponents";
+// Error > PostCardWrapper가 무슨 파일로 바뀐건지 찾을 수 없음
+
+import { CustomBody } from "../CommunityPostCard/CommunityPostCard.style";
+import { PostProfile, PostContent } from "../../PostCard/PostProfile";
+// Error > PostContent가 이 파일안에 존재하지 않음
+
+import { Thumbnail } from "../PostCard.style";
 import { Interaction, ArrowButton } from "../../../Common/Interactions";
 
 function CommunityPostCard({

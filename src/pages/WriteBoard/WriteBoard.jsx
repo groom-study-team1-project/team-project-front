@@ -2,11 +2,25 @@ import React, { useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { CKEditor } from "@ckeditor/ckeditor5-react";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
-import styled from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPhotoFilm } from "@fortawesome/free-solid-svg-icons";
 import GlobalStyle from "../../assets/styles/GlobalStyle";
 import { createPost } from "../../services/api";
+import {
+  BackImg,
+  Categoryselect,
+  Hashtag,
+  ImgAdd,
+  ImgPreview,
+  ImgWrap,
+  SubmitBtn,
+  SubmitBtnWrap,
+  Titleinput,
+  TitleWrap,
+  Wrap,
+  Write,
+  WriteWrap,
+} from "./WriteBoard.style";
 
 function WriteBoard() {
   const navigate = useNavigate();
@@ -67,7 +81,7 @@ function WriteBoard() {
       <Wrap>
         <WriteWrap>
           <BackImg
-            src={require("../assets/images/back-removebg-preview.png")}
+            src={require("../../assets/images/back-removebg-preview.png")}
             alt="뒤로 가기"
             onClick={() => {
               navigate(-1);

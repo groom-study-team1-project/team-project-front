@@ -1,5 +1,8 @@
-import styled from "styled-components";
-import { PostCardWrapper } from "../../Common/PostCardWrapper";
+import {
+  CustomPostCardWrapper,
+  PostContainer,
+  PostTitle,
+} from "../NoticePostCard/NoticePostCard.style";
 import { InteractionItem } from "../../../Common/Interactions";
 import eyeIcon from "../../assets/images/eye.png";
 

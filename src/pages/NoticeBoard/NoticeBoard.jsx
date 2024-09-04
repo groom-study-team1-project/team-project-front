@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { fetchNoticePostItems } from "../../services/api";
-import BoardLayout from "../../components/Layout/BoardLayout";
-import NoticePostCard from "../../components/PostCard/NoticePostCard";
+import BoardLayout from "../../Layout/BoardLayout/BoardLayout";
+import NoticePostCard from "../../components/Card/PostCard/NoticePostCard/NoticePostCard";
 
 function NoticeBoard() {
   const [postCards, setPostCards] = useState([]);

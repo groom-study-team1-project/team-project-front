@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 
-const Container = styled.div`
+export const Container = styled.div`
   width: 256px;
   height: ${(props) => (props.text === "인기 게시글" ? "406px" : "286px")};
   border-radius: 10px;
@@ -10,14 +10,14 @@ const Container = styled.div`
   border: 1px solid black;
 `;
 
-const ContainerTitle = styled.h2`
+export const ContainerTitle = styled.h2`
   font-weight: bold;
   font-size: 16px;
   margin-top: 4px;
   color: #333;
 `;
 
-const Divider = styled.div`
+export const Divider = styled.div`
   margin-top: 8px;
   margin-bottom: 8px;
   height: 1px;
@@ -33,7 +33,7 @@ const Divider = styled.div`
   }
 `;
 
-const PopularContainer = ({ text, children }) => {
+export const PopularContainer = ({ text, children }) => {
   return (
     <Container text={text}>
       <ContainerTitle>{text}</ContainerTitle>

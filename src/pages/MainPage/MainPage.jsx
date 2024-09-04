@@ -1,9 +1,9 @@
 import React from "react";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
-import Navbar from "../../Layout/Navbar";
-import redirectIcon from "../assets/images/redirect-to-board.png";
-import ProjectPostCard from "../../components/Common/ProjectPostCard";
+import Navbar from "../../Layout/Navbar/Navbar";
+import redirectIcon from "../../assets/images/redirect-to-board.png";
+import ProjectPostCard from "../../components/Card/PostCard/ProjectPostCard/ProjectPostCard";
 import CommunityPostCard from "../../components/Card/PostCard/CommunityPostCard/CommunityPostCard";
 
 const Container = styled.div`
