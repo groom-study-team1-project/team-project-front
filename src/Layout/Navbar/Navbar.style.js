@@ -25,7 +25,7 @@ export const Logo = styled.div`
   border: 1px solid #111;
 `;
 
-export const nonLogo = styled(Logo)`
+export const NonLogo = styled(Logo)`
   width: 0;
   height: 0;
   border: none;

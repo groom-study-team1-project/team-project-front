@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { fetchMenuItems } from "../../services/api";
 import {
   Logo,
-  nonLogo,
+  NonLogo,
   NavbarInner,
   NavbarWrapper,
   Menu,
@@ -22,7 +22,7 @@ function Navbar({ isMainPage = true, isLoggedIn = true }) {
   return (
     <NavbarWrapper>
       <NavbarInner>
-        {isMainPage ? <Logo>로고</Logo> : <nonLogo />}
+        {isMainPage ? <Logo>로고</Logo> : <NonLogo />}
 
         {isMainPage && (
           <Menu>
