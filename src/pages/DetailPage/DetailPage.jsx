@@ -1,10 +1,10 @@
 import React, { useRef, useState, useEffect } from "react";
-import styled from "styled-components";
+
 import { CKEditor } from "@ckeditor/ckeditor5-react";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import Slide from "../../components/Common/imgSlide";
-import heart from "../assets/images/heart.png";
-import commentsubmit from "../assets/images/commentsubmit.png";
+import heart from "../../assets/images/heart.png";
+import commentsubmit from "../../assets/images/commentsubmit.png";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEllipsisVertical } from "@fortawesome/free-solid-svg-icons";
 import {
@@ -15,11 +15,36 @@ import {
 import {
   PostProfile,
   ProfileImage,
-} from "../../components/Common/PostCardComponents";
+} from "../../components/Card/PostCard/PostProfile";
 import {
   Interaction,
   InteractionItem,
 } from "../../components/Common/Interactions";
+import { Wrap } from "../WriteBoard/WriteBoard.style";
+import {
+  CategotyWrap,
+  CenteredContainer,
+  PostWrap,
+  Postheader,
+  PostheaderRignt,
+  Modify,
+  ModalBackground,
+  Modal,
+  Title,
+  PostFooter,
+  CommentsWrap,
+  CommetHr,
+  Comment,
+  CommentText,
+  Bold,
+  CommentRight,
+  TimeAndLike,
+  IconWrap,
+  CommnetModalIcon,
+  CommentInputWrap,
+  CommentInput,
+  InputImg,
+} from "./DetailPage.style";
 
 function DetailPage() {
   const [post, setPost] = useState(null);
@@ -140,7 +165,7 @@ function DetailPage() {
             <div style={{ fontSize: "24px" }}>댓글</div>
             <CommetHr />
             {commentsData.result.map((commentData, index) => (
-              <CommentWrap key={index}>
+              <CommentsWrap key={index}>
                 <Comment>
                   <ProfileImage />
                   <CommentText>
@@ -164,7 +189,7 @@ function DetailPage() {
                     </CommnetModalIcon>
                   )}
                 </CommentRight>
-              </CommentWrap>
+              </CommentsWrap>
             ))}
             <hr />
             <form onSubmit={onSubmit}>

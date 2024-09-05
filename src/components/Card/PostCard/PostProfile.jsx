@@ -1,6 +1,6 @@
 import styled from "styled-components";
 
-const ProfileWrapper = styled.div`
+export const ProfileWrapper = styled.div`
   display: flex;
   align-items: center;
 `;
@@ -13,16 +13,16 @@ export const ProfileImage = styled.div`
   margin-right: ${({ isBig }) => (isBig ? "20px" : "10px")};
 `;
 
-const ProfileInfo = styled.div`
+export const ProfileInfo = styled.div`
   display: flex;
   flex-direction: column;
 `;
 
-const ProfileInfoName = styled.p`
+export const ProfileInfoName = styled.p`
   font-size: ${({ isBig }) => (isBig ? "48px" : "14px")};
 `;
 
-const ProfileInfoJob = styled.p`
+export const ProfileInfoJob = styled.p`
   font-size: ${({ isBig }) => (isBig ? "24px" : "13px")};
 `;
 

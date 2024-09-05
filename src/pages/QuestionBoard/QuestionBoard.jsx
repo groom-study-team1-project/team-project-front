@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { fetchPostItems } from "../../services/api";
-import BoardLayout from "../../Layout/BoardLayout";
+import BoardLayout from "../../Layout/BoardLayout/BoardLayout";
 import CommunityPostCard from "../../components/Card/PostCard/CommunityPostCard/CommunityPostCard";
 
 function QuestionBoard() {

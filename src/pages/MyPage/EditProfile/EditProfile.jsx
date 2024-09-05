@@ -1,7 +1,22 @@
 import React, { useState } from "react";
-import styled from "styled-components";
-import { EditProfile, ProfileImage } from "../Common/PostCardComponents";
+import {
+  EditProfile,
+  ProfileImage,
+} from "../../../components/Card/PostCard/PostProfile";
 import { edit } from "../../../services/api";
+import {
+  EditProfileWrapper,
+  FlexDiv,
+  Input,
+  JobSelect,
+  Label,
+  PasswordButton,
+  ProfileActionWrapper,
+  ProfileButton,
+  ProfileDetails,
+  ProfileImageWrapper,
+  SelfIntroductionTextarea,
+} from "./EditProfile.style";
 
 function EditProfile() {
   const [profileImg, setProfileImg] = useState(null);
@@ -68,4 +83,4 @@ function EditProfile() {
   );
 }
 
-export default EditProfile;
+export default EditProFile;

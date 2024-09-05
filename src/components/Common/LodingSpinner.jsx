@@ -2,7 +2,7 @@ import React from "react";
 import { PulseLoader, DotLoader, BarLoader } from "react-spinners";
 import styled from "styled-components";
 
-const Wrap = styled.div`
+export const Wrap = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;

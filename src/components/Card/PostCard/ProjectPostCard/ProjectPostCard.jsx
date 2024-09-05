@@ -1,12 +1,8 @@
-import styled from "styled-components";
-import {
-  PostCardWrapper,
-  InnerContainer,
-  Body,
-  PostActions,
-} from "./PostCardWrapper";
-import { PostProfile, PostContent, Thumbnail } from "./PostCardComponents";
-import { Interaction, ArrowButton } from "./Interactions";
+import { PostCardWrapper, InnerContainer, Body } from "./PostCardWrapper";
+import { CustomPostActions } from "../ProjectPostCard/ProjectPostCard.style";
+import { PostContent, Thumbnail } from "../PostCard.style";
+import { Interaction, ArrowButton } from "../../../Common/Interactions";
+import PostProfile from "../PostProfile";
 
 function ProjectPostCard({
   title,

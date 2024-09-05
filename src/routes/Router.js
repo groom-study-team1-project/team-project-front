@@ -1,5 +1,13 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import MyProfile from "../pages/MyPage/MyProfile/MyProfile";
+import MainPage from "../pages/MainPage/MainPage";
+import FreeBoard from "../pages/FreeBoard/FreeBoard";
+import QuestionBoard from "../pages/QuestionBoard/QuestionBoard";
+import ProjectBoard from "../pages/QuestionBoard/QuestionBoard";
+import NoticeBoard from "../pages/NoticeBoard/NoticeBoard";
+import EditProfile from "../pages/MyPage/EditProfile/EditProfile";
+import DetailPage from "../pages/DetailPage/DetailPage";
+import BoardWrite from "../pages/WriteBoard/WriteBoard";
 
 function Router() {
   return (
