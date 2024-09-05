@@ -1,8 +1,6 @@
 import React from "react";
 import { useLocation } from "react-router-dom";
-import NavBar from "./Navbar";
-import PopularPostCard from "../components/Card/PopularCard/PopularPostCard/PopularPostCard";
-import PopularHashCard from "../components/Card/PopularCard/PopularHashCard/PopularHashCard";
+import NavBar from "../Navbar/Navbar";
 import {
   BoardTitle,
   Container,
@@ -14,9 +12,11 @@ import {
   RightSidebarWrapper,
   SearchBox,
   SearchSortWrapper,
-  SidebarWrapper,
   SortOption,
 } from "../BoardLayout/BoardLayout.style";
+import PopularPostCard from "../../components/Card/PopularCard/PopularPostCard/PopularPostCard";
+import PopularHashCard from "../../components/Card/PopularCard/PopularHashCard/PopularHashCard";
+import Sidebar from "../Sidebar/Sidebar";
 
 function BoardLayout({ postCards }) {
   const location = useLocation();
@@ -39,7 +39,7 @@ function BoardLayout({ postCards }) {
 
   return (
     <Container>
-      <SidebarWrapper />
+      <Sidebar />
       <MainContentWrapper>
         <NavBar isMainPage={false} />
         <ContentWrapper>

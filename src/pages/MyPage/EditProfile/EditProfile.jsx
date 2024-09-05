@@ -1,8 +1,5 @@
 import React, { useState } from "react";
-import {
-  EditProfile,
-  ProfileImage,
-} from "../../../components/Card/PostCard/PostProfile";
+import { ProfileImage } from "../../../components/Card/PostCard/PostProfile";
 import { edit } from "../../../services/api";
 import {
   EditProfileWrapper,
@@ -83,4 +80,4 @@ function EditProfile() {
   );
 }
 
-export default EditProFile;
+export default EditProfile;

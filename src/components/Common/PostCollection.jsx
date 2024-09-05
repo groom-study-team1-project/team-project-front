@@ -1,10 +1,9 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-
-import { ProfileImage } from "./PostCardComponents";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faAngleDown } from "@fortawesome/free-solid-svg-icons";
 import { Interaction } from "./Interactions";
+import { ProfileImage } from "../Card/PostCard/PostProfile";
 
 const ProfileHeaderLeft = styled.div`
   display: flex;

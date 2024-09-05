@@ -1,8 +1,13 @@
-import { PostCardWrapper, InnerContainer, Body } from "./PostCardWrapper";
-import { CustomPostActions } from "../ProjectPostCard/ProjectPostCard.style";
-import { PostContent, Thumbnail } from "../PostCard.style";
-import { Interaction, ArrowButton } from "../../../Common/Interactions";
-import PostProfile from "../PostProfile";
+import { ArrowButton, Interaction } from "../../../Common/Interactions";
+import {
+  Body,
+  ContentBox,
+  InnerContainer,
+  PostCardWrapper,
+  Thumbnail,
+} from "../PostCard.style";
+import { PostProfile } from "../PostProfile";
+import { CustomPostActions } from "./ProjectPostCard.style";
 
 function ProjectPostCard({
   title,
@@ -20,7 +25,10 @@ function ProjectPostCard({
             <Interaction count={count} />
             <ArrowButton />
           </CustomPostActions>
-          <PostContent title={title} content={content} />
+          <ContentBox>
+            <p>{title}</p>
+            <p>{content}</p>
+          </ContentBox>
           <PostProfile name={name} job={job} />
         </Body>
       </InnerContainer>

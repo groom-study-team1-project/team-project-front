@@ -2,16 +2,17 @@ import React, { useEffect, useState } from "react";
 import { fetchMyprofileData } from "../../../services/api";
 import {
   Main,
-  PostCollection,
   ProfileHeader,
-  ProfileLeft,
   ProfileSetting,
   ProfileTitle,
   ProfileWrap,
   Userintroduce,
   Wrap,
 } from "./MyProfile.style";
-// Error > ProfileLeft, PostCollection 이 MyProfile.style.js에 존재하지 않음
+import {
+  PostCollection,
+  ProfileLeft,
+} from "../../../components/Common/PostCollection";
 
 function MyProfile() {
   const [myProfile, setProfile] = useState(null);

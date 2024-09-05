@@ -1,10 +1,20 @@
 import React from "react";
-import styled from "styled-components";
-import { Link } from "react-router-dom";
+import {
+  Button,
+  Container,
+  Content,
+  Detail,
+  LeftArea,
+  PostCard,
+  PostCardLine,
+  RightArea,
+  SubTitle,
+  Title,
+} from "./MainPage.style";
 import Navbar from "../../Layout/Navbar/Navbar";
-import redirectIcon from "../../assets/images/redirect-to-board.png";
 import ProjectPostCard from "../../components/Card/PostCard/ProjectPostCard/ProjectPostCard";
 import CommunityPostCard from "../../components/Card/PostCard/CommunityPostCard/CommunityPostCard";
+import redirectIcon from "../../assets/images/redirect-to-board.png";
 
 function MainPage() {
   console.log("b" + "a" + +"a");

@@ -9,7 +9,7 @@ import {
   SidebarUl,
 } from "./Sidebar.style";
 
-export default function Sidebar() {
+function Sidebar() {
   const [menuItems, setMenuItems] = useState([]);
 
   useEffect(() => {
@@ -35,3 +35,5 @@ export default function Sidebar() {
     </ContainerDiv>
   );
 }
+
+export default Sidebar;

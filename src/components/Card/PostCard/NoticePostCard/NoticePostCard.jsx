@@ -4,7 +4,7 @@ import {
   PostTitle,
 } from "../NoticePostCard/NoticePostCard.style";
 import { InteractionItem } from "../../../Common/Interactions";
-import eyeIcon from "../../assets/images/eye.png";
+import eyeIcon from "../../../../assets/images/eye.png";
 
 function NoticePostCard({ id, title, date, count }) {
   return (

@@ -1,5 +1,5 @@
 import styled from "styled-components";
-// Error > PostActions 에서 에러발생
+import { PostActions } from "../PostCard.style";
 
 export const CustomPostActions = styled(PostActions)`
   align-items: center;

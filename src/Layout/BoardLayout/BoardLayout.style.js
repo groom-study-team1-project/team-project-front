@@ -1,5 +1,4 @@
 import styled, { css } from "styled-components";
-import { SideBar } from "../Sidebar/Sidebar";
 
 export const Container = styled.div`
   display: flex;
@@ -7,8 +6,6 @@ export const Container = styled.div`
   max-width: 1920px;
   height: 100vh;
 `;
-
-export const SidebarWrapper = styled(SideBar)``;
 
 export const MainContentWrapper = styled.div`
   width: auto;
