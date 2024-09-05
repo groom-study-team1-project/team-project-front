@@ -2,7 +2,6 @@ import axios from "axios";
 
 const API_URL = "http://localhost:8080";
 
-// 닉네임 중복검사
 const checkDuplicatedNickname = async (name) => {
   try {
     const res = await axios.get(`${API_URL}/members/validate/nickname`, {
@@ -15,7 +14,6 @@ const checkDuplicatedNickname = async (name) => {
   }
 };
 
-// 이메일 중복검사
 const checkDuplicatedEmail = async (email) => {
   try {
     const res = await axios.get(`${API_URL}/members/validate/email`, {
@@ -27,3 +25,5 @@ const checkDuplicatedEmail = async (email) => {
     throw error;
   }
 };
+
+export { checkDuplicatedNickname, checkDuplicatedEmail };
