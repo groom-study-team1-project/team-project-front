@@ -96,18 +96,18 @@ function DetailPage() {
     <>
       <CenteredContainer>
         <Wrap>
-          <CategotyWrap>{post.result.categoryInfo.title}</CategotyWrap>
+          <CategotyWrap>{post.categoryInfo.title}</CategotyWrap>
 
           <PostWrap>
             <Postheader>
               <PostProfile
-                name={post.result.memberInfo.nickname}
-                job={post.result.memberInfo.development}
+                name={post.memberInfo.nickname}
+                job={post.memberInfo.development}
               />
               <div>
-                {post.result.postInfo.isModified ? (
+                {post.postInfo.isModified ? (
                   <PostheaderRignt>
-                    <div>{post.result.postInfo.createdAt}</div>
+                    <div>{post.postInfo.createdAt}</div>
                     <Modify
                       onClick={() => {
                         setModalcurrnet(true);
@@ -127,23 +127,23 @@ function DetailPage() {
                   </PostheaderRignt>
                 ) : (
                   <PostheaderRignt>
-                    <div>{post.result.postInfo.createdAt}</div>
+                    <div>{post.postInfo.createdAt}</div>
                   </PostheaderRignt>
                 )}
               </div>
             </Postheader>
-            {post.result.categoryInfo.title === "프로젝트 자랑 게시판" ? (
+            {post.categoryInfo.title === "프로젝트 자랑 게시판" ? (
               <div>
-                <Slide imgUrls={post.result.postInfo.imgUrl} />
+                <Slide imgUrls={post.postInfo.imgUrl} />
               </div>
             ) : (
               ""
             )}
 
-            <Title>{post.result.postInfo.title}</Title>
+            <Title>{post.postInfo.title}</Title>
             <CKEditor
               editor={ClassicEditor}
-              data={post.result.postInfo.content}
+              data={post.postInfo.content}
               config={{
                 toolbar: [],
               }}
@@ -152,7 +152,7 @@ function DetailPage() {
           </PostWrap>
           <PostFooter>
             <div>
-              {post.result.postInfo.hashtags.map((hashtag, index) => (
+              {post.postInfo.hashtags.map((hashtag, index) => (
                 <span key={index}>{hashtag}</span>
               ))}
             </div>

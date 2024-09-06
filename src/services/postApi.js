@@ -17,7 +17,7 @@ export const createPost = async (body, token) => {
 };
 
 export const fetchPostdetail = async (postId) => {
-  return {
+  const result1 = {
     code: 1201,
     message: "게시글 조회에 성공하였습니다.",
     result: {
@@ -58,4 +58,11 @@ export const fetchPostdetail = async (postId) => {
       },
     },
   };
+  try {
+    //const result = await axios.get(`/posts/${postId}`);
+    console.log("result", result1);
+    return result1.result;
+  } catch (error) {
+    console.log(error);
+  }
 };
