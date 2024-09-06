@@ -68,11 +68,11 @@ function WriteBoard() {
     await e.preventDefault();
     const { title, content, hasgtags } = form;
     let body = {};
-    const NumCategoty_id = Number(selectedCategory);
-    if (NumCategoty_id === 2) {
-      body = { title, content, hasgtags, NumCategoty_id, imgUrls };
+    const category_id = Number(selectedCategory);
+    if (category_id === 2) {
+      body = { title, content, hasgtags, category_id, imgUrls };
     } else {
-      body = { title, content, hasgtags, NumCategoty_id };
+      body = { title, content, hasgtags, category_id };
     }
     await createPost(body);
   };

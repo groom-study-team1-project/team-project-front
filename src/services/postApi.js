@@ -10,7 +10,7 @@ export const createPost = async (body, token) => {
     const result = await axios.post("/api/posts/upload", body, {
       headers: headers,
     });
-    redirect(`${result.id}`);
+    redirect(`${result.result.id}`);
   } catch (error) {
     console.log(error);
   }
