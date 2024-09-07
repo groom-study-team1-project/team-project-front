@@ -6,9 +6,9 @@ const Input = styled.input`
   margin: 16px 0;
 `;
 
-export const FormInputField = ({ label, type, value }) => (
+export const FormInputField = ({ label, type, value, onChange }) => (
   <div>
     <p>{label}</p>
-    <Input type={type} value={value} />
+    <Input type={type} value={value} onChange={onChange} />
   </div>
 );
