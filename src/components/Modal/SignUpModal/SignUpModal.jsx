@@ -14,12 +14,48 @@ export default function SignUpModal({ changeModal }) {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [tel, setTel] = useState("");
+  const [errors, setErrors] = useState({});
+
+  const validateForm = () => {
+    let errors = {};
+
+    if (nickname.length < 2 || nickname.length > 20) {
+      errors.nickname = "닉네임은 2글자부터 20글자까지 가능합니다.";
+    }
+
+    if (!/^[a-zA-Z0-9가-힣]+$/.test(nickname)) {
+      errors.nickname = "닉네임은 영어 대소문자, 한글, 숫자의 조합이어야 합니다.";
+    }
+
+    if (!/\S+@\S+\.\S+/.test(email)) {
+      errors.email = "유효한 이메일 주소를 입력해주세요.";
+    }
+
+    if (password.length < 8 || password.length > 16) {
+      errors.password = "비밀번호는 8글자 이상 16글자 이하이어야 합니다.";
+    }
+
+    if (password !== confirmPassword) {
+      errors.confirmPassword = "비밀번호가 일치하지 않습니다.";
+    }
+
+    if (!/^\d{3}-\d{4}-\d{4}$/.test(tel)) {
+      errors.tel = "전화번호 형식을 맞춰주세요. 예: 010-0000-0000";
+    }
+
+    setErrors(errors);
+    return Object.keys(errors).length === 0;
+  };
 
   async function handleSignUp(e) {
     e.preventDefault();
 
+    if (!validateForm()) {
+      return;
+    }
+
     try {
-      changeModal();
+      changeModal(); //나중에 뒤로 빼기
 
       const profileImgUrl = await uploadImageToS3(profileImg);
 
@@ -33,7 +69,6 @@ export default function SignUpModal({ changeModal }) {
   }
 
   const handleImageChange = (e) => {
-    console.log(e.target.files[0]);
     const file = e.target.files[0];
     if (file) {
       const imageUrl = URL.createObjectURL(file);
@@ -59,36 +94,47 @@ export default function SignUpModal({ changeModal }) {
               <input type="file" onChange={handleImageChange} />
             </div>
           </ProfileImgDiv>
+
           <FormInputField
             label={"닉네임"}
             type={"text"}
             value={nickname}
             onChange={(e) => setNickname(e.target.value)}
           />
+          {errors.nickname && <div style={{ color: "red" }}>{errors.nickname}</div>}
+
           <FormInputField
             label={"이메일"}
             type={"email"}
             value={email}
             onChange={(e) => setEmail(e.target.value)}
           />
+          {errors.email && <div style={{ color: "red" }}>{errors.email}</div>}
+
           <FormInputField
             label={"비밀번호"}
             type={"password"}
             value={password}
             onChange={(e) => setPassword(e.target.value)}
           />
+          {errors.password && <div style={{ color: "red" }}>{errors.password}</div>}
+
           <FormInputField
             label={"비밀번호 확인"}
             type={"password"}
             value={confirmPassword}
             onChange={(e) => setConfirmPassword(e.target.value)}
           />
+          {errors.confirmPassword && <div style={{ color: "red" }}>{errors.confirmPassword}</div>}
+
           <FormInputField
             label={"휴대폰 번호"}
             type={"tel"}
             value={tel}
             onChange={(e) => setTel(e.target.value)}
           />
+          {errors.tel && <div style={{ color: "red" }}>{errors.tel}</div>}
+
           <Divider />
           <Btn type="submit">계정 생성하기</Btn>
         </Form>
