@@ -8,16 +8,23 @@ import {
   Menu,
   MenuItem,
   Button,
+  ButtonBox
 } from "./Navbar.style";
+import { useNavigate } from "react-router-dom";
 
 function Navbar({ isMainPage = true, isLoggedIn = true }) {
   const [menuItems, setMenuItems] = useState([]);
+  let navigate = useNavigate();
 
   useEffect(() => {
     fetchMenuItems()
       .then((menuItems) => setMenuItems(menuItems))
       .catch((err) => console.log(err.message));
   }, []);
+
+  const redirectToMyPage = () => {
+    navigate("/my-page");
+  };
 
   return (
     <NavbarWrapper>
@@ -33,7 +40,11 @@ function Navbar({ isMainPage = true, isLoggedIn = true }) {
         )}
 
         {isLoggedIn ? (
-          <Button>글쓰기 다크모드 프로필</Button>
+          <ButtonBox>
+            <Button >글쓰기</Button>
+            <Button >다크모드</Button>
+            <Button onClick={redirectToMyPage}>프로필</Button>{" "}
+          </ButtonBox>
         ) : (
           <Button>다크모드 로그인 회원가입</Button>
         )}
