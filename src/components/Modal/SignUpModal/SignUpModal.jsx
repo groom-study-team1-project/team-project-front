@@ -1,8 +1,9 @@
 import React, { useState } from "react";
-import profileIcon from "../../assets/images/profileIcon.png";
+import profileIcon from "../../../assets/images/profileIcon.png";
 import { signup } from "../../../services/api";
 import { Btn, Container, Divider, Form } from "../Modal.style";
 import { FormInputField } from "../FormInputField";
+import { ProfileImgDiv, SignUpHeader } from "./SignUpModal.style";
 
 export default function SignUpModal() {
   const [profileImg, setProfileImg] = useState(null);
