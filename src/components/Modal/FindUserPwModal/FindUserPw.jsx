@@ -5,15 +5,15 @@ import { FormInputField } from "../FormInputField";
 import { FindUserPwHeader } from "./FindUserPw.style";
 
 export default function FindUserPw() {
-  const [name, setName] = useState("");
   const [email, setEmail] = useState("");
-  const [phoneNum, setPhoneNum] = useState("");
+  const [nickname, setNickname] = useState("");
+  const [tel, setTel] = useState("");
 
   const handleFindUserPw = async () => {
     try {
-      const response = await findUserPw(email, name, phoneNum);
+      const response = await findUserPw(email, nickname, tel);
 
-      // todo: 비밀번호 처리 방안 검토 후 함수 구현
+      console.log("success", response);
     } catch (error) {
       console.log(error);
     }
@@ -25,14 +25,27 @@ export default function FindUserPw() {
         <FindUserPwHeader>
           <h2>비밀번호 찾기</h2>
         </FindUserPwHeader>
-        <Form action="">
-          <FormInputField label={"이메일"} type={"email"} value={email} />
-          <FormInputField label={"닉네임"} type={"text"} value={name} />
-          <FormInputField label={"휴대폰 번호"} type={"tel"} value={phoneNum} />
+        <Form onSubmit={handleFindUserPw}>
+          <FormInputField
+            label={"이메일"}
+            type={"email"}
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+          />
+          <FormInputField
+            label={"닉네임"}
+            type={"text"}
+            value={nickname}
+            onChange={(e) => setNickname(e.target.value)}
+          />
+          <FormInputField
+            label={"휴대폰 번호"}
+            type={"tel"}
+            value={tel}
+            onChange={(e) => setTel(e.target.value)}
+          />
           <Divider />
-          <Btn onClick={handleFindUserPw} type="submit">
-            비밀번호 찾기
-          </Btn>
+          <Btn type="submit">비밀번호 찾기</Btn>
         </Form>
       </div>
     </Container>
