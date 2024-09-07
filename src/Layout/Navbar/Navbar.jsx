@@ -52,7 +52,6 @@ function Navbar({ isMainPage = true, isLoggedIn = true }) {
         )}
       </NavbarInner>
 
-      {/* react-modal 모달 */}
       <Modal
         isOpen={isModalOpen}
         onRequestClose={closeModal}
@@ -68,7 +67,7 @@ function Navbar({ isMainPage = true, isLoggedIn = true }) {
           },
         }}
       >
-        <LoginModal />
+        <LoginModal closeModal={closeModal} />
       </Modal>
     </NavbarWrapper>
   );
