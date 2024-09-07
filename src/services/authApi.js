@@ -1,3 +1,5 @@
+import axios from "axios";
+
 export const logout = async (accessToken) => {
   try {
     // const response = await axios.post(

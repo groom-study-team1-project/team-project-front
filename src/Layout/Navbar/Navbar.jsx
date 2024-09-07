@@ -8,7 +8,9 @@ import {
   Menu,
   MenuItem,
   Button,
+  ButtonBox,
 } from "./Navbar.style";
+import { logout } from "../../services/authApi";
 
 function Navbar({ isMainPage = true, isLoggedIn = true }) {
   const [menuItems, setMenuItems] = useState([]);
@@ -18,6 +20,14 @@ function Navbar({ isMainPage = true, isLoggedIn = true }) {
       .then((menuItems) => setMenuItems(menuItems))
       .catch((err) => console.log(err.message));
   }, []);
+
+  async function handleLogout(e) {
+    try {
+      await logout();
+    } catch (err) {
+      console.log(err);
+    }
+  }
 
   return (
     <NavbarWrapper>
@@ -35,7 +45,11 @@ function Navbar({ isMainPage = true, isLoggedIn = true }) {
         {isLoggedIn ? (
           <Button>글쓰기 다크모드 프로필</Button>
         ) : (
-          <Button>다크모드 로그인 회원가입</Button>
+          <ButtonBox>
+            <Button onClick={handleLogout}>다크모드</Button>
+            <Button>로그인</Button>
+            <Button>회원가입</Button>
+          </ButtonBox>
         )}
       </NavbarInner>
     </NavbarWrapper>
