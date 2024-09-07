@@ -6,7 +6,8 @@ import { ProfileImgDiv, SignUpHeader } from "./SignUpModal.style";
 import { signUp } from "../../../services/authApi";
 import { uploadImageToS3 } from "../../../services/s3Service";
 
-export default function SignUpModal({ closeModal }) {
+export default function SignUpModal({ changeModal }) {
+  const [previewImage, setPreviewImage] = useState(null);
   const [profileImg, setProfileImg] = useState(null);
   const [nickname, setNickname] = useState("");
   const [email, setEmail] = useState("");
@@ -18,14 +19,14 @@ export default function SignUpModal({ closeModal }) {
     e.preventDefault();
 
     try {
+      changeModal();
+
       const profileImgUrl = await uploadImageToS3(profileImg);
 
       let body = { email, password, nickname, imageUrl: profileImgUrl, tel };
 
       const response = await signUp(body);
       console.log(response);
-
-      closeModal();
     } catch (err) {
       console.log(err);
     }
@@ -36,7 +37,8 @@ export default function SignUpModal({ closeModal }) {
     const file = e.target.files[0];
     if (file) {
       const imageUrl = URL.createObjectURL(file);
-      setProfileImg(imageUrl);
+      setProfileImg(file);
+      setPreviewImage(imageUrl);
     }
   };
 
@@ -49,7 +51,7 @@ export default function SignUpModal({ closeModal }) {
         <Form onSubmit={handleSignUp}>
           <ProfileImgDiv>
             <img
-              src={profileImg ? profileImg : profileIcon}
+              src={previewImage ? previewImage : profileIcon}
               alt="프로필사진"
               style={{ width: "100px", height: "100px" }}
             />

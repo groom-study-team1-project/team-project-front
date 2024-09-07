@@ -41,6 +41,11 @@ function Navbar({ isMainPage = true, isLoggedIn = true }) {
     setIsModalOpen(false);
   };
 
+  const changeModal = () => {
+    setModalType("login");
+    setIsModalOpen(true);
+  };
+
   return (
     <NavbarWrapper>
       <NavbarInner>
@@ -82,7 +87,7 @@ function Navbar({ isMainPage = true, isLoggedIn = true }) {
         {modalType === "login" ? (
           <LoginModal closeModal={closeModal} />
         ) : (
-          <SignUpModal closeModal={closeModal} />
+          <SignUpModal changeModal={changeModal} />
         )}
       </Modal>
     </NavbarWrapper>
