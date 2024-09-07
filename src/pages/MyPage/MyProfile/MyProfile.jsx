@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { fetchMyprofileData } from "../../../services/api";
 import {
   Main,
   ProfileHeader,
@@ -13,22 +12,38 @@ import {
   PostCollection,
   ProfileLeft,
 } from "../../../components/Common/PostCollection";
+import { useSelector } from "react-redux";
+import { fetchProfileInfo } from "../../../services/authApi";
 
 function MyProfile() {
-  const [myProfile, setProfile] = useState(null);
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const MyprofileData = await fetchMyprofileData();
-        setProfile(MyprofileData.result);
-      } catch (error) {
-        console.error("데이터 가져오는데 실패", error);
-      }
-    };
-    fetchData();
-  }, []);
+  const [profileData, setProfileData] = useState(null);
+  const email = useSelector((state) => state.user.userInfo);
+  const isLoggedIn = useSelector((state) => state.user.isLoggedIn);
+  const [error, setError] = useState(null);
 
-  if (!myProfile) {
+  useEffect(() => {
+    if (!isLoggedIn) {
+      return;
+    }
+
+    if (email) {
+      const memberId = email.split("@")[0];
+
+      fetchProfileInfo(memberId)
+        .then((data) => setProfileData(data))
+        .catch((err) => setError(err));
+    }
+  }, [email]);
+
+  if (!isLoggedIn) {
+    return <div>로그인이 필요합니다.</div>;
+  }
+
+  if (error) {
+    return <div>프로필 정보를 불러오는데 실패했습니다.</div>;
+  }
+
+  if (!profileData && isLoggedIn) {
     return <div>Loading...</div>;
   }
   return (
@@ -40,15 +55,15 @@ function MyProfile() {
         <Main>
           <ProfileHeader>
             <ProfileLeft
-              nickName={myProfile.userInfo.nickName}
-              job={myProfile.userInfo.Job}
+              nickName={profileData.result.nickname}
+              job={profileData.result.role}
             />
             <ProfileSetting>프로필 수정</ProfileSetting>
           </ProfileHeader>
           <hr />
-          <Userintroduce>{myProfile.userInfo.userIntroduce}</Userintroduce>
+          <Userintroduce>{profileData.result.aboutMe}</Userintroduce>
           <hr />
-          <PostCollection myProfile={myProfile} />
+          {/* <PostCollection myProfile={profileData} /> */}
         </Main>
       </Wrap>
     </>
