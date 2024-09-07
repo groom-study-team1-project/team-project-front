@@ -8,12 +8,14 @@ import {
   Menu,
   MenuItem,
   Button,
-  ButtonBox
+  ButtonBox,
 } from "./Navbar.style";
+import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
-function Navbar({ isMainPage = true, isLoggedIn = true }) {
+function Navbar({ isMainPage = true }) {
   const [menuItems, setMenuItems] = useState([]);
+  const isLoggedIn = useSelector((state) => state.user.isLoggedIn);
   let navigate = useNavigate();
 
   useEffect(() => {
@@ -41,8 +43,8 @@ function Navbar({ isMainPage = true, isLoggedIn = true }) {
 
         {isLoggedIn ? (
           <ButtonBox>
-            <Button >글쓰기</Button>
-            <Button >다크모드</Button>
+            <Button>글쓰기</Button>
+            <Button>다크모드</Button>
             <Button onClick={redirectToMyPage}>프로필</Button>{" "}
           </ButtonBox>
         ) : (
