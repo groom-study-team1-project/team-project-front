@@ -7,9 +7,9 @@ const Input = styled.input`
   margin-bottom: ${(props) => props.marginBtm};
 `;
 
-export const FormInputField = ({ label, type, value }) => (
+export const FormInputField = ({ label, type, value, onChange }) => (
   <div>
     <p>{label}</p>
-    <Input type={type} value={value} />
+    <Input type={type} value={value} onChange={onChange} />
   </div>
 );
