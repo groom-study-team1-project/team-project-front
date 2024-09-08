@@ -1,6 +1,6 @@
 import React from "react";
-import { useLocation } from "react-router-dom";
 import NavBar from "../Navbar/Navbar";
+import Sidebar from "../Sidebar/Sidebar";
 import {
   BoardTitle,
   Container,
@@ -8,7 +8,6 @@ import {
   ContentWrapper,
   MainContentWrapper,
   PopularCardWrapper,
-  PostCardWrapper,
   RightSidebarWrapper,
   SearchBox,
   SearchSortWrapper,
@@ -16,27 +15,25 @@ import {
 } from "../BoardLayout/BoardLayout.style";
 import PopularPostCard from "../../components/Card/PopularCard/PopularPostCard/PopularPostCard";
 import PopularHashCard from "../../components/Card/PopularCard/PopularHashCard/PopularHashCard";
-import Sidebar from "../Sidebar/Sidebar";
+import PostLineLayout from "../PostLineLayout/PostLineLayout";
 
-function BoardLayout({ postCards }) {
-  const location = useLocation();
-
-  const determineBoardTitle = () => {
-    switch (location.pathname) {
-      case "/community/projects":
-        return "프로젝트 게시판";
-      case "/community/notices":
-        return "공지사항";
-      case "/community/free":
-        return "자유게시판";
-      case "/community/questions":
-        return "질문게시판";
-      default:
-        return null;
+function BoardLayout({ postCards, pageType, onSearchResults }) {
+  const boardTitle = () => {
+    if (pageType) {
+      switch (pageType) {
+        case "projects":
+          return "프로젝트 게시판";
+        case "notices":
+          return "공지사항";
+        case "free":
+          return "자유게시판";
+        case "questions":
+          return "질문게시판";
+        default:
+          return null;
+      }
     }
   };
-  const isProjectBoard = determineBoardTitle() === "프로젝트 게시판";
-
   return (
     <Container>
       <Sidebar />
@@ -44,20 +41,13 @@ function BoardLayout({ postCards }) {
         <NavBar isMainPage={false} />
         <ContentWrapper>
           <Content>
-            <BoardTitle text={determineBoardTitle()}>
-              {determineBoardTitle()}
-            </BoardTitle>
-
+            <BoardTitle $pageType={pageType}>{boardTitle()}</BoardTitle>
             <SearchSortWrapper>
               <SearchBox>Search</SearchBox>
               <SortOption>최신순</SortOption>
             </SearchSortWrapper>
-
-            <PostCardWrapper isProjectBoard={isProjectBoard}>
-              {postCards}
-            </PostCardWrapper>
+            <PostLineLayout pageType={pageType} postCards={postCards} />
           </Content>
-
           <RightSidebarWrapper>
             <PopularCardWrapper>
               <PopularPostCard />
@@ -73,3 +63,8 @@ function BoardLayout({ postCards }) {
 }
 
 export default BoardLayout;
+
+<SearchSortWrapper>
+  <SearchBox>Search</SearchBox>
+  <SortOption>최신순</SortOption>
+</SearchSortWrapper>;
