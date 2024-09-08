@@ -14,12 +14,14 @@ import {
 } from "../../../components/Common/PostCollection";
 import { useSelector } from "react-redux";
 import { fetchProfileInfo } from "../../../services/authApi";
+import { useNavigate } from "react-router-dom";
 
 function MyProfile() {
   const [profileData, setProfileData] = useState(null);
-  const email = useSelector((state) => state.user.userInfo);
+  const email = useSelector((state) => state.user.userInfo.email);
   const isLoggedIn = useSelector((state) => state.user.isLoggedIn);
   const [error, setError] = useState(null);
+  let navigate = useNavigate();
 
   useEffect(() => {
     if (!isLoggedIn) {
@@ -46,6 +48,11 @@ function MyProfile() {
   if (!profileData && isLoggedIn) {
     return <div>Loading...</div>;
   }
+
+  const redirectToEditPage = () => {
+    navigate("/edit");
+  };
+
   return (
     <>
       <Wrap>
@@ -58,7 +65,9 @@ function MyProfile() {
               nickName={profileData.result.nickname}
               job={profileData.result.role}
             />
-            <ProfileSetting>프로필 수정</ProfileSetting>
+            <ProfileSetting onClick={redirectToEditPage}>
+              프로필 수정
+            </ProfileSetting>
           </ProfileHeader>
           <hr />
           <Userintroduce>{profileData.result.aboutMe}</Userintroduce>

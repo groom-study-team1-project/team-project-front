@@ -31,3 +31,31 @@ export const fetchProfileInfo = async (memberId) => {
     throw error;
   }
 };
+
+export const editProfile = async (body) => {
+  try {
+    //const response = await axios.put("/api/members/me/profile", body);
+
+    const response = {
+      code: 1007,
+      message: "프로필 수정이 성공하였습니다.",
+      result: {
+        nickname: body.nickname,
+        imageUrl: "http://localhost:8080/images/profile.png",
+        aboutMe: "자기소개",
+        tel: "010-0000-0000",
+        role: "IOS Developer",
+        githubUrl: "https://github.com/abcd",
+        blogUrl: "blog",
+        activityStats: {
+          postCount: "0",
+          commentCount: "0",
+        },
+      },
+    };
+    return response;
+  } catch (error) {
+    console.error("사용자 정보를 불러오는데 실패했습니다.", error);
+    throw error;
+  }
+};
