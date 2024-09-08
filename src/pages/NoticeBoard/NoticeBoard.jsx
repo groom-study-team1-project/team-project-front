@@ -1,30 +1,44 @@
 import React, { useEffect, useState } from "react";
 import { fetchNoticePostItems } from "../../services/api";
+import { searchPosts } from "../../services/searchApi";
 import BoardLayout from "../../Layout/BoardLayout/BoardLayout";
 import NoticePostCard from "../../components/Card/PostCard/NoticePostCard/NoticePostCard";
 
-function NoticeBoard() {
+function FreeBoard() {
   const [postCards, setPostCards] = useState([]);
 
+  const fetchData = async (searchTerm) => {
+    try {
+      const postItems = searchTerm
+        ? await searchPosts("free", searchTerm)
+        : await fetchNoticePostItems();
+
+      const cards = postItems.map((post) => (
+        <NoticePostCard
+          key={post.id}
+          id={post.id}
+          title={post.title}
+          date={post.date}
+          count={post.count}
+        />
+      ));
+      setPostCards(cards);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
   useEffect(() => {
-    fetchNoticePostItems()
-      .then((postItems) => {
-        // 받아온 데이터를 기반으로 PostCard 컴포넌트 생성
-        const cards = postItems.map((post) => (
-          <NoticePostCard
-            key={post.id}
-            id={post.id}
-            title={post.title}
-            date={post.date}
-            count={post.count}
-          />
-        ));
-        setPostCards(cards);
-      })
-      .catch((err) => console.log(err));
+    fetchData();
   }, []);
 
-  return <BoardLayout postCards={(postCards, postCards, postCards)} />;
+  return (
+    <BoardLayout
+      postCards={postCards}
+      pageType="questions"
+      onSearchResults={fetchData}
+    />
+  );
 }
 
-export default NoticeBoard;
+export default FreeBoard;
