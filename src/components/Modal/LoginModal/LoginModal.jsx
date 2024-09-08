@@ -1,11 +1,11 @@
 import React, { useState } from "react";
-import { join } from "../../../services/api";
 import { useNavigate } from "react-router-dom";
 import { Btn, Container, Divider, Form, Logo } from "../Modal.style";
 import { FormInputField } from "../FormInputField";
 import { FindUserBtn } from "./LoginModal.style";
+import { login } from "../../../services/authApi";
 
-export default function LoginModal() {
+export default function LoginModal({ closeModal, changeModal }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
@@ -15,17 +15,23 @@ export default function LoginModal() {
     e.preventDefault();
 
     try {
-      const data = await join(email, password);
-      console.log("success", data);
-    } catch (error) {
-      console.log("failed", error);
-    }
+      let body = { email, password };
 
-    // todo: 로그인 로직
+      const response = await login(body);
+      console.log(response);
+
+      const { accessToken, refreshToken } = response.result;
+
+      localStorage.setItem("accessToken", accessToken);
+
+      closeModal();
+    } catch (err) {
+      console.log(err);
+    }
   }
 
   const handleFindUserId = () => {
-    navigate("/find-user-id");
+    changeModal("findUserId");
   };
 
   const handleFindUserPw = () => {
@@ -38,8 +44,27 @@ export default function LoginModal() {
         <h1>로고 이미지</h1>
       </Logo>
       <Form action="" method="post" onSubmit={handleLogin}>
-        <FormInputField label={"이메일"} type={"email"} value={email} />
-        <FormInputField label={"비밀번호"} type={"password"} value={password} />
+        <FormInputField
+          label={"이메일"}
+          type={"email"}
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+        />
+        <FormInputField
+          label={"비밀번호"}
+          type={"password"}
+          value={password}
+          onChange={(e) => {
+            setPassword(e.target.value);
+            console.log(e.target.value);
+          }}
+        />
+
+        <Btn type="submit" id="loginBtn">
+          로그인
+        </Btn>
+        <Divider />
+
         <div className="btns">
           <div
             className="findUserBtns"
@@ -49,11 +74,6 @@ export default function LoginModal() {
             <FindUserBtn onClick={handleFindUserPw}>비밀번호 찾기</FindUserBtn>
           </div>
         </div>
-        <Btn type="submit" id="loginBtn">
-          로그인
-        </Btn>
-        <Divider />
-        <Btn id="signUpBtn">회원가입</Btn>
       </Form>
     </Container>
   );
