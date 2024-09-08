@@ -1,6 +1,7 @@
 import React from "react";
 import NavBar from "../Navbar/Navbar";
 import Sidebar from "../Sidebar/Sidebar";
+import SearchSort from "../../components/SearchSort/SearchSort";
 import {
   BoardTitle,
   Container,
@@ -9,9 +10,6 @@ import {
   MainContentWrapper,
   PopularCardWrapper,
   RightSidebarWrapper,
-  SearchBox,
-  SearchSortWrapper,
-  SortOption,
 } from "../BoardLayout/BoardLayout.style";
 import PopularPostCard from "../../components/Card/PopularCard/PopularPostCard/PopularPostCard";
 import PopularHashCard from "../../components/Card/PopularCard/PopularHashCard/PopularHashCard";
@@ -42,10 +40,7 @@ function BoardLayout({ postCards, pageType, onSearchResults }) {
         <ContentWrapper>
           <Content>
             <BoardTitle $pageType={pageType}>{boardTitle()}</BoardTitle>
-            <SearchSortWrapper>
-              <SearchBox>Search</SearchBox>
-              <SortOption>최신순</SortOption>
-            </SearchSortWrapper>
+            <SearchSort onSearch={onSearchResults} pageType={pageType} />
             <PostLineLayout pageType={pageType} postCards={postCards} />
           </Content>
           <RightSidebarWrapper>
@@ -63,8 +58,3 @@ function BoardLayout({ postCards, pageType, onSearchResults }) {
 }
 
 export default BoardLayout;
-
-<SearchSortWrapper>
-  <SearchBox>Search</SearchBox>
-  <SortOption>최신순</SortOption>
-</SearchSortWrapper>;
