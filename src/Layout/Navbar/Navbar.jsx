@@ -14,6 +14,7 @@ import Modal from "react-modal";
 import LoginModal from "../../components/Modal/LoginModal/LoginModal";
 import SignUpModal from "../../components/Modal/SignUpModal/SignUpModal";
 import FindUserId from "../../components/Modal/FindUserIdModal/FindUserId";
+import FindUserPw from "../../components/Modal/FindUserPwModal/FindUserPw";
 
 Modal.setAppElement("#root");
 
@@ -72,7 +73,9 @@ function Navbar({ isMainPage = true, isLoggedIn = true }) {
             ? "로그인 모달"
             : modalType === "signup"
             ? "회원가입 모달"
-            : "아이디 찾기 모달"
+            : modalType === "findUserId"
+            ? "아이디 찾기 모달"
+            : "비밀번호 찾기 모달"
         }
         style={{
           content: {
@@ -89,8 +92,10 @@ function Navbar({ isMainPage = true, isLoggedIn = true }) {
           <LoginModal closeModal={closeModal} changeModal={changeModal} />
         ) : modalType === "signup" ? (
           <SignUpModal changeModal={changeModal} />
-        ) : (
+        ) : modalType === "findUserId" ? (
           <FindUserId changeModal={changeModal} />
+        ) : (
+          <FindUserPw changeModal={changeModal} />
         )}
       </Modal>
     </NavbarWrapper>

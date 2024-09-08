@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
 import { Btn, Container, Divider, Form, Logo } from "../Modal.style";
 import { FormInputField } from "../FormInputField";
 import { FindUserBtn } from "./LoginModal.style";
@@ -8,8 +7,6 @@ import { login } from "../../../services/authApi";
 export default function LoginModal({ closeModal, changeModal }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-
-  const navigate = useNavigate();
 
   async function handleLogin(e) {
     e.preventDefault();
@@ -35,7 +32,7 @@ export default function LoginModal({ closeModal, changeModal }) {
   };
 
   const handleFindUserPw = () => {
-    navigate("/find-user-pw");
+    changeModal("findUserPw");
   };
 
   return (

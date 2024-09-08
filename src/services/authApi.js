@@ -89,7 +89,7 @@ export const findUserId = async (nickname, tel) => {
   }
 };
 
-export const findUserPw = async (email = "") => {
+export const findUserPw = async (email, nickname, tel) => {
   try {
     // const response = await axios.get("/members/me/password", {
     //   params: {
@@ -102,13 +102,10 @@ export const findUserPw = async (email = "") => {
       code: 1007,
       message: "비밀번호 찾기에 성공했습니다.",
       result: {
-        code: 1007,
-        message: "비밀번호 찾기에 성공했습니다.",
-        result: {
-          password: "testPassword",
-        },
+        password: "testPassword",
       },
     };
+    return response;
   } catch (error) {
     console.error("비밀번호를 찾던 중 오류 발생:", error);
     throw error;

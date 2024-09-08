@@ -1,23 +1,25 @@
 import React, { useState } from "react";
-import { findUserPw } from "../../../services/api";
 import { Btn, Container, Divider, Form } from "../Modal.style";
 import { FormInputField } from "../FormInputField";
 import { FindUserPwHeader } from "./FindUserPw.style";
+import { findUserPw } from "../../../services/authApi";
 
 export default function FindUserPw() {
   const [email, setEmail] = useState("");
   const [nickname, setNickname] = useState("");
   const [tel, setTel] = useState("");
 
-  const handleFindUserPw = async () => {
+  async function handleFindUserPw(e) {
+    e.preventDefault();
+
     try {
       const response = await findUserPw(email, nickname, tel);
 
-      console.log("success", response);
+      console.log("success", response.result.password);
     } catch (error) {
       console.log(error);
     }
-  };
+  }
 
   return (
     <Container width="530px" height="628px">
