@@ -75,7 +75,7 @@ export default function SignUpModal({ changeModal }) {
       const response = await signUp(body);
       console.log(response);
 
-      changeModal();
+      changeModal("login");
     } catch (err) {
       console.log(err);
     }

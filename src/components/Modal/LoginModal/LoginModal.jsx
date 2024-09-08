@@ -5,7 +5,7 @@ import { FormInputField } from "../FormInputField";
 import { FindUserBtn } from "./LoginModal.style";
 import { login } from "../../../services/authApi";
 
-export default function LoginModal({ closeModal }) {
+export default function LoginModal({ closeModal, changeModal }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
@@ -31,7 +31,7 @@ export default function LoginModal({ closeModal }) {
   }
 
   const handleFindUserId = () => {
-    navigate("/find-user-id");
+    changeModal("findUserId");
   };
 
   const handleFindUserPw = () => {

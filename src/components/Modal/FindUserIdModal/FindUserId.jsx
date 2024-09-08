@@ -4,19 +4,22 @@ import { FindUserIdHeader } from "./FindUserId.style";
 import { FormInputField } from "../FormInputField";
 import { findUserId } from "../../../services/authApi";
 
-export default function FindUserId() {
+export default function FindUserId({ changeModal }) {
   const [nickname, setNickname] = useState("");
   const [tel, setTel] = useState("");
 
-  const handleFindUserId = async () => {
+  async function handleFindUserId(e) {
+    e.preventDefault();
+
     try {
       const response = await findUserId(nickname, tel);
 
-      console.log("success", response.email);
+      console.log("success", response.result.email);
+      changeModal("login");
     } catch (error) {
       console.log(error);
     }
-  };
+  }
 
   return (
     <Container width="530px" height="628px">
@@ -35,12 +38,10 @@ export default function FindUserId() {
             label={"휴대폰 번호"}
             type={"tel"}
             value={tel}
-            onChange={(e) => setEmail(e.target.value)}
+            onChange={(e) => setTel(e.target.value)}
           />
           <Divider />
-          <Btn onClick={handleFindUserId} type="submit">
-            아이디 찾기
-          </Btn>
+          <Btn type="submit">아이디 찾기</Btn>
         </Form>
       </div>
     </Container>

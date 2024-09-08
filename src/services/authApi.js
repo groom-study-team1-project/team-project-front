@@ -68,7 +68,7 @@ export const uploadProfileImage = async (body) => {
   }
 };
 
-export const findUserId = async (nickname = "", tel = "") => {
+export const findUserId = async (nickname, tel) => {
   try {
     // const response = await axios.get("/members/me/email", {
     //   params: {
