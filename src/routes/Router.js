@@ -7,8 +7,7 @@ import ProjectBoard from "../pages/QuestionBoard/QuestionBoard";
 import NoticeBoard from "../pages/NoticeBoard/NoticeBoard";
 import EditProfile from "../pages/MyPage/EditProfile/EditProfile";
 import DetailPage from "../pages/DetailPage/DetailPage";
-import BoardWrite from "../pages/WriteBoard/WriteBoard";
-
+import PostForm from "../pages/PostForm/PostForm";
 function Router() {
   return (
     <BrowserRouter>
@@ -21,7 +20,8 @@ function Router() {
         <Route path="/my-page" element={<MyProfile />} />
         <Route path="/edit" element={<EditProfile />} />
         <Route path="/detail" element={<DetailPage />} />
-        <Route path="/boardwrite" element={<BoardWrite />} />
+        <Route path="/boardwrite" element={<PostForm />} />
+        <Route path="/editpost/:postId" element={<PostForm />} />
       </Routes>
     </BrowserRouter>
   );

@@ -17,7 +17,7 @@ import {
   Interaction,
   InteractionItem,
 } from "../../components/Common/Interactions";
-import { Wrap } from "../WriteBoard/WriteBoard.style";
+import { Wrap } from "../../components/Common/WriteBoard/WriteBoard.style";
 import {
   CategotyWrap,
   CenteredContainer,

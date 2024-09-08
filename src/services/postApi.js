@@ -4,13 +4,13 @@ import { redirect } from "react-router-dom";
 export const createPost = async (body, token) => {
   try {
     console.log(body);
-    const headers = {
-      Authorization: `Bearer ${token}`,
-    };
-    const result = await axios.post("/api/posts/upload", body, {
-      headers: headers,
-    });
-    redirect(`${result.result.id}`);
+    // const headers = {
+    //   Authorization: `Bearer ${token}`,
+    // };
+    // const result = await axios.post("/api/posts/upload", body, {
+    //   headers: headers,
+    // });
+    // redirect(`${result.result.id}`);
   } catch (error) {
     console.log(error);
   }
@@ -62,6 +62,22 @@ export const fetchPostdetail = async (postId) => {
     //const result = await axios.get(`/posts/${postId}`);
     console.log("result", result1);
     return result1.result;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const fetchPostChange = async (body, postId, token) => {
+  try {
+    console.log(body);
+    console.log(postId);
+    // const headers = {
+    //   Authorization: `Bearer ${token}`,
+    // };
+    // const result = await axios.put(`/api/posts/${postId}`, body, {
+    //   headers: headers,
+    // });
+    // redirect(`${result.result.id}`);
   } catch (error) {
     console.log(error);
   }
