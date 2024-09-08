@@ -26,7 +26,6 @@ export const login = async (body) => {
 
 export const signUp = async (body) => {
   try {
-    console.log(body);
     //const response = await axios.post("/members/sign-up", body);
     const response = {
       code: 1000,
@@ -39,6 +38,32 @@ export const signUp = async (body) => {
     }
   } catch (error) {
     console.log("로그인 실패:", error);
+    throw error;
+  }
+};
+
+export const uploadProfileImage = async (body) => {
+  try {
+    //const response = await axios.post("/api/members/profile-image", body);
+    const response = {
+      status: {
+        code: 9999,
+        message: "응답 성공 메시지입니다.",
+      },
+      result: {
+        imageUrl:
+          "http://localhost:4566/test-bucket/profiles/11/2b776b15_1725181775362.jpeg",
+      },
+    };
+    if (response.status.code === 9999) {
+      return response;
+    } else {
+      throw new Error(
+        response.status.message || "업로드 할 수 없는 이미지입니다."
+      );
+    }
+  } catch (error) {
+    console.log("이미지 업로드 실패:", error);
     throw error;
   }
 };

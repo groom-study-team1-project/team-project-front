@@ -3,8 +3,7 @@ import profileIcon from "../../../assets/images/profileIcon.png";
 import { Btn, Container, Divider, Form } from "../Modal.style";
 import { FormInputField } from "../FormInputField";
 import { ProfileImgDiv, SignUpHeader } from "./SignUpModal.style";
-import { signUp } from "../../../services/authApi";
-import { uploadImageToS3 } from "../../../services/s3Service";
+import { signUp, uploadProfileImage } from "../../../services/authApi";
 
 export default function SignUpModal({ changeModal }) {
   const [previewImage, setPreviewImage] = useState(null);
@@ -24,7 +23,8 @@ export default function SignUpModal({ changeModal }) {
     }
 
     if (!/^[a-zA-Z0-9가-힣]+$/.test(nickname)) {
-      errors.nickname = "닉네임은 영어 대소문자, 한글, 숫자의 조합이어야 합니다.";
+      errors.nickname =
+        "닉네임은 영어 대소문자, 한글, 숫자의 조합이어야 합니다.";
     }
 
     if (!/\S+@\S+\.\S+/.test(email)) {
@@ -47,6 +47,19 @@ export default function SignUpModal({ changeModal }) {
     return Object.keys(errors).length === 0;
   };
 
+  const uploadImageAndGetUrl = async () => {
+    try {
+      const formData = new FormData();
+      formData.append("file", profileImg);
+
+      const response = await uploadProfileImage(formData);
+      return response.result.imageUrl;
+    } catch (err) {
+      console.error("이미지 업로드 실패:", err);
+      return null;
+    }
+  };
+
   async function handleSignUp(e) {
     e.preventDefault();
 
@@ -55,14 +68,14 @@ export default function SignUpModal({ changeModal }) {
     }
 
     try {
-      changeModal(); //나중에 뒤로 빼기
-
-      const profileImgUrl = await uploadImageToS3(profileImg);
+      const profileImgUrl = await uploadImageAndGetUrl();
 
       let body = { email, password, nickname, imageUrl: profileImgUrl, tel };
 
       const response = await signUp(body);
       console.log(response);
+
+      changeModal();
     } catch (err) {
       console.log(err);
     }
@@ -101,7 +114,9 @@ export default function SignUpModal({ changeModal }) {
             value={nickname}
             onChange={(e) => setNickname(e.target.value)}
           />
-          {errors.nickname && <div style={{ color: "red" }}>{errors.nickname}</div>}
+          {errors.nickname && (
+            <div style={{ color: "red" }}>{errors.nickname}</div>
+          )}
 
           <FormInputField
             label={"이메일"}
@@ -117,7 +132,9 @@ export default function SignUpModal({ changeModal }) {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
           />
-          {errors.password && <div style={{ color: "red" }}>{errors.password}</div>}
+          {errors.password && (
+            <div style={{ color: "red" }}>{errors.password}</div>
+          )}
 
           <FormInputField
             label={"비밀번호 확인"}
@@ -125,7 +142,9 @@ export default function SignUpModal({ changeModal }) {
             value={confirmPassword}
             onChange={(e) => setConfirmPassword(e.target.value)}
           />
-          {errors.confirmPassword && <div style={{ color: "red" }}>{errors.confirmPassword}</div>}
+          {errors.confirmPassword && (
+            <div style={{ color: "red" }}>{errors.confirmPassword}</div>
+          )}
 
           <FormInputField
             label={"휴대폰 번호"}
