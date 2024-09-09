@@ -72,9 +72,11 @@ function MyProfile() {
               nickName={profileData.result.nickname}
               job={profileData.result.role}
             />
-            <ProfileSetting onClick={redirectToEditPage}>
-              프로필 수정
-            </ProfileSetting>
+            {isMine ? (
+              <ProfileSetting onClick={redirectToEditPage}>
+                프로필 수정
+              </ProfileSetting>
+            ) : null}
           </ProfileHeader>
           <hr />
           <Userintroduce>{profileData.result.aboutMe}</Userintroduce>
