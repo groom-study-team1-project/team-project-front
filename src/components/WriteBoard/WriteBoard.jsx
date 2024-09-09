@@ -4,9 +4,9 @@ import { CKEditor } from "@ckeditor/ckeditor5-react";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPhotoFilm } from "@fortawesome/free-solid-svg-icons";
-import GlobalStyle from "../../../assets/styles/GlobalStyle";
-import { createPost, fetchPostChange } from "../../../services/postApi";
-import backBtn from "../../../assets/images/back-removebg-preview.png";
+import GlobalStyle from "../../assets/styles/GlobalStyle";
+import { createPost, fetchPostChange } from "../../services/postApi";
+import backBtn from "../../assets/images/back-removebg-preview.png";
 import {
   BackImg,
   Categoryselect,

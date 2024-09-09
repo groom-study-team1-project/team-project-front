@@ -1,5 +1,4 @@
 import axios from "axios";
-import { redirect } from "react-router-dom";
 
 export const createPost = async (body, token) => {
   try {
@@ -77,7 +76,25 @@ export const fetchPostChange = async (body, postId, token) => {
     // const result = await axios.put(`/api/posts/${postId}`, body, {
     //   headers: headers,
     // });
-    // redirect(`${result.result.id}`);
+    // console.log(result);
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const deletepost = async (postId, token) => {
+  try {
+    const response = {
+      code: 1204,
+      message: "해당 게시글이 삭제되었습니다.",
+    };
+    console.log(response.message);
+    // const headers = {
+    //   Authorization: `Bearer ${token}`,
+    // };
+    // await axios.delete(`/api/posts/${postId}`, {
+    //   headers: headers,
+    // });
   } catch (error) {
     console.log(error);
   }
