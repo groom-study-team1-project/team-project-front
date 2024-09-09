@@ -62,7 +62,15 @@ export const editProfile = async (body) => {
 
 export const postInfo = async (memberId, categoryId) => {
   try {
-    //const response = await axios.get(`/api/post/${memberId}/${categoryId}`);
+    // const response = await axios.get(`/api/post`, {
+    //   params: {
+    //     memberId: memberId,
+    //     categoryId: categoryId,
+    //   },
+    //   headers: {
+    //     Authorization: `Bearer ${yourAccessToken}`,
+    //   },
+    // });
 
     const response = [
       {
