@@ -16,6 +16,8 @@ import { useNavigate } from "react-router-dom";
 function Navbar({ isMainPage = true }) {
   const [menuItems, setMenuItems] = useState([]);
   const isLoggedIn = useSelector((state) => state.user.isLoggedIn);
+  const email = useSelector((state) => state.user.userInfo.email).split("@")[0];
+
   let navigate = useNavigate();
 
   useEffect(() => {
@@ -25,7 +27,7 @@ function Navbar({ isMainPage = true }) {
   }, []);
 
   const redirectToMyPage = () => {
-    navigate("/my-page");
+    navigate(`/my-page/${email}`);
   };
 
   return (
