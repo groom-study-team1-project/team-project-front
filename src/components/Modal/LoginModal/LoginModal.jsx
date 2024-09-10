@@ -39,7 +39,7 @@ export default function LoginModal({ closeModal }) {
   };
 
   return (
-    <Container width="530px" height="628px">
+    <Container width="496px" height="628px">
       <Logo>
         <h1>로고 이미지</h1>
       </Logo>

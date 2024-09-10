@@ -10,6 +10,7 @@ import {
   Button,
 } from "./Navbar.style";
 import Modal from "react-modal";
+import ModalLayout from "../../components/Modal/Modal";
 import LoginModal from "../../components/Modal/LoginModal/LoginModal";
 
 Modal.setAppElement("#root");
@@ -25,10 +26,12 @@ function Navbar({ isMainPage = true, isLoggedIn = true }) {
   }, []);
 
   const openModal = () => {
+    console.log("모달 열림");
     setIsModalOpen(true);
   };
 
   const closeModal = () => {
+    console.log("모달 닫힘");
     setIsModalOpen(false);
   };
 
@@ -52,23 +55,13 @@ function Navbar({ isMainPage = true, isLoggedIn = true }) {
         )}
       </NavbarInner>
 
-      <Modal
+      <ModalLayout
         isOpen={isModalOpen}
-        onRequestClose={closeModal}
-        contentLabel="로그인 모달"
-        style={{
-          content: {
-            top: "50%",
-            left: "50%",
-            right: "auto",
-            bottom: "auto",
-            marginRight: "-50%",
-            transform: "translate(-50%, -50%)",
-          },
-        }}
+        closeModal={closeModal}
+        contentLable={"로그인 모달"}
       >
         <LoginModal closeModal={closeModal} />
-      </Modal>
+      </ModalLayout>
     </NavbarWrapper>
   );
 }
