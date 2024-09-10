@@ -112,7 +112,7 @@ export async function fetchMenuItems() {
     { id: 2, item: "질문 게시판" },
     { id: 3, item: "프로젝트 게시판" },
     { id: 4, item: "공지사항" },
-  ];
+  ].slice();
 }
 
 export const join = async (email, password) => {

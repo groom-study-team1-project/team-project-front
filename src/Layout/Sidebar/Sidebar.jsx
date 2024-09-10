@@ -8,31 +8,33 @@ import {
   SidebarLink,
   SidebarUl,
 } from "./Sidebar.style";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 
 function Sidebar() {
   const [menuItems, setMenuItems] = useState([]);
   const navigate = useNavigate();
+  const location = useLocation();
 
   useEffect(() => {
     fetchMenuItems()
       .then((menuItems) => {
-        console.log(menuItems);
-        setMenuItems(menuItems);
+        console.log(111111);
+        console.log(menuItems[0]);
+
+        setMenuItems([...menuItems]);
       })
       .catch((err) => console.log(err.message));
-  }, []);
+  }, [location.pathname]);
 
   const handleNavigation = (id) => {
-    console.log(id);
     if (id === 1) {
-      navigate("/community/free");
+      window.location.href = "/community/free";
     } else if (id === 2) {
-      navigate("/community/questions");
+      window.location.href = "/community/questions";
     } else if (id === 3) {
-      navigate("/community/projects");
+      window.location.href = "/community/projects";
     } else if (id === 4) {
-      navigate("/community/notices");
+      window.location.href = "/community/notices";
     }
   };
 
@@ -44,10 +46,11 @@ function Sidebar() {
       <SidebarDiv>
         <SidebarUl>
           {menuItems.map((item) => (
-            <SidebarLi key={item.id}>
-              <SidebarLink onClick={() => handleNavigation(item.id)}>
-                {item.item}
-              </SidebarLink>
+            <SidebarLi
+              key={item.id}
+              onClick={(e) => handleNavigation(item.id, e)}
+            >
+              <SidebarLink>{item.item}</SidebarLink>
             </SidebarLi>
           ))}
         </SidebarUl>
