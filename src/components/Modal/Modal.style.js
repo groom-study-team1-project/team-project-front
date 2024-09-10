@@ -9,7 +9,7 @@ export const Container = styled.div`
   height: ${({ height }) => height || "100%"};
   background-color: rgba(255, 255, 255, 0.5);
   box-sizing: border-box;
-  border: 1px solid black;
+  border-radius: 40px;
 `;
 
 export const Logo = styled.div`
