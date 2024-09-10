@@ -43,8 +43,8 @@ function Sidebar() {
       </Logo>
       <SidebarDiv>
         <SidebarUl>
-          {menuItems.map((item, index) => (
-            <SidebarLi key={`${item.id}-${index}`}>
+          {menuItems.map((item) => (
+            <SidebarLi key={item.id}>
               <SidebarLink onClick={() => handleNavigation(item.id)}>
                 {item.item}
               </SidebarLink>

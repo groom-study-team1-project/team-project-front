@@ -98,4 +98,5 @@ export const PostCard = styled.div`
   display: flex;
   flex-direction: column;
   align-self: flex-end;
+  width: ${({ width }) => width || ""};
 `;

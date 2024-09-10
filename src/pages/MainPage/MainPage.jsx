@@ -54,7 +54,7 @@ function MainPage() {
               <PostCard>PostCard</PostCard>
             </PostCardLine>
             <PostCardLine>
-              <PostCard>
+              <PostCard width="985px">
                 <CommunityPostCard />
               </PostCard>
             </PostCardLine>
