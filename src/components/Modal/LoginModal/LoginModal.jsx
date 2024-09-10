@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Btn, Container, Divider, Form, Logo } from "../Modal.style";
 import { FormInputField } from "../FormInputField";
-import { FindUserBtn } from "./LoginModal.style";
+import { FindUserBtns, FindUserBtn } from "./LoginModal.style";
 import { login } from "../../../services/authApi";
 import logoImg from "../../../assets/images/DEEPDIVERS.png";
 
@@ -68,13 +68,20 @@ export default function LoginModal({ closeModal }) {
         <Divider />
 
         <div className="btns">
-          <div
-            className="findUserBtns"
-            style={{ display: "flex", justifyContent: "flex-end" }}
-          >
-            <FindUserBtn onClick={handleFindUserId}>아이디 찾기</FindUserBtn>
-            <FindUserBtn onClick={handleFindUserPw}>비밀번호 찾기</FindUserBtn>
-          </div>
+          <FindUserBtns>
+            <div>
+              <span style={{ fontSize: "14px" }}>아이디를 잃어버리셨나요?</span>
+              <FindUserBtn onClick={handleFindUserId}>아이디 찾기</FindUserBtn>
+            </div>
+            <div>
+              <span style={{ fontSize: "14px" }}>
+                비밀번호를 잃어버리셨나요?
+              </span>
+              <FindUserBtn onClick={handleFindUserPw}>
+                비밀번호 찾기
+              </FindUserBtn>
+            </div>
+          </FindUserBtns>
         </div>
       </Form>
     </Container>
