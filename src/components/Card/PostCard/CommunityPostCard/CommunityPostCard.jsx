@@ -17,7 +17,7 @@ function CommunityPostCard({
   count = { view: 0, like: 0, comment: 0 },
 }) {
   return (
-    <PostCardWrapper width="985px" height="232px">
+    <PostCardWrapper height="232px">
       <InnerContainer>
         <Thumbnail />
         <CustomBody>
