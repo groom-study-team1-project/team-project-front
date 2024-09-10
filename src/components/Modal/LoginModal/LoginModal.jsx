@@ -4,6 +4,7 @@ import { Btn, Container, Divider, Form, Logo } from "../Modal.style";
 import { FormInputField } from "../FormInputField";
 import { FindUserBtn } from "./LoginModal.style";
 import { login } from "../../../services/authApi";
+import logoImg from "../../../assets/images/DEEPDIVERS.png";
 
 export default function LoginModal({ closeModal }) {
   const [email, setEmail] = useState("");
@@ -41,7 +42,8 @@ export default function LoginModal({ closeModal }) {
   return (
     <Container width="496px" height="628px">
       <Logo>
-        <h1>로고 이미지</h1>
+        {/* 임시로 로고이미지 지정해놓음 */}
+        <img src={logoImg} alt="로고 이미지" style={{ width: "288px" }} />
       </Logo>
       <Form action="" method="post" onSubmit={handleLogin}>
         <FormInputField

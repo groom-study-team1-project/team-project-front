@@ -30,7 +30,7 @@ export const Btn = styled.button`
   background-image: linear-gradient(90deg, #acb6e5 0%, #86fde8 100%);
   border: none;
   border-radius: 10px;
-  font-size: 16px;
+  font-size: 14px;
   transition: 0.3s;
 
   &:active {
@@ -39,7 +39,8 @@ export const Btn = styled.button`
 `;
 
 export const Divider = styled.div`
-  width: 100%;
+  width: 98%;
   height: 1px;
-  background-color: darkgray;
+  background-color: #929292;
+  margin: 1.5rem 0;
 `;

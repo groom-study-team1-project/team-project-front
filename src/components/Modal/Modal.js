@@ -25,7 +25,7 @@ function ModalLayout({ isOpen, closeModal, children }) {
           marginRight: "-50%",
           transform: "translate(-50%, -50%)",
           background: "rgba(255, 255, 255, 0.9)",
-          padding: "2rem 1.5rem",
+          padding: "0 1rem",
           borderRadius: "20px",
           maxWidth: "530px",
           boxShadow: "0px 4px 16px rgba(0, 0, 0, 0.2)",
