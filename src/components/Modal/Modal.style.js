@@ -27,6 +27,15 @@ export const Btn = styled.button`
   width: 404px;
   height: 40px;
   cursor: pointer;
+  background-image: linear-gradient(90deg, #acb6e5 0%, #86fde8 100%);
+  border: none;
+  border-radius: 10px;
+  font-size: 16px;
+  transition: 0.3s;
+
+  &:active {
+    transform: scale(0.98);
+  }
 `;
 
 export const Divider = styled.div`

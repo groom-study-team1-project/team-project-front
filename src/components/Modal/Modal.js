@@ -1,6 +1,5 @@
 import React from "react";
 import Modal from "react-modal";
-// import { ModalOverlay, ModalContent } from "./Modal.style";
 
 function ModalLayout({ isOpen, closeModal, children }) {
   return (
