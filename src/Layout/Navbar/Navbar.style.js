@@ -45,6 +45,10 @@ export const MenuItem = styled.div`
   }
 `;
 
+export const ButtonBox = styled.div`
+  display: flex;
+`;
+
 export const Button = styled.div`
   display: flex;
   justify-content: center;

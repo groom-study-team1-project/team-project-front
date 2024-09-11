@@ -8,7 +8,9 @@ import {
   Menu,
   MenuItem,
   Button,
+  ButtonBox,
 } from "./Navbar.style";
+import { logout } from "../../services/authApi";
 import Modal from "react-modal";
 import LoginModal from "../../components/Modal/LoginModal/LoginModal";
 
@@ -24,6 +26,14 @@ function Navbar({ isMainPage = true, isLoggedIn = true }) {
       .catch((err) => console.log(err.message));
   }, []);
 
+  async function handleLogout(e) {
+    try {
+      await logout();
+    } catch (err) {
+      console.log(err);
+    }
+  }
+  
   const openModal = () => {
     setIsModalOpen(true);
   };
@@ -48,6 +58,11 @@ function Navbar({ isMainPage = true, isLoggedIn = true }) {
         {isLoggedIn ? (
           <Button>글쓰기 다크모드 프로필</Button>
         ) : (
+          <ButtonBox>
+            <Button onClick={handleLogout}>다크모드</Button>
+            <Button>로그인</Button>
+            <Button>회원가입</Button>
+          </ButtonBox>
           <Button onClick={openModal}>다크모드 로그인 회원가입</Button>
         )}
       </NavbarInner>
