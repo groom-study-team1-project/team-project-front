@@ -17,7 +17,10 @@ import CommunityPostCard from "../../components/Card/PostCard/CommunityPostCard/
 import redirectIcon from "../../assets/images/redirect-to-board.png";
 
 function MainPage() {
-  console.log("b" + "a" + +"a");
+  const handleNavigation = () => {
+    window.location.href = "/community/free";
+  };
+
   return (
     <>
       <Container>
@@ -41,7 +44,7 @@ function MainPage() {
               <br /> 네트워크, 유익한 자료와 활동으로 커뮤니티에서 유익한 시간을
               보내세요.
             </Detail>
-            <Button to="/community/free">
+            <Button onClick={handleNavigation}>
               DeepDivers 게시판으로 바로가기
               <img src={redirectIcon} alt="Redirect to board" />
             </Button>

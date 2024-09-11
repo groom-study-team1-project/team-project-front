@@ -10,7 +10,7 @@ import {
   Button,
 } from "./Navbar.style";
 
-function Navbar({ isMainPage = true, isLoggedIn = true }) {
+function Navbar({ isMainPage = false, isLoggedIn = true }) {
   const [menuItems, setMenuItems] = useState([]);
 
   useEffect(() => {
