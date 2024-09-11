@@ -40,6 +40,7 @@ export const Menu = styled.div`
 
 export const MenuItem = styled.div`
   margin-right: 20px;
+  cursor: pointer;
 
   &:last-child {
     margin-right: 0;

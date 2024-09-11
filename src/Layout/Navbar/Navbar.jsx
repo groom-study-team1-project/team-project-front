@@ -19,6 +19,18 @@ function Navbar({ isMainPage = true, isLoggedIn = true }) {
       .catch((err) => console.log(err.message));
   }, []);
 
+  const handleNavigation = (id) => {
+    if (id === 1) {
+      window.location.href = "/community/free";
+    } else if (id === 2) {
+      window.location.href = "/community/questions";
+    } else if (id === 3) {
+      window.location.href = "/community/projects";
+    } else if (id === 4) {
+      window.location.href = "/community/notices";
+    }
+  };
+
   return (
     <NavbarWrapper>
       <NavbarInner>
@@ -26,8 +38,10 @@ function Navbar({ isMainPage = true, isLoggedIn = true }) {
 
         {isMainPage && (
           <Menu>
-            {menuItems.map((menu) => (
-              <MenuItem key={menu.id}>{menu.item}</MenuItem>
+            {menuItems.map((item) => (
+              <MenuItem key={item.id} onClick={() => handleNavigation(item.id)}>
+                {item.item}
+              </MenuItem>
             ))}
           </Menu>
         )}
