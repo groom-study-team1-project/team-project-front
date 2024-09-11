@@ -33,7 +33,7 @@ function Navbar({ isMainPage = true, isLoggedIn = true }) {
       console.log(err);
     }
   }
-  
+
   const openModal = () => {
     setIsModalOpen(true);
   };
@@ -60,10 +60,9 @@ function Navbar({ isMainPage = true, isLoggedIn = true }) {
         ) : (
           <ButtonBox>
             <Button onClick={handleLogout}>다크모드</Button>
-            <Button>로그인</Button>
+            <Button onClick={openModal}>로그인</Button>
             <Button>회원가입</Button>
           </ButtonBox>
-          <Button onClick={openModal}>다크모드 로그인 회원가입</Button>
         )}
       </NavbarInner>
 
