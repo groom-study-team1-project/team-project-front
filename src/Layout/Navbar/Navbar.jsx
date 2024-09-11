@@ -17,7 +17,7 @@ import { logout } from "../../services/authApi";
 
 Modal.setAppElement("#root");
 
-function Navbar({ isMainPage = false, isLoggedIn = true }) {
+function Navbar({ isMainPage = false, isLoggedIn = false }) {
   const [menuItems, setMenuItems] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalType, setModalType] = useState("login");
