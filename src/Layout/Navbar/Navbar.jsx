@@ -13,6 +13,7 @@ import {
 import Modal from "react-modal";
 import LoginModal from "../../components/Modal/LoginModal/LoginModal";
 import SignUpModal from "../../components/Modal/SignUpModal/SignUpModal";
+import { logout } from "../../services/authApi";
 
 Modal.setAppElement("#root");
 
@@ -26,6 +27,14 @@ function Navbar({ isMainPage = true, isLoggedIn = true }) {
       .then((menuItems) => setMenuItems(menuItems))
       .catch((err) => console.log(err.message));
   }, []);
+
+  async function handleLogout(e) {
+    try {
+      await logout();
+    } catch (err) {
+      console.log(err);
+    }
+  }
 
   const openLoginModal = () => {
     setModalType("login");
@@ -63,8 +72,9 @@ function Navbar({ isMainPage = true, isLoggedIn = true }) {
           <Button>글쓰기 다크모드 프로필</Button>
         ) : (
           <ButtonBox>
+            <Button onClick={handleLogout}>다크모드</Button>
             <Button onClick={openLoginModal}>로그인</Button>
-            <Button onClick={openSignupModal}>회원가입</Button>{" "}
+            <Button onClick={openSignupModal}>회원가입</Button>
           </ButtonBox>
         )}
       </NavbarInner>

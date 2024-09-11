@@ -1,6 +1,8 @@
 import axios from "axios";
 import { redirect } from "react-router-dom";
 
+const API_URL = "http://localhost:8080";
+
 export const login = async (body) => {
   try {
     //const response = await axios.post("/members/login", body);
@@ -65,5 +67,75 @@ export const uploadProfileImage = async (body) => {
   } catch (error) {
     console.log("이미지 업로드 실패:", error);
     throw error;
+  }
+};
+
+export const checkDuplicatedNickname = async (name) => {
+  try {
+    // const response = await axios.get(`${API_URL}/members/validate/nickname`, {
+    //   params: { nickname: name },
+    // });
+
+    const response = {
+      code: 1003,
+      message: "사용가능한 이름 입니다.",
+    };
+
+    if (response.code === 1003) {
+      return false;
+    } else {
+      return true;
+    }
+  } catch (error) {
+    console.log("checking nickname error", error);
+    throw error;
+  }
+};
+
+export const checkDuplicatedEmail = async (email) => {
+  try {
+    // const response = await axios.get(`${API_URL}/members/validate/email`, {
+    //   params: { email },
+    // });
+
+    const response = {
+      code: 1004,
+      message: "사용가능한 이메일 입니다.",
+    };
+
+    if (response.code === 1004) {
+      return false;
+    } else {
+      return true;
+    }
+  } catch (error) {
+    console.log("checking email error", error);
+    throw error;
+  }
+};
+
+export const logout = async (accessToken) => {
+  try {
+    // const response = await axios.post(
+    //   "/api/members/log-out",
+    //   {},
+    //   {
+    //     headers: {
+    //       Authorization: `Bearer ${accessToken}`,
+    //     },
+    //   }
+    // );
+    const response = {
+      code: 1002,
+      message: "사용자 로그아웃에 성공하였습니다.",
+    };
+
+    if (response.code === 1002) {
+      console.log("로그아웃 성공:", response.message);
+    } else {
+      throw new Error(response.data.message || "로그아웃 실패");
+    }
+  } catch (error) {
+    console.log(error);
   }
 };

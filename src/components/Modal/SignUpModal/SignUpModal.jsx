@@ -3,7 +3,12 @@ import profileIcon from "../../../assets/images/profileIcon.png";
 import { Btn, Container, Divider, Form } from "../Modal.style";
 import { FormInputField } from "../FormInputField";
 import { ProfileImgDiv, SignUpHeader } from "./SignUpModal.style";
-import { signUp, uploadProfileImage } from "../../../services/authApi";
+import {
+  checkDuplicatedEmail,
+  checkDuplicatedNickname,
+  signUp,
+  uploadProfileImage,
+} from "../../../services/authApi";
 
 export default function SignUpModal({ changeModal }) {
   const [previewImage, setPreviewImage] = useState(null);
@@ -15,7 +20,7 @@ export default function SignUpModal({ changeModal }) {
   const [tel, setTel] = useState("");
   const [errors, setErrors] = useState({});
 
-  const validateForm = () => {
+  const validateForm = async () => {
     let errors = {};
 
     if (nickname.length < 2 || nickname.length > 20) {
@@ -27,8 +32,16 @@ export default function SignUpModal({ changeModal }) {
         "닉네임은 영어 대소문자, 한글, 숫자의 조합이어야 합니다.";
     }
 
+    if (await checkDuplicatedNickname(nickname)) {
+      errors.nickname = "중복된 닉네임입니다.";
+    }
+
     if (!/\S+@\S+\.\S+/.test(email)) {
       errors.email = "유효한 이메일 주소를 입력해주세요.";
+    }
+
+    if (await checkDuplicatedEmail(email)) {
+      errors.email = "중복된 이메일 주소입니다.";
     }
 
     if (password.length < 8 || password.length > 16) {
