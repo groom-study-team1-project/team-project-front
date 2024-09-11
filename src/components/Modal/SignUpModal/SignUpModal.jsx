@@ -1,8 +1,13 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import profileIcon from "../../assets/images/profileIcon.png";
 import { signup } from "../../../services/api";
 import { Btn, Container, Divider, Form } from "../Modal.style";
 import { FormInputField } from "../FormInputField";
+import { ProfileImgDiv, SignUpHeader } from "./SignUpModal.style";
+import {
+  checkDuplicatedEmail,
+  checkDuplicatedNickname,
+} from "../../../services/authApi";
 
 export default function SignUpModal() {
   const [profileImg, setProfileImg] = useState(null);
@@ -11,6 +16,8 @@ export default function SignUpModal() {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [phoneNum, setPhoneNum] = useState("");
+  const [isNameValid, setIsNameValid] = useState(null);
+  const [isEmailValid, setIsEmailValid] = useState(null);
 
   async function handleSignUp(e) {
     e.preventDefault();
@@ -40,6 +47,36 @@ export default function SignUpModal() {
     }
   };
 
+  useEffect(() => {
+    const handleCheckNickname = async (e) => {
+      if (name.length > 0) {
+        try {
+          const isValid = await checkDuplicatedNickname(name);
+          setIsNameValid(isValid);
+        } catch (error) {
+          console.log("checking nickname error", error);
+          setIsNameValid(false);
+        }
+      }
+    };
+    handleCheckNickname();
+  }, [name]);
+
+  useEffect(() => {
+    const handleCheckEmail = async (e) => {
+      if (email.length > 0) {
+        try {
+          const isValid = await checkDuplicatedEmail(email);
+          setIsEmailValid(isValid);
+        } catch (error) {
+          console.log("checking email error", error);
+          setIsEmailValid(false);
+        }
+      }
+    };
+    handleCheckEmail();
+  }, [email]);
+
   return (
     <Container width="530px" height="918px">
       <div>
@@ -57,8 +94,26 @@ export default function SignUpModal() {
               <input type="file" onChange={handleImageChange} />
             </div>
           </ProfileImgDiv>
-          <FormInputField label={"닉네임"} type={"text"} value={name} />
-          <FormInputField label={"이메일"} type={"email"} value={email} />
+          <FormInputField
+            label={"닉네임"}
+            type={"text"}
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            required
+          />
+          {isNameValid === false && (
+            <p style={{ color: "red" }}>이미 사용 중인 닉네임입니다.</p>
+          )}
+          <FormInputField
+            label={"이메일"}
+            type={"email"}
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+          />
+          {isEmailValid === false && (
+            <p style={{ color: "red" }}>이미 사용 중인 이메일입니다.</p>
+          )}
           <FormInputField
             label={"비밀번호"}
             type={"password"}
@@ -69,7 +124,12 @@ export default function SignUpModal() {
             type={"password"}
             value={confirmPassword}
           />
-          <FormInputField label={"휴대폰 번호"} type={"tel"} value={phoneNum} />
+          <FormInputField
+            label={"휴대폰 번호"}
+            type={"tel"}
+            value={phoneNum}
+            required
+          />
           <Divider />
           <Btn type="submit">계정 생성하기</Btn>
         </Form>
