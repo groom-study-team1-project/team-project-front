@@ -22,7 +22,8 @@ export const ContentWrapper = styled.div`
 export const Content = styled.div``;
 
 export const BoardTitle = styled.div`
-  width: ${(props) => (props.text === "프로젝트 게시판" ? "264px" : "200px")};
+  width: ${(props) =>
+    props.$boardType === "프로젝트 게시판" ? "264px" : "200px"};
   height: 48px;
   display: flex;
   border: 1px solid black;
@@ -52,14 +53,22 @@ export const SearchBox = styled.div`
   border: 1px solid blue;
 `;
 
-export const SortOption = styled.div`
+export const SortOption = styled.select`
   width: 80px;
   height: 24px;
   border: 1px solid blue;
   align-self: flex-end;
+  cursor: pointer;
 `;
 
-export const PostCardWrapper = styled.div`
+export const SortItems = styled.div`
+  border: 1px solid black;
+  position: absolute;
+`;
+
+export const PostCardWrapper = styled.div.attrs((props) => ({
+  isProjectBoard: undefined, // DOM에 전달되지 않도록 필터링
+}))`
   width: 990px;
   max-width: 1190px;
   margin-left: 80px;

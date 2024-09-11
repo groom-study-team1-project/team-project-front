@@ -99,3 +99,15 @@ export const deletepost = async (postId, token) => {
     console.log(error);
   }
 };
+
+export const sortPostsByCriteria = async (categoty_id, sort, post_id) => {
+  try {
+    // const result = await axios.get(
+    //   `/posts/${post_id}?sort=${sort}&categoty-id=${categoty_id}`
+    // );
+    // console.log(result);
+    await console.log(categoty_id, sort, post_id);
+  } catch (error) {
+    console.log(error);
+  }
+};
