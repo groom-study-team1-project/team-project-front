@@ -26,7 +26,7 @@ export const ProfileInfoJob = styled.p`
   font-size: ${({ isBig }) => (isBig ? "24px" : "13px")};
 `;
 
-export const PostProfile = ({ name, job }) => (
+export const PostProfileBox = ({ name, job }) => (
   <ProfileWrapper>
     <ProfileImage />
     <ProfileInfo>
@@ -36,7 +36,7 @@ export const PostProfile = ({ name, job }) => (
   </ProfileWrapper>
 );
 
-export const EditProfile = ({ name, job }) => (
+export const EditProfileBox = ({ name, job }) => (
   <ProfileWrapper>
     <ProfileImage width="200px" height="200px" isBig={true} />
     <ProfileInfo>
