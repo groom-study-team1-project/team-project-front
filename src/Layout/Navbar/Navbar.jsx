@@ -10,15 +10,17 @@ import {
   Button,
   ButtonBox,
 } from "./Navbar.style";
-import { logout } from "../../services/authApi";
 import Modal from "react-modal";
 import LoginModal from "../../components/Modal/LoginModal/LoginModal";
+import SignUpModal from "../../components/Modal/SignUpModal/SignUpModal";
+import { logout } from "../../services/authApi";
 
 Modal.setAppElement("#root");
 
 function Navbar({ isMainPage = true, isLoggedIn = true }) {
   const [menuItems, setMenuItems] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [modalType, setModalType] = useState("login");
 
   useEffect(() => {
     fetchMenuItems()
@@ -34,12 +36,23 @@ function Navbar({ isMainPage = true, isLoggedIn = true }) {
     }
   }
 
-  const openModal = () => {
+  const openLoginModal = () => {
+    setModalType("login");
+    setIsModalOpen(true);
+  };
+
+  const openSignupModal = () => {
+    setModalType("signup");
     setIsModalOpen(true);
   };
 
   const closeModal = () => {
     setIsModalOpen(false);
+  };
+
+  const changeModal = () => {
+    setModalType("login");
+    setIsModalOpen(true);
   };
 
   return (
@@ -60,8 +73,8 @@ function Navbar({ isMainPage = true, isLoggedIn = true }) {
         ) : (
           <ButtonBox>
             <Button onClick={handleLogout}>다크모드</Button>
-            <Button onClick={openModal}>로그인</Button>
-            <Button>회원가입</Button>
+            <Button onClick={openLoginModal}>로그인</Button>
+            <Button onClick={openSignupModal}>회원가입</Button>
           </ButtonBox>
         )}
       </NavbarInner>
@@ -69,7 +82,7 @@ function Navbar({ isMainPage = true, isLoggedIn = true }) {
       <Modal
         isOpen={isModalOpen}
         onRequestClose={closeModal}
-        contentLabel="로그인 모달"
+        contentLabel={modalType === "login" ? "로그인 모달" : "회원가입 모달"}
         style={{
           content: {
             top: "50%",
@@ -81,7 +94,11 @@ function Navbar({ isMainPage = true, isLoggedIn = true }) {
           },
         }}
       >
-        <LoginModal closeModal={closeModal} />
+        {modalType === "login" ? (
+          <LoginModal closeModal={closeModal} />
+        ) : (
+          <SignUpModal changeModal={changeModal} />
+        )}
       </Modal>
     </NavbarWrapper>
   );
