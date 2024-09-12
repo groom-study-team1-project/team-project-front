@@ -20,30 +20,18 @@ function Sidebar() {
       .catch((err) => console.log(err.message));
   }, []);
 
-  const handleNavigation = (id) => {
+  const handleNavigation = (id, e) => {
+    console.log(id);
     if (id === 1) {
-      window.location.href = "/community/free";
+      navigate("/community/free");
     } else if (id === 2) {
-      window.location.href = "/community/questions";
+      navigate("/community/questions");
     } else if (id === 3) {
-      window.location.href = "/community/projects";
+      navigate("/community/projects");
     } else if (id === 4) {
-      window.location.href = "/community/notices";
+      navigate("/community/notices");
     }
   };
-
-  // const handleNavigation = (id, e) => {
-  //   console.log(id);
-  //   if (id === 1) {
-  //     navigate("/community/free");
-  //   } else if (id === 2) {
-  //     navigate("/community/questions");
-  //   } else if (id === 3) {
-  //     navigate("/community/projects");
-  //   } else if (id === 4) {
-  //     navigate("/community/notices");
-  //   }
-  // };
 
   return (
     <ContainerDiv>

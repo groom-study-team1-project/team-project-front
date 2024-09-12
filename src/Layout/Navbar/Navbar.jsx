@@ -14,6 +14,7 @@ import Modal from "react-modal";
 import LoginModal from "../../components/Modal/LoginModal/LoginModal";
 import SignUpModal from "../../components/Modal/SignUpModal/SignUpModal";
 import { logout } from "../../services/authApi";
+import { useNavigate } from "react-router-dom";
 
 Modal.setAppElement("#root");
 
@@ -21,6 +22,7 @@ function Navbar({ isMainPage = false, isLoggedIn = false }) {
   const [menuItems, setMenuItems] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalType, setModalType] = useState("login");
+  const navigate = useNavigate();
 
   useEffect(() => {
     fetchMenuItems()
@@ -28,15 +30,16 @@ function Navbar({ isMainPage = false, isLoggedIn = false }) {
       .catch((err) => console.log(err.message));
   }, []);
 
-  const handleNavigation = (id) => {
+  const handleNavigation = (id, e) => {
+    console.log(id);
     if (id === 1) {
-      window.location.href = "/community/free";
+      navigate("/community/free");
     } else if (id === 2) {
-      window.location.href = "/community/questions";
+      navigate("/community/questions");
     } else if (id === 3) {
-      window.location.href = "/community/projects";
+      navigate("/community/projects");
     } else if (id === 4) {
-      window.location.href = "/community/notices";
+      navigate("/community/notices");
     }
   };
 
