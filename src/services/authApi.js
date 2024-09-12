@@ -199,3 +199,47 @@ export const editProfile = async (body) => {
     throw error;
   }
 };
+
+export const findUserId = async (nickname, tel) => {
+  try {
+    // const response = await axios.get("/members/me/email", {
+    //   params: {
+    //     nickname,
+    //     tel,
+    //   },
+    // });
+    const response = {
+      code: 1006,
+      message: "이메일 찾기에 성공했습니다.",
+      result: {
+        email: "test@mail.com",
+      },
+    };
+    return response;
+  } catch (error) {
+    console.error("회원 정보를 가져오는 중 오류 발생:", error);
+  }
+};
+
+export const findUserPw = async (email, nickname, tel) => {
+  try {
+    // const response = await axios.get("/members/me/password", {
+    //   params: {
+    //     email,
+    //     nickname,
+    //     tel
+    //   },
+    // });
+    const response = {
+      code: 1007,
+      message: "비밀번호 찾기에 성공했습니다.",
+      result: {
+        password: "testPassword",
+      },
+    };
+    return response;
+  } catch (error) {
+    console.error("비밀번호를 찾던 중 오류 발생:", error);
+    throw error;
+  }
+};

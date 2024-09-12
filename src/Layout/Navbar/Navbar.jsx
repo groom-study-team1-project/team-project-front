@@ -15,6 +15,8 @@ import { useNavigate } from "react-router-dom";
 import Modal from "react-modal";
 import LoginModal from "../../components/Modal/LoginModal/LoginModal";
 import SignUpModal from "../../components/Modal/SignUpModal/SignUpModal";
+import FindUserId from "../../components/Modal/FindUserIdModal/FindUserId";
+import FindUserPw from "../../components/Modal/FindUserPwModal/FindUserPw";
 import { logout } from "../../services/authApi";
 
 Modal.setAppElement("#root");
@@ -44,13 +46,8 @@ function Navbar({ isMainPage = true }) {
     }
   }
 
-  const openLoginModal = () => {
-    setModalType("login");
-    setIsModalOpen(true);
-  };
-
-  const openSignupModal = () => {
-    setModalType("signup");
+  const openModal = (type) => {
+    setModalType(type);
     setIsModalOpen(true);
   };
 
@@ -58,9 +55,8 @@ function Navbar({ isMainPage = true }) {
     setIsModalOpen(false);
   };
 
-  const changeModal = () => {
-    setModalType("login");
-    setIsModalOpen(true);
+  const changeModal = (type) => {
+    openModal(type);
   };
 
   return (
@@ -85,8 +81,8 @@ function Navbar({ isMainPage = true }) {
         ) : (
           <ButtonBox>
             <Button onClick={handleLogout}>다크모드</Button>
-            <Button onClick={openLoginModal}>로그인</Button>
-            <Button onClick={openSignupModal}>회원가입</Button>
+            <Button onClick={() => openModal("login")}>로그인</Button>
+            <Button onClick={() => openModal("signup")}>회원가입</Button>{" "}
           </ButtonBox>
         )}
       </NavbarInner>
@@ -94,7 +90,15 @@ function Navbar({ isMainPage = true }) {
       <Modal
         isOpen={isModalOpen}
         onRequestClose={closeModal}
-        contentLabel={modalType === "login" ? "로그인 모달" : "회원가입 모달"}
+        contentLabel={
+          modalType === "login"
+            ? "로그인 모달"
+            : modalType === "signup"
+            ? "회원가입 모달"
+            : modalType === "findUserId"
+            ? "아이디 찾기 모달"
+            : "비밀번호 찾기 모달"
+        }
         style={{
           content: {
             top: "50%",
@@ -107,9 +111,13 @@ function Navbar({ isMainPage = true }) {
         }}
       >
         {modalType === "login" ? (
-          <LoginModal closeModal={closeModal} />
-        ) : (
+          <LoginModal closeModal={closeModal} changeModal={changeModal} />
+        ) : modalType === "signup" ? (
           <SignUpModal changeModal={changeModal} />
+        ) : modalType === "findUserId" ? (
+          <FindUserId changeModal={changeModal} />
+        ) : (
+          <FindUserPw changeModal={changeModal} />
         )}
       </Modal>
     </NavbarWrapper>
