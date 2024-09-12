@@ -28,7 +28,7 @@ function MainPage() {
   return (
     <>
       <Container>
-        <Navbar isMainPage={true} isLoggedIn={false} />
+        <Navbar isMainPage={true} />
         <Content>
           <LeftArea>
             <Title>DeepDivers</Title>

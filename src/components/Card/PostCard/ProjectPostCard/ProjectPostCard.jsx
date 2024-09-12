@@ -6,7 +6,7 @@ import {
   PostCardWrapper,
   Thumbnail,
 } from "../PostCard.style";
-import { PostProfile } from "../PostProfile";
+import { PostProfileBox } from "../PostProfile";
 import { CustomPostActions } from "./ProjectPostCard.style";
 
 function ProjectPostCard({
@@ -29,7 +29,7 @@ function ProjectPostCard({
             <p>{title}</p>
             <p>{content}</p>
           </ContentBox>
-          <PostProfile name={name} job={job} />
+          <PostProfileBox name={name} job={job} />
         </Body>
       </InnerContainer>
     </PostCardWrapper>
