@@ -9,3 +9,11 @@ export const ProfileImgDiv = styled.div`
 export const SignUpHeader = styled(Logo)`
   margin-bottom: 0;
 `;
+
+export const ErrorMsg = styled.div`
+  color: red;
+  font-weight: bold;
+  font-size: 12px;
+  margin-top: 8px;
+  margin-bottom: 16px;
+`;
