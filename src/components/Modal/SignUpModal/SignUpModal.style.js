@@ -6,4 +6,6 @@ export const ProfileImgDiv = styled.div`
   padding-bottom: 16px;
 `;
 
-export const SignUpHeader = styled(Logo)``;
+export const SignUpHeader = styled(Logo)`
+  margin-bottom: 0;
+`;

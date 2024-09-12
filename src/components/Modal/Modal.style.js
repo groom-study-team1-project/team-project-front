@@ -14,6 +14,12 @@ export const Container = styled.div`
 
 export const Logo = styled.div`
   margin-bottom: 4rem;
+
+  h1 {
+    font-size: 24px;
+    font-weight: bold;
+    padding-bottom: 1rem;
+  }
 `;
 
 export const Form = styled.form`
@@ -42,5 +48,6 @@ export const Divider = styled.div`
   width: ${({ width }) => width || "100%"};
   height: 1px;
   background-color: #929292;
-  margin: 1.5rem 0;
+  margin-bottom: 1.5rem;
+  margin-top: 1rem;
 `;

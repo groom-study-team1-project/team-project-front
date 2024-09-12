@@ -28,7 +28,9 @@ function ModalLayout({ isOpen, closeModal, children }) {
           padding: "0 1rem",
           borderRadius: "20px",
           maxWidth: "530px",
+          maxHeight: "918px",
           boxShadow: "0px 4px 16px rgba(0, 0, 0, 0.2)",
+          overflow: "hidden",
         },
       }}
     >
