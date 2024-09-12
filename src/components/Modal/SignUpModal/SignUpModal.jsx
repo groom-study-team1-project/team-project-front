@@ -76,21 +76,23 @@ export default function SignUpModal({ changeModal }) {
   async function handleSignUp(e) {
     e.preventDefault();
 
-    if (!validateForm()) {
+    const isValid = await validateForm();
+
+    if (isValid) {
+      try {
+        const profileImgUrl = await uploadImageAndGetUrl();
+
+        let body = { email, password, nickname, imageUrl: profileImgUrl, tel };
+
+        const response = await signUp(body);
+        console.log(response);
+
+        changeModal();
+      } catch (err) {
+        console.log(err);
+      }
+    } else {
       return;
-    }
-
-    try {
-      const profileImgUrl = await uploadImageAndGetUrl();
-
-      let body = { email, password, nickname, imageUrl: profileImgUrl, tel };
-
-      const response = await signUp(body);
-      console.log(response);
-
-      changeModal();
-    } catch (err) {
-      console.log(err);
     }
   }
 
