@@ -25,7 +25,7 @@ export default function FindUserId({ changeModal }) {
     <Container width="530px" height="628px">
       <div>
         <FindUserIdHeader>
-          <h2>아이디 찾기</h2>
+          <h1>아이디 찾기</h1>
         </FindUserIdHeader>
         <Form onSubmit={handleFindUserId}>
           <FormInputField
