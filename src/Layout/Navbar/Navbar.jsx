@@ -44,6 +44,8 @@ function Navbar({ isMainPage = false }) {
       navigate("/community/projects");
     } else if (id === 4) {
       navigate("/community/notices");
+    } else if (id == 5) {
+      navigate("/");
     }
   };
 

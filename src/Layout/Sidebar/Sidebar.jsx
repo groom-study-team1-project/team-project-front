@@ -20,7 +20,7 @@ function Sidebar() {
       .catch((err) => console.log(err.message));
   }, []);
 
-  const handleNavigation = (id, e) => {
+  const handleNavigation = (id) => {
     console.log(id);
     if (id === 1) {
       navigate("/community/free");
@@ -30,12 +30,14 @@ function Sidebar() {
       navigate("/community/projects");
     } else if (id === 4) {
       navigate("/community/notices");
+    } else if (id == 5) {
+      navigate("/");
     }
   };
 
   return (
     <ContainerDiv>
-      <Logo>
+      <Logo onClick={() => handleNavigation(5)}>
         <h2>로고이미지</h2>
       </Logo>
       <SidebarDiv>
