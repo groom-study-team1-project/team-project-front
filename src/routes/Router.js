@@ -13,10 +13,12 @@ function Router() {
   return (
     <Routes>
       <Route path="/" element={<MainPage />} />
-      <Route path="/community/free" element={<FreeBoard />} />
-      <Route path="/community/questions" element={<QuestionBoard />} />
-      <Route path="/community/projects" element={<ProjectBoard />} />
-      <Route path="/community/notices" element={<NoticeBoard />} />
+      <Route path="/community">
+        <Route path="free" element={<FreeBoard />} />
+        <Route path="questions" element={<QuestionBoard />} />
+        <Route path="projects" element={<ProjectBoard />} />
+        <Route path="notices" element={<NoticeBoard />} />
+      </Route>
       <Route path="/my-page" element={<MyProfile />} />
       <Route path="/edit" element={<EditProfile />} />
       <Route path="/detail" element={<DetailPage />} />
