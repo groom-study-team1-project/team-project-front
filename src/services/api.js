@@ -14,7 +14,7 @@ export async function fetchPostItems() {
       //+ 썸네일, 사용자 프로필 이미지
     },
     {
-      id: 1,
+      id: 2,
       title: "Title",
       content: "This is content.",
       name: "John Doe",
@@ -27,7 +27,7 @@ export async function fetchPostItems() {
       //+ 썸네일, 사용자 프로필 이미지
     },
     {
-      id: 1,
+      id: 3,
       title: "Title",
       content: "This is content.",
       name: "John Doe",
@@ -40,7 +40,7 @@ export async function fetchPostItems() {
       //+ 썸네일, 사용자 프로필 이미지
     },
     {
-      id: 1,
+      id: 5,
       title: "Title",
       content: "This is content.",
       name: "John Doe",
@@ -53,7 +53,7 @@ export async function fetchPostItems() {
       //+ 썸네일, 사용자 프로필 이미지
     },
     {
-      id: 1,
+      id: 4,
       title: "Title",
       content: "This is content.",
       name: "John Doe",
@@ -77,19 +77,42 @@ export async function fetchNoticePostItems() {
       count: {
         view: 12,
       },
-      //+ 썸네일, 사용자 프로필 이미지
+    },
+    {
+      id: 2,
+      title: "Title",
+      date: "2024-08-28",
+      count: {
+        view: 12,
+      },
+    },
+    {
+      id: 3,
+      title: "Title",
+      date: "2024-08-28",
+      count: {
+        view: 12,
+      },
+    },
+    {
+      id: 4,
+      title: "Title",
+      date: "2024-08-28",
+      count: {
+        view: 12,
+      },
     },
   ];
 }
 
 export async function fetchMenuItems() {
   return [
-    { id: 1, item: "Dummy", link: "#" },
-    { id: 2, item: "Dummy", link: "#" },
-    { id: 3, item: "Dummy", link: "#" },
-    { id: 4, item: "Dummy", link: "#" },
-    { id: 5, item: "Dummy", link: "#" },
-  ];
+    { id: 0, item: "HOT 게시판" },
+    { id: 1, item: "자유 게시판" },
+    { id: 2, item: "질문 게시판" },
+    { id: 3, item: "프로젝트 게시판" },
+    { id: 4, item: "공지사항" },
+  ].slice();
 }
 
 export const join = async (email, password) => {

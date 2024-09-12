@@ -11,7 +11,7 @@ const PopularPostCard = () => {
     fetchPopularPostItems()
       .then((postItems) => setPostItems(postItems))
       .catch((err) => console.log(err));
-  });
+  }, []);
 
   return (
     <PopularContainer text="인기 게시글">

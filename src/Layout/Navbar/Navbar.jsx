@@ -21,7 +21,7 @@ import { logout } from "../../services/authApi";
 
 Modal.setAppElement("#root");
 
-function Navbar({ isMainPage = true }) {
+function Navbar({ isMainPage = false }) {
   const [menuItems, setMenuItems] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalType, setModalType] = useState("login");
@@ -33,6 +33,21 @@ function Navbar({ isMainPage = true }) {
       .then((menuItems) => setMenuItems(menuItems))
       .catch((err) => console.log(err.message));
   }, []);
+
+  const handleNavigation = (id, e) => {
+    console.log(id);
+    if (id === 1) {
+      navigate("/community/free");
+    } else if (id === 2) {
+      navigate("/community/questions");
+    } else if (id === 3) {
+      navigate("/community/projects");
+    } else if (id === 4) {
+      navigate("/community/notices");
+    } else if (id == 5) {
+      navigate("/");
+    }
+  };
 
   const redirectToMyPage = () => {
     navigate("/my-page");
@@ -66,8 +81,10 @@ function Navbar({ isMainPage = true }) {
 
         {isMainPage && (
           <Menu>
-            {menuItems.map((menu) => (
-              <MenuItem key={menu.id}>{menu.item}</MenuItem>
+            {menuItems.map((item) => (
+              <MenuItem key={item.id} onClick={() => handleNavigation(item.id)}>
+                {item.item}
+              </MenuItem>
             ))}
           </Menu>
         )}
