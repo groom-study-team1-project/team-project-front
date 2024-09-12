@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState, useEffect } from "react";
 import { fetchMenuItems } from "../../services/api";
 import {
   Logo,
@@ -12,9 +12,17 @@ import {
 } from "./Navbar.style";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import Modal from "react-modal";
+import LoginModal from "../../components/Modal/LoginModal/LoginModal";
+import SignUpModal from "../../components/Modal/SignUpModal/SignUpModal";
+import { logout } from "../../services/authApi";
+
+Modal.setAppElement("#root");
 
 function Navbar({ isMainPage = true }) {
   const [menuItems, setMenuItems] = useState([]);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [modalType, setModalType] = useState("login");
   const isLoggedIn = useSelector((state) => state.user.isLoggedIn);
   let navigate = useNavigate();
 
@@ -26,6 +34,33 @@ function Navbar({ isMainPage = true }) {
 
   const redirectToMyPage = () => {
     navigate("/my-page");
+  };
+
+  async function handleLogout(e) {
+    try {
+      await logout();
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
+  const openLoginModal = () => {
+    setModalType("login");
+    setIsModalOpen(true);
+  };
+
+  const openSignupModal = () => {
+    setModalType("signup");
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+  };
+
+  const changeModal = () => {
+    setModalType("login");
+    setIsModalOpen(true);
   };
 
   return (
@@ -48,9 +83,35 @@ function Navbar({ isMainPage = true }) {
             <Button onClick={redirectToMyPage}>프로필</Button>{" "}
           </ButtonBox>
         ) : (
-          <Button>다크모드 로그인 회원가입</Button>
+          <ButtonBox>
+            <Button onClick={handleLogout}>다크모드</Button>
+            <Button onClick={openLoginModal}>로그인</Button>
+            <Button onClick={openSignupModal}>회원가입</Button>
+          </ButtonBox>
         )}
       </NavbarInner>
+
+      <Modal
+        isOpen={isModalOpen}
+        onRequestClose={closeModal}
+        contentLabel={modalType === "login" ? "로그인 모달" : "회원가입 모달"}
+        style={{
+          content: {
+            top: "50%",
+            left: "50%",
+            right: "auto",
+            bottom: "auto",
+            marginRight: "-50%",
+            transform: "translate(-50%, -50%)",
+          },
+        }}
+      >
+        {modalType === "login" ? (
+          <LoginModal closeModal={closeModal} />
+        ) : (
+          <SignUpModal changeModal={changeModal} />
+        )}
+      </Modal>
     </NavbarWrapper>
   );
 }
