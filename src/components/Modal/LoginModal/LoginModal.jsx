@@ -9,8 +9,6 @@ export default function LoginModal({ closeModal, changeModal }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const navigate = useNavigate();
-
   async function handleLogin(e) {
     e.preventDefault();
 
@@ -35,7 +33,7 @@ export default function LoginModal({ closeModal, changeModal }) {
   };
 
   const handleFindUserPw = () => {
-    navigate("/find-user-pw");
+    changeModal("findUserPw");
   };
 
   return (

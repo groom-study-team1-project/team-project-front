@@ -13,7 +13,7 @@ import {
   createcomment,
 } from "../../services/api";
 import {
-  PostProfile,
+  PostProfileBox,
   ProfileImage,
 } from "../../components/Card/PostCard/PostProfile";
 import {
@@ -103,7 +103,7 @@ function DetailPage() {
 
           <PostWrap>
             <Postheader>
-              <PostProfile
+              <PostProfileBox
                 name={post.result.memberInfo.nickname}
                 job={post.result.memberInfo.development}
               />

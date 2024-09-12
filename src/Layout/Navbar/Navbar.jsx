@@ -10,23 +10,41 @@ import {
   Button,
   ButtonBox,
 } from "./Navbar.style";
+import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import Modal from "react-modal";
 import LoginModal from "../../components/Modal/LoginModal/LoginModal";
 import SignUpModal from "../../components/Modal/SignUpModal/SignUpModal";
 import FindUserId from "../../components/Modal/FindUserIdModal/FindUserId";
+import FindUserPw from "../../components/Modal/FindUserPwModal/FindUserPw";
+import { logout } from "../../services/authApi";
 
 Modal.setAppElement("#root");
 
-function Navbar({ isMainPage = true, isLoggedIn = true }) {
+function Navbar({ isMainPage = true }) {
   const [menuItems, setMenuItems] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalType, setModalType] = useState("login");
+  const isLoggedIn = useSelector((state) => state.user.isLoggedIn);
+  let navigate = useNavigate();
 
   useEffect(() => {
     fetchMenuItems()
       .then((menuItems) => setMenuItems(menuItems))
       .catch((err) => console.log(err.message));
   }, []);
+
+  const redirectToMyPage = () => {
+    navigate("/my-page");
+  };
+
+  async function handleLogout(e) {
+    try {
+      await logout();
+    } catch (err) {
+      console.log(err);
+    }
+  }
 
   const openModal = (type) => {
     setModalType(type);
@@ -55,9 +73,14 @@ function Navbar({ isMainPage = true, isLoggedIn = true }) {
         )}
 
         {isLoggedIn ? (
-          <Button>글쓰기 다크모드 프로필</Button>
+          <ButtonBox>
+            <Button>글쓰기</Button>
+            <Button>다크모드</Button>
+            <Button onClick={redirectToMyPage}>프로필</Button>{" "}
+          </ButtonBox>
         ) : (
           <ButtonBox>
+            <Button onClick={handleLogout}>다크모드</Button>
             <Button onClick={() => openModal("login")}>로그인</Button>
             <Button onClick={() => openModal("signup")}>회원가입</Button>{" "}
           </ButtonBox>
@@ -72,7 +95,9 @@ function Navbar({ isMainPage = true, isLoggedIn = true }) {
             ? "로그인 모달"
             : modalType === "signup"
             ? "회원가입 모달"
-            : "아이디 찾기 모달"
+            : modalType === "findUserId"
+            ? "아이디 찾기 모달"
+            : "비밀번호 찾기 모달"
         }
         style={{
           content: {
@@ -89,8 +114,10 @@ function Navbar({ isMainPage = true, isLoggedIn = true }) {
           <LoginModal closeModal={closeModal} changeModal={changeModal} />
         ) : modalType === "signup" ? (
           <SignUpModal changeModal={changeModal} />
-        ) : (
+        ) : modalType === "findUserId" ? (
           <FindUserId changeModal={changeModal} />
+        ) : (
+          <FindUserPw changeModal={changeModal} />
         )}
       </Modal>
     </NavbarWrapper>
