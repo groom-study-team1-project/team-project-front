@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import { fetchMenuItems } from "../../services/api";
 import {
   Logo,
   NonLogo,
@@ -18,6 +17,7 @@ import SignUpModal from "../../components/Modal/SignUpModal/SignUpModal";
 import FindUserId from "../../components/Modal/FindUserIdModal/FindUserId";
 import FindUserPw from "../../components/Modal/FindUserPwModal/FindUserPw";
 import { logout } from "../../services/authApi";
+import { fetchCategoryItems } from "../../services/postApi";
 
 Modal.setAppElement("#root");
 
@@ -29,7 +29,7 @@ function Navbar({ isMainPage = false }) {
   let navigate = useNavigate();
 
   useEffect(() => {
-    fetchMenuItems()
+    fetchCategoryItems()
       .then((menuItems) => setMenuItems(menuItems))
       .catch((err) => console.log(err.message));
   }, []);

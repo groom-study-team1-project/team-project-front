@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { fetchMenuItems } from "../../services/api";
 import {
   ContainerDiv,
   Logo,
@@ -9,13 +8,14 @@ import {
   SidebarUl,
 } from "./Sidebar.style";
 import { useNavigate } from "react-router-dom";
+import { fetchCategoryItems } from "../../services/postApi";
 
 function Sidebar() {
   const [menuItems, setMenuItems] = useState([]);
   const navigate = useNavigate();
 
   useEffect(() => {
-    fetchMenuItems()
+    fetchCategoryItems()
       .then((menuItems) => setMenuItems(menuItems))
       .catch((err) => console.log(err.message));
   }, []);
