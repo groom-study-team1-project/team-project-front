@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import profileIcon from "../../../assets/images/profileIcon.png";
 import { Btn, Container, Divider, Form } from "../Modal.style";
 import { FormInputField } from "../FormInputField";
-import { ProfileImgDiv, SignUpHeader } from "./SignUpModal.style";
+import { ErrorMsg, ProfileImgDiv, SignUpHeader } from "./SignUpModal.style";
 import {
   checkDuplicatedEmail,
   checkDuplicatedNickname,
@@ -128,28 +128,27 @@ export default function SignUpModal({ changeModal }) {
             type={"text"}
             value={nickname}
             onChange={(e) => setNickname(e.target.value)}
+            hasError={errors.nickname}
           />
-          {errors.nickname && (
-            <div style={{ color: "red" }}>{errors.nickname}</div>
-          )}
+          {errors.nickname && <ErrorMsg>{errors.nickname}</ErrorMsg>}
 
           <FormInputField
             label={"이메일"}
             type={"email"}
             value={email}
             onChange={(e) => setEmail(e.target.value)}
+            hasError={errors.email}
           />
-          {errors.email && <div style={{ color: "red" }}>{errors.email}</div>}
+          {errors.email && <ErrorMsg>{errors.email}</ErrorMsg>}
 
           <FormInputField
             label={"비밀번호"}
             type={"password"}
             value={password}
             onChange={(e) => setPassword(e.target.value)}
+            hasError={errors.password}
           />
-          {errors.password && (
-            <div style={{ color: "red" }}>{errors.password}</div>
-          )}
+          {errors.password && <ErrorMsg>{errors.password}</ErrorMsg>}
 
           <FormInputField
             label={"비밀번호 확인"}
@@ -158,7 +157,7 @@ export default function SignUpModal({ changeModal }) {
             onChange={(e) => setConfirmPassword(e.target.value)}
           />
           {errors.confirmPassword && (
-            <div style={{ color: "red" }}>{errors.confirmPassword}</div>
+            <ErrorMsg>{errors.confirmPassword}</ErrorMsg>
           )}
 
           <FormInputField
@@ -166,8 +165,9 @@ export default function SignUpModal({ changeModal }) {
             type={"tel"}
             value={tel}
             onChange={(e) => setTel(e.target.value)}
+            hasError={errors.tel}
           />
-          {errors.tel && <div style={{ color: "red" }}>{errors.tel}</div>}
+          {errors.tel && <ErrorMsg>{errors.tel}</ErrorMsg>}
 
           <Divider />
           <Btn type="submit">계정 생성하기</Btn>
