@@ -14,7 +14,7 @@ export async function fetchPostItems() {
       //+ 썸네일, 사용자 프로필 이미지
     },
     {
-      id: 1,
+      id: 2,
       title: "Title",
       content: "This is content.",
       name: "John Doe",
@@ -27,7 +27,7 @@ export async function fetchPostItems() {
       //+ 썸네일, 사용자 프로필 이미지
     },
     {
-      id: 1,
+      id: 3,
       title: "Title",
       content: "This is content.",
       name: "John Doe",
@@ -40,7 +40,7 @@ export async function fetchPostItems() {
       //+ 썸네일, 사용자 프로필 이미지
     },
     {
-      id: 1,
+      id: 5,
       title: "Title",
       content: "This is content.",
       name: "John Doe",
@@ -53,7 +53,7 @@ export async function fetchPostItems() {
       //+ 썸네일, 사용자 프로필 이미지
     },
     {
-      id: 1,
+      id: 4,
       title: "Title",
       content: "This is content.",
       name: "John Doe",
@@ -77,19 +77,42 @@ export async function fetchNoticePostItems() {
       count: {
         view: 12,
       },
-      //+ 썸네일, 사용자 프로필 이미지
+    },
+    {
+      id: 2,
+      title: "Title",
+      date: "2024-08-28",
+      count: {
+        view: 12,
+      },
+    },
+    {
+      id: 3,
+      title: "Title",
+      date: "2024-08-28",
+      count: {
+        view: 12,
+      },
+    },
+    {
+      id: 4,
+      title: "Title",
+      date: "2024-08-28",
+      count: {
+        view: 12,
+      },
     },
   ];
 }
 
 export async function fetchMenuItems() {
   return [
-    { id: 1, item: "Dummy", link: "#" },
-    { id: 2, item: "Dummy", link: "#" },
-    { id: 3, item: "Dummy", link: "#" },
-    { id: 4, item: "Dummy", link: "#" },
-    { id: 5, item: "Dummy", link: "#" },
-  ];
+    { id: 0, item: "HOT 게시판" },
+    { id: 1, item: "자유 게시판" },
+    { id: 2, item: "질문 게시판" },
+    { id: 3, item: "프로젝트 게시판" },
+    { id: 4, item: "공지사항" },
+  ].slice();
 }
 
 export const join = async (email, password) => {
@@ -188,56 +211,9 @@ export async function fetchPopularHashItems() {
     },
   ];
 }
-export const createPost = async (body) => {
-  await console.log(body);
-};
 
 export const createcomment = async (body) => {
   await console.log(body);
-};
-
-export const fetchPostdetail = async (postId) => {
-  return {
-    code: 1201,
-    message: "게시글 조회에 성공하였습니다.",
-    result: {
-      categoryInfo: {
-        id: 1,
-        title: "프로젝트 자랑 게시판",
-      },
-      memberInfo: {
-        Id: 0,
-        nickname: "MogensEgeskov",
-        development: "iOS Developer",
-        imageUrl: "~~~",
-      },
-      postInfo: {
-        title: "UI Templates",
-        content:
-          "<p>My first iOS app is available on the AppStore. I literally didn’t know anything about SwiftUI (still not much) and in probably 4 weeks was able to recreate my android app for iOS. Highly recommend MengTo video. My first iOS app is available on the AppStore. I literally didn’t know anything about SwiftUI (still not much) and in probably 4 weeks was able to recreate my android app for iOS. Highly recommend MengTo video. My first iOS app is available on the AppStore. I literally didn’t know anything about SwiftUI (still not much) and in probably 4 weeks was able to recreate my android app for iOS. Highly recommend MengTo video.My first iOS app is available on the AppStore. I literally didn’t know anything about SwiftUI (still not much) and in probably 4 weeks was able to recreate my android app for iOS. Highly recommend MengTo video. My first iOS app is available on the AppStore. I literally didn’t know anything about SwiftUI (still not much) and in probably 4 weeks was able to recreate my android app for iOS. </p>",
-        viewCount: 12,
-        commentCount: 12,
-        recommedCount: 12,
-        createdAt: new Date().toLocaleDateString(),
-        isModified: true,
-        hashtags: ["#test"],
-        imgUrl: [
-          {
-            id: 1,
-            url: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS6KVvlziiJYFxZZIq3Xc_dVuzIbSLrgvtHPA&s",
-          },
-          {
-            id: 2,
-            url: "https://www.shutterstock.com/ko/blog/wp-content/uploads/sites/17/2021/01/2021-graphic-design-banner.jpg",
-          },
-          {
-            id: 3,
-            url: "https://img1.daumcdn.net/thumb/R1280x0/?fname=http://t1.daumcdn.net/brunch/service/user/6H5a/image/VbC1Pts-64VW9-xWDV3qad5cLok.jpg",
-          },
-        ],
-      },
-    },
-  };
 };
 
 export const fetchcomment = async (postId) => {

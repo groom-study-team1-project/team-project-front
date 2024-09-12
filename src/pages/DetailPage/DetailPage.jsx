@@ -7,11 +7,8 @@ import heart from "../../assets/images/heart.png";
 import commentsubmit from "../../assets/images/commentsubmit.png";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEllipsisVertical } from "@fortawesome/free-solid-svg-icons";
-import {
-  fetchPostdetail,
-  fetchcomment,
-  createcomment,
-} from "../../services/api";
+import { fetchcomment, createcomment } from "../../services/api";
+import { fetchPostdetail } from "../../services/postApi";
 import {
   PostProfileBox,
   ProfileImage,

@@ -5,7 +5,7 @@ import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPhotoFilm } from "@fortawesome/free-solid-svg-icons";
 import GlobalStyle from "../../assets/styles/GlobalStyle";
-import { createPost } from "../../services/api";
+import { createPost } from "../../services/postApi";
 import {
   BackImg,
   Categoryselect,
@@ -25,7 +25,7 @@ import {
 function WriteBoard() {
   const navigate = useNavigate();
   const [form, setValue] = useState({ title: "", content: "", hasgtags: [] });
-  const [selectedCategory, setSelectedCategory] = useState("자유게시판");
+  const [selectedCategory, setSelectedCategory] = useState(0);
   const [imgUrls, setImgUrls] = useState([]); // State to store multiple image URLs
   const fileInput = useRef(null);
 
@@ -68,13 +68,15 @@ function WriteBoard() {
     await e.preventDefault();
     const { title, content, hasgtags } = form;
     let body = {};
-    if (selectedCategory === "프로젝트 자랑 게시판") {
-      body = { title, content, hasgtags, selectedCategory, imgUrls };
+    const category_id = Number(selectedCategory);
+    if (category_id === 2) {
+      body = { title, content, hasgtags, category_id, imgUrls };
     } else {
-      body = { title, content, hasgtags, selectedCategory };
+      body = { title, content, hasgtags, category_id };
     }
     await createPost(body);
   };
+
   return (
     <>
       <GlobalStyle />
@@ -103,16 +105,14 @@ function WriteBoard() {
                 onChange={handleCategoryChange}
                 value={selectedCategory}
               >
-                <option value="자유 게시판">자유 게시판</option>
-                <option value="질문 게시판">질문 게시판</option>
-                <option value="프로젝트 자랑 게시판">
-                  프로젝트 자랑 게시판
-                </option>
-                <option value="공지 게시판">공지 게시판</option>
+                <option value={0}>자유 게시판</option>
+                <option value={1}>질문 게시판</option>
+                <option value={2}>프로젝트 자랑 게시판</option>
+                <option value={3}>공지 게시판</option>
               </Categoryselect>
             </span>
           </TitleWrap>
-          {selectedCategory === "프로젝트 자랑 게시판" && (
+          {selectedCategory === "2" && (
             <ImgWrap>
               {imgUrls.map((url, index) => (
                 <ImgPreview key={index} src={url} alt={`Preview ${index}`} />
@@ -140,7 +140,7 @@ function WriteBoard() {
             }}
             data=""
             onReady={(editor) => {
-              console.log("Editor is ready to use!", editor);
+              // console.log("Editor is ready to use!", editor);
             }}
             onChange={(event, editor) => {
               const data = editor.getData();
@@ -151,7 +151,7 @@ function WriteBoard() {
               setValue({ ...form, content: data });
             }}
             onFocus={(event, editor) => {
-              console.log("Focus.", editor);
+              // console.log("Focus.", editor);
             }}
           />
           <Hashtag
