@@ -39,7 +39,7 @@ export const Btn = styled.button`
 `;
 
 export const Divider = styled.div`
-  width: 80%;
+  width: ${({ width }) => width || "100%"};
   height: 1px;
   background-color: #929292;
   margin: 1.5rem 0;

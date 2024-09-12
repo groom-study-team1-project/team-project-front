@@ -63,7 +63,7 @@ export default function LoginModal({ closeModal, changeModal }) {
         <Btn type="submit" id="loginBtn">
           로그인
         </Btn>
-        <Divider />
+        <Divider width="80%" />
 
         <div className="btns">
           <FindUserBtns>
