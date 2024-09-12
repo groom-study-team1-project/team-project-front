@@ -1,9 +1,11 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faAngleDown } from "@fortawesome/free-solid-svg-icons";
 import { Interaction } from "./Interactions";
 import { ProfileImage } from "../Card/PostCard/PostProfile";
+import { postInfo } from "../../services/authApi";
+import { useSelector } from "react-redux";
 
 const ProfileHeaderLeft = styled.div`
   display: flex;
@@ -67,20 +69,22 @@ export const ProfileLeft = ({ width, height, size, bottom, nickName, job }) => {
 };
 
 const BoardContents = ({ contents }) => {
-  return contents.map((content, index) => (
-    <BoardContentsWrap key={index}>
+  const userInfo = useSelector((state) => state.user.userInfo);
+
+  return contents.map((content) => (
+    <BoardContentsWrap key={content.postId}>
       <div style={{ flex: "1" }}>
         <ProfileLeft
           width={"30px"}
           height={"30px"}
           size={"16px"}
           bottom={"2px"}
-          nickName={content.user.nickName}
-          job={content.user.Job}
+          nickName={userInfo.nickName}
+          job={userInfo.role}
         />
       </div>
-      <BoardContent>{content.PostContent.title}</BoardContent>
-      <Interaction count={content.PostContent.count} />
+      <BoardContent>{content.postTitle}</BoardContent>
+      <Interaction count={content.count} />
     </BoardContentsWrap>
   ));
 };
@@ -114,36 +118,53 @@ const Board = ({ board, count, id, contents }) => {
   );
 };
 
-export const PostCollection = ({ myProfile }) => {
+export const PostCollection = ({ memberId }) => {
+  const [freeBoard, setFreeBoard] = useState([]);
+  const [projectBoard, setProjectBoard] = useState([]);
+  const [questionBoard, setQuestionBoard] = useState([]);
+  const catergoryId = {
+    freeBoard: 1,
+    projectBoard: 2,
+    questionBoard: 3,
+  };
+
+  useEffect(() => {
+    postInfo(memberId, catergoryId.freeBoard)
+      .then((data) => setFreeBoard(data))
+      .catch((err) => console.log(err));
+    postInfo(memberId, catergoryId.projectBoard)
+      .then((data) => setProjectBoard(data))
+      .catch((err) => console.log(err));
+    postInfo(memberId, catergoryId.questionBoard)
+      .then((data) => setQuestionBoard(data))
+      .catch((err) => console.log(err));
+  }, []);
+
   return (
     <Mypost>
       <div>
         <span>내가 쓴 글</span>
         <span>
-          {` ${
-            myProfile.Post.freeBoard.length +
-            myProfile.Post.projectBoard.length +
-            myProfile.Post.questionBoard.length
-          }`}
+          {` ${freeBoard.length + projectBoard.length + questionBoard.length}`}
         </span>
       </div>
       <Board
-        id={1}
+        id={catergoryId.freeBoard}
         board={"자유 게시판"}
-        count={myProfile.Post.freeBoard.length}
-        contents={myProfile.Post.freeBoard}
+        count={freeBoard.length}
+        contents={freeBoard}
       />
       <Board
-        id={2}
+        id={catergoryId.projectBoard}
         board={"프로젝트 자랑 게시판"}
-        count={myProfile.Post.projectBoard.length}
-        contents={myProfile.Post.projectBoard}
+        count={projectBoard.length}
+        contents={projectBoard}
       />
       <Board
-        id={3}
+        id={catergoryId.questionBoard}
         board={"질문 게시판"}
-        count={myProfile.Post.questionBoard.length}
-        contents={myProfile.Post.questionBoard}
+        count={questionBoard.length}
+        contents={questionBoard}
       />
     </Mypost>
   );

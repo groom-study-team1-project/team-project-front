@@ -26,6 +26,8 @@ function Navbar({ isMainPage = false }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalType, setModalType] = useState("login");
   const isLoggedIn = useSelector((state) => state.user.isLoggedIn);
+  const email = useSelector((state) => state.user.userInfo.email).split("@")[0];
+
   let navigate = useNavigate();
 
   useEffect(() => {
@@ -50,7 +52,7 @@ function Navbar({ isMainPage = false }) {
   };
 
   const redirectToMyPage = () => {
-    navigate("/my-page");
+    navigate(`/my-page/${email}`);
   };
 
   async function handleLogout(e) {

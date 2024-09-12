@@ -19,7 +19,7 @@ function Router() {
         <Route path="projects" element={<ProjectBoard />} />
         <Route path="notices" element={<NoticeBoard />} />
       </Route>
-      <Route path="/my-page" element={<MyProfile />} />
+      <Route path="/my-page/:id" element={<MyProfile />} />
       <Route path="/edit" element={<EditProfile />} />
       <Route path="/detail" element={<DetailPage />} />
       <Route path="/boardwrite" element={<BoardWrite />} />
