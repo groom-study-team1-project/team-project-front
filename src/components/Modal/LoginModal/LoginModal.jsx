@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { Btn, Container, Divider, Form, Logo } from "../Modal.style";
 import { FormInputField } from "../FormInputField";
 import { FindUserBtn } from "./LoginModal.style";
