@@ -6,11 +6,9 @@ import { FindUserBtns, FindUserBtn } from "./LoginModal.style";
 import { login } from "../../../services/authApi";
 import logoImg from "../../../assets/images/DEEPDIVERS.png";
 
-export default function LoginModal({ closeModal }) {
+export default function LoginModal({ closeModal, changeModal }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-
-  const navigate = useNavigate();
 
   async function handleLogin(e) {
     e.preventDefault();
@@ -32,11 +30,11 @@ export default function LoginModal({ closeModal }) {
   }
 
   const handleFindUserId = () => {
-    navigate("/find-user-id");
+    changeModal("findUserId");
   };
 
   const handleFindUserPw = () => {
-    navigate("/find-user-pw");
+    changeModal("findUserPw");
   };
 
   return (

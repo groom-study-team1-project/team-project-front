@@ -8,16 +8,26 @@ import {
   Menu,
   MenuItem,
   Button,
+  ButtonBox,
 } from "./Navbar.style";
+import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import Modal from "react-modal";
 import ModalLayout from "../../components/Modal/Modal";
 import LoginModal from "../../components/Modal/LoginModal/LoginModal";
+import SignUpModal from "../../components/Modal/SignUpModal/SignUpModal";
+import FindUserId from "../../components/Modal/FindUserIdModal/FindUserId";
+import FindUserPw from "../../components/Modal/FindUserPwModal/FindUserPw";
+import { logout } from "../../services/authApi";
 
 Modal.setAppElement("#root");
 
-function Navbar({ isMainPage = true, isLoggedIn = true }) {
+function Navbar({ isMainPage = false }) {
   const [menuItems, setMenuItems] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [modalType, setModalType] = useState("login");
+  const isLoggedIn = useSelector((state) => state.user.isLoggedIn);
+  let navigate = useNavigate();
 
   useEffect(() => {
     fetchMenuItems()
@@ -25,14 +35,45 @@ function Navbar({ isMainPage = true, isLoggedIn = true }) {
       .catch((err) => console.log(err.message));
   }, []);
 
-  const openModal = () => {
-    console.log("모달 열림");
+  const handleNavigation = (id, e) => {
+    console.log(id);
+    if (id === 1) {
+      navigate("/community/free");
+    } else if (id === 2) {
+      navigate("/community/questions");
+    } else if (id === 3) {
+      navigate("/community/projects");
+    } else if (id === 4) {
+      navigate("/community/notices");
+    } else if (id == 5) {
+      navigate("/");
+    }
+  };
+
+  const redirectToMyPage = () => {
+    navigate("/my-page");
+  };
+
+  async function handleLogout(e) {
+    try {
+      await logout();
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
+  const openModal = (type) => {
+    setModalType(type);
     setIsModalOpen(true);
   };
 
   const closeModal = () => {
     console.log("모달 닫힘");
     setIsModalOpen(false);
+  };
+
+  const changeModal = (type) => {
+    openModal(type);
   };
 
   return (
@@ -42,25 +83,63 @@ function Navbar({ isMainPage = true, isLoggedIn = true }) {
 
         {isMainPage && (
           <Menu>
-            {menuItems.map((menu) => (
-              <MenuItem key={menu.id}>{menu.item}</MenuItem>
+            {menuItems.map((item) => (
+              <MenuItem key={item.id} onClick={() => handleNavigation(item.id)}>
+                {item.item}
+              </MenuItem>
             ))}
           </Menu>
         )}
 
         {isLoggedIn ? (
-          <Button>글쓰기 다크모드 프로필</Button>
+          <ButtonBox>
+            <Button>글쓰기</Button>
+            <Button>다크모드</Button>
+            <Button onClick={redirectToMyPage}>프로필</Button>{" "}
+          </ButtonBox>
         ) : (
-          <Button onClick={openModal}>다크모드 로그인 회원가입</Button>
+          <ButtonBox>
+            <Button onClick={handleLogout}>다크모드</Button>
+            <Button onClick={() => openModal("login")}>로그인</Button>
+            <Button onClick={() => openModal("signup")}>회원가입</Button>{" "}
+          </ButtonBox>
         )}
       </NavbarInner>
 
       <ModalLayout
         isOpen={isModalOpen}
+        onRequestClose={closeModal}
+        contentLabel={
+          modalType === "login"
+            ? "로그인 모달"
+            : modalType === "signup"
+            ? "회원가입 모달"
+            : modalType === "findUserId"
+            ? "아이디 찾기 모달"
+            : "비밀번호 찾기 모달"
+        }
+        style={{
+          content: {
+            top: "50%",
+            left: "50%",
+            right: "auto",
+            bottom: "auto",
+            marginRight: "-50%",
+            transform: "translate(-50%, -50%)",
+          },
+        }}
         closeModal={closeModal}
         contentLable={"로그인 모달"}
       >
-        <LoginModal closeModal={closeModal} />
+        {modalType === "login" ? (
+          <LoginModal closeModal={closeModal} changeModal={changeModal} />
+        ) : modalType === "signup" ? (
+          <SignUpModal changeModal={changeModal} />
+        ) : modalType === "findUserId" ? (
+          <FindUserId changeModal={changeModal} />
+        ) : (
+          <FindUserPw changeModal={changeModal} />
+        )}
       </ModalLayout>
     </NavbarWrapper>
   );

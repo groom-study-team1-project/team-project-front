@@ -7,13 +7,10 @@ import heart from "../../assets/images/heart.png";
 import commentsubmit from "../../assets/images/commentsubmit.png";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEllipsisVertical } from "@fortawesome/free-solid-svg-icons";
+import { fetchcomment, createcomment } from "../../services/api";
+import { fetchPostdetail } from "../../services/postApi";
 import {
-  fetchPostdetail,
-  fetchcomment,
-  createcomment,
-} from "../../services/api";
-import {
-  PostProfile,
+  PostProfileBox,
   ProfileImage,
 } from "../../components/Card/PostCard/PostProfile";
 import {
@@ -103,7 +100,7 @@ function DetailPage() {
 
           <PostWrap>
             <Postheader>
-              <PostProfile
+              <PostProfileBox
                 name={post.result.memberInfo.nickname}
                 job={post.result.memberInfo.development}
               />
