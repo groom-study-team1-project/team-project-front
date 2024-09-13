@@ -1,5 +1,5 @@
 import React, { useRef, useState, useEffect } from "react";
-
+import { useNavigate } from "react-router-dom";
 import { CKEditor } from "@ckeditor/ckeditor5-react";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import Slide from "../../components/Common/imgSlide";
@@ -17,7 +17,8 @@ import {
   Interaction,
   InteractionItem,
 } from "../../components/Common/Interactions";
-import { Wrap } from "../../components/Common/WriteBoard/WriteBoard.style";
+import { Wrap } from "../../components/WriteBoard/WriteBoard.style";
+import { deletepost } from "../../services/postApi";
 import {
   CategotyWrap,
   CenteredContainer,
@@ -49,7 +50,7 @@ function DetailPage() {
   const [commentValue, setCommentValue] = useState("");
   const [modalcurrent, setModalcurrnet] = useState(false);
   const modalRef = useRef(null);
-
+  const navigate = useNavigate();
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -118,9 +119,21 @@ function DetailPage() {
                     {modalcurrent && (
                       <ModalBackground>
                         <Modal ref={modalRef}>
-                          <div>수정</div>
+                          <div
+                            onClick={() => {
+                              navigate(`/editpost/${1}`);
+                            }}
+                          >
+                            수정
+                          </div>
                           <hr style={{ margin: "0px", padding: "0px" }} />
-                          <div>삭제</div>
+                          <div
+                            onClick={() => {
+                              deletepost(`${1}`);
+                            }}
+                          >
+                            삭제
+                          </div>
                         </Modal>
                       </ModalBackground>
                     )}
