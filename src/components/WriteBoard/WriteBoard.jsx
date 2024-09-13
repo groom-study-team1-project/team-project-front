@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 import { CKEditor } from "@ckeditor/ckeditor5-react";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -32,6 +33,7 @@ const WriteBoard = ({ postData, postId }) => {
   const [imgUrls, setImgUrls] = useState([]);
   const fileInput = useRef(null);
   const [draggedItem, setDraggedItem] = useState(null);
+  const API_URL = "http://203.232.193.208:7000/api/post/image";
 
   useEffect(() => {
     if (postData) {
@@ -54,20 +56,31 @@ const WriteBoard = ({ postData, postId }) => {
     fileInput.current.click();
   };
 
-  const handleFileChange = (e) => {
+  const handleFileChange = async (e) => {
     const files = Array.from(e.target.files);
-    const newImgUrls = [];
+    const uploadedUrls = [];
 
-    files.forEach((file) => {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        newImgUrls.push(reader.result);
-        if (newImgUrls.length === files.length) {
-          setImgUrls((prevImgUrls) => [...prevImgUrls, ...newImgUrls]); // 새 이미지를 기존 배열에 추가
+    for (const file of files) {
+      const body = new FormData();
+      body.append("upload", file);
+
+      try {
+        const response = await axios.post(`${API_URL}`, body, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        });
+
+        const result = response.data;
+        if (result.url && result.url[0]) {
+          uploadedUrls.push(result.url[0]);
         }
-      };
-      reader.readAsDataURL(file);
-    });
+      } catch (err) {
+        console.error("Image upload failed:", err);
+      }
+    }
+
+    setImgUrls((prevImgUrls) => [...prevImgUrls, ...uploadedUrls]);
   };
 
   const handlehashtag = (e) => {
@@ -133,28 +146,31 @@ const WriteBoard = ({ postData, postId }) => {
     }
   };
 
-  const API_URL = "http://203.232.193.208:7000/api/post/image";
   function uploadAdapter(loader) {
     return {
-      upload: () => {
-        return new Promise((resolve, reject) => {
+      upload: async () => {
+        return new Promise(async (resolve, reject) => {
           const body = new FormData();
-          loader.file.then((file) => {
+          try {
+            const file = await loader.file;
             body.append("upload", file);
-            fetch(`${API_URL}`, {
-              method: "post",
-              body: body,
-            })
-              .then((res) => res.json())
-              .then((res) => {
-                resolve({
-                  default: res.url[0],
-                });
-              })
-              .catch((err) => {
-                reject(err);
+
+            const response = await axios.post(`${API_URL}`, body, {
+              headers: {
+                "Content-Type": "multipart/form-data",
+              },
+            });
+
+            const result = response.data;
+
+            if (result.url && result.url[0]) {
+              resolve({
+                default: result.url[0],
               });
-          });
+            }
+          } catch (error) {
+            reject(error);
+          }
         });
       },
     };
