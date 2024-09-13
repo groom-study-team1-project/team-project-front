@@ -4,27 +4,27 @@ import BoardLayout from "../../Layout/BoardLayout/BoardLayout";
 import NoticePostCard from "../../components/Card/PostCard/NoticePostCard/NoticePostCard";
 
 function NoticeBoard() {
-  const [postCards, setPostCards] = useState([]);
+  const [postItems, setPostItems] = useState([]);
 
   useEffect(() => {
     fetchNoticePostItems()
-      .then((postItems) => {
-        // 받아온 데이터를 기반으로 PostCard 컴포넌트 생성
-        const cards = postItems.map((post) => (
-          <NoticePostCard
-            key={post.id}
-            id={post.id}
-            title={post.title}
-            date={post.date}
-            count={post.count}
-          />
-        ));
-        setPostCards(cards);
-      })
+      .then((data) => setPostItems(data))
       .catch((err) => console.log(err));
   }, []);
 
-  return <BoardLayout postCards={(postCards, postCards, postCards)} />;
+  return (
+    <BoardLayout category={{ title: "공지사항", id: 4 }}>
+      {postItems.map((postItem) => (
+        <NoticePostCard
+          key={postItem.id}
+          id={postItem.id}
+          title={postItem.title}
+          date={postItem.date}
+          count={postItem.count}
+        />
+      ))}
+    </BoardLayout>
+  );
 }
 
 export default NoticeBoard;

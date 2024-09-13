@@ -6,7 +6,7 @@ import {
   PostCardWrapper,
   Thumbnail,
 } from "../PostCard.style";
-import { PostProfile } from "../PostProfile";
+import { PostProfileBox } from "../PostProfile";
 import { CustomBody } from "./CommunityPostCard.style";
 
 function CommunityPostCard({
@@ -17,12 +17,12 @@ function CommunityPostCard({
   count = { view: 0, like: 0, comment: 0 },
 }) {
   return (
-    <PostCardWrapper width="985px" height="232px">
+    <PostCardWrapper height="232px">
       <InnerContainer>
         <Thumbnail />
         <CustomBody>
           <PostActions>
-            <PostProfile name={name} job={job} />
+            <PostProfileBox name={name} job={job} />
             <Interaction count={count} />
           </PostActions>
           <ContentBox>
