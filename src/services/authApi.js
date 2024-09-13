@@ -243,3 +243,34 @@ export const findUserPw = async (email, nickname, tel) => {
     throw error;
   }
 };
+
+export const postInfo = async (memberId, categoryId) => {
+  try {
+    // const response = await axios.get(`/api/post`, {
+    //   params: {
+    //     memberId: memberId,
+    //     categoryId: categoryId,
+    //   },
+    //   headers: {
+    //     Authorization: `Bearer ${yourAccessToken}`,
+    //   },
+    // });
+
+    const response = [
+      {
+        postId: 1,
+        postTitle: "게시글 제목",
+        count: {
+          view: 5,
+          like: 55,
+          comment: 555,
+        },
+        postCreatedAt: "게시글 작성 일자",
+      },
+    ];
+    return response;
+  } catch (error) {
+    console.error("사용자 정보를 불러오는데 실패했습니다.", error);
+    throw error;
+  }
+};

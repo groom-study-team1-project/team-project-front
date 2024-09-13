@@ -10,7 +10,7 @@ export const ProfileImage = styled.div`
   height: ${({ height }) => height || "30px"};
   border: 1px solid;
   border-radius: 50%;
-  margin-right: ${({ isBig }) => (isBig ? "20px" : "10px")};
+  margin-right: ${({ isbig }) => (isbig ? "20px" : "10px")};
 `;
 
 export const ProfileInfo = styled.div`
@@ -19,11 +19,11 @@ export const ProfileInfo = styled.div`
 `;
 
 export const ProfileInfoName = styled.p`
-  font-size: ${({ isBig }) => (isBig ? "48px" : "14px")};
+  font-size: ${({ isbig }) => (isbig ? "48px" : "14px")};
 `;
 
 export const ProfileInfoJob = styled.p`
-  font-size: ${({ isBig }) => (isBig ? "24px" : "13px")};
+  font-size: ${({ isbig }) => (isbig ? "24px" : "13px")};
 `;
 
 export const PostProfileBox = ({ name, job }) => (
@@ -38,10 +38,10 @@ export const PostProfileBox = ({ name, job }) => (
 
 export const EditProfileBox = ({ name, job }) => (
   <ProfileWrapper>
-    <ProfileImage width="200px" height="200px" isBig={true} />
+    <ProfileImage width="200px" height="200px" isbig={true} />
     <ProfileInfo>
-      <ProfileInfoName isBig={true}>{name}</ProfileInfoName>
-      <ProfileInfoJob isBig={true}>{job}</ProfileInfoJob>
+      <ProfileInfoName isbig={true}>{name}</ProfileInfoName>
+      <ProfileInfoJob isbig={true}>{job}</ProfileInfoJob>
     </ProfileInfo>
   </ProfileWrapper>
 );
