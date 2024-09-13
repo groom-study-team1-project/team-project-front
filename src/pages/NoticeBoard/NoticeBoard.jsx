@@ -13,7 +13,7 @@ function NoticeBoard() {
   }, []);
 
   return (
-    <BoardLayout title={"공지사항"}>
+    <BoardLayout category={{ title: "공지사항", id: 4 }}>
       {postItems.map((postItem) => (
         <NoticePostCard
           key={postItem.id}
