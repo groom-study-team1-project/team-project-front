@@ -2,7 +2,6 @@ import React, { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { CKEditor } from "@ckeditor/ckeditor5-react";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
-import { editorConfig } from "../editor/editorConfig";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPhotoFilm, faXmark } from "@fortawesome/free-solid-svg-icons";
 import GlobalStyle from "../../assets/styles/GlobalStyle";
@@ -243,7 +242,6 @@ const WriteBoard = ({ postData, postId }) => {
           <CKEditor
             editor={ClassicEditor}
             config={{
-              ...editorConfig,
               placeholder: "내용을 입력하세요.",
               extraPlugins: [uploadPlugin], // 커스텀 업로드 어댑터 플러그인
             }}
