@@ -12,6 +12,7 @@ import {
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import Modal from "react-modal";
+import ModalLayout from "../../components/Modal/Modal";
 import LoginModal from "../../components/Modal/LoginModal/LoginModal";
 import SignUpModal from "../../components/Modal/SignUpModal/SignUpModal";
 import FindUserId from "../../components/Modal/FindUserIdModal/FindUserId";
@@ -69,6 +70,7 @@ function Navbar({ isMainPage = false }) {
   };
 
   const closeModal = () => {
+    console.log("모달 닫힘");
     setIsModalOpen(false);
   };
 
@@ -106,7 +108,7 @@ function Navbar({ isMainPage = false }) {
         )}
       </NavbarInner>
 
-      <Modal
+      <ModalLayout
         isOpen={isModalOpen}
         onRequestClose={closeModal}
         contentLabel={
@@ -128,6 +130,8 @@ function Navbar({ isMainPage = false }) {
             transform: "translate(-50%, -50%)",
           },
         }}
+        closeModal={closeModal}
+        contentLable={"로그인 모달"}
       >
         {modalType === "login" ? (
           <LoginModal closeModal={closeModal} changeModal={changeModal} />
@@ -138,7 +142,7 @@ function Navbar({ isMainPage = false }) {
         ) : (
           <FindUserPw changeModal={changeModal} />
         )}
-      </Modal>
+      </ModalLayout>
     </NavbarWrapper>
   );
 }
