@@ -64,7 +64,9 @@ function MyProfile() {
     <>
       <Wrap>
         <ProfileWrap>
-          <ProfileTitle>프로필</ProfileTitle>
+          <ProfileTitle>
+            <h1>프로필</h1>
+          </ProfileTitle>
         </ProfileWrap>
         <Main>
           <ProfileHeader>

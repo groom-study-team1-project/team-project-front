@@ -6,6 +6,8 @@ export const Wrap = styled.div`
   flex-direction: column;
   align-items: center;
   height: 100vh;
+  // 임시로 배경 지정
+  background-color: #acb6e5;
 `;
 
 export const Main = styled.div`
@@ -20,11 +22,28 @@ export const ProfileWrap = styled.div`
 `;
 
 export const ProfileTitle = styled.div`
-  border: 1px solid black;
   padding: 10px;
-  border-radius: 10px;
+  border-radius: 20px;
   width: 200px;
   text-align: center;
+  font-size: 20px;
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.5) 0%,
+    rgba(255, 255, 255, 1) 50%,
+    rgba(255, 255, 255, 0.5) 100%
+  );
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+
+  h1 {
+    background: linear-gradient(180deg, #0b0611 0%, #47286f 53%, #42469c 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    color: transparent;
+    font-size: 24px;
+    font-weight: 800;
+  }
 `;
 
 export const ProfileHeader = styled.div`
@@ -36,8 +55,8 @@ export const ProfileHeader = styled.div`
 
 export const ProfileSetting = styled.button`
   border-radius: 10px;
-  width: 155px;
-  height: 50px;
+  width: 136px;
+  height: 40px;
   background-color: #7682ff;
   color: white;
   border: none;
