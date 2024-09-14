@@ -9,7 +9,7 @@ import {
   Button,
   ButtonBox,
 } from "./Navbar.style";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import Modal from "react-modal";
 import ModalLayout from "../../components/Modal/Modal";
@@ -19,6 +19,7 @@ import FindUserId from "../../components/Modal/FindUserIdModal/FindUserId";
 import FindUserPw from "../../components/Modal/FindUserPwModal/FindUserPw";
 import { logout } from "../../services/authApi";
 import { fetchCategoryItems } from "../../services/postApi";
+import { logout as logoutAction } from "../../store/user/userSlice";
 
 Modal.setAppElement("#root");
 
@@ -27,7 +28,10 @@ function Navbar({ isMainPage = false }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalType, setModalType] = useState("login");
   const isLoggedIn = useSelector((state) => state.user.isLoggedIn);
-  const email = useSelector((state) => state.user.userInfo.email).split("@")[0];
+  const userInfo = useSelector((state) => state.user.userInfo);
+  const email =
+    userInfo && userInfo.email ? userInfo.email.split("@")[0] : null;
+  const dispatch = useDispatch();
 
   let navigate = useNavigate();
 
@@ -59,6 +63,7 @@ function Navbar({ isMainPage = false }) {
   async function handleLogout(e) {
     try {
       await logout();
+      dispatch(logoutAction());
     } catch (err) {
       console.log(err);
     }
@@ -96,14 +101,14 @@ function Navbar({ isMainPage = false }) {
         {isLoggedIn ? (
           <ButtonBox>
             <Button>글쓰기</Button>
-            <Button>다크모드</Button>
-            <Button onClick={redirectToMyPage}>프로필</Button>{" "}
+            <Button onClick={handleLogout}>다크모드</Button>
+            <Button onClick={redirectToMyPage}>프로필</Button>
           </ButtonBox>
         ) : (
           <ButtonBox>
             <Button onClick={handleLogout}>다크모드</Button>
             <Button onClick={() => openModal("login")}>로그인</Button>
-            <Button onClick={() => openModal("signup")}>회원가입</Button>{" "}
+            <Button onClick={() => openModal("signup")}>회원가입</Button>
           </ButtonBox>
         )}
       </NavbarInner>
