@@ -40,7 +40,7 @@ export async function fetchPostItems() {
       //+ 썸네일, 사용자 프로필 이미지
     },
     {
-      id: 5,
+      id: 4,
       title: "Title",
       content: "This is content.",
       name: "John Doe",
@@ -53,7 +53,7 @@ export async function fetchPostItems() {
       //+ 썸네일, 사용자 프로필 이미지
     },
     {
-      id: 4,
+      id: 5,
       title: "Title",
       content: "This is content.",
       name: "John Doe",

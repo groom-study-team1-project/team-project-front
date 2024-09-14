@@ -1,23 +1,22 @@
 import axios from "axios";
-import { redirect } from "react-router-dom";
 
 export const createPost = async (body, token) => {
   try {
     console.log(body);
-    const headers = {
-      Authorization: `Bearer ${token}`,
-    };
-    const result = await axios.post("/api/posts/upload", body, {
-      headers: headers,
-    });
-    redirect(`${result.result.id}`);
+    // const headers = {
+    //   Authorization: `Bearer ${token}`,
+    // };
+    // const result = await axios.post("/api/posts/upload", body, {
+    //   headers: headers,
+    // });
+    // redirect(`${result.result.id}`);
   } catch (error) {
     console.log(error);
   }
 };
 
 export const fetchPostdetail = async (postId) => {
-  return {
+  const result1 = {
     code: 1201,
     message: "게시글 조회에 성공하였습니다.",
     result: {
@@ -58,6 +57,59 @@ export const fetchPostdetail = async (postId) => {
       },
     },
   };
+  try {
+    //const result = await axios.get(`/posts/${postId}`);
+    console.log("result", result1);
+    return result1.result;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const fetchPostChange = async (body, postId, token) => {
+  try {
+    console.log(body);
+    console.log(postId);
+    // const headers = {
+    //   Authorization: `Bearer ${token}`,
+    // };
+    // const result = await axios.put(`/api/posts/${postId}`, body, {
+    //   headers: headers,
+    // });
+    // console.log(result);
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const deletepost = async (postId, token) => {
+  try {
+    const response = {
+      code: 1204,
+      message: "해당 게시글이 삭제되었습니다.",
+    };
+    console.log(response.message);
+    // const headers = {
+    //   Authorization: `Bearer ${token}`,
+    // };
+    // await axios.delete(`/api/posts/${postId}`, {
+    //   headers: headers,
+    // });
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const sortPostsByCriteria = async (categoty_id, sort, post_id) => {
+  try {
+    // const result = await axios.get(
+    //   `/posts/${post_id}?sort=${sort}&categoty-id=${categoty_id}`
+    // );
+    // console.log(result);
+    await console.log(categoty_id, sort, post_id);
+  } catch (error) {
+    console.log(error);
+  }
 };
 
 export async function fetchCategoryItems() {

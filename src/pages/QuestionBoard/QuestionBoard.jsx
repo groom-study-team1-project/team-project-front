@@ -13,7 +13,7 @@ function QuestionBoard() {
   }, []);
 
   return (
-    <BoardLayout title={"질문 게시판"}>
+    <BoardLayout category={{ title: "질문 게시판", id: 2 }}>
       {postItems.map((postItem) => (
         <CommunityPostCard
           key={postItem.id}

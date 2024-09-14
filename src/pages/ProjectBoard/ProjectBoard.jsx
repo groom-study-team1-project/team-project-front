@@ -13,7 +13,7 @@ function ProjectBoard() {
   }, []);
 
   return (
-    <BoardLayout title={"프로젝트 게시판"}>
+    <BoardLayout category={{ title: "프로젝트 게시판", id: 3 }}>
       {postItems.map((postItem) => (
         <ProjectPostCard
           key={postItem.id}

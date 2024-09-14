@@ -13,7 +13,7 @@ function FreeBoard() {
   }, []);
 
   return (
-    <BoardLayout title={"자유 게시판"}>
+    <BoardLayout category={{ title: "자유게시판", id: 1 }}>
       {postItems.map((postItem) => (
         <CommunityPostCard
           key={postItem.id}

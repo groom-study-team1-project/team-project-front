@@ -53,11 +53,17 @@ export const SearchBox = styled.div`
   border: 1px solid blue;
 `;
 
-export const SortOption = styled.div`
+export const SortOption = styled.select`
   width: 80px;
   height: 24px;
   border: 1px solid blue;
   align-self: flex-end;
+  cursor: pointer;
+`;
+
+export const SortItems = styled.div`
+  border: 1px solid black;
+  position: absolute;
 `;
 
 export const PostCardWrapper = styled.div`

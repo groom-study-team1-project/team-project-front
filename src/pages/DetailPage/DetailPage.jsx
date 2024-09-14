@@ -1,5 +1,5 @@
 import React, { useRef, useState, useEffect } from "react";
-
+import { useNavigate } from "react-router-dom";
 import { CKEditor } from "@ckeditor/ckeditor5-react";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import Slide from "../../components/Common/imgSlide";
@@ -17,7 +17,8 @@ import {
   Interaction,
   InteractionItem,
 } from "../../components/Common/Interactions";
-import { Wrap } from "../WriteBoard/WriteBoard.style";
+import { Wrap } from "../../components/WriteBoard/WriteBoard.style";
+import { deletepost } from "../../services/postApi";
 import {
   CategotyWrap,
   CenteredContainer,
@@ -49,7 +50,7 @@ function DetailPage() {
   const [commentValue, setCommentValue] = useState("");
   const [modalcurrent, setModalcurrnet] = useState(false);
   const modalRef = useRef(null);
-
+  const navigate = useNavigate();
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -96,7 +97,7 @@ function DetailPage() {
     <>
       <CenteredContainer>
         <Wrap>
-          <CategotyWrap>{post.result.categoryInfo.title}</CategotyWrap>
+          <CategotyWrap>{post.categoryInfo.title}</CategotyWrap>
 
           <PostWrap>
             <Postheader>
@@ -105,9 +106,9 @@ function DetailPage() {
                 job={post.result.memberInfo.development}
               />
               <div>
-                {post.result.postInfo.isModified ? (
+                {post.postInfo.isModified ? (
                   <PostheaderRignt>
-                    <div>{post.result.postInfo.createdAt}</div>
+                    <div>{post.postInfo.createdAt}</div>
                     <Modify
                       onClick={() => {
                         setModalcurrnet(true);
@@ -118,32 +119,44 @@ function DetailPage() {
                     {modalcurrent && (
                       <ModalBackground>
                         <Modal ref={modalRef}>
-                          <div>수정</div>
+                          <div
+                            onClick={() => {
+                              navigate(`/editpost/${1}`);
+                            }}
+                          >
+                            수정
+                          </div>
                           <hr style={{ margin: "0px", padding: "0px" }} />
-                          <div>삭제</div>
+                          <div
+                            onClick={() => {
+                              deletepost(`${1}`);
+                            }}
+                          >
+                            삭제
+                          </div>
                         </Modal>
                       </ModalBackground>
                     )}
                   </PostheaderRignt>
                 ) : (
                   <PostheaderRignt>
-                    <div>{post.result.postInfo.createdAt}</div>
+                    <div>{post.postInfo.createdAt}</div>
                   </PostheaderRignt>
                 )}
               </div>
             </Postheader>
-            {post.result.categoryInfo.title === "프로젝트 자랑 게시판" ? (
+            {post.categoryInfo.title === "프로젝트 자랑 게시판" ? (
               <div>
-                <Slide imgUrls={post.result.postInfo.imgUrl} />
+                <Slide imgUrls={post.postInfo.imgUrl} />
               </div>
             ) : (
               ""
             )}
 
-            <Title>{post.result.postInfo.title}</Title>
+            <Title>{post.postInfo.title}</Title>
             <CKEditor
               editor={ClassicEditor}
-              data={post.result.postInfo.content}
+              data={post.postInfo.content}
               config={{
                 toolbar: [],
               }}
@@ -152,7 +165,7 @@ function DetailPage() {
           </PostWrap>
           <PostFooter>
             <div>
-              {post.result.postInfo.hashtags.map((hashtag, index) => (
+              {post.postInfo.hashtags.map((hashtag, index) => (
                 <span key={index}>{hashtag}</span>
               ))}
             </div>
