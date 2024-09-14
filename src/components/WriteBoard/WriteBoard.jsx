@@ -1,9 +1,10 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 import { CKEditor } from "@ckeditor/ckeditor5-react";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPhotoFilm } from "@fortawesome/free-solid-svg-icons";
+import { faPhotoFilm, faXmark } from "@fortawesome/free-solid-svg-icons";
 import GlobalStyle from "../../assets/styles/GlobalStyle";
 import { createPost, fetchPostChange } from "../../services/postApi";
 import backBtn from "../../assets/images/back-removebg-preview.png";
@@ -21,14 +22,18 @@ import {
   Wrap,
   Write,
   WriteWrap,
+  ImgPreviewDelete,
+  ImgPreviewWrap,
 } from "./WriteBoard.style";
 
 const WriteBoard = ({ postData, postId }) => {
   const navigate = useNavigate();
   const [form, setValue] = useState({ title: "", content: "", hashtags: [] });
   const [selectedCategory, setSelectedCategory] = useState(0);
-  const [imgUrls, setImgUrls] = useState([]); // State to store multiple image URLs
+  const [imgUrls, setImgUrls] = useState([]);
   const fileInput = useRef(null);
+  const [draggedItem, setDraggedItem] = useState(null);
+  const API_URL = "http://203.232.193.208:7000/api/post/image";
 
   useEffect(() => {
     if (postData) {
@@ -42,6 +47,7 @@ const WriteBoard = ({ postData, postId }) => {
       setImgUrls(imgurl);
     }
   }, [postData]);
+
   const handleCategoryChange = (e) => {
     setSelectedCategory(e.target.value);
   };
@@ -50,23 +56,35 @@ const WriteBoard = ({ postData, postId }) => {
     fileInput.current.click();
   };
 
-  const handleFileChange = (e) => {
+  const handleFileChange = async (e) => {
     const files = Array.from(e.target.files);
-    const newImgUrls = [];
+    const uploadedUrls = [];
 
-    files.forEach((file) => {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        newImgUrls.push(reader.result);
-        if (newImgUrls.length === files.length) {
-          setImgUrls((prevImgUrls) => [...prevImgUrls, ...newImgUrls]); // Append new images to the existing array
+    for (const file of files) {
+      const body = new FormData();
+      body.append("upload", file);
+
+      try {
+        const response = await axios.post(`${API_URL}`, body, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        });
+
+        const result = response.data;
+        if (result.url && result.url[0]) {
+          uploadedUrls.push(result.url[0]);
         }
-      };
-      reader.readAsDataURL(file);
-    });
+      } catch (err) {
+        console.error("Image upload failed:", err);
+      }
+    }
+
+    setImgUrls((prevImgUrls) => [...prevImgUrls, ...uploadedUrls]);
   };
+
   const handlehashtag = (e) => {
-    const hashtagStr = e.target.hashtag.value;
+    const hashtagStr = e.target.value;
     const hashtagArray = hashtagStr
       .split(" ")
       .filter((item) => item.startsWith("#"));
@@ -77,45 +95,99 @@ const WriteBoard = ({ postData, postId }) => {
     setValue({ ...form, title: e.target.value });
   };
 
+  const deletePreviewImg = (indexToDelete) => {
+    setImgUrls((prevImgUrls) =>
+      prevImgUrls.filter((_, index) => index !== indexToDelete)
+    );
+  };
+
+  const handleDragStart = (index) => {
+    setDraggedItem(index);
+  };
+
+  const handleDragOver = (e) => {
+    e.preventDefault();
+  };
+
+  const handleDrop = (index) => {
+    const draggedOverItem = index;
+
+    if (draggedItem === draggedOverItem) return;
+
+    const items = [...imgUrls];
+    const item = items[draggedItem];
+
+    items.splice(draggedItem, 1);
+    items.splice(draggedOverItem, 0, item);
+
+    setImgUrls(items);
+  };
+
   const onSubmit = async (e) => {
-    await e.preventDefault();
+    e.preventDefault();
     try {
+      const { title, content, hashtags } = form;
+      let body = {};
+      const category_id = Number(selectedCategory);
+
+      if (category_id === 3) {
+        body = { title, content, hashtags, category_id, imgUrls };
+      } else {
+        body = { title, content, hashtags, category_id };
+      }
+
       if (postData) {
-        const { title, content, hashtags } = form;
-        let body = {};
-        const category_id = Number(selectedCategory);
-        if (category_id === 2) {
-          body = { title, content, hashtags, category_id, imgUrls };
-        } else {
-          body = { title, content, hashtags, category_id };
-        }
         await fetchPostChange(body, postId);
       } else {
-        const { title, content, hashtags } = form;
-        let body = {};
-        const category_id = Number(selectedCategory);
-        if (category_id === 2) {
-          body = { title, content, hashtags, category_id, imgUrls };
-        } else {
-          body = { title, content, hashtags, category_id };
-        }
         await createPost(body);
       }
-    } catch (error) {}
+    } catch (error) {
+      console.error(error);
+    }
   };
+
+  function uploadAdapter(loader) {
+    return {
+      upload: async () => {
+        return new Promise(async (resolve, reject) => {
+          const body = new FormData();
+          try {
+            const file = await loader.file;
+            body.append("upload", file);
+
+            const response = await axios.post(`${API_URL}`, body, {
+              headers: {
+                "Content-Type": "multipart/form-data",
+              },
+            });
+
+            const result = response.data;
+
+            if (result.url && result.url[0]) {
+              resolve({
+                default: result.url[0],
+              });
+            }
+          } catch (error) {
+            reject(error);
+          }
+        });
+      },
+    };
+  }
+
+  function uploadPlugin(editor) {
+    editor.plugins.get("FileRepository").createUploadAdapter = (loader) => {
+      return uploadAdapter(loader);
+    };
+  }
 
   return (
     <>
       <GlobalStyle />
       <Wrap>
         <WriteWrap>
-          <BackImg
-            src={backBtn}
-            alt="뒤로 가기"
-            onClick={() => {
-              navigate(-1);
-            }}
-          />
+          <BackImg src={backBtn} alt="뒤로 가기" onClick={() => navigate(-1)} />
           <Write>글 쓰기</Write>
         </WriteWrap>
         <form onSubmit={onSubmit}>
@@ -133,18 +205,30 @@ const WriteBoard = ({ postData, postId }) => {
                 onChange={handleCategoryChange}
                 value={selectedCategory}
               >
-                <option value={0}>자유 게시판</option>
-                <option value={1}>질문 게시판</option>
-                <option value={2}>프로젝트 자랑 게시판</option>
-                <option value={3}>공지 게시판</option>
+                <option value={1}>자유 게시판</option>
+                <option value={2}>질문 게시판</option>
+                <option value={3}>프로젝트 게시판</option>
+                <option value={4}>공지 게시판</option>
               </Categoryselect>
             </span>
           </TitleWrap>
-          {Number(selectedCategory) === 2 && (
+          {Number(selectedCategory) === 3 && (
             <ImgWrap>
               {imgUrls.map((url, index) => (
-                <ImgPreview key={index} src={url} alt={`Preview ${index}`} />
+                <ImgPreviewWrap
+                  key={index}
+                  draggable
+                  onDragStart={() => handleDragStart(index)}
+                  onDragOver={handleDragOver}
+                  onDrop={() => handleDrop(index)}
+                >
+                  <ImgPreview src={url} alt={`Preview ${index}`} />
+                  <ImgPreviewDelete onClick={() => deletePreviewImg(index)}>
+                    <FontAwesomeIcon icon={faXmark} />
+                  </ImgPreviewDelete>
+                </ImgPreviewWrap>
               ))}
+
               <ImgAdd onClick={handleClickImgadd}>
                 <FontAwesomeIcon
                   icon={faPhotoFilm}
@@ -165,23 +249,15 @@ const WriteBoard = ({ postData, postId }) => {
             editor={ClassicEditor}
             config={{
               placeholder: "내용을 입력하세요.",
+              extraPlugins: [uploadPlugin],
             }}
             data={form.content}
-            onReady={(editor) => {
-              // console.log("Editor is ready to use!", editor);
-            }}
-            onChange={(event, editor) => {
-              const data = editor.getData();
-              console.log({ event, editor, data });
-            }}
             onBlur={(event, editor) => {
               const data = editor.getData();
               setValue({ ...form, content: data });
             }}
-            onFocus={(event, editor) => {
-              // console.log("Focus.", editor);
-            }}
           />
+
           <Hashtag
             type="text"
             placeholder="#태그입력"

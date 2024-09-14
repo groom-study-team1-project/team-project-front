@@ -16,6 +16,7 @@ export const WriteWrap = styled.div`
 export const BackImg = styled.img`
   width: 40px;
   height: 40px;
+  cursor: pointer;
 `;
 export const Write = styled.div`
   font-size: 40px;
@@ -26,7 +27,7 @@ export const TitleWrap = styled.div`
 `;
 
 export const Titleinput = styled.input`
-  width: 732px;
+  width: 300%;
   height: 43px;
   border-radius: 10px;
   border: 1px solid black;
@@ -60,19 +61,48 @@ export const SubmitBtn = styled.button`
 
 export const ImgWrap = styled.div`
   display: flex;
-  background: #efefef;
+  background: rgba(239, 239, 239, 0.5);
+
   margin-bottom: 16px;
   padding: 10px;
-  overflow-x: auto; /* Enable horizontal scrolling */
-  white-space: nowrap; /* Prevent images from wrapping to the next line */
+  overflow-x: auto;
+  white-space: nowrap;
 `;
 
+export const ImgPreviewWrap = styled.div`
+  position: relative;
+`;
 export const ImgPreview = styled.img`
   object-fit: cover;
   width: 288px;
   height: 160px;
   margin-right: 10px;
   margin-bottom: 10px; /* Space between images in case they wrap to the next line */
+  flex-shrink: 0;
+  cursor: pointer;
+`;
+
+export const ImgPreviewDelete = styled.div`
+  position: absolute;
+  z-index: 30;
+  top: 0;
+  cursor: pointer;
+  border-radius: 50%;
+  background-color: gray;
+  color: black;
+  width: 20px;
+  height: 20px;
+  align-items: center;
+  display: flex;
+  justify-content: center;
+  opacity: 0.5;
+  right: 0;
+  margin-right: 12px;
+  margin-top: 2px;
+  &:hover {
+    opacity: 1;
+    color: white;
+  }
 `;
 
 export const ImgAdd = styled.div`
@@ -85,4 +115,5 @@ export const ImgAdd = styled.div`
   cursor: pointer;
   border: 1px solid #ccc;
   position: relative;
+  flex-shrink: 0;
 `;
