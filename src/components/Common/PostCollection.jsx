@@ -40,6 +40,8 @@ const Myboard = styled.div`
 const ProfileImages = styled(ProfileImage)`
   width: ${(props) => (props.$width ? props.$width : "100px")};
   height: ${(props) => (props.$height ? props.$height : "100px")};
+  background-color: lightblue; // 임시 배경색 지정
+  border: 2px solid white;
 `;
 
 const BoardContentsWrap = styled.div`

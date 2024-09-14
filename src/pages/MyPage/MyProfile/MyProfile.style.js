@@ -6,13 +6,19 @@ export const Wrap = styled.div`
   flex-direction: column;
   align-items: center;
   height: 100vh;
-  // 임시로 배경 지정
-  background-color: #acb6e5;
+  background-color: #acb6e5; // 임시로 배경 지정
 `;
 
 export const Main = styled.div`
   width: 1450px;
-  border: 1px solid black;
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.6) 50%,
+    rgba(255, 255, 255, 0.5) 100%
+  );
+  border-radius: 20px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  padding: 8px;
 `;
 
 export const ProfileWrap = styled.div`
@@ -23,7 +29,7 @@ export const ProfileWrap = styled.div`
 
 export const ProfileTitle = styled.div`
   padding: 10px;
-  border-radius: 20px;
+  border-radius: 16px;
   width: 200px;
   text-align: center;
   font-size: 20px;
