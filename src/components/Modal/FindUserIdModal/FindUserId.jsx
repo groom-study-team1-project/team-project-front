@@ -4,38 +4,25 @@ import { FindUserIdHeader } from "./FindUserId.style";
 import { FormInputField } from "../FormInputField";
 import { findUserId } from "../../../services/authApi";
 
-const mockUserData = {
-  nickname: "구름이",
-  phoneNumber: "010-1234-5678",
-  email: "example@example.com",
-};
-
 export default function FindUserId({ changeModal }) {
   const [nickname, setNickname] = useState("");
   const [tel, setTel] = useState("");
-  const [email, setEmail] = useState("");
   const [foundEmail, setFoundEmail] = useState(false);
 
   async function handleFindUserId(e) {
     e.preventDefault();
 
     try {
-      // const response = await findUserId(nickname, tel);
-      // console.log("success", response.result.email);
+      const response = await findUserId(nickname, tel);
+      console.log("응답 성공 여부", response.success);
       // if (response.data.success) {
-      //   setEmail(response.data.email);
-      //   setFoundEmail(true);
+      //   setFoundEmail(response.data.email);
       // } else console.log("email 찾을 수 없음");
 
-      if (
-        nickname === mockUserData.nickname &&
-        tel === mockUserData.phoneNumber
-      ) {
-        setFoundEmail(mockUserData.email);
-        console.log("success", mockUserData.email);
-      } else console.log("사용자 정보 찾을 수 없음");
-
-      // changeModal("login");
+      if (response && response.success && response.result.email) {
+        setFoundEmail(response.result.email);
+        console.log("이메일 찾기 성공", response.result.email);
+      } else console.log("이메일 찾기 실패");
     } catch (error) {
       console.log(error);
     }
