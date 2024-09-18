@@ -1,48 +1,57 @@
 import React from "react";
-import NavBar from "../Navbar/Navbar";
-import Sidebar from "../Sidebar/Sidebar";
-import SearchSort from "../../components/SearchSort/SearchSort";
 import {
-  BoardTitle,
   Container,
+  MainContentWrapper,
+  SidebarWrapper,
   Content,
   ContentWrapper,
-  MainContentWrapper,
-  PopularCardWrapper,
+  BoardTitle,
+  SearchSortWrapper,
+  SearchBox,
+  SortOption,
   RightSidebarWrapper,
-} from "../BoardLayout/BoardLayout.style";
-import PopularPostCard from "../../components/Card/PopularCard/PopularPostCard/PopularPostCard";
+  PopularCardWrapper,
+  PostCardWrapper,
+} from "./BoardLayout.style";
+import Search from "../../components/Search/Search";
+import Sidebar from "../Sidebar/Sidebar";
+import Navbar from "../Navbar/Navbar";
 import PopularHashCard from "../../components/Card/PopularCard/PopularHashCard/PopularHashCard";
-import PostLineLayout from "../PostLineLayout/PostLineLayout";
+import PopularPostCard from "../../components/Card/PopularCard/PopularPostCard/PopularPostCard";
+import { sortPostsByCriteria } from "../../services/postApi";
 
-function BoardLayout({ postCards, pageType, onSearchResults }) {
-  const boardTitle = () => {
-    if (pageType) {
-      switch (pageType) {
-        case "projects":
-          return "프로젝트 게시판";
-        case "notices":
-          return "공지사항";
-        case "free":
-          return "자유게시판";
-        case "questions":
-          return "질문게시판";
-        default:
-          return null;
-      }
-    }
-  };
+function BoardLayout({ category, children, onSearch }) {
+  console.log(category);
   return (
     <Container>
-      <Sidebar />
+      <SidebarWrapper>
+        <Sidebar />
+      </SidebarWrapper>
+
       <MainContentWrapper>
-        <NavBar isMainPage={false} />
-        <ContentWrapper>
-          <Content>
-            <BoardTitle $pageType={pageType}>{boardTitle()}</BoardTitle>
-            <SearchSort onSearch={onSearchResults} pageType={pageType} />
-            <PostLineLayout pageType={pageType} postCards={postCards} />
-          </Content>
+        <Navbar />
+        <Content>
+          <ContentWrapper>
+            <BoardTitle>{category.title}</BoardTitle>
+            <SearchSortWrapper>
+              <Search onSearch={onSearch} />
+              <SortOption
+                onChange={(e) => {
+                  const value = e.target.value;
+                  if (value === "date") {
+                    sortPostsByCriteria(category.id, "date", 0);
+                  } else if (value === "like") {
+                    sortPostsByCriteria(category.id, "like", 0);
+                  }
+                }}
+              >
+                <option value="date">최신순</option>
+                <option value="like">인기순</option>
+              </SortOption>
+            </SearchSortWrapper>
+            <PostCardWrapper>{children}</PostCardWrapper>
+          </ContentWrapper>
+
           <RightSidebarWrapper>
             <PopularCardWrapper>
               <PopularPostCard />
@@ -51,7 +60,7 @@ function BoardLayout({ postCards, pageType, onSearchResults }) {
               <PopularHashCard />
             </PopularCardWrapper>
           </RightSidebarWrapper>
-        </ContentWrapper>
+        </Content>
       </MainContentWrapper>
     </Container>
   );

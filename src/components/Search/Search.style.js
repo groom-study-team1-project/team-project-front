@@ -1,14 +1,10 @@
 import styled from "styled-components";
 
-export const SearchSortWrapper = styled.div`
+export const SearchWrapper = styled.div`
   width: auto;
   height: 32px;
   display: flex;
-  margin-top: 50px;
-  margin-left: 80px;
-  margin-right: 150px;
   border: 1px solid blue;
-  justify-content: space-between;
 `;
 
 export const SearchBox = styled.div`
@@ -41,9 +37,10 @@ export const SearchIcon = styled.img`
   cursor: pointer;
 `;
 
-export const SortOption = styled.div`
+export const SearchOption = styled.select`
   width: 80px;
   height: 24px;
   border: 1px solid blue;
   align-self: flex-end;
+  cursor: pointer;
 `;

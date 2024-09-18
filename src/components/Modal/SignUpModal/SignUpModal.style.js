@@ -6,4 +6,14 @@ export const ProfileImgDiv = styled.div`
   padding-bottom: 16px;
 `;
 
-export const SignUpHeader = styled(Logo)``;
+export const SignUpHeader = styled(Logo)`
+  margin-bottom: 0;
+`;
+
+export const ErrorMsg = styled.div`
+  color: red;
+  font-weight: bold;
+  font-size: 12px;
+  margin-top: 8px;
+  margin-bottom: 16px;
+`;

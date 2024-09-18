@@ -1,11 +1,12 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { CKEditor } from "@ckeditor/ckeditor5-react";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPhotoFilm } from "@fortawesome/free-solid-svg-icons";
 import GlobalStyle from "../../assets/styles/GlobalStyle";
-import { createPost } from "../../services/api";
+import { createPost, fetchPostChange } from "../../services/postApi";
+import backBtn from "../../assets/images/back-removebg-preview.png";
 import {
   BackImg,
   Categoryselect,
@@ -22,13 +23,25 @@ import {
   WriteWrap,
 } from "./WriteBoard.style";
 
-function WriteBoard() {
+const WriteBoard = ({ postData, postId }) => {
   const navigate = useNavigate();
-  const [form, setValue] = useState({ title: "", content: "", hasgtags: [] });
-  const [selectedCategory, setSelectedCategory] = useState("자유게시판");
+  const [form, setValue] = useState({ title: "", content: "", hashtags: [] });
+  const [selectedCategory, setSelectedCategory] = useState(0);
   const [imgUrls, setImgUrls] = useState([]); // State to store multiple image URLs
   const fileInput = useRef(null);
 
+  useEffect(() => {
+    if (postData) {
+      setValue({
+        title: postData.postInfo.title || "",
+        content: postData.postInfo.content || "",
+        hashtags: postData.postInfo.hashtags || [],
+      });
+      setSelectedCategory(postData.categoryInfo.id);
+      const imgurl = postData.postInfo.imgUrl.map((img) => img.url);
+      setImgUrls(imgurl);
+    }
+  }, [postData]);
   const handleCategoryChange = (e) => {
     setSelectedCategory(e.target.value);
   };
@@ -53,11 +66,11 @@ function WriteBoard() {
     });
   };
   const handlehashtag = (e) => {
-    const hashtagStr = e.target.value;
+    const hashtagStr = e.target.hashtag.value;
     const hashtagArray = hashtagStr
       .split(" ")
       .filter((item) => item.startsWith("#"));
-    setValue({ ...form, hasgtags: hashtagArray });
+    setValue({ ...form, hashtags: hashtagArray });
   };
 
   const onChange = (e) => {
@@ -66,22 +79,38 @@ function WriteBoard() {
 
   const onSubmit = async (e) => {
     await e.preventDefault();
-    const { title, content, hasgtags } = form;
-    let body = {};
-    if (selectedCategory === "프로젝트 자랑 게시판") {
-      body = { title, content, hasgtags, selectedCategory, imgUrls };
-    } else {
-      body = { title, content, hasgtags, selectedCategory };
-    }
-    await createPost(body);
+    try {
+      if (postData) {
+        const { title, content, hashtags } = form;
+        let body = {};
+        const category_id = Number(selectedCategory);
+        if (category_id === 2) {
+          body = { title, content, hashtags, category_id, imgUrls };
+        } else {
+          body = { title, content, hashtags, category_id };
+        }
+        await fetchPostChange(body, postId);
+      } else {
+        const { title, content, hashtags } = form;
+        let body = {};
+        const category_id = Number(selectedCategory);
+        if (category_id === 2) {
+          body = { title, content, hashtags, category_id, imgUrls };
+        } else {
+          body = { title, content, hashtags, category_id };
+        }
+        await createPost(body);
+      }
+    } catch (error) {}
   };
+
   return (
     <>
       <GlobalStyle />
       <Wrap>
         <WriteWrap>
           <BackImg
-            src={require("../../assets/images/back-removebg-preview.png")}
+            src={backBtn}
             alt="뒤로 가기"
             onClick={() => {
               navigate(-1);
@@ -96,6 +125,7 @@ function WriteBoard() {
                 type="text"
                 placeholder="제목을 입력하세요"
                 onChange={onChange}
+                value={form.title}
               />
             </span>
             <span>
@@ -103,16 +133,14 @@ function WriteBoard() {
                 onChange={handleCategoryChange}
                 value={selectedCategory}
               >
-                <option value="자유 게시판">자유 게시판</option>
-                <option value="질문 게시판">질문 게시판</option>
-                <option value="프로젝트 자랑 게시판">
-                  프로젝트 자랑 게시판
-                </option>
-                <option value="공지 게시판">공지 게시판</option>
+                <option value={0}>자유 게시판</option>
+                <option value={1}>질문 게시판</option>
+                <option value={2}>프로젝트 자랑 게시판</option>
+                <option value={3}>공지 게시판</option>
               </Categoryselect>
             </span>
           </TitleWrap>
-          {selectedCategory === "프로젝트 자랑 게시판" && (
+          {Number(selectedCategory) === 2 && (
             <ImgWrap>
               {imgUrls.map((url, index) => (
                 <ImgPreview key={index} src={url} alt={`Preview ${index}`} />
@@ -138,9 +166,9 @@ function WriteBoard() {
             config={{
               placeholder: "내용을 입력하세요.",
             }}
-            data=""
+            data={form.content}
             onReady={(editor) => {
-              console.log("Editor is ready to use!", editor);
+              // console.log("Editor is ready to use!", editor);
             }}
             onChange={(event, editor) => {
               const data = editor.getData();
@@ -151,13 +179,15 @@ function WriteBoard() {
               setValue({ ...form, content: data });
             }}
             onFocus={(event, editor) => {
-              console.log("Focus.", editor);
+              // console.log("Focus.", editor);
             }}
           />
           <Hashtag
             type="text"
             placeholder="#태그입력"
+            name="hashtag"
             onChange={handlehashtag}
+            value={form.hashtags.join(" ")}
           />
           <SubmitBtnWrap>
             <SubmitBtn $borderColor="#929292" $bgColor="transparent">
@@ -171,6 +201,6 @@ function WriteBoard() {
       </Wrap>
     </>
   );
-}
+};
 
 export default WriteBoard;

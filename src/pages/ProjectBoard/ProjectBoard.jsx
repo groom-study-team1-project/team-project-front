@@ -1,44 +1,60 @@
 import React, { useEffect, useState } from "react";
 import { fetchPostItems } from "../../services/api";
-import { searchPosts } from "../../services/searchApi";
 import BoardLayout from "../../Layout/BoardLayout/BoardLayout";
 import ProjectPostCard from "../../components/Card/PostCard/ProjectPostCard/ProjectPostCard";
+import {
+  fetchSearchTitle,
+  fetchSearchMember,
+  fetchSearchTag,
+} from "../../services/searchApi";
 
 function ProjectBoard() {
-  const [postCards, setPostCards] = useState([]);
+  const [postItems, setPostItems] = useState([]);
 
-  const fetchData = async (searchTerm) => {
+  const fetchData = async (searchTerm, filter) => {
     try {
-      const postItems = searchTerm
-        ? await searchPosts("free", searchTerm)
-        : await fetchPostItems();
+      let postItems;
 
-      const cards = postItems.map((post) => (
-        <ProjectPostCard
-          key={post.id}
-          title={post.title}
-          content={post.content}
-          name={post.name}
-          job={post.job}
-          count={post.count}
-        />
-      ));
-      setPostCards(cards);
+      if (searchTerm) {
+        if (filter === "title") {
+          postItems = await fetchSearchTitle("free", searchTerm);
+        } else if (filter === "author") {
+          postItems = await fetchSearchMember("free", searchTerm);
+        } else if (filter === "hashtag") {
+          postItems = await fetchSearchTag("free", searchTerm);
+        }
+      } else {
+        postItems = await fetchPostItems();
+      }
+      console.log(postItems);
+      console.log(searchTerm, filter);
     } catch (err) {
       console.log(err);
     }
   };
 
   useEffect(() => {
-    fetchData();
+    fetchPostItems()
+      .then((data) => setPostItems(data))
+      .catch((err) => console.log(err));
   }, []);
 
   return (
     <BoardLayout
-      postCards={postCards}
-      pageType="projects"
-      onSearchResults={fetchData}
-    />
+      category={{ title: "프로젝트 게시판", id: 3 }}
+      onSearch={fetchData}
+    >
+      {postItems.map((postItem) => (
+        <ProjectPostCard
+          key={postItem.id}
+          title={postItem.title}
+          content={postItem.content}
+          name={postItem.name}
+          job={postItem.job}
+          count={postItem.count}
+        />
+      ))}
+    </BoardLayout>
   );
 }
 

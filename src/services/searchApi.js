@@ -1,87 +1,98 @@
 import axios from "axios";
 
-const mockData = [
-  {
-    id: 1,
-    title: "Title 1",
-    content: "This is content.",
-    name: "John Doe",
-    job: "Software Engineer",
-    count: {
-      view: 12,
-      like: 23,
-      comment: 20,
-    },
-    //+ 썸네일, 사용자 프로필 이미지
-  },
-  {
-    id: 2,
-    title: "Title 2",
-    content: "This is content.",
-    name: "John Doe",
-    job: "Software Engineer",
-    count: {
-      view: 12,
-      like: 23,
-      comment: 20,
-    },
-    //+ 썸네일, 사용자 프로필 이미지
-  },
-  {
-    id: 3,
-    title: "Title 3",
-    content: "This is content.",
-    name: "John Doe",
-    job: "Software Engineer",
-    count: {
-      view: 12,
-      like: 23,
-      comment: 20,
-    },
-    //+ 썸네일, 사용자 프로필 이미지
-  },
-  {
-    id: 4,
-    title: "Title 4",
-    content: "This is content.",
-    name: "John Doe",
-    job: "Software Engineer",
-    count: {
-      view: 12,
-      like: 23,
-      comment: 20,
-    },
-    //+ 썸네일, 사용자 프로필 이미지
-  },
-  {
-    id: 5,
-    title: "Title 5",
-    content: "This is content.",
-    name: "John Doe",
-    job: "Software Engineer",
-    count: {
-      view: 12,
-      like: 23,
-      comment: 20,
-    },
-    //+ 썸네일, 사용자 프로필 이미지
-  },
-];
-
-// 페이지 타입에 맞는 검색어 기반 데이터 요청 함수
-export const searchPosts = async (pageType, searchTerm = "") => {
-  // 검색어가 없을 때는 mockData 바로 반환
-  if (!searchTerm.trim()) {
-    return mockData;
-  }
-
-  const url = `/api/search/${pageType}?query=${searchTerm}`;
-
+export const fetchSearchTitle = async (post_id, searchTerm = "") => {
   try {
-    const response = await axios.get(url);
-    return response.data; // title, name, id, job, content, count 데이터 반환
+    //const response = await axios.post("/posts/{post_id}?category-id=&sort=&tag={searchTerm}, post_id, searchTerm);
+    const response = {
+      code: 1101,
+      message: "게시글 조회에 성공하였습니다.",
+      result: {
+        memberInfo: {
+          memberId: 1,
+          memberNickName: "구름이",
+        },
+        postId: 1,
+        categoryId: 0,
+        title: "test",
+        content: "test",
+        commentCount: 0,
+        recommendCount: 0,
+        viewCount: 0,
+        createdAt: "생성일자",
+        updatedAt: "수정일자",
+      },
+    };
+
+    if (response.code === 1101) {
+      console.log("조회 성공");
+      return response;
+    } else {
+      throw new Error(response.message || "로그인 실패");
+    }
   } catch (error) {
-    console.error("Error fetching data:", error);
-    return mockData; // 에러 발생 시 mockData 반환
+    console.log("로그인 실패:", error);
+    throw error;
+  }
+};
+
+export const fetchSearchMember = async (post_id, searchTerm = "") => {
+  try {
+    //const response = await axios.post("/posts/{post_id}?category-id=&sort=&tag={searchTerm}, post_id, searchTerm);
+    const response = {
+      code: 1102,
+      message: "게시글 조회에 성공하였습니다.",
+      result: {
+        memberInfoId: 0,
+        categoryId: 0,
+        title: "test",
+        content: "test",
+        commentCount: 0,
+        recommendCount: 0,
+        viewCount: 0,
+        createdAt: "생성일자",
+        updatedAt: "수정일자",
+      },
+    };
+
+    if (response.code === 1102) {
+      console.log("조회 성공");
+      return response;
+    } else {
+      throw new Error(response.message || "로그인 실패");
+    }
+  } catch (error) {
+    console.log("로그인 실패:", error);
+    throw error;
+  }
+};
+
+export const fetchSearchTag = async (post_id, searchTerm = "") => {
+  try {
+    //const response = await axios.post("/posts/{post_id}?category-id=&sort=&tag={searchTerm}, post_id, searchTerm);
+    const response = {
+      code: 1103,
+      message: "게시글 조회에 성공하였습니다.",
+      result: {
+        memberInfoId: 0,
+        categoryId: 0,
+        title: "test",
+        content: "test",
+        commentCount: 0,
+        recommendCount: 0,
+        viewCount: 0,
+        createdAt: "생성일자",
+        updatedAt: "수정일자",
+      },
+    };
+
+    if (response.code === 1103) {
+      console.log("조회 성공");
+      return response;
+    } else {
+      throw new Error(response.message || "로그인 실패");
+    }
+  } catch (error) {
+    console.log("로그인 실패:", error);
+    throw error;
   }
 };

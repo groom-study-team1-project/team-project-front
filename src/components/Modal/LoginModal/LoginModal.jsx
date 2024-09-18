@@ -1,59 +1,86 @@
 import React, { useState } from "react";
-import { join } from "../../../services/api";
 import { useNavigate } from "react-router-dom";
 import { Btn, Container, Divider, Form, Logo } from "../Modal.style";
 import { FormInputField } from "../FormInputField";
-import { FindUserBtn } from "./LoginModal.style";
+import { FindUserBtns, FindUserBtn } from "./LoginModal.style";
+import { login } from "../../../services/authApi";
+import logoImg from "../../../assets/images/DEEPDIVERS.png";
 
-export default function LoginModal() {
+export default function LoginModal({ closeModal, changeModal }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-
-  const navigate = useNavigate();
 
   async function handleLogin(e) {
     e.preventDefault();
 
     try {
-      const data = await join(email, password);
-      console.log("success", data);
-    } catch (error) {
-      console.log("failed", error);
-    }
+      let body = { email, password };
 
-    // todo: 로그인 로직
+      const response = await login(body);
+      console.log(response);
+
+      const { accessToken, refreshToken } = response.result;
+
+      localStorage.setItem("accessToken", accessToken);
+
+      closeModal();
+    } catch (err) {
+      console.log(err);
+    }
   }
 
   const handleFindUserId = () => {
-    navigate("/find-user-id");
+    changeModal("findUserId");
   };
 
   const handleFindUserPw = () => {
-    navigate("/find-user-pw");
+    changeModal("findUserPw");
   };
 
   return (
-    <Container width="530px" height="628px">
+    <Container width="496px" height="628px">
       <Logo>
-        <h1>로고 이미지</h1>
+        {/* 임시로 로고이미지 지정해놓음 */}
+        <img src={logoImg} alt="로고 이미지" style={{ width: "288px" }} />
       </Logo>
       <Form action="" method="post" onSubmit={handleLogin}>
-        <FormInputField label={"이메일"} type={"email"} value={email} />
-        <FormInputField label={"비밀번호"} type={"password"} value={password} />
-        <div className="btns">
-          <div
-            className="findUserBtns"
-            style={{ display: "flex", justifyContent: "flex-end" }}
-          >
-            <FindUserBtn onClick={handleFindUserId}>아이디 찾기</FindUserBtn>
-            <FindUserBtn onClick={handleFindUserPw}>비밀번호 찾기</FindUserBtn>
-          </div>
-        </div>
+        <FormInputField
+          label={"이메일"}
+          type={"email"}
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+        />
+        <FormInputField
+          label={"비밀번호"}
+          type={"password"}
+          value={password}
+          onChange={(e) => {
+            setPassword(e.target.value);
+            console.log(e.target.value);
+          }}
+        />
+
         <Btn type="submit" id="loginBtn">
           로그인
         </Btn>
-        <Divider />
-        <Btn id="signUpBtn">회원가입</Btn>
+        <Divider width="80%" />
+
+        <div className="btns">
+          <FindUserBtns>
+            <div>
+              <span style={{ fontSize: "14px" }}>아이디를 잃어버리셨나요?</span>
+              <FindUserBtn onClick={handleFindUserId}>아이디 찾기</FindUserBtn>
+            </div>
+            <div>
+              <span style={{ fontSize: "14px" }}>
+                비밀번호를 잃어버리셨나요?
+              </span>
+              <FindUserBtn onClick={handleFindUserPw}>
+                비밀번호 찾기
+              </FindUserBtn>
+            </div>
+          </FindUserBtns>
+        </div>
       </Form>
     </Container>
   );

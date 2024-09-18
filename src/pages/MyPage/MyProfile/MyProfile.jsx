@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { fetchMyprofileData } from "../../../services/api";
 import {
   Main,
   ProfileHeader,
@@ -13,24 +12,54 @@ import {
   PostCollection,
   ProfileLeft,
 } from "../../../components/Common/PostCollection";
+import { useSelector } from "react-redux";
+import { fetchProfileInfo } from "../../../services/authApi";
+import { useNavigate, useParams } from "react-router-dom";
 
 function MyProfile() {
-  const [myProfile, setProfile] = useState(null);
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const MyprofileData = await fetchMyprofileData();
-        setProfile(MyprofileData.result);
-      } catch (error) {
-        console.error("데이터 가져오는데 실패", error);
-      }
-    };
-    fetchData();
-  }, []);
+  const [profileData, setProfileData] = useState(null);
+  const [isMine, setIsMine] = useState(false);
+  const email = useSelector((state) => state.user.userInfo.email).split("@")[0];
+  const isLoggedIn = useSelector((state) => state.user.isLoggedIn);
+  const [error, setError] = useState(null);
+  let navigate = useNavigate();
 
-  if (!myProfile) {
+  const { id: memberId } = useParams();
+
+  useEffect(() => {
+    if (!isLoggedIn) {
+      return;
+    }
+
+    if (memberId) {
+      fetchProfileInfo(memberId)
+        .then((data) => setProfileData(data))
+        .catch((err) => setError(err));
+    }
+
+    if (email === memberId) {
+      setIsMine(true);
+    } else {
+      setIsMine(false);
+    }
+  }, [memberId, isLoggedIn]);
+
+  if (!isLoggedIn) {
+    return <div>로그인이 필요합니다.</div>;
+  }
+
+  if (error) {
+    return <div>프로필 정보를 불러오는데 실패했습니다.</div>;
+  }
+
+  if (!profileData && isLoggedIn) {
     return <div>Loading...</div>;
   }
+
+  const redirectToEditPage = () => {
+    navigate("/edit");
+  };
+
   return (
     <>
       <Wrap>
@@ -40,15 +69,19 @@ function MyProfile() {
         <Main>
           <ProfileHeader>
             <ProfileLeft
-              nickName={myProfile.userInfo.nickName}
-              job={myProfile.userInfo.Job}
+              nickName={profileData.result.nickname}
+              job={profileData.result.role}
             />
-            <ProfileSetting>프로필 수정</ProfileSetting>
+            {isMine ? (
+              <ProfileSetting onClick={redirectToEditPage}>
+                프로필 수정
+              </ProfileSetting>
+            ) : null}
           </ProfileHeader>
           <hr />
-          <Userintroduce>{myProfile.userInfo.userIntroduce}</Userintroduce>
+          <Userintroduce>{profileData.result.aboutMe}</Userintroduce>
           <hr />
-          <PostCollection myProfile={myProfile} />
+          {isMine ? <PostCollection memberId={memberId} /> : null}
         </Main>
       </Wrap>
     </>
