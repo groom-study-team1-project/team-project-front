@@ -17,7 +17,7 @@ import {
   Interaction,
   InteractionItem,
 } from "../../components/Common/Interactions";
-import { Wrap } from "../../components/WriteBoard/WriteBoard.style";
+import { Wrap } from "../WriteBoard/WriteBoard.style";
 import { deletepost } from "../../services/postApi";
 import {
   CategotyWrap,
@@ -102,8 +102,8 @@ function DetailPage() {
           <PostWrap>
             <Postheader>
               <PostProfileBox
-                name={post.result.memberInfo.nickname}
-                job={post.result.memberInfo.development}
+                name={post.memberInfo.nickname}
+                job={post.memberInfo.development}
               />
               <div>
                 {post.postInfo.isModified ? (
