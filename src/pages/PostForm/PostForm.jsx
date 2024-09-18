@@ -1,5 +1,5 @@
 import { useParams } from "react-router-dom";
-import WriteBoard from "../../components/WriteBoard/WriteBoard";
+import WriteBoard from "../WriteBoard/WriteBoard";
 
 const PostForm = () => {
   const result1 = [
