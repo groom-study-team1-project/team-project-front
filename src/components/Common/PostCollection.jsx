@@ -48,6 +48,7 @@ const ProfileImages = styled(ProfileImage)`
   height: ${(props) => (props.$height ? props.$height : "100px")};
   background-color: lightblue; // 임시 배경색 지정
   border: 2px solid white;
+  margin-right: ${(props) => (props.$marginRight ? props.marginRight : "0")};
 `;
 
 const BoardContentsWrap = styled.div`
@@ -62,12 +63,24 @@ const BoardContent = styled.div`
   margin-left: 75px;
 `;
 
-export const ProfileLeft = ({ width, height, size, bottom, nickName, job }) => {
+export const ProfileLeft = ({
+  width,
+  height,
+  marginRight,
+  size,
+  bottom,
+  nickName,
+  job,
+}) => {
   return (
     <ProfileHeaderLeft>
-      <ProfileImages $width="200px" $height="200px" />
-      <div style={{ marginLeft: "32px" }}>
-        <UserName $size="40px" $bottom={bottom}>
+      <ProfileImages
+        $width={width}
+        $height={height}
+        $marginRight={marginRight}
+      />
+      <div style={{ marginLeft: "24px" }}>
+        <UserName $size={size} $bottom={bottom}>
           {nickName}
         </UserName>
         <div>{job}</div>

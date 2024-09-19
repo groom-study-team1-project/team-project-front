@@ -71,6 +71,9 @@ function MyProfile() {
         <Main>
           <ProfileHeader>
             <ProfileLeft
+              width={"200px"}
+              height={"200px"}
+              marginRight={"32px"}
               nickName={profileData.result.nickname}
               job={profileData.result.role}
             />
