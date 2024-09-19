@@ -16,11 +16,15 @@ import informaitonIcon from "../../assets/images/Help Badge.png";
 import userIcon from "../../assets/images/User.png";
 import questionIcon from "../../assets/images/User Settings.png";
 import fileIcon from "../../assets/images/File Multiple.png";
+import { useDispatch, useSelector } from "react-redux";
+import { selectMenuItem } from "../../store/category/menuSlice";
 
 function Sidebar() {
   const [menuItems, setMenuItems] = useState([]);
-  const [selectedItem, setSelectedItem] = useState(null);
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const selectedItem = useSelector((state) => state.menu?.selectedItem || null);
+  console.log("selected item: ", selectedItem);
 
   useEffect(() => {
     fetchCategoryItems()
@@ -29,7 +33,15 @@ function Sidebar() {
   }, []);
 
   const handleMenuClick = (id) => {
-    setSelectedItem(id);
+    // dispatch(selectMenuItem(id));
+    // handleNavigation(id);
+
+    console.log("Clicked Item ID:", id); // 클릭된 ID 출력
+
+    dispatch(selectMenuItem(id)); // 선택된 메뉴 항목을 상태로 저장
+    console.log("Updated Selected Item:", id); // 상태 업데이트 확인
+
+    handleNavigation(id); // 페이지 이동 처리
   };
 
   const handleNavigation = (id) => {
@@ -68,21 +80,24 @@ function Sidebar() {
       </Logo>
       <SidebarDiv>
         <SidebarUl>
-          {menuItems.map((item) => (
-            <SidebarLi
-              key={item.id}
-              onClick={() => {
-                handleMenuClick(item.id);
-                handleNavigation(item.id);
-              }}
-              isSelected={selectedItem === item.id}
-            >
-              <SidebarLink>
-                {item.item}
-                {iconMapping[item.item]}
-              </SidebarLink>
-            </SidebarLi>
-          ))}
+          {menuItems.length > 0 ? (
+            menuItems.map((item) => (
+              <SidebarLi
+                key={item.id}
+                onClick={() => {
+                  handleMenuClick(item.id);
+                }}
+                isSelected={selectedItem !== null && selectedItem === item.id}
+              >
+                <SidebarLink>
+                  {item.item}
+                  {iconMapping[item.item]}
+                </SidebarLink>
+              </SidebarLi>
+            ))
+          ) : (
+            <li>메뉴를 불러오는 중...</li>
+          )}
         </SidebarUl>
       </SidebarDiv>
     </ContainerDiv>
