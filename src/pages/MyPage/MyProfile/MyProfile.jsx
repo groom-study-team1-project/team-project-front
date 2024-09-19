@@ -80,10 +80,15 @@ function MyProfile() {
               </ProfileSetting>
             ) : null}
           </ProfileHeader>
-          <hr />
-          <Userintroduce>{profileData.result.aboutMe}</Userintroduce>
-          <hr />
-          {isMine ? <PostCollection memberId={memberId} /> : null}
+          <div
+            style={{
+              width: "90%",
+              marginLeft: "5%",
+            }}
+          >
+            <Userintroduce>{profileData.result.aboutMe}</Userintroduce>
+            {isMine ? <PostCollection memberId={memberId} /> : null}
+          </div>
         </Main>
       </Wrap>
     </>

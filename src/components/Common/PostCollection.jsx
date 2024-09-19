@@ -19,8 +19,14 @@ const UserName = styled.div`
 `;
 
 const Mypost = styled.div`
-  border: 1px solid black;
-  margin: 10px;
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.6) 50%,
+    rgba(255, 255, 255, 0.5) 100%
+  );
+  border-radius: 20px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  margin: 24px;
   border-radius: 10px;
   padding: 10px;
 `;
@@ -59,9 +65,9 @@ const BoardContent = styled.div`
 export const ProfileLeft = ({ width, height, size, bottom, nickName, job }) => {
   return (
     <ProfileHeaderLeft>
-      <ProfileImages $width={width} $height={height} />
-      <div>
-        <UserName $size={size} $bottom={bottom}>
+      <ProfileImages $width="200px" $height="200px" />
+      <div style={{ marginLeft: "32px" }}>
+        <UserName $size="40px" $bottom={bottom}>
           {nickName}
         </UserName>
         <div>{job}</div>
