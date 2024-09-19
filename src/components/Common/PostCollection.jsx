@@ -18,6 +18,10 @@ const UserName = styled.div`
   margin-bottom: ${(props) => (props.$bottom ? props.$bottom : "20px")};
 `;
 
+const UserJob = styled.div`
+  font-size: ${(props) => (props.$jobSize ? props.$jobSize : "16px")};
+`;
+
 const Mypost = styled.div`
   background: linear-gradient(
     180deg,
@@ -70,6 +74,7 @@ export const ProfileLeft = ({
   size,
   bottom,
   nickName,
+  jobSize,
   job,
 }) => {
   return (
@@ -83,7 +88,7 @@ export const ProfileLeft = ({
         <UserName $size={size} $bottom={bottom}>
           {nickName}
         </UserName>
-        <div>{job}</div>
+        <UserJob $jobSize={jobSize}>{job}</UserJob>
       </div>
     </ProfileHeaderLeft>
   );
@@ -96,11 +101,12 @@ const BoardContents = ({ contents }) => {
     <BoardContentsWrap key={content.postId}>
       <div style={{ flex: "1" }}>
         <ProfileLeft
-          width={"30px"}
-          height={"30px"}
+          width={"50px"}
+          height={"50px"}
           size={"16px"}
-          bottom={"2px"}
+          bottom={"8px"}
           nickName={userInfo.nickName}
+          jobSize={"8px"}
           job={userInfo.role}
         />
       </div>
