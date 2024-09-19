@@ -30,21 +30,24 @@ const Mypost = styled.div`
     rgba(255, 255, 255, 0.5) 100%
   );
   border-radius: 20px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
   margin: 24px;
   border-radius: 10px;
   padding: 16px;
 `;
 
 const Myboard = styled.div`
-  padding: 10px;
-  border: 1px solid black;
+  padding: 10px 16px;
+  border: 1px solid rgba(0, 0, 0, 0.1);
   margin: 10px;
   display: flex;
   justify-content: space-between;
   border-radius: 8px;
+
   span {
     cursor: pointer;
+    color: #575757;
+    padding-right: 10px;
   }
 `;
 
@@ -175,8 +178,8 @@ export const PostCollection = ({ memberId }) => {
   return (
     <Mypost>
       <div style={{ padding: "10px" }}>
-        <span style={{ fontWeight: "bold" }}>내가 쓴 글</span>
-        <span style={{ fontSize: "12px", paddingLeft: "5px" }}>
+        <span style={{ fontWeight: "bold", fontSize: "17px" }}>내가 쓴 글</span>
+        <span style={{ fontSize: "14px", paddingLeft: "5px" }}>
           {` ${freeBoard.length + projectBoard.length + questionBoard.length}`}
         </span>
       </div>
