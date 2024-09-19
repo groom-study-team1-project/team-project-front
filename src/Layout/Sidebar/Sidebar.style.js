@@ -38,7 +38,7 @@ export const SidebarLi = styled.li`
   border-left: ${(props) => (props.isSelected ? "2px solid #2670E9" : "none")};
 
   &:last-child {
-    border: none;
+    border-bottom: none;
   }
 `;
 
