@@ -33,15 +33,8 @@ function Sidebar() {
   }, []);
 
   const handleMenuClick = (id) => {
-    // dispatch(selectMenuItem(id));
-    // handleNavigation(id);
-
-    console.log("Clicked Item ID:", id); // 클릭된 ID 출력
-
-    dispatch(selectMenuItem(id)); // 선택된 메뉴 항목을 상태로 저장
-    console.log("Updated Selected Item:", id); // 상태 업데이트 확인
-
-    handleNavigation(id); // 페이지 이동 처리
+    dispatch(selectMenuItem(id));
+    handleNavigation(id);
   };
 
   const handleNavigation = (id) => {
