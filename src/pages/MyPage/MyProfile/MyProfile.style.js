@@ -5,8 +5,9 @@ export const Wrap = styled.div`
   justify-content: center;
   flex-direction: column;
   align-items: center;
-  height: 100vh;
+  max-height: 100vh;
   background-color: #acb6e5; // 임시로 배경 지정
+  padding: 48px 24px;
 `;
 
 export const Main = styled.div`

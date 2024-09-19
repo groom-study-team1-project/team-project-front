@@ -20,6 +20,7 @@ const UserName = styled.div`
 
 const UserJob = styled.div`
   font-size: ${(props) => (props.$jobSize ? props.$jobSize : "16px")};
+  color: ${(props) => (props.$color ? props.$color : "black")};
 `;
 
 const Mypost = styled.div`
@@ -32,7 +33,7 @@ const Mypost = styled.div`
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
   margin: 24px;
   border-radius: 10px;
-  padding: 10px;
+  padding: 16px;
 `;
 
 const Myboard = styled.div`
@@ -75,6 +76,7 @@ export const ProfileLeft = ({
   bottom,
   nickName,
   jobSize,
+  color,
   job,
 }) => {
   return (
@@ -88,7 +90,9 @@ export const ProfileLeft = ({
         <UserName $size={size} $bottom={bottom}>
           {nickName}
         </UserName>
-        <UserJob $jobSize={jobSize}>{job}</UserJob>
+        <UserJob $jobSize={jobSize} $color={color}>
+          {job}
+        </UserJob>
       </div>
     </ProfileHeaderLeft>
   );
@@ -99,14 +103,15 @@ const BoardContents = ({ contents }) => {
 
   return contents.map((content) => (
     <BoardContentsWrap key={content.postId}>
-      <div style={{ flex: "1" }}>
+      <div style={{ flex: "1.2" }}>
         <ProfileLeft
           width={"50px"}
           height={"50px"}
-          size={"16px"}
+          size={"14px"}
           bottom={"8px"}
           nickName={userInfo.nickName}
-          jobSize={"8px"}
+          jobSize={"10px"}
+          color={"#828282"}
           job={userInfo.role}
         />
       </div>
@@ -169,9 +174,9 @@ export const PostCollection = ({ memberId }) => {
 
   return (
     <Mypost>
-      <div>
-        <span>내가 쓴 글</span>
-        <span>
+      <div style={{ padding: "10px" }}>
+        <span style={{ fontWeight: "bold" }}>내가 쓴 글</span>
+        <span style={{ fontSize: "12px", paddingLeft: "5px" }}>
           {` ${freeBoard.length + projectBoard.length + questionBoard.length}`}
         </span>
       </div>
