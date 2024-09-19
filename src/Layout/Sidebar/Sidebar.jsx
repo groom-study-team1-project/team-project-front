@@ -9,6 +9,7 @@ import {
 } from "./Sidebar.style";
 import { useNavigate } from "react-router-dom";
 import { fetchCategoryItems } from "../../services/postApi";
+import logoImg from "../../assets/images/DEEPDIVERS.png";
 
 function Sidebar() {
   const [menuItems, setMenuItems] = useState([]);
@@ -38,7 +39,7 @@ function Sidebar() {
   return (
     <ContainerDiv>
       <Logo onClick={() => handleNavigation(5)}>
-        <h2>로고이미지</h2>
+        <img src={logoImg} alt="로고 이미지" style={{ width: "128px" }} />
       </Logo>
       <SidebarDiv>
         <SidebarUl>
