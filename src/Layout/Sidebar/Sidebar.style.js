@@ -31,6 +31,15 @@ export const SidebarLi = styled.li`
   padding: 1rem 0;
   cursor: pointer;
   border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  background: ${(props) =>
+    props.isSelected
+      ? "-webkit-linear-gradient(45deg, rgba(38, 112, 233, 0.5) 0%, #ffffff 100%)"
+      : "transparent"};
+  border-left: ${(props) => (props.isSelected ? "2px solid #2670E9" : "none")};
+
+  &:last-child {
+    border: none;
+  }
 `;
 
 export const SidebarLink = styled.div`

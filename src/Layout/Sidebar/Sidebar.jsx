@@ -19,6 +19,7 @@ import fileIcon from "../../assets/images/File Multiple.png";
 
 function Sidebar() {
   const [menuItems, setMenuItems] = useState([]);
+  const [selectedItem, setSelectedItem] = useState(null);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -26,6 +27,10 @@ function Sidebar() {
       .then((menuItems) => setMenuItems(menuItems))
       .catch((err) => console.log(err.message));
   }, []);
+
+  const handleMenuClick = (id) => {
+    setSelectedItem(id);
+  };
 
   const handleNavigation = (id) => {
     console.log(id);
@@ -64,7 +69,14 @@ function Sidebar() {
       <SidebarDiv>
         <SidebarUl>
           {menuItems.map((item) => (
-            <SidebarLi key={item.id} onClick={() => handleNavigation(item.id)}>
+            <SidebarLi
+              key={item.id}
+              onClick={() => {
+                handleMenuClick(item.id);
+                handleNavigation(item.id);
+              }}
+              isSelected={selectedItem === item.id}
+            >
               <SidebarLink>
                 {item.item}
                 {iconMapping[item.item]}
