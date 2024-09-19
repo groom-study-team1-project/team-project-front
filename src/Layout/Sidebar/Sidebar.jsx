@@ -55,7 +55,11 @@ function Sidebar() {
   return (
     <ContainerDiv>
       <Logo onClick={() => handleNavigation(5)}>
-        <img src={logoImg} alt="로고 이미지" style={{ width: "128px" }} />
+        <img
+          src={logoImg}
+          alt="로고 이미지"
+          style={{ width: "128px", margin: "16px" }}
+        />
       </Logo>
       <SidebarDiv>
         <SidebarUl>
