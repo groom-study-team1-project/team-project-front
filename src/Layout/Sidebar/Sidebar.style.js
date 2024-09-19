@@ -30,12 +30,13 @@ export const SidebarLi = styled.li`
   margin-bottom: 1rem;
   padding: 1rem 0;
   cursor: pointer;
-  border: 1px solid black;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
 `;
 
 export const SidebarLink = styled.div`
   text-decoration: none;
   color: black;
+  margin-left: 8px;
 `;
 
 export const SidebarIcon = styled.img`
