@@ -8,7 +8,7 @@ import commentsubmit from "../../assets/images/commentsubmit.png";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEllipsisVertical } from "@fortawesome/free-solid-svg-icons";
 import { fetchcomment, createcomment } from "../../services/api";
-import { fetchPostdetail } from "../../services/postApi";
+import { fetchPostDetail } from "../../services/postApi";
 import {
   PostProfileBox,
   ProfileImage,
@@ -51,10 +51,11 @@ function DetailPage() {
   const [modalcurrent, setModalcurrnet] = useState(false);
   const modalRef = useRef(null);
   const navigate = useNavigate();
+
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const postResponse = await fetchPostdetail();
+        const postResponse = await fetchPostDetail();
         const commentsResponse = await fetchcomment();
 
         setPost(postResponse);
@@ -121,7 +122,7 @@ function DetailPage() {
                         <Modal ref={modalRef}>
                           <div
                             onClick={() => {
-                              navigate(`/editpost/${1}`);
+                              navigate(`/board/edit/${1}`);
                             }}
                           >
                             수정

@@ -15,13 +15,13 @@ export const createPost = async (body, token) => {
   }
 };
 
-export const fetchPostdetail = async (postId) => {
-  const result1 = {
+export const fetchPostDetail = async (postId) => {
+  const response = {
     code: 1201,
     message: "게시글 조회에 성공하였습니다.",
     result: {
       categoryInfo: {
-        id: 1,
+        id: 2,
         title: "프로젝트 자랑 게시판",
       },
       memberInfo: {
@@ -59,8 +59,14 @@ export const fetchPostdetail = async (postId) => {
   };
   try {
     //const result = await axios.get(`/posts/${postId}`);
+    if (response.code === 1201) {
+      return response.result;
+    } else {
+      throw new Error(
+        response.message || "게시글을 불러올 수 없거나 존재하지 않습니다."
+      );
+    }
     console.log("result", result1);
-    return result1.result;
   } catch (error) {
     console.log(error);
   }
