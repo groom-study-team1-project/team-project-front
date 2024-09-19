@@ -2,10 +2,8 @@ import styled from "styled-components";
 
 export const ContainerDiv = styled.div`
   max-height: 1080px;
-  height: 90vh;
+  height: 100vh;
   width: 314px;
-  // container border는 원래 없는 거라서 스켈레톤에서만 보임
-  border-right: 1px solid gray;
 `;
 
 export const SidebarDiv = styled.div`
