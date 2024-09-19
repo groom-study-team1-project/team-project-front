@@ -5,11 +5,11 @@ import FreeBoard from "../pages/Board/FreeBoard/FreeBoard";
 import QuestionBoard from "../pages/Board/QuestionBoard/QuestionBoard";
 import NoticeBoard from "../pages/Board/NoticeBoard/NoticeBoard";
 import EditProfile from "../pages/MyPage/EditProfile/EditProfile";
-import DetailPage from "../pages/DetailPage/DetailPage";
+import BoardDetail from "../pages/Board/BoardDetail/BoardDetail";
 import ProjectBoard from "../pages/Board/ProjectBoard/ProjectBoard";
 import Background from "../Layout/Background/Background";
 import BoardLayout from "../Layout/BoardLayout/BoardLayout";
-import WriteBoard from "../pages/WriteBoard/WriteBoard";
+import BoardWrite from "../pages/Board/BoardWrite/BoardWrite";
 
 function Router() {
   return (
@@ -23,9 +23,9 @@ function Router() {
             <Route path="projects" element={<ProjectBoard />} />
             <Route path="notices" element={<NoticeBoard />} />
           </Route>
-          <Route path="detail" element={<DetailPage />} />
-          <Route path="write" element={<WriteBoard />} />
-          <Route path="edit/:postId" element={<WriteBoard />} />
+          <Route path="detail" element={<BoardDetail />} />
+          <Route path="write" element={<BoardWrite />} />
+          <Route path="edit/:postId" element={<BoardWrite />} />
         </Route>
         <Route path="/my-page">
           <Route path=":id" element={<MyProfile />} />

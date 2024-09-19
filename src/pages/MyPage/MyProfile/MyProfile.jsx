@@ -57,7 +57,7 @@ function MyProfile() {
   }
 
   const redirectToEditPage = () => {
-    navigate("/edit");
+    navigate("/my-page/edit");
   };
 
   return (

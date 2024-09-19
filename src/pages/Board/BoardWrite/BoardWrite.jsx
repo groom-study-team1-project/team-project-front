@@ -8,8 +8,8 @@ import {
   createPost,
   fetchPostChange,
   fetchPostDetail,
-} from "../../services/postApi";
-import backBtn from "../../assets/images/back-removebg-preview.png";
+} from "../../../services/postApi";
+import backBtn from "../../../assets/images/back-removebg-preview.png";
 import {
   BackImg,
   Categoryselect,
@@ -24,9 +24,9 @@ import {
   Wrap,
   Write,
   WriteWrap,
-} from "./WriteBoard.style";
+} from "./BoardWrite.style";
 
-const WriteBoard = () => {
+const BoardWrite = () => {
   const navigate = useNavigate();
   const [formValue, setFormValue] = useState({
     title: "",
@@ -222,4 +222,4 @@ const WriteBoard = () => {
   );
 };
 
-export default WriteBoard;
+export default BoardWrite;
