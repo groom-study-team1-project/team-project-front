@@ -20,6 +20,7 @@ import FindUserPw from "../../components/Modal/FindUserPwModal/FindUserPw";
 import { logout } from "../../services/authApi";
 import { fetchCategoryItems } from "../../services/postApi";
 import { logout as logoutAction } from "../../store/user/userSlice";
+import logoImg from "../../assets/images/DEEPDIVERS.png";
 
 Modal.setAppElement("#root");
 
@@ -86,7 +87,13 @@ function Navbar({ isMainPage = false }) {
   return (
     <NavbarWrapper>
       <NavbarInner>
-        {isMainPage ? <Logo>로고</Logo> : <NonLogo />}
+        {isMainPage ? (
+          <Logo>
+            <img src={logoImg} alt="로고 이미지" style={{ width: "128px" }} />
+          </Logo>
+        ) : (
+          <NonLogo />
+        )}
 
         {isMainPage && (
           <Menu>

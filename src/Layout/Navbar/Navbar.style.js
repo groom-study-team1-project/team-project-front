@@ -5,7 +5,6 @@ export const NavbarWrapper = styled.nav`
   justify-content: center;
   width: 100%;
   height: 80px;
-  border: 1px solid #111;
 `;
 
 export const NavbarInner = styled.div`
@@ -23,7 +22,6 @@ export const Logo = styled.div`
   align-items: center;
   width: 136px;
   height: 38px;
-  border: 1px solid #111;
 `;
 
 export const NonLogo = styled(Logo)`
