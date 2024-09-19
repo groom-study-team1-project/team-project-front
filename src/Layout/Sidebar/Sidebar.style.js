@@ -37,3 +37,8 @@ export const SidebarLink = styled.div`
   text-decoration: none;
   color: black;
 `;
+
+export const SidebarIcon = styled.img`
+  float: right;
+  margin-right: 16px;
+`;

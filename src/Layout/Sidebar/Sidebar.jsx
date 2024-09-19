@@ -3,6 +3,7 @@ import {
   ContainerDiv,
   Logo,
   SidebarDiv,
+  SidebarIcon,
   SidebarLi,
   SidebarLink,
   SidebarUl,
@@ -10,6 +11,11 @@ import {
 import { useNavigate } from "react-router-dom";
 import { fetchCategoryItems } from "../../services/postApi";
 import logoImg from "../../assets/images/DEEPDIVERS.png";
+import cardIcon from "../../assets/images/Card.png";
+import informaitonIcon from "../../assets/images/Help Badge.png";
+import userIcon from "../../assets/images/User.png";
+import questionIcon from "../../assets/images/User Settings.png";
+import fileIcon from "../../assets/images/File Multiple.png";
 
 function Sidebar() {
   const [menuItems, setMenuItems] = useState([]);
@@ -36,6 +42,16 @@ function Sidebar() {
     }
   };
 
+  const iconMapping = {
+    "HOT 게시판": <SidebarIcon src={userIcon} alt="HOT 게시판 아이콘" />,
+    "자유 게시판": <SidebarIcon src={cardIcon} alt="자유 게시판 아이콘" />,
+    "프로젝트 게시판": (
+      <SidebarIcon src={fileIcon} alt="프로젝트 게시판 아이콘" />
+    ),
+    "질문 게시판": <SidebarIcon src={questionIcon} alt="질문 게시판 아이콘" />,
+    공지사항: <SidebarIcon src={informaitonIcon} alt="공지사항 아이콘" />,
+  };
+
   return (
     <ContainerDiv>
       <Logo onClick={() => handleNavigation(5)}>
@@ -45,7 +61,10 @@ function Sidebar() {
         <SidebarUl>
           {menuItems.map((item) => (
             <SidebarLi key={item.id} onClick={() => handleNavigation(item.id)}>
-              <SidebarLink>{item.item}</SidebarLink>
+              <SidebarLink>
+                {item.item}
+                {iconMapping[item.item]}
+              </SidebarLink>
             </SidebarLi>
           ))}
         </SidebarUl>
