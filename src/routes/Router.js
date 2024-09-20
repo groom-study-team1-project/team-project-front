@@ -23,7 +23,7 @@ function Router() {
             <Route path="projects" element={<ProjectBoard />} />
             <Route path="notices" element={<NoticeBoard />} />
           </Route>
-          <Route path="detail" element={<BoardDetail />} />
+          <Route path="detail/:postId" element={<BoardDetail />} />
           <Route path="write" element={<BoardWrite />} />
           <Route path="edit/:postId" element={<BoardWrite />} />
         </Route>

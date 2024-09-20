@@ -30,6 +30,7 @@ function ProjectBoard() {
         {postItems.map((postItem) => (
           <ProjectPostCard
             key={postItem.id}
+            id={postItem.id}
             title={postItem.title}
             content={postItem.content}
             name={postItem.name}

@@ -30,6 +30,7 @@ function FreeBoard() {
         {postItems.map((postItem) => (
           <CommunityPostCard
             key={postItem.id}
+            id={postItem.id}
             title={postItem.title}
             content={postItem.content}
             name={postItem.name}

@@ -34,7 +34,7 @@ function Navbar({ isMainPage = false }) {
   );
 
   const dispatch = useDispatch();
-  let navigate = useNavigate();
+  const navigate = useNavigate();
 
   useEffect(() => {
     fetchCategoryItems()
@@ -60,7 +60,7 @@ function Navbar({ isMainPage = false }) {
     if (to === "my-profile") {
       navigate(`/my-page/${email}`);
     } else if (to === "write") {
-      navigate("board/write");
+      navigate("/board/write");
     }
   };
 
