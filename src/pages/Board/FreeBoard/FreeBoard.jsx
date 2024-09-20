@@ -36,6 +36,7 @@ function FreeBoard() {
             name={postItem.name}
             job={postItem.job}
             count={postItem.count}
+            img={postItem.imgUrl}
           />
         ))}
       </PostCardWrapper>
