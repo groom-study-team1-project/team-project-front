@@ -42,9 +42,10 @@ function Navbar({ isMainPage = false }) {
       .catch((err) => console.log(err.message));
   }, []);
 
-  const handleNavigation = (id, e) => {
+  const handleBoardNavigation = (id, e) => {
     console.log(id);
-    if (id === 1) {
+    if (id === 0) {
+    } else if (id === 1) {
       navigate("/board/free");
     } else if (id === 2) {
       navigate("/board/questions");
@@ -52,13 +53,15 @@ function Navbar({ isMainPage = false }) {
       navigate("/board/projects");
     } else if (id === 4) {
       navigate("/board/notices");
-    } else if (id == 5) {
-      navigate("/");
     }
   };
 
-  const redirectToMyPage = () => {
-    navigate(`/my-page/${email}`);
+  const handleNavigation = (to, e) => {
+    if (to === "my-profile") {
+      navigate(`/my-page/${email}`);
+    } else if (to === "write") {
+      navigate("board/write");
+    }
   };
 
   async function handleLogout(e) {
@@ -92,7 +95,10 @@ function Navbar({ isMainPage = false }) {
         {isMainPage && (
           <Menu>
             {menuItems.map((item) => (
-              <MenuItem key={item.id} onClick={() => handleNavigation(item.id)}>
+              <MenuItem
+                key={item.id}
+                onClick={() => handleBoardNavigation(item.id)}
+              >
                 {item.item}
               </MenuItem>
             ))}
@@ -101,9 +107,11 @@ function Navbar({ isMainPage = false }) {
 
         {isLoggedIn ? (
           <ButtonBox>
-            <Button>글쓰기</Button>
+            <Button onClick={() => handleNavigation("write")}>글쓰기</Button>
             <Button onClick={handleLogout}>다크모드</Button>
-            <Button onClick={redirectToMyPage}>프로필</Button>
+            <Button onClick={() => handleNavigation("my-profile")}>
+              프로필
+            </Button>
           </ButtonBox>
         ) : (
           <ButtonBox>
