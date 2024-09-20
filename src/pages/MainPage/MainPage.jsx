@@ -22,7 +22,7 @@ function MainPage() {
 
   const handleNavigation = () => {
     console.log(11);
-    navigate("/community/free");
+    navigate("/board/free");
   };
 
   return (

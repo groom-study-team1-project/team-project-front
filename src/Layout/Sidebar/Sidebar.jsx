@@ -40,13 +40,13 @@ function Sidebar() {
   const handleNavigation = (id) => {
     console.log(id);
     if (id === 1) {
-      navigate("/community/free");
+      navigate("/board/free");
     } else if (id === 2) {
-      navigate("/community/questions");
+      navigate("/board/questions");
     } else if (id === 3) {
-      navigate("/community/projects");
+      navigate("/board/projects");
     } else if (id === 4) {
-      navigate("/community/notices");
+      navigate("/board/notices");
     } else if (id == 5) {
       navigate("/");
     }

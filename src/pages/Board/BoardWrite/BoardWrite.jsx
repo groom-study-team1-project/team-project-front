@@ -1,12 +1,15 @@
 import React, { useEffect, useRef, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { CKEditor } from "@ckeditor/ckeditor5-react";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPhotoFilm } from "@fortawesome/free-solid-svg-icons";
-import GlobalStyle from "../../assets/styles/GlobalStyle";
-import { createPost, fetchPostChange } from "../../services/postApi";
-import backBtn from "../../assets/images/back-removebg-preview.png";
+import {
+  createPost,
+  fetchPostChange,
+  fetchPostDetail,
+} from "../../../services/postApi";
+import backBtn from "../../../assets/images/back-removebg-preview.png";
 import {
   BackImg,
   Categoryselect,
@@ -21,27 +24,47 @@ import {
   Wrap,
   Write,
   WriteWrap,
-} from "./WriteBoard.style";
+} from "./BoardWrite.style";
 
-const WriteBoard = ({ postData, postId }) => {
+const BoardWrite = () => {
   const navigate = useNavigate();
-  const [form, setValue] = useState({ title: "", content: "", hashtags: [] });
+  const [formValue, setFormValue] = useState({
+    title: "",
+    content: "",
+    hashtags: [],
+  });
+  const [postData, setPostData] = useState(null);
   const [selectedCategory, setSelectedCategory] = useState(0);
   const [imgUrls, setImgUrls] = useState([]); // State to store multiple image URLs
   const fileInput = useRef(null);
+  const { postId } = useParams();
 
   useEffect(() => {
-    if (postData) {
-      setValue({
-        title: postData.postInfo.title || "",
-        content: postData.postInfo.content || "",
-        hashtags: postData.postInfo.hashtags || [],
-      });
-      setSelectedCategory(postData.categoryInfo.id);
-      const imgurl = postData.postInfo.imgUrl.map((img) => img.url);
-      setImgUrls(imgurl);
+    const fetchData = async () => {
+      try {
+        const response = await fetchPostDetail(postId);
+        setPostData(response);
+
+        setFormValue({
+          title: response.postInfo.title || "",
+          content: response.postInfo.content || "",
+          hashtags: response.postInfo.hashtags || [],
+        });
+
+        setSelectedCategory(response.categoryInfo.id);
+
+        const imgurl = response.postInfo.imgUrl.map((img) => img.url);
+        setImgUrls(imgurl);
+      } catch (error) {
+        console.error("데이터를 가져오는데 실패", error);
+      }
+    };
+
+    if (postId) {
+      fetchData();
     }
-  }, [postData]);
+  }, []);
+
   const handleCategoryChange = (e) => {
     setSelectedCategory(e.target.value);
   };
@@ -65,48 +88,44 @@ const WriteBoard = ({ postData, postId }) => {
       reader.readAsDataURL(file);
     });
   };
-  const handlehashtag = (e) => {
+
+  const handleHashTag = (e) => {
     const hashtagStr = e.target.hashtag.value;
     const hashtagArray = hashtagStr
       .split(" ")
       .filter((item) => item.startsWith("#"));
-    setValue({ ...form, hashtags: hashtagArray });
+    setFormValue({ ...formValue, hashtags: hashtagArray });
   };
 
   const onChange = (e) => {
-    setValue({ ...form, title: e.target.value });
+    setFormValue({ ...formValue, title: e.target.value });
   };
 
   const onSubmit = async (e) => {
-    await e.preventDefault();
+    e.preventDefault();
+
     try {
+      const { title, content, hashtags } = formValue;
+      const category_id = Number(selectedCategory);
+
+      let body = { title, content, hashtags, category_id };
+
+      if (category_id === 2) {
+        body.imgUrls = imgUrls;
+      }
+
       if (postData) {
-        const { title, content, hashtags } = form;
-        let body = {};
-        const category_id = Number(selectedCategory);
-        if (category_id === 2) {
-          body = { title, content, hashtags, category_id, imgUrls };
-        } else {
-          body = { title, content, hashtags, category_id };
-        }
         await fetchPostChange(body, postId);
       } else {
-        const { title, content, hashtags } = form;
-        let body = {};
-        const category_id = Number(selectedCategory);
-        if (category_id === 2) {
-          body = { title, content, hashtags, category_id, imgUrls };
-        } else {
-          body = { title, content, hashtags, category_id };
-        }
         await createPost(body);
       }
-    } catch (error) {}
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
     <>
-      <GlobalStyle />
       <Wrap>
         <WriteWrap>
           <BackImg
@@ -125,7 +144,7 @@ const WriteBoard = ({ postData, postId }) => {
                 type="text"
                 placeholder="제목을 입력하세요"
                 onChange={onChange}
-                value={form.title}
+                value={formValue.title}
               />
             </span>
             <span>
@@ -166,7 +185,7 @@ const WriteBoard = ({ postData, postId }) => {
             config={{
               placeholder: "내용을 입력하세요.",
             }}
-            data={form.content}
+            data={formValue.content}
             onReady={(editor) => {
               // console.log("Editor is ready to use!", editor);
             }}
@@ -176,7 +195,7 @@ const WriteBoard = ({ postData, postId }) => {
             }}
             onBlur={(event, editor) => {
               const data = editor.getData();
-              setValue({ ...form, content: data });
+              setFormValue({ ...formValue, content: data });
             }}
             onFocus={(event, editor) => {
               // console.log("Focus.", editor);
@@ -186,8 +205,8 @@ const WriteBoard = ({ postData, postId }) => {
             type="text"
             placeholder="#태그입력"
             name="hashtag"
-            onChange={handlehashtag}
-            value={form.hashtags.join(" ")}
+            onChange={handleHashTag}
+            value={formValue.hashtags.join(" ")}
           />
           <SubmitBtnWrap>
             <SubmitBtn $borderColor="#929292" $bgColor="transparent">
@@ -203,4 +222,4 @@ const WriteBoard = ({ postData, postId }) => {
   );
 };
 
-export default WriteBoard;
+export default BoardWrite;
