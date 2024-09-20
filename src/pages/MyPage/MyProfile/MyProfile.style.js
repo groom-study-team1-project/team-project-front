@@ -6,7 +6,6 @@ export const Wrap = styled.div`
   flex-direction: column;
   align-items: center;
   max-height: 100vh;
-  background-color: #acb6e5; // 임시로 배경 지정
   padding: 48px 24px;
 `;
 
