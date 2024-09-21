@@ -106,6 +106,7 @@ function BoardDetail() {
               <PostProfileBox
                 name={post.memberInfo.nickname}
                 job={post.memberInfo.development}
+                email={post.memberInfo.email}
               />
               <div>
                 {post.postInfo.isModified ? (

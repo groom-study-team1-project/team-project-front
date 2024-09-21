@@ -28,6 +28,7 @@ export const fetchPostDetail = async (postId) => {
         Id: 0,
         nickname: "MogensEgeskov",
         development: "iOS Developer",
+        email: "lkjj",
         imageUrl: "~~~",
       },
       postInfo: {
@@ -66,7 +67,6 @@ export const fetchPostDetail = async (postId) => {
         response.message || "게시글을 불러올 수 없거나 존재하지 않습니다."
       );
     }
-    console.log("result", result1);
   } catch (error) {
     console.log(error);
   }
