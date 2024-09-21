@@ -30,12 +30,13 @@ export const ProfileInfoJob = styled.p`
 export const PostProfileBox = ({ name, job, email }) => {
   const navigate = useNavigate();
 
-  const handleProfileClick = () => {
+  const handleProfileClick = (e) => {
+    e.stopPropagation();
     navigate(`/my-page/${email}`);
   };
 
   return (
-    <ProfileWrapper onClick={handleProfileClick}>
+    <ProfileWrapper onClick={(e) => handleProfileClick(e)}>
       <ProfileImage />
       <ProfileInfo>
         <ProfileInfoName>{name}</ProfileInfoName>
