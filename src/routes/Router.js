@@ -28,8 +28,10 @@ function Router() {
           <Route path="edit/:postId" element={<BoardWrite />} />
         </Route>
         <Route path="/my-page">
-          <Route path=":id" element={<MyProfile />} />
-          <Route path="edit" element={<EditProfile />} />
+          <Route element={<BoardLayout isMyPage={true} />}>
+            <Route path=":id" element={<MyProfile />} />
+            <Route path="edit" element={<EditProfile />} />
+          </Route>
         </Route>
       </Route>
     </Routes>
