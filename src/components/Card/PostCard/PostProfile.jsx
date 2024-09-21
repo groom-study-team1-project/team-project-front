@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import { useNavigate } from "react-router-dom";
 
 export const ProfileWrapper = styled.div`
   display: flex;
@@ -26,15 +27,23 @@ export const ProfileInfoJob = styled.p`
   font-size: ${({ isbig }) => (isbig ? "24px" : "13px")};
 `;
 
-export const PostProfileBox = ({ name, job }) => (
-  <ProfileWrapper>
-    <ProfileImage />
-    <ProfileInfo>
-      <ProfileInfoName>{name}</ProfileInfoName>
-      <ProfileInfoJob>{job}</ProfileInfoJob>
-    </ProfileInfo>
-  </ProfileWrapper>
-);
+export const PostProfileBox = ({ name, job, email }) => {
+  const navigate = useNavigate();
+
+  const handleProfileClick = () => {
+    navigate(`/my-page/${email}`);
+  };
+
+  return (
+    <ProfileWrapper onClick={handleProfileClick}>
+      <ProfileImage />
+      <ProfileInfo>
+        <ProfileInfoName>{name}</ProfileInfoName>
+        <ProfileInfoJob>{job}</ProfileInfoJob>
+      </ProfileInfo>
+    </ProfileWrapper>
+  );
+};
 
 export const EditProfileBox = ({ name, job }) => (
   <ProfileWrapper>

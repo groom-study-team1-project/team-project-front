@@ -4,8 +4,11 @@ export async function fetchPostItems() {
       id: 1,
       title: "Title",
       content: "This is content.",
-      name: "John Doe",
-      job: "Software Engineer",
+      author: {
+        name: "John Doe",
+        job: "Software Engineer",
+        email: "sgerr",
+      },
       count: {
         view: 12,
         like: 23,
@@ -30,8 +33,11 @@ export async function fetchPostItems() {
       id: 2,
       title: "Title",
       content: "This is content.",
-      name: "John Doe",
-      job: "Software Engineer",
+      author: {
+        name: "John Doe",
+        job: "Software Engineer",
+        email: "sgerr",
+      },
       count: {
         view: 12,
         like: 23,
@@ -56,8 +62,11 @@ export async function fetchPostItems() {
       id: 3,
       title: "Title",
       content: "This is content.",
-      name: "John Doe",
-      job: "Software Engineer",
+      author: {
+        name: "John Doe",
+        job: "Software Engineer",
+        email: "sgerr",
+      },
       count: {
         view: 12,
         like: 23,
@@ -82,8 +91,11 @@ export async function fetchPostItems() {
       id: 4,
       title: "Title",
       content: "This is content.",
-      name: "John Doe",
-      job: "Software Engineer",
+      author: {
+        name: "John Doe",
+        job: "Software Engineer",
+        email: "sgerr",
+      },
       count: {
         view: 12,
         like: 23,
@@ -108,8 +120,11 @@ export async function fetchPostItems() {
       id: 5,
       title: "Title",
       content: "This is content.",
-      name: "John Doe",
-      job: "Software Engineer",
+      author: {
+        name: "John Doe",
+        job: "Software Engineer",
+        email: "sgerr",
+      },
       count: {
         view: 12,
         like: 23,

@@ -17,6 +17,7 @@ function CommunityPostCard({
   content,
   name,
   job,
+  email,
   count = { view: 0, like: 0, comment: 0 },
   img,
 }) {
@@ -43,11 +44,11 @@ function CommunityPostCard({
     <PostCardWrapper height="232px" onClick={handleNavigation}>
       <InnerContainer>
         <Thumbnail>
-          <img src={img[imgIndex].url} alt={`img ${imgIndex}`} />
+          {img ? <img src={img[imgIndex].url} alt={`img ${imgIndex}`} /> : null}
         </Thumbnail>
         <CustomBody>
           <PostActions>
-            <PostProfileBox name={name} job={job} />
+            <PostProfileBox name={name} job={job} email={email} />
             <Interaction count={count} />
           </PostActions>
           <ContentBox>

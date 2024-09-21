@@ -30,11 +30,14 @@ function QuestionBoard() {
         {postItems.map((postItem) => (
           <CommunityPostCard
             key={postItem.id}
+            id={postItem.id}
             title={postItem.title}
             content={postItem.content}
-            name={postItem.name}
-            job={postItem.job}
+            name={postItem.author.name}
+            job={postItem.author.job}
+            email={postItem.author.email}
             count={postItem.count}
+            img={postItem.imgUrl}
           />
         ))}
       </PostCardWrapper>
