@@ -5,7 +5,7 @@ export const Container = styled.div`
   height: 100%;
 
   canvas {
-    position: absolute;
+    position: fixed;
     top: 0;
     left: 0;
     z-index: -1;
