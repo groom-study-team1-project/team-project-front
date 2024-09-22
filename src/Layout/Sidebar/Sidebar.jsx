@@ -24,7 +24,6 @@ function Sidebar() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const selectedItem = useSelector((state) => state.menu?.selectedItem || null);
-  console.log("selected item: ", selectedItem);
 
   useEffect(() => {
     fetchCategoryItems()
