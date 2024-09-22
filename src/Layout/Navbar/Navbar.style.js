@@ -38,9 +38,14 @@ export const Menu = styled.div`
 export const MenuItem = styled.div`
   margin-right: 20px;
   cursor: pointer;
+  transition: transform 0.2s;
 
   &:last-child {
     margin-right: 0;
+  }
+
+  &:hover {
+    transform: scale(1.08);
   }
 `;
 
