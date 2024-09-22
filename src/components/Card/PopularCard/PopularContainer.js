@@ -1,5 +1,6 @@
 import React from "react";
 import styled from "styled-components";
+import { Divider } from "../Card.style";
 
 export const Container = styled.div`
   width: 256px;
@@ -15,22 +16,6 @@ export const ContainerTitle = styled.h2`
   font-size: 16px;
   margin-top: 4px;
   color: #333;
-`;
-
-export const Divider = styled.div`
-  margin-top: 8px;
-  margin-bottom: 8px;
-  height: 1px;
-  background: linear-gradient(
-    to right,
-    rgba(0, 0, 0, 0),
-    rgba(0, 0, 0, 0.4),
-    rgba(0, 0, 0, 0)
-  );
-
-  &:nth-last-child(1) {
-    margin-bottom: 20px;
-  }
 `;
 
 export const PopularContainer = ({ text, children }) => {

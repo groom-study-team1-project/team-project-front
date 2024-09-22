@@ -10,6 +10,7 @@ import {
 import { PostProfileBox } from "../PostProfile";
 import { CustomBody } from "./CommunityPostCard.style";
 import { useNavigate } from "react-router-dom";
+import { Divider } from "../../Card.style";
 
 function CommunityPostCard({
   id,
@@ -54,10 +55,13 @@ function CommunityPostCard({
               <PostProfileBox name={name} job={job} email={email} />
               <Interaction count={count} />
             </PostActions>
+            <Divider />
             <ContentBox>
               <p>{title}</p>
               <p>{content}</p>
             </ContentBox>
+            <Divider />
+
             <ArrowButton
               handlePrevImage={(e) => handlePrevImage(e)}
               handleNextImage={(e) => handleNextImage(e)}

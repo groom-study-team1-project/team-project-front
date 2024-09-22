@@ -2,18 +2,15 @@ import styled from "styled-components";
 
 export const ContentBox = styled.div`
   flex-grow: 1;
-  height: 120px;
-  border-top: 1px solid;
-  border-bottom: 1px solid;
-  padding: 10px 0;
-  margin: 10px 0 10px 0;
+  //padding: 10px 0;
+  //margin: 10px 0 10px 0;
 `;
 
 export const Thumbnail = styled.div`
   flex-grow: 1;
   max-width: 260px;
-  border: 1px solid;
-
+  border-radius: 10px;
+  overflow: hidden;
   img {
     width: 100%;
     height: 100%;
@@ -38,7 +35,7 @@ export const InnerContainer = styled.div`
   display: flex;
   flex-direction: ${({ direction }) => direction || "row"};
   flex-grow: 1;
-  padding: 10px;
+  padding: 16px;
   border-radius: 10px;
   background: linear-gradient(
     to bottom,
