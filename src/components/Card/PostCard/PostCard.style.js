@@ -11,6 +11,9 @@ export const Thumbnail = styled.div`
   max-width: 260px;
   border-radius: 10px;
   overflow: hidden;
+  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.05), 0 15px 30px rgba(0, 0, 0, 0.15),
+    0 20px 40px rgba(0, 0, 0, 0.25);
+
   img {
     width: 100%;
     height: 100%;
@@ -42,6 +45,8 @@ export const InnerContainer = styled.div`
     rgba(255, 255, 255, 0.6),
     rgba(255, 255, 255, 0.5)
   );
+  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1), 0 15px 30px rgba(0, 0, 0, 0.1),
+    0 20px 40px rgba(0, 0, 0, 0.15);
 
   &::before {
     content: "";
