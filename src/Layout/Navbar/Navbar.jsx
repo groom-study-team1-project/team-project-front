@@ -21,6 +21,7 @@ import { logout } from "../../services/authApi";
 import { fetchCategoryItems } from "../../services/postApi";
 import { logout as logoutAction } from "../../store/user/userSlice";
 import logoImg from "../../assets/images/DEEPDIVERS.png";
+import { selectMenuItem } from "../../store/category/menuSlice";
 
 Modal.setAppElement("#root");
 
@@ -41,6 +42,11 @@ function Navbar({ isMainPage = false }) {
       .then((menuItems) => setMenuItems(menuItems))
       .catch((err) => console.log(err.message));
   }, []);
+
+  const handleMenuClick = (id) => {
+    dispatch(selectMenuItem(id));
+    handleNavigation(id);
+  };
 
   const handleNavigation = (id, e) => {
     console.log(id);
@@ -98,7 +104,7 @@ function Navbar({ isMainPage = false }) {
         {isMainPage && (
           <Menu>
             {menuItems.map((item) => (
-              <MenuItem key={item.id} onClick={() => handleNavigation(item.id)}>
+              <MenuItem key={item.id} onClick={() => handleMenuClick(item.id)}>
                 {item.item}
               </MenuItem>
             ))}
