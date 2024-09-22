@@ -26,6 +26,12 @@ export const PostCardWrapper = styled.div`
   display: flex;
   width: ${({ width }) => width || "100%"};
   height: ${({ height }) => height || "100%"};
+  cursor: pointer;
+  transition: transform 450ms;
+
+  &:hover {
+    transform: scale(1.025);
+  }
 `;
 
 export const InnerContainer = styled.div`

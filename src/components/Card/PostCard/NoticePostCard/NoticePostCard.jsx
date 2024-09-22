@@ -1,12 +1,11 @@
 import {
-  CustomPostCardWrapper,
   PostContainer,
   PostTitle,
 } from "../NoticePostCard/NoticePostCard.style";
 import { InteractionItem } from "../../../Common/Interactions";
 import eyeIcon from "../../../../assets/images/eye.png";
 import { useNavigate } from "react-router-dom";
-import { InnerContainer } from "../PostCard.style";
+import { InnerContainer, PostCardWrapper } from "../PostCard.style";
 
 function NoticePostCard({ id, title, date, count }) {
   const navigate = useNavigate();
@@ -16,7 +15,7 @@ function NoticePostCard({ id, title, date, count }) {
   };
 
   return (
-    <CustomPostCardWrapper height="40px" onClick={handleNavigation}>
+    <PostCardWrapper height="40px" onClick={handleNavigation}>
       <InnerContainer>
         <PostContainer>{id}</PostContainer>
         <PostTitle>{title}</PostTitle>
@@ -25,7 +24,7 @@ function NoticePostCard({ id, title, date, count }) {
           <InteractionItem icon={eyeIcon} count={count.view} />
         </PostContainer>
       </InnerContainer>
-    </CustomPostCardWrapper>
+    </PostCardWrapper>
   );
 }
 
