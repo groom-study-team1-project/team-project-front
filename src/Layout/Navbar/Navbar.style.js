@@ -33,7 +33,6 @@ export const NonLogo = styled(Logo)`
 export const Menu = styled.div`
   display: flex;
   align-items: center;
-  border: 1px solid #111;
 `;
 
 export const MenuItem = styled.div`
