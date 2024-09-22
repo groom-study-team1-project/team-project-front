@@ -22,8 +22,8 @@ export const Thumbnail = styled.div`
 `;
 
 export const PostCardWrapper = styled.div`
+  position: relative;
   display: flex;
-  border: 1px solid;
   width: ${({ width }) => width || "100%"};
   height: ${({ height }) => height || "100%"};
 `;
@@ -32,7 +32,32 @@ export const InnerContainer = styled.div`
   display: flex;
   flex-direction: ${({ direction }) => direction || "row"};
   flex-grow: 1;
-  margin: 10px;
+  padding: 10px;
+  border-radius: 10px;
+  background: linear-gradient(
+    to bottom,
+    rgba(255, 255, 255, 0.6),
+    rgba(255, 255, 255, 0.5)
+  );
+
+  &::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: 10px;
+    border: 1px solid transparent;
+    background: linear-gradient(
+        10deg,
+        rgba(255, 255, 255, 0),
+        rgba(255, 255, 255, 1)
+      )
+      border-box;
+    -webkit-mask: linear-gradient(#fff 0 0) padding-box,
+      linear-gradient(#fff 0 0);
+    mask: linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: destination-out;
+    mask-composite: exclude;
+  }
 `;
 
 export const Body = styled.div`
