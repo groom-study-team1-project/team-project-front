@@ -41,27 +41,31 @@ function CommunityPostCard({
   };
 
   return (
-    <PostCardWrapper height="232px" onClick={handleNavigation}>
-      <InnerContainer>
-        <Thumbnail>
-          {img ? <img src={img[imgIndex].url} alt={`img ${imgIndex}`} /> : null}
-        </Thumbnail>
-        <CustomBody>
-          <PostActions>
-            <PostProfileBox name={name} job={job} email={email} />
-            <Interaction count={count} />
-          </PostActions>
-          <ContentBox>
-            <p>{title}</p>
-            <p>{content}</p>
-          </ContentBox>
-          <ArrowButton
-            handlePrevImage={(e) => handlePrevImage(e)}
-            handleNextImage={(e) => handleNextImage(e)}
-          />
-        </CustomBody>
-      </InnerContainer>
-    </PostCardWrapper>
+    <>
+      <PostCardWrapper height="232px" onClick={handleNavigation}>
+        <InnerContainer>
+          <Thumbnail>
+            {img ? (
+              <img src={img[imgIndex].url} alt={`img ${imgIndex}`} />
+            ) : null}
+          </Thumbnail>
+          <CustomBody>
+            <PostActions>
+              <PostProfileBox name={name} job={job} email={email} />
+              <Interaction count={count} />
+            </PostActions>
+            <ContentBox>
+              <p>{title}</p>
+              <p>{content}</p>
+            </ContentBox>
+            <ArrowButton
+              handlePrevImage={(e) => handlePrevImage(e)}
+              handleNextImage={(e) => handleNextImage(e)}
+            />
+          </CustomBody>
+        </InnerContainer>
+      </PostCardWrapper>
+    </>
   );
 }
 
