@@ -107,15 +107,16 @@ function Navbar({ isMainPage = false }) {
 
         {isLoggedIn ? (
           <ButtonBox>
+            <Button>다크모드</Button>
             <Button>글쓰기</Button>
-            <Button onClick={handleLogout}>다크모드</Button>
+            <Button onClick={handleLogout}>로그아웃</Button>
             <Button onClick={redirectToMyPage}>프로필</Button>
           </ButtonBox>
         ) : (
           <ButtonBox>
-            <Button onClick={handleLogout}>다크모드</Button>
-            <Button onClick={() => openModal("login")}>로그인</Button>
-            <Button onClick={() => openModal("signup")}>회원가입</Button>
+            <Button>다크모드</Button>
+            <Button onClick={() => openModal("login")}>Login</Button>
+            <Button onClick={() => openModal("signup")}>Sign up</Button>
           </ButtonBox>
         )}
       </NavbarInner>
