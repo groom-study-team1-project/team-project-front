@@ -37,6 +37,7 @@ import {
   CommentsWrap,
   CommetHr,
   Comment,
+  CommentProfile,
   CommentText,
   Bold,
   CommentRight,
@@ -180,14 +181,14 @@ function DetailPage() {
             <div style={{ fontSize: "24px" }}>댓글</div>
             <CommetHr />
             {commentsData.result.map((commentData, index) => (
-              <CommentsWrap key={index}>
-                <Comment>
+              <Comment>
+                <CommentProfile>
                   <ProfileImage />
                   <CommentText>
                     <Bold>{commentData.memberInfo.nickname}</Bold>
                     <div>{commentData.commentInfo.content}</div>
                   </CommentText>
-                </Comment>
+                </CommentProfile>
                 <CommentRight>
                   <TimeAndLike>
                     <div>{commentData.commentInfo.createdAt}</div>
@@ -204,7 +205,7 @@ function DetailPage() {
                     </CommnetModalIcon>
                   )}
                 </CommentRight>
-              </CommentsWrap>
+              </Comment>
             ))}
             <hr />
             <form onSubmit={onSubmit}>

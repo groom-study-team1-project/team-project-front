@@ -69,7 +69,7 @@ export const IconWrap = styled.div`
 `;
 
 export const CommetHr = styled.hr`
-  width: 15%;
+  width: 100%;
   float: left;
 `;
 
@@ -89,7 +89,11 @@ export const CommentWrap = styled.div`
   margin-bottom: 16px;
 `;
 
-export const Comment = styled.div`
+export const Comment = styled(CommentWrap)`
+  display: columns;
+`;
+
+export const CommentProfile = styled.div`
   display: flex;
   align-items: center;
 `;
