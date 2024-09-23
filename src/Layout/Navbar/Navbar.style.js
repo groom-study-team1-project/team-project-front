@@ -60,7 +60,8 @@ export const Button = styled.div`
   align-items: center;
   cursor: pointer;
   height: 32px;
-  border: 1px solid #111;
+  margin: 5px;
+  padding: 1px;
 `;
 
 export const BorderButton = styled.div`
