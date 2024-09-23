@@ -8,6 +8,7 @@ import {
   MenuItem,
   Button,
   ButtonBox,
+  BorderButton,
 } from "./Navbar.style";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
@@ -122,7 +123,9 @@ function Navbar({ isMainPage = false }) {
           <ButtonBox>
             <Button>다크모드</Button>
             <Button onClick={() => openModal("login")}>Login</Button>
-            <Button onClick={() => openModal("signup")}>Sign up</Button>
+            <BorderButton onClick={() => openModal("signup")}>
+              Sign up
+            </BorderButton>
           </ButtonBox>
         )}
       </NavbarInner>

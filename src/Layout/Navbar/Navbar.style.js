@@ -62,3 +62,17 @@ export const Button = styled.div`
   height: 32px;
   border: 1px solid #111;
 `;
+
+export const BorderButton = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  height: 32px;
+  border-radius: 30px;
+  background-color: rgba(255, 255, 255, 0.5);
+  padding: 0 10px;
+  margin: 5px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  border: 2px solid rgba(255, 255, 255, 0.1);
+`;
