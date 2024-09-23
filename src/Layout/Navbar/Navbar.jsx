@@ -23,6 +23,7 @@ import { fetchCategoryItems } from "../../services/postApi";
 import { logout as logoutAction } from "../../store/user/userSlice";
 import logoImg from "../../assets/images/DEEPDIVERS.png";
 import { selectMenuItem } from "../../store/category/menuSlice";
+import darkmodeIcon from "../../assets/images/darkmode.png";
 
 Modal.setAppElement("#root");
 
@@ -114,14 +115,18 @@ function Navbar({ isMainPage = false }) {
 
         {isLoggedIn ? (
           <ButtonBox>
-            <Button>다크모드</Button>
-            <Button>글쓰기</Button>
+            <Button>
+              <img src={darkmodeIcon} alt="다크모드" />
+            </Button>
+            <BorderButton>새 글 작성</BorderButton>
             <Button onClick={handleLogout}>로그아웃</Button>
             <Button onClick={redirectToMyPage}>프로필</Button>
           </ButtonBox>
         ) : (
           <ButtonBox>
-            <Button>다크모드</Button>
+            <Button>
+              <img src={darkmodeIcon} alt="다크모드" />
+            </Button>
             <Button onClick={() => openModal("login")}>Login</Button>
             <BorderButton onClick={() => openModal("signup")}>
               Sign up
