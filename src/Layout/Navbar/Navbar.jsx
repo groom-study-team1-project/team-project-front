@@ -125,6 +125,7 @@ function Navbar({ isMainPage = false }) {
               <img
                 src={userInfo?.imageUrl ? userInfo.imageUrl : profileIcon}
                 alt="프로필"
+                style={{ borderRadius: "20px", marginTop: "3px" }}
               />
             </Button>
           </ButtonBox>
