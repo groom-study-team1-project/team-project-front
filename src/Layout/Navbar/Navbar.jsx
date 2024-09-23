@@ -24,6 +24,7 @@ import { logout as logoutAction } from "../../store/user/userSlice";
 import logoImg from "../../assets/images/DEEPDIVERS.png";
 import { selectMenuItem } from "../../store/category/menuSlice";
 import darkmodeIcon from "../../assets/images/darkmode.png";
+import profileIcon from "../../assets/images/profileIcon.png";
 
 Modal.setAppElement("#root");
 
@@ -120,7 +121,12 @@ function Navbar({ isMainPage = false }) {
             </Button>
             <BorderButton>새 글 작성</BorderButton>
             <Button onClick={handleLogout}>로그아웃</Button>
-            <Button onClick={redirectToMyPage}>프로필</Button>
+            <Button onClick={redirectToMyPage}>
+              <img
+                src={userInfo?.imageUrl ? userInfo.imageUrl : profileIcon}
+                alt="프로필"
+              />
+            </Button>
           </ButtonBox>
         ) : (
           <ButtonBox>
