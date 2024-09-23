@@ -1,9 +1,11 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { CKEditor } from "@ckeditor/ckeditor5-react";
-import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
+import { DecoupledEditor } from "ckeditor5";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPhotoFilm, faXmark } from "@fortawesome/free-solid-svg-icons";
+import { editorConfig } from "./editor";
+import axios from "axios";
 import GlobalStyle from "../../assets/styles/GlobalStyle";
 import { createPost, fetchPostChange } from "../../services/postApi";
 import backBtn from "../../assets/images/back-removebg-preview.png";
@@ -25,6 +27,9 @@ import {
   ImgPreviewWrap,
 } from "./WriteBoard.style";
 
+import "./App.css";
+import "ckeditor5/ckeditor5.css";
+
 const WriteBoard = ({ postData, postId }) => {
   const navigate = useNavigate();
   const [form, setValue] = useState({ title: "", content: "", hashtags: [] });
@@ -32,6 +37,9 @@ const WriteBoard = ({ postData, postId }) => {
   const [imgUrls, setImgUrls] = useState([]); // 이미지 URL을 저장하는 상태
   const fileInput = useRef(null);
   const [draggedItem, setDraggedItem] = useState(null); // 드래그된 항목 상태
+
+  const toolbarContainerRef = useRef(null); // 툴바 컨테이너 참조
+  const editorContainerRef = useRef(null); // 에디터 컨테이너 참조
 
   useEffect(() => {
     if (postData) {
@@ -151,14 +159,11 @@ const WriteBoard = ({ postData, postId }) => {
           const body = new FormData();
           loader.file.then((file) => {
             body.append("upload", file);
-            fetch(`${API_URL}`, {
-              method: "post",
-              body: body,
-            })
-              .then((res) => res.json())
+            axios
+              .post(`${API_URL}`, body)
               .then((res) => {
                 resolve({
-                  default: res.url[0],
+                  default: res.data.url[0],
                 });
               })
               .catch((err) => {
@@ -239,13 +244,28 @@ const WriteBoard = ({ postData, postId }) => {
               </ImgAdd>
             </ImgWrap>
           )}
+          <div ref={editorContainerRef}>
+            <div ref={toolbarContainerRef}></div>
+          </div>
           <CKEditor
-            editor={ClassicEditor}
+            editor={DecoupledEditor}
             config={{
-              placeholder: "내용을 입력하세요.",
-              extraPlugins: [uploadPlugin], // 커스텀 업로드 어댑터 플러그인
+              ...editorConfig,
+              extraPlugins: [uploadPlugin],
             }}
             data={form.content}
+            onReady={(editor) => {
+              const toolbarElement = editor.ui.view.toolbar.element;
+              if (toolbarContainerRef.current.firstChild !== toolbarElement) {
+                toolbarContainerRef.current.innerHTML = "";
+                toolbarContainerRef.current.appendChild(toolbarElement);
+              }
+
+              const editableElement = editor.ui.view.editable.element;
+              if (!editorContainerRef.current.contains(editableElement)) {
+                editorContainerRef.current.appendChild(editableElement);
+              }
+            }}
             onBlur={(event, editor) => {
               const data = editor.getData();
               setValue({ ...form, content: data });
@@ -263,7 +283,7 @@ const WriteBoard = ({ postData, postId }) => {
             <SubmitBtn $borderColor="#929292" $bgColor="transparent">
               임시저장
             </SubmitBtn>
-            <SubmitBtn $borderColor="#86FDE8" $bgColor="#86FDE8" type="submit">
+            <SubmitBtn $borderColor="#B1CDE9" $bgColor="#B1CDE9" type="submit">
               확인
             </SubmitBtn>
           </SubmitBtnWrap>
