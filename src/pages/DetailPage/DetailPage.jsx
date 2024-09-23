@@ -1,7 +1,7 @@
 import React, { useRef, useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { CKEditor } from "@ckeditor/ckeditor5-react";
-import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
+import { DecoupledEditor } from "ckeditor5";
 import Slide from "../../components/Common/imgSlide";
 import heart from "../../assets/images/heart.png";
 import commentsubmit from "../../assets/images/commentsubmit.png";
@@ -155,7 +155,7 @@ function DetailPage() {
 
             <Title>{post.postInfo.title}</Title>
             <CKEditor
-              editor={ClassicEditor}
+              editor={DecoupledEditor}
               data={post.postInfo.content}
               config={{
                 toolbar: [],
