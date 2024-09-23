@@ -7,8 +7,13 @@ import heart from "../../assets/images/heart.png";
 import commentsubmit from "../../assets/images/commentsubmit.png";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEllipsisVertical } from "@fortawesome/free-solid-svg-icons";
-import { fetchcomment, createcomment } from "../../services/api";
-import { fetchPostdetail } from "../../services/postApi";
+import {
+  createComment,
+  fetchComment,
+  editComment,
+  deleteComment,
+} from "../../services/commentApi";
+import { fetchPostdetail, deletepost } from "../../services/postApi";
 import {
   PostProfileBox,
   ProfileImage,
@@ -18,7 +23,6 @@ import {
   InteractionItem,
 } from "../../components/Common/Interactions";
 import { Wrap } from "../../components/WriteBoard/WriteBoard.style";
-import { deletepost } from "../../services/postApi";
 import {
   CategotyWrap,
   CenteredContainer,
@@ -51,11 +55,12 @@ function DetailPage() {
   const [modalcurrent, setModalcurrnet] = useState(false);
   const modalRef = useRef(null);
   const navigate = useNavigate();
+
   useEffect(() => {
     const fetchData = async () => {
       try {
         const postResponse = await fetchPostdetail();
-        const commentsResponse = await fetchcomment();
+        const commentsResponse = await fetchComment();
 
         setPost(postResponse);
         setCommentData(commentsResponse);
@@ -69,7 +74,7 @@ function DetailPage() {
   const onSubmit = async (e) => {
     await e.preventDefault();
     const body = { commentValue };
-    await createcomment(body);
+    await createComment(body);
   };
 
   const onChange = (e) => {
@@ -102,8 +107,8 @@ function DetailPage() {
           <PostWrap>
             <Postheader>
               <PostProfileBox
-                name={post.result.memberInfo.nickname}
-                job={post.result.memberInfo.development}
+                name={post.memberInfo.nickname}
+                job={post.memberInfo.development}
               />
               <div>
                 {post.postInfo.isModified ? (
