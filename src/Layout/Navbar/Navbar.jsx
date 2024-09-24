@@ -20,6 +20,7 @@ import FindUserId from "../../components/Modal/FindUserIdModal/FindUserId";
 import FindUserPw from "../../components/Modal/FindUserPwModal/FindUserPw";
 import { logout } from "../../services/authApi";
 import { fetchCategoryItems } from "../../services/postApi";
+import { userLogout } from "../../store/user/userSlice";
 import { logout as logoutAction } from "../../store/user/userSlice";
 import logoImg from "../../assets/images/DEEPDIVERS.png";
 import { selectMenuItem } from "../../store/category/menuSlice";
@@ -33,12 +34,13 @@ function Navbar({ isMainPage = false }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalType, setModalType] = useState("login");
   const isLoggedIn = useSelector((state) => state.user.isLoggedIn);
+  const email = useSelector((state) =>
+    state.user.isLoggedIn ? state.user.userInfo.email.split("@")[0] : null
+  );
   const userInfo = useSelector((state) => state.user.userInfo);
-  const email =
-    userInfo && userInfo.email ? userInfo.email.split("@")[0] : null;
-  const dispatch = useDispatch();
 
-  let navigate = useNavigate();
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   useEffect(() => {
     fetchCategoryItems()
@@ -48,12 +50,13 @@ function Navbar({ isMainPage = false }) {
 
   const handleMenuClick = (id) => {
     dispatch(selectMenuItem(id));
-    handleNavigation(id);
+    handleBoardNavigation(id);
   };
 
-  const handleNavigation = (id, e) => {
+  const handleBoardNavigation = (id, e) => {
     console.log(id);
-    if (id === 1) {
+    if (id === 0) {
+    } else if (id === 1) {
       navigate("/board/free");
     } else if (id === 2) {
       navigate("/board/questions");
@@ -61,19 +64,21 @@ function Navbar({ isMainPage = false }) {
       navigate("/board/projects");
     } else if (id === 4) {
       navigate("/board/notices");
-    } else if (id == 5) {
-      navigate("/");
     }
   };
 
-  const redirectToMyPage = () => {
-    navigate(`/my-page/${email}`);
+  const handleNavigation = (to, e) => {
+    if (to === "my-profile") {
+      navigate(`/my-page/${email}`);
+    } else if (to === "write") {
+      navigate("/board/write");
+    }
   };
 
   async function handleLogout(e) {
     try {
       await logout();
-      dispatch(logoutAction());
+      dispatch(userLogout());
     } catch (err) {
       console.log(err);
     }
@@ -119,9 +124,11 @@ function Navbar({ isMainPage = false }) {
             <Button>
               <img src={darkmodeIcon} alt="다크모드" />
             </Button>
-            <BorderButton>새 글 작성</BorderButton>
+            <BorderButton onClick={() => handleNavigation("write")}>
+              새 글 작성
+            </BorderButton>
             <Button onClick={handleLogout}>로그아웃</Button>
-            <Button onClick={redirectToMyPage}>
+            <Button onClick={() => handleNavigation("my-profile")}>
               <img
                 src={userInfo?.imageUrl ? userInfo.imageUrl : profileIcon}
                 alt="프로필"

@@ -9,17 +9,18 @@ const initialState = {
     aboutMe: "안녕하세요. 구름톤 딥다이브 수강생입니다.",
     phoneNumber: "010-1234-5678",
   },
-  isLoggedIn: true,
+  isLoggedIn: false,
 };
 
 const userSlice = createSlice({
   name: "user",
   initialState,
   reducers: {
-    setUserInfo: (state, action) => {
+    userLogin: (state, action) => {
       state.userInfo = action.payload;
+      state.isLoggedIn = true;
     },
-    logout: (state) => {
+    userLogout: (state) => {
       state.userInfo = null;
       state.isLoggedIn = false;
     },
@@ -32,6 +33,6 @@ const userSlice = createSlice({
   },
 });
 
-export const { setUserInfo, logout, updateUserInfo } = userSlice.actions;
+export const { userLogin, userLogout, updateUserInfo } = userSlice.actions;
 
 export default userSlice.reducer;
