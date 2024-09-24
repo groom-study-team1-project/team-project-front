@@ -124,6 +124,7 @@ export const CommentInput = styled.input`
   border-radius: 8px;
   padding: 10px 12px;
   font-size: 16px;
+  position: absolute;
 `;
 
 export const InputImg = styled.img`
@@ -155,10 +156,20 @@ export const Modal = styled.div`
     cursor: pointer;
   }
 `;
+
+export const CommentModalBackground = styled(ModalBackground)``;
+
+export const CommentModal = styled(Modal)`
+  position: absolute;
+  margin-right: 100px;
+`;
+
 export const Bold = styled.div`
   font-weight: bold;
   margin-bottom: 5px;
 `;
-export const CommnetModalIcon = styled.div`
+
+export const CommentModalIcon = styled.div`
   margin-left: 10px;
+  position: relative;
 `;

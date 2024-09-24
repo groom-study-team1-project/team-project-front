@@ -32,6 +32,8 @@ import {
   Modify,
   ModalBackground,
   Modal,
+  CommentModal,
+  CommentModalBackground,
   Title,
   PostFooter,
   CommentsWrap,
@@ -43,7 +45,7 @@ import {
   CommentRight,
   TimeAndLike,
   IconWrap,
-  CommnetModalIcon,
+  CommentModalIcon,
   CommentInputWrap,
   CommentInput,
   InputImg,
@@ -54,7 +56,9 @@ function DetailPage() {
   const [commentsData, setCommentData] = useState(null);
   const [commentValue, setCommentValue] = useState("");
   const [modalcurrent, setModalcurrnet] = useState(false);
+  const [commentmodalcurrent, setCommentModalcurrent] = useState(false);
   const modalRef = useRef(null);
+  const commentModalRef = useRef(null);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -85,6 +89,11 @@ function DetailPage() {
   const handleClickOutside = (e) => {
     if (modalRef.current && !modalRef.current.contains(e.target)) {
       setModalcurrnet(false);
+    } else if (
+      commentModalRef.current &&
+      !commentModalRef.current.contains(e.target)
+    ) {
+      setCommentModalcurrent(false);
     }
   };
 
@@ -195,14 +204,41 @@ function DetailPage() {
                     <IconWrap>
                       <InteractionItem
                         icon={heart}
-                        count={commentData.commentInfo.recommedCount}
+                        count={commentData.commentInfo.recommendCount}
                       />
                     </IconWrap>
                   </TimeAndLike>
                   {commentData.commentInfo.isModified && (
-                    <CommnetModalIcon>
-                      <FontAwesomeIcon icon={faEllipsisVertical} />
-                    </CommnetModalIcon>
+                    <CommentModalIcon>
+                      <Modify
+                        onClick={() => {
+                          setCommentModalcurrent(true);
+                        }}
+                      >
+                        <FontAwesomeIcon icon={faEllipsisVertical} />
+                      </Modify>
+                      {commentmodalcurrent && (
+                        <CommentModalBackground>
+                          <CommentModal ref={commentModalRef}>
+                            <div
+                              onClick={() => {
+                                editComment();
+                              }}
+                            >
+                              수정
+                            </div>
+                            <hr style={{ margin: "0px", padding: "0px" }} />
+                            <div
+                              onClick={() => {
+                                deleteComment();
+                              }}
+                            >
+                              삭제
+                            </div>
+                          </CommentModal>
+                        </CommentModalBackground>
+                      )}
+                    </CommentModalIcon>
                   )}
                 </CommentRight>
               </Comment>
