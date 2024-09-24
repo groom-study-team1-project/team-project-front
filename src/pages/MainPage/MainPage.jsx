@@ -54,7 +54,7 @@ function MainPage() {
             </Button>
           </LeftArea>
           <RightArea>
-            <PostCardLine>
+            {/* <PostCardLine>
               <PostCard>
                 <ProjectPostCard />
               </PostCard>
@@ -64,7 +64,7 @@ function MainPage() {
               <PostCard width="985px">
                 <CommunityPostCard />
               </PostCard>
-            </PostCardLine>
+            </PostCardLine> */}
           </RightArea>
         </Content>
       </Container>

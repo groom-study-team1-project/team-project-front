@@ -2,18 +2,19 @@ import styled from "styled-components";
 
 export const Container = styled.div`
   margin: 0;
-  border: 1px solid black;
+  /* border: 1px solid black; */
+  height: 100vh;
 `;
 
 // 콘텐츠
 export const Content = styled.main`
   height: auto;
   padding: 20px;
-  margin-top: 155px;
+  margin-top: 20%;
   display: flex;
   align-items: center;
   justify-content: space-around;
-  border: 1px solid black;
+  box-sizing: border-box;
 `;
 
 // 왼쪽 콘텐츠(타이틀&게시판버튼)
@@ -22,42 +23,44 @@ export const LeftArea = styled.div`
   max-width: 520px;
   height: auto;
   margin-top: -100px;
-  border: 1px solid black;
+  box-sizing: border-box;
 `;
 
 export const Title = styled.h2`
-  font-size: 2.5rem;
-  color: #343a40;
-  border: 1px solid black;
+  font-size: 30px;
   margin-top: 10px;
   margin-bottom: 10px;
+  font-weight: 600;
 `;
 
 export const SubTitle = styled.h1`
   font-style: black;
-  border: 1px solid black;
   margin-top: 10px;
   margin-bottom: 10px;
+  font-size: 2rem;
+  font-weight: 900;
 `;
 
 export const Detail = styled.p`
-  font-size: 10px;
+  font-size: 12px;
   margin-top: 20px;
   margin-bottom: 20px;
-  border: 1px solid black;
 `;
 
 export const Button = styled.div`
   width: 240px;
   color: #000000;
-  padding: 5px 10px;
-  border: 1px solid black;
+  padding: 6px 10px;
+  padding-left: 15px;
+  padding-bottom: 8px;
   border-radius: 10px;
   display: flex;
   align-items: center;
   text-decoration: none;
   font-size: 14px;
   cursor: pointer;
+  background-color: rgba(255, 255, 255, 0.5);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 
   &:hover {
     background-color: #ededed;
@@ -80,7 +83,7 @@ export const Button = styled.div`
 export const RightArea = styled.div`
   padding: 20px;
   margin-right: 90px;
-  border: 1px solid black;
+  /* border: 1px solid black; */
 `;
 
 export const PostCardLine = styled.div`
