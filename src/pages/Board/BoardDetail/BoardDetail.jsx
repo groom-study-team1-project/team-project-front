@@ -1,24 +1,24 @@
 import React, { useRef, useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { CKEditor } from "@ckeditor/ckeditor5-react";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
-import Slide from "../../components/Common/imgSlide";
-import heart from "../../assets/images/heart.png";
-import commentsubmit from "../../assets/images/commentsubmit.png";
+import Slide from "../../../components/Common/imgSlide";
+import heart from "../../../assets/images/heart.png";
+import commentsubmit from "../../../assets/images/commentsubmit.png";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEllipsisVertical } from "@fortawesome/free-solid-svg-icons";
-import { fetchcomment, createcomment } from "../../services/api";
-import { fetchPostdetail } from "../../services/postApi";
+import { fetchcomment, createcomment } from "../../../services/api";
+import { fetchPostDetail } from "../../../services/postApi";
 import {
   PostProfileBox,
   ProfileImage,
-} from "../../components/Card/PostCard/PostProfile";
+} from "../../../components/Card/PostCard/PostProfile";
 import {
   Interaction,
   InteractionItem,
-} from "../../components/Common/Interactions";
-import { Wrap } from "../../components/WriteBoard/WriteBoard.style";
-import { deletepost } from "../../services/postApi";
+} from "../../../components/Common/Interactions";
+import { Wrap } from "../BoardWrite/BoardWrite.style";
+import { deletepost } from "../../../services/postApi";
 import {
   CategotyWrap,
   CenteredContainer,
@@ -42,19 +42,21 @@ import {
   CommentInputWrap,
   CommentInput,
   InputImg,
-} from "./DetailPage.style";
+} from "./BoardDetail.style";
 
-function DetailPage() {
+function BoardDetail() {
   const [post, setPost] = useState(null);
   const [commentsData, setCommentData] = useState(null);
   const [commentValue, setCommentValue] = useState("");
   const [modalcurrent, setModalcurrnet] = useState(false);
   const modalRef = useRef(null);
   const navigate = useNavigate();
+  const { postId } = useParams();
+
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const postResponse = await fetchPostdetail();
+        const postResponse = await fetchPostDetail(postId);
         const commentsResponse = await fetchcomment();
 
         setPost(postResponse);
@@ -102,8 +104,9 @@ function DetailPage() {
           <PostWrap>
             <Postheader>
               <PostProfileBox
-                name={post.result.memberInfo.nickname}
-                job={post.result.memberInfo.development}
+                name={post.memberInfo.nickname}
+                job={post.memberInfo.development}
+                email={post.memberInfo.email}
               />
               <div>
                 {post.postInfo.isModified ? (
@@ -121,7 +124,7 @@ function DetailPage() {
                         <Modal ref={modalRef}>
                           <div
                             onClick={() => {
-                              navigate(`/editpost/${1}`);
+                              navigate(`/board/edit/${1}`);
                             }}
                           >
                             수정
@@ -223,4 +226,4 @@ function DetailPage() {
   );
 }
 
-export default DetailPage;
+export default BoardDetail;

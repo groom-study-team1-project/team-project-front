@@ -5,10 +5,13 @@ import { FormInputField } from "../FormInputField";
 import { FindUserBtns, FindUserBtn } from "./LoginModal.style";
 import { login } from "../../../services/authApi";
 import logoImg from "../../../assets/images/DEEPDIVERS.png";
+import { useDispatch } from "react-redux";
+import { userLogin } from "../../../store/user/userSlice";
 
 export default function LoginModal({ closeModal, changeModal }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const dispatch = useDispatch();
 
   async function handleLogin(e) {
     e.preventDefault();
@@ -19,10 +22,11 @@ export default function LoginModal({ closeModal, changeModal }) {
       const response = await login(body);
       console.log(response);
 
-      const { accessToken, refreshToken } = response.result;
+      const { accessToken, refreshToken, userInfo } = response.result;
 
       localStorage.setItem("accessToken", accessToken);
 
+      dispatch(userLogin(userInfo));
       closeModal();
     } catch (err) {
       console.log(err);

@@ -2,15 +2,16 @@ import styled from "styled-components";
 
 export const Wrap = styled.div`
   display: flex;
-  justify-content: center;
   flex-direction: column;
   align-items: center;
-  max-height: 100vh;
+  justify-content: space-between;
+  width: 100%;
   padding: 48px 24px;
 `;
 
 export const Main = styled.div`
-  width: 1450px;
+  max-width: 1380px;
+  width: 100%;
   background: linear-gradient(
     180deg,
     rgba(255, 255, 255, 0.6) 50%,
@@ -22,7 +23,8 @@ export const Main = styled.div`
 `;
 
 export const ProfileWrap = styled.div`
-  width: 1450px;
+  width: 100%;
+  max-width: 1450px;
   margin-left: 0px;
   margin-bottom: 70px;
 `;

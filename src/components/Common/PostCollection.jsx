@@ -112,7 +112,7 @@ const BoardContents = ({ contents }) => {
           height={"50px"}
           size={"14px"}
           bottom={"8px"}
-          nickName={userInfo.nickName}
+          nickName={userInfo.nickname}
           jobSize={"10px"}
           color={"#828282"}
           job={userInfo.role}
