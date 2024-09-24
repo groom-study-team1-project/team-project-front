@@ -2,15 +2,14 @@ import styled from "styled-components";
 
 export const Container = styled.div`
   margin: 0;
-  /* border: 1px solid black; */
-  height: 100vh;
 `;
 
 // 콘텐츠
 export const Content = styled.main`
   height: auto;
   padding: 20px;
-  margin-top: 20%;
+  margin-top: 10%;
+  margin-left: 40px;
   display: flex;
   align-items: center;
   justify-content: space-around;
@@ -22,7 +21,7 @@ export const LeftArea = styled.div`
   width: 500px;
   max-width: 520px;
   height: auto;
-  margin-top: -100px;
+  margin-top: -50px;
   box-sizing: border-box;
 `;
 
@@ -82,20 +81,30 @@ export const Button = styled.div`
 // 오른쪽 콘텐츠(포스트카드)
 export const RightArea = styled.div`
   padding: 20px;
-  margin-right: 90px;
-  /* border: 1px solid black; */
 `;
 
 export const PostCardLine = styled.div`
-  display: flex;
-  border: 1px solid black;
+  box-sizing: border-box;
+  overflow: hidden;
+  width: auto;
+  max-width: 800px;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 0;
+  align-items: center;
+  justify-items: end;
 `;
 
-export const PostCard = styled.div`
-  margin: 10px;
-  border: 1px solid black;
-  display: flex;
-  flex-direction: column;
-  align-self: flex-end;
-  width: ${({ width }) => width || ""};
+// export const PostCard = styled.div`
+//   margin: 10px;
+//   border: 1px solid black;
+//   display: flex;
+//   flex-direction: column;
+//   align-self: flex-end;
+//   width: ${({ width }) => width || ""};
+// `;
+
+export const PostCardImg = styled.img`
+  width: ${(props) => props.width || "320px"};
+  height: ${(props) => props.height || "200px"};
 `;

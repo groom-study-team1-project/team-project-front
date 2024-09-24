@@ -10,12 +10,15 @@ import {
   RightArea,
   SubTitle,
   Title,
+  PostCardImg,
 } from "./MainPage.style";
 import Navbar from "../../Layout/Navbar/Navbar";
 import ProjectPostCard from "../../components/Card/PostCard/ProjectPostCard/ProjectPostCard";
 import CommunityPostCard from "../../components/Card/PostCard/CommunityPostCard/CommunityPostCard";
 import redirectIcon from "../../assets/images/redirect-to-board.png";
 import { useNavigate } from "react-router-dom";
+import projectBoardCardImg from "../../assets/images/Template Card.png";
+import freeBoardCardImg from "../../assets/images/Story Card Horizontal.png";
 
 function MainPage() {
   const navigate = useNavigate();
@@ -65,6 +68,18 @@ function MainPage() {
                 <CommunityPostCard />
               </PostCard>
             </PostCardLine> */}
+            <PostCardLine>
+              <PostCardImg
+                src={projectBoardCardImg}
+                alt="프로젝트 게시판 이미지"
+                height="438"
+              />
+              <PostCardImg
+                src={freeBoardCardImg}
+                alt="자유 게시판 이미지"
+                width="550"
+              />
+            </PostCardLine>
           </RightArea>
         </Content>
       </Container>
