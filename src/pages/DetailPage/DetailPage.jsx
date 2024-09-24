@@ -33,6 +33,7 @@ import {
   ModalBackground,
   Modal,
   CommentModal,
+  CommentEditModal,
   CommentModalBackground,
   Title,
   PostFooter,
@@ -57,6 +58,8 @@ function DetailPage() {
   const [commentValue, setCommentValue] = useState("");
   const [modalcurrent, setModalcurrnet] = useState(false);
   const [commentmodalcurrent, setCommentModalcurrent] = useState(false);
+  const [isEditing, setIsEditing] = useState(true);
+  const [editCommentValue, setEditCommentValue] = useState("");
   const modalRef = useRef(null);
   const commentModalRef = useRef(null);
   const navigate = useNavigate();
@@ -217,25 +220,65 @@ function DetailPage() {
                       >
                         <FontAwesomeIcon icon={faEllipsisVertical} />
                       </Modify>
+
                       {commentmodalcurrent && (
                         <CommentModalBackground>
-                          <CommentModal ref={commentModalRef}>
-                            <div
-                              onClick={() => {
-                                editComment();
-                              }}
-                            >
-                              수정
-                            </div>
-                            <hr style={{ margin: "0px", padding: "0px" }} />
-                            <div
-                              onClick={() => {
-                                deleteComment();
-                              }}
-                            >
-                              삭제
-                            </div>
-                          </CommentModal>
+                          {isEditing ? (
+                            <CommentModal ref={commentModalRef}>
+                              <>
+                                <div
+                                  onClick={() => {
+                                    setIsEditing(false);
+                                    setEditCommentValue(
+                                      commentData.commentInfo.content
+                                    );
+                                  }}
+                                >
+                                  수정
+                                </div>
+                                <hr style={{ margin: "0px", padding: "0px" }} />
+                                <div
+                                  onClick={() => {
+                                    deleteComment();
+                                  }}
+                                >
+                                  삭제
+                                </div>
+                              </>
+                            </CommentModal>
+                          ) : (
+                            <CommentEditModal>
+                              <input
+                                type="text"
+                                value={editCommentValue}
+                                onChange={(e) =>
+                                  setEditCommentValue(e.target.value)
+                                }
+                                onKeyDown={async (e) => {
+                                  if (e.key === "Enter") {
+                                    await editComment({
+                                      content: editCommentValue,
+                                    });
+                                    setIsEditing(false);
+                                    setCommentModalcurrent(false);
+                                  }
+                                }}
+                                placeholder="댓글 수정"
+                              />
+                              {/* 수정 제출 버튼 */}
+                              <InputImg
+                                src={commentsubmit}
+                                alt="댓글 수정 제출"
+                                onClick={async () => {
+                                  await editComment({
+                                    content: editCommentValue,
+                                  }); // 수정된 내용 전달
+                                  setIsEditing(false); // 수정 모드 종료
+                                  setCommentModalcurrent(false); // 모달 닫기
+                                }}
+                              />
+                            </CommentEditModal>
+                          )}
                         </CommentModalBackground>
                       )}
                     </CommentModalIcon>

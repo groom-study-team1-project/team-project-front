@@ -173,3 +173,7 @@ export const CommentModalIcon = styled.div`
   margin-left: 10px;
   position: relative;
 `;
+
+export const CommentEditModal = styled(Modal)`
+  width: auto;
+`;
