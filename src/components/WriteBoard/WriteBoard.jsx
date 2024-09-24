@@ -40,6 +40,7 @@ const WriteBoard = ({ postData, postId }) => {
 
   const toolbarContainerRef = useRef(null); // 툴바 컨테이너 참조
   const editorContainerRef = useRef(null); // 에디터 컨테이너 참조
+  const API_URL = "http://localhost:7000/api/post/image";
 
   useEffect(() => {
     if (postData) {
@@ -54,34 +55,38 @@ const WriteBoard = ({ postData, postId }) => {
     }
   }, [postData]);
 
-  // 카테고리 변경 처리 함수
   const handleCategoryChange = (e) => {
     setSelectedCategory(e.target.value);
   };
 
-  // 이미지 추가 버튼 클릭 시 파일 입력창 열기
   const handleClickImgadd = () => {
     fileInput.current.click();
   };
 
-  // 파일 선택 시 이미지 URL을 배열에 추가
-  const handleFileChange = (e) => {
+  const handleFileChange = async (e) => {
     const files = Array.from(e.target.files);
     const newImgUrls = [];
 
-    files.forEach((file) => {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        newImgUrls.push(reader.result);
-        if (newImgUrls.length === files.length) {
-          setImgUrls((prevImgUrls) => [...prevImgUrls, ...newImgUrls]); // 새 이미지를 기존 배열에 추가
-        }
-      };
-      reader.readAsDataURL(file);
-    });
+    for (let file of files) {
+      const formData = new FormData();
+      formData.append("upload", file);
+
+      try {
+        const response = await axios.post(API_URL, formData, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        });
+
+        newImgUrls.push(response.data.url);
+      } catch (error) {
+        console.error("이미지 업로드 실패:", error);
+      }
+    }
+
+    setImgUrls((prevImgUrls) => [...prevImgUrls, ...newImgUrls]);
   };
 
-  // 해시태그 입력 처리 함수
   const handlehashtag = (e) => {
     const hashtagStr = e.target.value;
     const hashtagArray = hashtagStr
@@ -90,29 +95,24 @@ const WriteBoard = ({ postData, postId }) => {
     setValue({ ...form, hashtags: hashtagArray });
   };
 
-  // 제목 입력 변경 처리 함수
   const onChange = (e) => {
     setValue({ ...form, title: e.target.value });
   };
 
-  // 이미지 삭제 처리 함수
   const deletePreviewImg = (indexToDelete) => {
     setImgUrls((prevImgUrls) =>
       prevImgUrls.filter((_, index) => index !== indexToDelete)
     );
   };
 
-  // 드래그 시작 처리 함수
   const handleDragStart = (index) => {
     setDraggedItem(index);
   };
 
-  // 드래그 오버 처리 함수 (기본 이벤트 취소)
   const handleDragOver = (e) => {
     e.preventDefault();
   };
 
-  // 드랍 처리 함수 (이미지 배열 변경)
   const handleDrop = (index) => {
     const draggedOverItem = index;
 
@@ -121,7 +121,6 @@ const WriteBoard = ({ postData, postId }) => {
     const items = [...imgUrls];
     const item = items[draggedItem];
 
-    // 드래그한 이미지를 드랍 위치에 삽입
     items.splice(draggedItem, 1);
     items.splice(draggedOverItem, 0, item);
 
@@ -142,16 +141,15 @@ const WriteBoard = ({ postData, postId }) => {
       }
 
       if (postData) {
-        await fetchPostChange(body, postId); // 게시물 수정
+        await fetchPostChange(body, postId);
       } else {
-        await createPost(body); // 새 게시물 작성
+        await createPost(body);
       }
     } catch (error) {
       console.error(error);
     }
   };
 
-  const API_URL = "http://localhost:7000/api/post/image";
   function uploadAdapter(loader) {
     return {
       upload: () => {
