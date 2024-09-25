@@ -79,6 +79,7 @@ function Navbar({ isMainPage = false }) {
     try {
       await logout();
       dispatch(userLogout());
+      navigate("/");
     } catch (err) {
       console.log(err);
     }
