@@ -114,10 +114,7 @@ function Navbar({ isMainPage = false }) {
         {isMainPage && (
           <Menu>
             {menuItems.map((item) => (
-              <MenuItem
-                key={item.id}
-                onClick={() => handleBoardNavigation(item.id)}
-              >
+              <MenuItem key={item.id} onClick={() => handleMenuClick(item.id)}>
                 {item.item}
               </MenuItem>
             ))}
