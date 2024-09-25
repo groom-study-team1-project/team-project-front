@@ -49,6 +49,7 @@ export const InnerContainer = styled.div`
   backdrop-filter: blur(20px);
 
   &::before {
+    z-index: -1;
     content: "";
     position: absolute;
     inset: 0;

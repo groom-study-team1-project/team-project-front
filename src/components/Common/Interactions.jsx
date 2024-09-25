@@ -34,7 +34,6 @@ const ArrowContainer = styled.div`
   border: 1px solid;
   border-color: rgba(0, 0, 0, 0.25);
   border-radius: 16px;
-  z-index: 2;
 
   .divider {
     width: 1px;
@@ -87,7 +86,6 @@ export const ArrowButton = ({ handlePrevImage, handleNextImage }) => {
         onMouseOut={() => setIsNextHovered(false)}
         onClick={handleNextImage}
       >
-        {/* Change icon on hover and mirrored */}
         <FontAwesomeIcon
           icon={faArrowRight}
           color={isNextHovered ? "" : "rgba(0, 0, 0, 0.25)"}
