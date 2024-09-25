@@ -1,8 +1,19 @@
 import axios from "axios";
 
-export const fetchSearchTitle = async (post_id, searchTerm = "") => {
+export const fetchSearchTitle = async (
+  post_id,
+  categoryId,
+  sort,
+  searchTerm
+) => {
   try {
-    //const response = await axios.post("/posts/{post_id}?category-id=&sort=&tag={searchTerm}, post_id, searchTerm);
+    // const response = await axios.get("/posts/{post_id}", {
+    //   params: {
+    //     categoryId,
+    //     sort,
+    //     searchTerm
+    //   },
+    // });
     const response = {
       code: 1101,
       message: "게시글 조회에 성공하였습니다.",
@@ -35,9 +46,20 @@ export const fetchSearchTitle = async (post_id, searchTerm = "") => {
   }
 };
 
-export const fetchSearchMember = async (post_id, searchTerm = "") => {
+export const fetchSearchMember = async (
+  post_id,
+  categoryId,
+  sort,
+  searchTerm
+) => {
   try {
-    //const response = await axios.post("/posts/{post_id}?category-id=&sort=&tag={searchTerm}, post_id, searchTerm);
+    // const response = await axios.get("/posts/{post_id}", {
+    //   params: {
+    //     categoryId,
+    //     sort,
+    //     searchTerm
+    //   },
+    // });
     const response = {
       code: 1102,
       message: "게시글 조회에 성공하였습니다.",
@@ -66,9 +88,15 @@ export const fetchSearchMember = async (post_id, searchTerm = "") => {
   }
 };
 
-export const fetchSearchTag = async (post_id, searchTerm = "") => {
+export const fetchSearchTag = async (post_id, categoryId, sort, searchTerm) => {
   try {
-    //const response = await axios.post("/posts/{post_id}?category-id=&sort=&tag={searchTerm}, post_id, searchTerm);
+    // const response = await axios.get("/posts/{post_id}", {
+    //   params: {
+    //     categoryId,
+    //     sort,
+    //     searchTerm
+    //   },
+    // });
     const response = {
       code: 1103,
       message: "게시글 조회에 성공하였습니다.",
