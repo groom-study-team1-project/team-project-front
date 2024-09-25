@@ -23,15 +23,13 @@ function Router() {
             <Route path="projects" element={<ProjectBoard />} />
             <Route path="notices" element={<NoticeBoard />} />
           </Route>
-          <Route path="detail/:postId" element={<BoardDetail />} />
+          <Route path="detail" element={<BoardDetail />} />
           <Route path="write" element={<BoardWrite />} />
           <Route path="edit/:postId" element={<BoardWrite />} />
         </Route>
         <Route path="/my-page">
-          <Route element={<BoardLayout isMyPage={true} />}>
-            <Route path=":id" element={<MyProfile />} />
-            <Route path="edit" element={<EditProfile />} />
-          </Route>
+          <Route path=":id" element={<MyProfile />} />
+          <Route path="edit" element={<EditProfile />} />
         </Route>
       </Route>
     </Routes>
