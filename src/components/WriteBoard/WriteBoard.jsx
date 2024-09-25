@@ -7,7 +7,11 @@ import { faPhotoFilm, faXmark } from "@fortawesome/free-solid-svg-icons";
 import { editorConfig } from "./editor";
 import axios from "axios";
 import GlobalStyle from "../../assets/styles/GlobalStyle";
-import { createPost, fetchPostChange } from "../../services/postApi";
+import {
+  createPost,
+  fetchPostChange,
+  uploadAdapter,
+} from "../../services/postApi";
 import backBtn from "../../assets/images/back-removebg-preview.png";
 import {
   BackImg,
@@ -25,6 +29,7 @@ import {
   WriteWrap,
   ImgPreviewDelete,
   ImgPreviewWrap,
+  Toolbar,
 } from "./WriteBoard.style";
 
 import "./App.css";
@@ -40,7 +45,6 @@ const WriteBoard = ({ postData, postId }) => {
 
   const toolbarContainerRef = useRef(null); // 툴바 컨테이너 참조
   const editorContainerRef = useRef(null); // 에디터 컨테이너 참조
-  const API_URL = "http://localhost:7000/api/post/image";
 
   useEffect(() => {
     if (postData) {
@@ -64,6 +68,8 @@ const WriteBoard = ({ postData, postId }) => {
   };
 
   const handleFileChange = async (e) => {
+    const API_URL = "http://localhost:7000/api/post/image";
+
     const files = Array.from(e.target.files);
     const newImgUrls = [];
 
@@ -150,29 +156,6 @@ const WriteBoard = ({ postData, postId }) => {
     }
   };
 
-  function uploadAdapter(loader) {
-    return {
-      upload: () => {
-        return new Promise((resolve, reject) => {
-          const body = new FormData();
-          loader.file.then((file) => {
-            body.append("upload", file);
-            axios
-              .post(`${API_URL}`, body)
-              .then((res) => {
-                resolve({
-                  default: res.data.url[0],
-                });
-              })
-              .catch((err) => {
-                reject(err);
-              });
-          });
-        });
-      },
-    };
-  }
-
   function uploadPlugin(editor) {
     editor.plugins.get("FileRepository").createUploadAdapter = (loader) => {
       return uploadAdapter(loader);
@@ -243,7 +226,10 @@ const WriteBoard = ({ postData, postId }) => {
             </ImgWrap>
           )}
           <div ref={editorContainerRef}>
-            <div ref={toolbarContainerRef}></div>
+            <Toolbar
+              style={{ marginBottom: "30px" }}
+              ref={toolbarContainerRef}
+            ></Toolbar>
           </div>
           <CKEditor
             editor={DecoupledEditor}

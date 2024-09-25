@@ -25,6 +25,12 @@ time, mark, audio, video {
     min-height: 400px;
     margin-bottom: 20px;
   }
+
+  .ck.ck-toolbar {
+    border: none;
+    border-radius: 10px;
+}
+
 /* HTML5 display-role reset for older browsers */
 article,
 aside,

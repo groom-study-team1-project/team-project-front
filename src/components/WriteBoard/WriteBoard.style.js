@@ -30,14 +30,14 @@ export const Titleinput = styled.input`
   width: 300%;
   height: 43px;
   border-radius: 10px;
-  border: 1px solid black;
+  border: none;
   margin-bottom: 32px;
 `;
 
 export const Categoryselect = styled.select`
   width: 196px;
   height: 43px;
-  border: 1px solid black;
+  border: none;
   border-radius: 10px;
 `;
 
@@ -56,7 +56,7 @@ export const SubmitBtn = styled.button`
   border-radius: 10px;
   background: ${(props) => props.$bgColor};
   cursor: pointer;
-  border-color: ${(props) => props.$borderColor};
+  border: 1px solid ${(props) => props.$borderColor};
 `;
 
 export const ImgWrap = styled.div`
@@ -80,6 +80,7 @@ export const ImgPreview = styled.img`
   margin-bottom: 10px; /* Space between images in case they wrap to the next line */
   flex-shrink: 0;
   cursor: pointer;
+  object-fit: contain;
 `;
 
 export const ImgPreviewDelete = styled.div`
@@ -116,4 +117,8 @@ export const ImgAdd = styled.div`
   border: 1px solid #ccc;
   position: relative;
   flex-shrink: 0;
+`;
+
+export const Toolbar = styled.div`
+  margin-bottom: 30px;
 `;

@@ -111,3 +111,28 @@ export const sortPostsByCriteria = async (categoty_id, sort, post_id) => {
     console.log(error);
   }
 };
+
+export const uploadAdapter = (loader) => {
+  const API_URL = "http://localhost:7000/api/post/image";
+
+  return {
+    upload: () => {
+      return new Promise((resolve, reject) => {
+        const body = new FormData();
+        loader.file.then((file) => {
+          body.append("upload", file);
+          axios
+            .post(`${API_URL}`, body)
+            .then((res) => {
+              resolve({
+                default: res.data.url[0],
+              });
+            })
+            .catch((err) => {
+              reject(err);
+            });
+        });
+      });
+    },
+  };
+};
