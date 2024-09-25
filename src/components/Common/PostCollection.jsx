@@ -68,7 +68,8 @@ const BoardContentsWrap = styled.div`
 
 const BoardContent = styled.div`
   flex: 4;
-  margin-left: 75px;
+  overflow: hidden;
+  max-width: 300px;
 `;
 
 export const ProfileLeft = ({
@@ -106,13 +107,13 @@ const BoardContents = ({ contents }) => {
 
   return contents.map((content) => (
     <BoardContentsWrap key={content.postId}>
-      <div style={{ flex: "1.2" }}>
+      <div style={{ flex: "1.1" }}>
         <ProfileLeft
-          width={"50px"}
-          height={"50px"}
+          width={"30px"}
+          height={"30px"}
           size={"14px"}
           bottom={"8px"}
-          nickName={userInfo.nickName}
+          nickName={userInfo.nickname}
           jobSize={"10px"}
           color={"#828282"}
           job={userInfo.role}
