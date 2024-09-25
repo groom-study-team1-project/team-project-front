@@ -2,10 +2,10 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
   userInfo: {
-    nickname: "구름이",
+    nickName: "구름이",
     email: "sdad@sad.sadf",
     role: "NORMAL, STUDENT, GRADUATE",
-    imageUrl: "image.png",
+    imageUrl: "",
     aboutMe: "안녕하세요. 구름톤 딥다이브 수강생입니다.",
     phoneNumber: "010-1234-5678",
   },

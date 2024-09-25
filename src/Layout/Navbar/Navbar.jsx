@@ -8,8 +8,9 @@ import {
   MenuItem,
   Button,
   ButtonBox,
+  BorderButton,
 } from "./Navbar.style";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import Modal from "react-modal";
 import ModalLayout from "../../components/Modal/Modal";
@@ -19,8 +20,11 @@ import FindUserId from "../../components/Modal/FindUserIdModal/FindUserId";
 import FindUserPw from "../../components/Modal/FindUserPwModal/FindUserPw";
 import { logout } from "../../services/authApi";
 import { fetchCategoryItems } from "../../services/postApi";
-import { useDispatch } from "react-redux";
 import { userLogout } from "../../store/user/userSlice";
+import logoImg from "../../assets/images/DEEPDIVERS.png";
+import { selectMenuItem } from "../../store/category/menuSlice";
+import darkmodeIcon from "../../assets/images/darkmode.png";
+import profileIcon from "../../assets/images/profileIcon.png";
 
 Modal.setAppElement("#root");
 
@@ -30,8 +34,11 @@ function Navbar({ isMainPage = false }) {
   const [modalType, setModalType] = useState("login");
   const isLoggedIn = useSelector((state) => state.user.isLoggedIn);
   const email = useSelector((state) =>
-    state.user.isLoggedIn ? state.user.userInfo.email.split("@")[0] : null
+    state.user.isLoggedIn && state.user.userInfo?.email
+      ? state.user.userInfo.email.split("@")[0]
+      : null
   );
+  const userInfo = useSelector((state) => state.user.userInfo);
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -42,10 +49,14 @@ function Navbar({ isMainPage = false }) {
       .catch((err) => console.log(err.message));
   }, []);
 
+  const handleMenuClick = (id) => {
+    dispatch(selectMenuItem(id));
+    handleBoardNavigation(id);
+  };
+
   const handleBoardNavigation = (id, e) => {
     console.log(id);
-    if (id === 0) {
-    } else if (id === 1) {
+    if (id === 1) {
       navigate("/board/free");
     } else if (id === 2) {
       navigate("/board/questions");
@@ -53,6 +64,8 @@ function Navbar({ isMainPage = false }) {
       navigate("/board/projects");
     } else if (id === 4) {
       navigate("/board/notices");
+    } else if (id == 5) {
+      navigate("/");
     }
   };
 
@@ -90,7 +103,13 @@ function Navbar({ isMainPage = false }) {
   return (
     <NavbarWrapper>
       <NavbarInner>
-        {isMainPage ? <Logo>로고</Logo> : <NonLogo />}
+        {isMainPage ? (
+          <Logo>
+            <img src={logoImg} alt="로고 이미지" style={{ width: "128px" }} />
+          </Logo>
+        ) : (
+          <NonLogo />
+        )}
 
         {isMainPage && (
           <Menu>
@@ -107,17 +126,35 @@ function Navbar({ isMainPage = false }) {
 
         {isLoggedIn ? (
           <ButtonBox>
-            <Button onClick={() => handleNavigation("write")}>글쓰기</Button>
-            <Button onClick={handleLogout}>다크모드</Button>
+            <Button>
+              <img src={darkmodeIcon} alt="다크모드" />
+            </Button>
+            <BorderButton onClick={() => handleNavigation("write")}>
+              새 글 작성
+            </BorderButton>
+            <Button onClick={handleLogout}>로그아웃</Button>
             <Button onClick={() => handleNavigation("my-profile")}>
-              프로필
+              <img
+                src={userInfo?.imageUrl ? userInfo.imageUrl : profileIcon}
+                alt="프로필"
+                style={{
+                  borderRadius: "20px",
+                  marginTop: "3px",
+                  width: "40px",
+                  height: "40px",
+                }}
+              />
             </Button>
           </ButtonBox>
         ) : (
           <ButtonBox>
-            <Button>다크모드</Button>
-            <Button onClick={() => openModal("login")}>로그인</Button>
-            <Button onClick={() => openModal("signup")}>회원가입</Button>{" "}
+            <Button>
+              <img src={darkmodeIcon} alt="다크모드" />
+            </Button>
+            <Button onClick={() => openModal("login")}>Login</Button>
+            <BorderButton onClick={() => openModal("signup")}>
+              Sign up
+            </BorderButton>
           </ButtonBox>
         )}
       </NavbarInner>

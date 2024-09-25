@@ -2,10 +2,8 @@ import styled from "styled-components";
 
 export const ContainerDiv = styled.div`
   max-height: 1080px;
-  height: 90vh;
+  height: 100vh;
   width: 314px;
-  // container border는 원래 없는 거라서 스켈레톤에서만 보임
-  border-right: 1px solid gray;
 `;
 
 export const SidebarDiv = styled.div`
@@ -32,10 +30,28 @@ export const SidebarLi = styled.li`
   margin-bottom: 1rem;
   padding: 1rem 0;
   cursor: pointer;
-  border: 1px solid black;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  background: ${(props) =>
+    props.isSelected
+      ? `-webkit-linear-gradient(45deg, rgba(38, 112, 233, 0.5) 0%, rgba(255, 255, 255, 0.1) 100%);
+      -moz-linear-gradient(45deg, rgba(38, 112, 233, 0.5) 0%, rgba(255, 255, 255, 0.1) 100%);
+      linear-gradient(45deg, rgba(38, 112, 233, 0.5) 0%, rgba(255, 255, 255, 0.1) 100%);
+      `
+      : "transparent"};
+  border-left: ${(props) => (props.isSelected ? "2px solid #2670E9" : "none")};
+
+  &:last-child {
+    border-bottom: none;
+  }
 `;
 
 export const SidebarLink = styled.div`
   text-decoration: none;
   color: black;
+  margin-left: 8px;
+`;
+
+export const SidebarIcon = styled.img`
+  float: right;
+  margin-right: 16px;
 `;
