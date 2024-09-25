@@ -18,15 +18,15 @@ export const Content = styled.main`
 
 // 왼쪽 콘텐츠(타이틀&게시판버튼)
 export const LeftArea = styled.div`
-  width: 500px;
-  max-width: 520px;
+  width: 600px;
+  max-width: 620px;
   height: auto;
   margin-top: -50px;
   box-sizing: border-box;
 `;
 
 export const Title = styled.h2`
-  font-size: 30px;
+  font-size: 40px;
   margin-top: 10px;
   margin-bottom: 10px;
   font-weight: 600;
@@ -36,12 +36,12 @@ export const SubTitle = styled.h1`
   font-style: black;
   margin-top: 10px;
   margin-bottom: 10px;
-  font-size: 2rem;
+  font-size: 35px;
   font-weight: 900;
 `;
 
 export const Detail = styled.p`
-  font-size: 12px;
+  font-size: 16px;
   margin-top: 20px;
   margin-bottom: 20px;
 `;
@@ -94,15 +94,6 @@ export const PostCardLine = styled.div`
   align-items: center;
   justify-items: end;
 `;
-
-// export const PostCard = styled.div`
-//   margin: 10px;
-//   border: 1px solid black;
-//   display: flex;
-//   flex-direction: column;
-//   align-self: flex-end;
-//   width: ${({ width }) => width || ""};
-// `;
 
 export const PostCardImg = styled.img`
   width: ${(props) => props.width || "320px"};

@@ -81,17 +81,6 @@ function MainPage() {
             </Button>
           </LeftArea>
           <RightArea>
-            {/* <PostCardLine>
-              <PostCard>
-                <ProjectPostCard />
-              </PostCard>
-              <PostCard>PostCard</PostCard>
-            </PostCardLine>
-            <PostCardLine>
-              <PostCard width="985px">
-                <CommunityPostCard />
-              </PostCard>
-            </PostCardLine> */}
             <PostCardLine>
               <PostCardImg
                 src={projectBoardCardImg}
