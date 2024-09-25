@@ -57,8 +57,7 @@ function Navbar({ isMainPage = false }) {
 
   const handleBoardNavigation = (id, e) => {
     console.log(id);
-    if (id === 0) {
-    } else if (id === 1) {
+    if (id === 1) {
       navigate("/board/free");
     } else if (id === 2) {
       navigate("/board/questions");
@@ -66,6 +65,8 @@ function Navbar({ isMainPage = false }) {
       navigate("/board/projects");
     } else if (id === 4) {
       navigate("/board/notices");
+    } else if (id == 5) {
+      navigate("/");
     }
   };
 

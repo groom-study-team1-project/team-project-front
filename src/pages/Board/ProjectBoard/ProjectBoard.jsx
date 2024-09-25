@@ -30,14 +30,11 @@ function ProjectBoard() {
         {postItems.map((postItem) => (
           <ProjectPostCard
             key={postItem.id}
-            id={postItem.id}
             title={postItem.title}
             content={postItem.content}
-            name={postItem.author.name}
-            job={postItem.author.job}
-            email={postItem.author.email}
+            name={postItem.name}
+            job={postItem.job}
             count={postItem.count}
-            img={postItem.imgUrl}
           />
         ))}
       </PostCardWrapper>
