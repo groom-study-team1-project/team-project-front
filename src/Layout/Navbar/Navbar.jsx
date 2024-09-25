@@ -21,7 +21,6 @@ import FindUserPw from "../../components/Modal/FindUserPwModal/FindUserPw";
 import { logout } from "../../services/authApi";
 import { fetchCategoryItems } from "../../services/postApi";
 import { userLogout } from "../../store/user/userSlice";
-import { logout as logoutAction } from "../../store/user/userSlice";
 import logoImg from "../../assets/images/DEEPDIVERS.png";
 import { selectMenuItem } from "../../store/category/menuSlice";
 import darkmodeIcon from "../../assets/images/darkmode.png";
@@ -115,7 +114,10 @@ function Navbar({ isMainPage = false }) {
         {isMainPage && (
           <Menu>
             {menuItems.map((item) => (
-              <MenuItem key={item.id} onClick={() => handleMenuClick(item.id)}>
+              <MenuItem
+                key={item.id}
+                onClick={() => handleBoardNavigation(item.id)}
+              >
                 {item.item}
               </MenuItem>
             ))}

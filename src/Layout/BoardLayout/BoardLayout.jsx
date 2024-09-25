@@ -13,8 +13,7 @@ import PopularHashCard from "../../components/Card/PopularCard/PopularHashCard/P
 import PopularPostCard from "../../components/Card/PopularCard/PopularPostCard/PopularPostCard";
 import { Outlet } from "react-router-dom";
 
-function BoardLayout({ category = { title: "프로젝트 게시판", id: 3 } }) {
-  console.log(category);
+function BoardLayout({ isMyPage = false }) {
   return (
     <Container>
       <SidebarWrapper>
@@ -26,14 +25,16 @@ function BoardLayout({ category = { title: "프로젝트 게시판", id: 3 } }) 
         <Content>
           <Outlet />
 
-          <RightSidebarWrapper>
-            <PopularCardWrapper>
-              <PopularPostCard />
-            </PopularCardWrapper>
-            <PopularCardWrapper>
-              <PopularHashCard />
-            </PopularCardWrapper>
-          </RightSidebarWrapper>
+          {!isMyPage ? (
+            <RightSidebarWrapper>
+              <PopularCardWrapper>
+                <PopularPostCard />
+              </PopularCardWrapper>
+              <PopularCardWrapper>
+                <PopularHashCard />
+              </PopularCardWrapper>
+            </RightSidebarWrapper>
+          ) : null}
         </Content>
       </MainContentWrapper>
     </Container>
