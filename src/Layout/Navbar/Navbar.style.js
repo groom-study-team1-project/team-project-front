@@ -12,7 +12,8 @@ export const NavbarInner = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  width: 1440px;
+  width: 100%;
+  max-width: 1440px;
   height: 80px;
 `;
 
@@ -39,6 +40,7 @@ export const Menu = styled.div`
 
 export const MenuItem = styled.div`
   margin-right: 20px;
+  cursor: pointer;
 
   &:last-child {
     margin-right: 0;

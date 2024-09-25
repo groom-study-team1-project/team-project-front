@@ -10,7 +10,7 @@ import { faEllipsisVertical } from "@fortawesome/free-solid-svg-icons";
 import { fetchcomment, createcomment } from "../../services/api";
 import { fetchPostdetail } from "../../services/postApi";
 import {
-  PostProfile,
+  PostProfileBox,
   ProfileImage,
 } from "../../components/Card/PostCard/PostProfile";
 import {
@@ -101,9 +101,9 @@ function DetailPage() {
 
           <PostWrap>
             <Postheader>
-              <PostProfile
-                name={post.memberInfo.nickname}
-                job={post.memberInfo.development}
+              <PostProfileBox
+                name={post.result.memberInfo.nickname}
+                job={post.result.memberInfo.development}
               />
               <div>
                 {post.postInfo.isModified ? (

@@ -1,63 +1,46 @@
-import React, { useState } from "react";
-import { useLocation } from "react-router-dom";
-import NavBar from "../Navbar/Navbar";
+import React from "react";
 import {
-  BoardTitle,
   Container,
+  MainContentWrapper,
+  SidebarWrapper,
   Content,
   ContentWrapper,
-  MainContentWrapper,
+  BoardTitle,
+  SearchSortWrapper,
+  SearchBox,
+  SortOption,
+  RightSidebarWrapper,
   PopularCardWrapper,
   PostCardWrapper,
-  RightSidebarWrapper,
-  SearchBox,
-  SearchSortWrapper,
-  SortOption,
-} from "../BoardLayout/BoardLayout.style";
-import PopularPostCard from "../../components/Card/PopularCard/PopularPostCard/PopularPostCard";
-import PopularHashCard from "../../components/Card/PopularCard/PopularHashCard/PopularHashCard";
+} from "./BoardLayout.style";
 import Sidebar from "../Sidebar/Sidebar";
+import Navbar from "../Navbar/Navbar";
+import PopularHashCard from "../../components/Card/PopularCard/PopularHashCard/PopularHashCard";
+import PopularPostCard from "../../components/Card/PopularCard/PopularPostCard/PopularPostCard";
 import { sortPostsByCriteria } from "../../services/postApi";
 
-function BoardLayout({ postCards }) {
-  const location = useLocation();
-
-  const determineBoardTitle = () => {
-    switch (location.pathname) {
-      case "/community/projects":
-        return { id: 1, title: "프로젝트 자랑 게시판" };
-      case "/community/notices":
-        return { id: 3, title: "공지사항" };
-      case "/community/free":
-        return { id: 0, title: "자유게시판" };
-      case "/community/questions":
-        return { id: 2, title: "질문게시판" };
-      default:
-        return null;
-    }
-  };
-  const boardTitle = determineBoardTitle();
-  const isProjectBoard = boardTitle.title === "프로젝트 게시판";
+function BoardLayout({ category, children }) {
+  console.log(category);
   return (
     <Container>
-      <Sidebar />
-      <MainContentWrapper>
-        <NavBar isMainPage={false} />
-        <ContentWrapper>
-          <Content>
-            <BoardTitle $boardType={boardTitle.title}>
-              {boardTitle.title}
-            </BoardTitle>
+      <SidebarWrapper>
+        <Sidebar />
+      </SidebarWrapper>
 
+      <MainContentWrapper>
+        <Navbar />
+        <Content>
+          <ContentWrapper>
+            <BoardTitle>{category.title}</BoardTitle>
             <SearchSortWrapper>
               <SearchBox>Search</SearchBox>
               <SortOption
                 onChange={(e) => {
                   const value = e.target.value;
                   if (value === "date") {
-                    sortPostsByCriteria(boardTitle.id, "date", 0);
+                    sortPostsByCriteria(category.id, "date", 0);
                   } else if (value === "like") {
-                    sortPostsByCriteria(boardTitle.id, "like", 0);
+                    sortPostsByCriteria(category.id, "like", 0);
                   }
                 }}
               >
@@ -65,11 +48,8 @@ function BoardLayout({ postCards }) {
                 <option value="like">인기순</option>
               </SortOption>
             </SearchSortWrapper>
-
-            <PostCardWrapper isProjectBoard={isProjectBoard}>
-              {postCards}
-            </PostCardWrapper>
-          </Content>
+            <PostCardWrapper>{children}</PostCardWrapper>
+          </ContentWrapper>
 
           <RightSidebarWrapper>
             <PopularCardWrapper>
@@ -79,7 +59,7 @@ function BoardLayout({ postCards }) {
               <PopularHashCard />
             </PopularCardWrapper>
           </RightSidebarWrapper>
-        </ContentWrapper>
+        </Content>
       </MainContentWrapper>
     </Container>
   );

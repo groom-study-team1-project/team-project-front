@@ -8,7 +8,7 @@ import eyeIcon from "../../../../assets/images/eye.png";
 
 function NoticePostCard({ id, title, date, count }) {
   return (
-    <CustomPostCardWrapper width="985px" height="40px">
+    <CustomPostCardWrapper height="40px">
       <PostContainer>{id}</PostContainer>
       <PostTitle>{title}</PostTitle>
       <PostContainer>{date}</PostContainer>

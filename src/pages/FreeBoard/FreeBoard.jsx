@@ -4,28 +4,28 @@ import BoardLayout from "../../Layout/BoardLayout/BoardLayout";
 import CommunityPostCard from "../../components/Card/PostCard/CommunityPostCard/CommunityPostCard";
 
 function FreeBoard() {
-  const [postCards, setPostCards] = useState([]);
+  const [postItems, setPostItems] = useState([]);
 
   useEffect(() => {
     fetchPostItems()
-      .then((postItems) => {
-        // 받아온 데이터를 기반으로 PostCard 컴포넌트 생성
-        const cards = postItems.map((post) => (
-          <CommunityPostCard
-            key={post.id}
-            title={post.title}
-            content={post.content}
-            name={post.name}
-            job={post.job}
-            count={post.count}
-          />
-        ));
-        setPostCards(cards);
-      })
+      .then((data) => setPostItems(data))
       .catch((err) => console.log(err));
   }, []);
 
-  return <BoardLayout postCards={postCards} />;
+  return (
+    <BoardLayout category={{ title: "자유게시판", id: 1 }}>
+      {postItems.map((postItem) => (
+        <CommunityPostCard
+          key={postItem.id}
+          title={postItem.title}
+          content={postItem.content}
+          name={postItem.name}
+          job={postItem.job}
+          count={postItem.count}
+        />
+      ))}
+    </BoardLayout>
+  );
 }
 
 export default FreeBoard;
