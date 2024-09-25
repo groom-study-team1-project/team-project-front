@@ -8,6 +8,7 @@ import {
   MenuItem,
   Button,
   ButtonBox,
+  BorderButton,
 } from "./Navbar.style";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
@@ -19,7 +20,12 @@ import FindUserId from "../../components/Modal/FindUserIdModal/FindUserId";
 import FindUserPw from "../../components/Modal/FindUserPwModal/FindUserPw";
 import { logout } from "../../services/authApi";
 import { fetchCategoryItems } from "../../services/postApi";
+import { userLogout } from "../../store/user/userSlice";
 import { logout as logoutAction } from "../../store/user/userSlice";
+import logoImg from "../../assets/images/DEEPDIVERS.png";
+import { selectMenuItem } from "../../store/category/menuSlice";
+import darkmodeIcon from "../../assets/images/darkmode.png";
+import profileIcon from "../../assets/images/profileIcon.png";
 
 Modal.setAppElement("#root");
 
@@ -28,12 +34,15 @@ function Navbar({ isMainPage = false }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalType, setModalType] = useState("login");
   const isLoggedIn = useSelector((state) => state.user.isLoggedIn);
+  const email = useSelector((state) =>
+    state.user.isLoggedIn && state.user.userInfo?.email
+      ? state.user.userInfo.email.split("@")[0]
+      : null
+  );
   const userInfo = useSelector((state) => state.user.userInfo);
-  const email =
-    userInfo && userInfo.email ? userInfo.email.split("@")[0] : null;
-  const dispatch = useDispatch();
 
-  let navigate = useNavigate();
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   useEffect(() => {
     fetchCategoryItems()
@@ -41,29 +50,38 @@ function Navbar({ isMainPage = false }) {
       .catch((err) => console.log(err.message));
   }, []);
 
-  const handleNavigation = (id, e) => {
+  const handleMenuClick = (id) => {
+    dispatch(selectMenuItem(id));
+    handleBoardNavigation(id);
+  };
+
+  const handleBoardNavigation = (id, e) => {
     console.log(id);
     if (id === 1) {
-      navigate("/community/free");
+      navigate("/board/free");
     } else if (id === 2) {
-      navigate("/community/questions");
+      navigate("/board/questions");
     } else if (id === 3) {
-      navigate("/community/projects");
+      navigate("/board/projects");
     } else if (id === 4) {
-      navigate("/community/notices");
+      navigate("/board/notices");
     } else if (id == 5) {
       navigate("/");
     }
   };
 
-  const redirectToMyPage = () => {
-    navigate(`/my-page/${email}`);
+  const handleNavigation = (to, e) => {
+    if (to === "my-profile") {
+      navigate(`/my-page/${email}`);
+    } else if (to === "write") {
+      navigate("/board/write");
+    }
   };
 
   async function handleLogout(e) {
     try {
       await logout();
-      dispatch(logoutAction());
+      dispatch(userLogout());
     } catch (err) {
       console.log(err);
     }
@@ -86,12 +104,18 @@ function Navbar({ isMainPage = false }) {
   return (
     <NavbarWrapper>
       <NavbarInner>
-        {isMainPage ? <Logo>로고</Logo> : <NonLogo />}
+        {isMainPage ? (
+          <Logo>
+            <img src={logoImg} alt="로고 이미지" style={{ width: "128px" }} />
+          </Logo>
+        ) : (
+          <NonLogo />
+        )}
 
         {isMainPage && (
           <Menu>
             {menuItems.map((item) => (
-              <MenuItem key={item.id} onClick={() => handleNavigation(item.id)}>
+              <MenuItem key={item.id} onClick={() => handleMenuClick(item.id)}>
                 {item.item}
               </MenuItem>
             ))}
@@ -100,15 +124,35 @@ function Navbar({ isMainPage = false }) {
 
         {isLoggedIn ? (
           <ButtonBox>
-            <Button>글쓰기</Button>
-            <Button onClick={handleLogout}>다크모드</Button>
-            <Button onClick={redirectToMyPage}>프로필</Button>
+            <Button>
+              <img src={darkmodeIcon} alt="다크모드" />
+            </Button>
+            <BorderButton onClick={() => handleNavigation("write")}>
+              새 글 작성
+            </BorderButton>
+            <Button onClick={handleLogout}>로그아웃</Button>
+            <Button onClick={() => handleNavigation("my-profile")}>
+              <img
+                src={userInfo?.imageUrl ? userInfo.imageUrl : profileIcon}
+                alt="프로필"
+                style={{
+                  borderRadius: "20px",
+                  marginTop: "3px",
+                  width: "40px",
+                  height: "40px",
+                }}
+              />
+            </Button>
           </ButtonBox>
         ) : (
           <ButtonBox>
-            <Button onClick={handleLogout}>다크모드</Button>
-            <Button onClick={() => openModal("login")}>로그인</Button>
-            <Button onClick={() => openModal("signup")}>회원가입</Button>
+            <Button>
+              <img src={darkmodeIcon} alt="다크모드" />
+            </Button>
+            <Button onClick={() => openModal("login")}>Login</Button>
+            <BorderButton onClick={() => openModal("signup")}>
+              Sign up
+            </BorderButton>
           </ButtonBox>
         )}
       </NavbarInner>

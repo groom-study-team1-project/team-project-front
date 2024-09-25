@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   Button,
   Container,
@@ -10,19 +10,46 @@ import {
   RightArea,
   SubTitle,
   Title,
+  PostCardImg,
 } from "./MainPage.style";
 import Navbar from "../../Layout/Navbar/Navbar";
 import ProjectPostCard from "../../components/Card/PostCard/ProjectPostCard/ProjectPostCard";
 import CommunityPostCard from "../../components/Card/PostCard/CommunityPostCard/CommunityPostCard";
 import redirectIcon from "../../assets/images/redirect-to-board.png";
 import { useNavigate } from "react-router-dom";
+import projectBoardCardImg from "../../assets/images/Template Card.png";
+import freeBoardCardImg from "../../assets/images/Story Card Horizontal.png";
+import { fetchCategoryItems } from "../../services/postApi";
+import { useDispatch } from "react-redux";
+import { selectMenuItem } from "../../store/category/menuSlice";
 
 function MainPage() {
+  const [menuItems, setMenuItems] = useState([]);
+  const [freeBoardId, setFreeBoardId] = useState(null);
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    fetchCategoryItems()
+      .then((items) => {
+        setMenuItems(items);
+
+        const freeBoardItem = items.find((item) => item.id === 1);
+        if (freeBoardItem) {
+          setFreeBoardId(freeBoardItem.id);
+        }
+      })
+      .catch((err) => console.log(err));
+  }, []);
+
+  const handleMenuClick = () => {
+    dispatch(selectMenuItem(freeBoardId));
+    handleNavigation();
+  };
 
   const handleNavigation = () => {
     console.log(11);
-    navigate("/community/free");
+    navigate("/board/free");
   };
 
   return (
@@ -48,22 +75,23 @@ function MainPage() {
               <br /> 네트워크, 유익한 자료와 활동으로 커뮤니티에서 유익한 시간을
               보내세요.
             </Detail>
-            <Button onClick={handleNavigation}>
+            <Button onClick={handleMenuClick}>
               DeepDivers 게시판으로 바로가기
               <img src={redirectIcon} alt="Redirect to board" />
             </Button>
           </LeftArea>
           <RightArea>
             <PostCardLine>
-              <PostCard>
-                <ProjectPostCard />
-              </PostCard>
-              <PostCard>PostCard</PostCard>
-            </PostCardLine>
-            <PostCardLine>
-              <PostCard width="985px">
-                <CommunityPostCard />
-              </PostCard>
+              <PostCardImg
+                src={projectBoardCardImg}
+                alt="프로젝트 게시판 이미지"
+                height="438"
+              />
+              <PostCardImg
+                src={freeBoardCardImg}
+                alt="자유 게시판 이미지"
+                width="550"
+              />
             </PostCardLine>
           </RightArea>
         </Content>

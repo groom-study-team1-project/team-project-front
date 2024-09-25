@@ -4,66 +4,146 @@ export async function fetchPostItems() {
       id: 1,
       title: "Title",
       content: "This is content.",
-      name: "John Doe",
-      job: "Software Engineer",
+      author: {
+        name: "John Doe",
+        job: "Software Engineer",
+        email: "sgerr",
+      },
       count: {
         view: 12,
         like: 23,
         comment: 20,
       },
-      //+ 썸네일, 사용자 프로필 이미지
+      imgUrl: [
+        {
+          id: 1,
+          url: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS6KVvlziiJYFxZZIq3Xc_dVuzIbSLrgvtHPA&s",
+        },
+        {
+          id: 2,
+          url: "https://www.shutterstock.com/ko/blog/wp-content/uploads/sites/17/2021/01/2021-graphic-design-banner.jpg",
+        },
+        {
+          id: 3,
+          url: "https://img1.daumcdn.net/thumb/R1280x0/?fname=http://t1.daumcdn.net/brunch/service/user/6H5a/image/VbC1Pts-64VW9-xWDV3qad5cLok.jpg",
+        },
+      ],
     },
     {
       id: 2,
       title: "Title",
       content: "This is content.",
-      name: "John Doe",
-      job: "Software Engineer",
+      author: {
+        name: "John Doe",
+        job: "Software Engineer",
+        email: "sgerr",
+      },
       count: {
         view: 12,
         like: 23,
         comment: 20,
       },
-      //+ 썸네일, 사용자 프로필 이미지
+      imgUrl: [
+        {
+          id: 1,
+          url: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS6KVvlziiJYFxZZIq3Xc_dVuzIbSLrgvtHPA&s",
+        },
+        {
+          id: 2,
+          url: "https://www.shutterstock.com/ko/blog/wp-content/uploads/sites/17/2021/01/2021-graphic-design-banner.jpg",
+        },
+        {
+          id: 3,
+          url: "https://img1.daumcdn.net/thumb/R1280x0/?fname=http://t1.daumcdn.net/brunch/service/user/6H5a/image/VbC1Pts-64VW9-xWDV3qad5cLok.jpg",
+        },
+      ],
     },
     {
       id: 3,
       title: "Title",
       content: "This is content.",
-      name: "John Doe",
-      job: "Software Engineer",
+      author: {
+        name: "John Doe",
+        job: "Software Engineer",
+        email: "sgerr",
+      },
       count: {
         view: 12,
         like: 23,
         comment: 20,
       },
-      //+ 썸네일, 사용자 프로필 이미지
+      imgUrl: [
+        {
+          id: 1,
+          url: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS6KVvlziiJYFxZZIq3Xc_dVuzIbSLrgvtHPA&s",
+        },
+        {
+          id: 2,
+          url: "https://www.shutterstock.com/ko/blog/wp-content/uploads/sites/17/2021/01/2021-graphic-design-banner.jpg",
+        },
+        {
+          id: 3,
+          url: "https://img1.daumcdn.net/thumb/R1280x0/?fname=http://t1.daumcdn.net/brunch/service/user/6H5a/image/VbC1Pts-64VW9-xWDV3qad5cLok.jpg",
+        },
+      ],
     },
     {
       id: 4,
       title: "Title",
       content: "This is content.",
-      name: "John Doe",
-      job: "Software Engineer",
+      author: {
+        name: "John Doe",
+        job: "Software Engineer",
+        email: "sgerr",
+      },
       count: {
         view: 12,
         like: 23,
         comment: 20,
       },
-      //+ 썸네일, 사용자 프로필 이미지
+      imgUrl: [
+        {
+          id: 1,
+          url: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS6KVvlziiJYFxZZIq3Xc_dVuzIbSLrgvtHPA&s",
+        },
+        {
+          id: 2,
+          url: "https://www.shutterstock.com/ko/blog/wp-content/uploads/sites/17/2021/01/2021-graphic-design-banner.jpg",
+        },
+        {
+          id: 3,
+          url: "https://img1.daumcdn.net/thumb/R1280x0/?fname=http://t1.daumcdn.net/brunch/service/user/6H5a/image/VbC1Pts-64VW9-xWDV3qad5cLok.jpg",
+        },
+      ],
     },
     {
       id: 5,
       title: "Title",
       content: "This is content.",
-      name: "John Doe",
-      job: "Software Engineer",
+      author: {
+        name: "John Doe",
+        job: "Software Engineer",
+        email: "sgerr",
+      },
       count: {
         view: 12,
         like: 23,
         comment: 20,
       },
-      //+ 썸네일, 사용자 프로필 이미지
+      imgUrl: [
+        {
+          id: 1,
+          url: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS6KVvlziiJYFxZZIq3Xc_dVuzIbSLrgvtHPA&s",
+        },
+        {
+          id: 2,
+          url: "https://www.shutterstock.com/ko/blog/wp-content/uploads/sites/17/2021/01/2021-graphic-design-banner.jpg",
+        },
+        {
+          id: 3,
+          url: "https://img1.daumcdn.net/thumb/R1280x0/?fname=http://t1.daumcdn.net/brunch/service/user/6H5a/image/VbC1Pts-64VW9-xWDV3qad5cLok.jpg",
+        },
+      ],
     },
   ];
 }
