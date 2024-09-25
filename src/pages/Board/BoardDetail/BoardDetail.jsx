@@ -1,5 +1,5 @@
 import React, { useRef, useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { CKEditor } from "@ckeditor/ckeditor5-react";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import Slide from "../../../components/Common/imgSlide";
@@ -51,11 +51,12 @@ function BoardDetail() {
   const [modalcurrent, setModalcurrnet] = useState(false);
   const modalRef = useRef(null);
   const navigate = useNavigate();
+  const { postId } = useParams();
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const postResponse = await fetchPostDetail();
+        const postResponse = await fetchPostDetail(postId);
         const commentsResponse = await fetchcomment();
 
         setPost(postResponse);
@@ -105,6 +106,7 @@ function BoardDetail() {
               <PostProfileBox
                 name={post.memberInfo.nickname}
                 job={post.memberInfo.development}
+                email={post.memberInfo.email}
               />
               <div>
                 {post.postInfo.isModified ? (

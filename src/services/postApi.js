@@ -28,6 +28,7 @@ export const fetchPostDetail = async (postId) => {
         Id: 0,
         nickname: "MogensEgeskov",
         development: "iOS Developer",
+        email: "lkjj",
         imageUrl: "~~~",
       },
       postInfo: {

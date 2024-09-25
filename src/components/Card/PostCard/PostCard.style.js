@@ -11,7 +11,14 @@ export const ContentBox = styled.div`
 
 export const Thumbnail = styled.div`
   flex-grow: 1;
+  max-width: 260px;
   border: 1px solid;
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
 `;
 
 export const PostCardWrapper = styled.div`
@@ -39,4 +46,3 @@ export const PostActions = styled.div`
   justify-content: space-between;
   align-items: flex-end;
 `;
-
