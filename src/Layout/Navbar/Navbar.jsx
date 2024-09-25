@@ -35,7 +35,9 @@ function Navbar({ isMainPage = false }) {
   const [modalType, setModalType] = useState("login");
   const isLoggedIn = useSelector((state) => state.user.isLoggedIn);
   const email = useSelector((state) =>
-    state.user.isLoggedIn ? state.user.userInfo.email.split("@")[0] : null
+    state.user.isLoggedIn && state.user.userInfo?.email
+      ? state.user.userInfo.email.split("@")[0]
+      : null
   );
   const userInfo = useSelector((state) => state.user.userInfo);
 
