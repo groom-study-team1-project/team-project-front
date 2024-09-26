@@ -5,11 +5,11 @@ import {
   ContentBox,
   InnerContainer,
   PostCardWrapper,
-  Thumbnail,
 } from "../PostCard.style";
 import { PostProfileBox } from "../PostProfile";
-import { CustomPostActions } from "./ProjectPostCard.style";
+import { CustomPostActions, CustomThumbnail } from "./ProjectPostCard.style";
 import { useNavigate } from "react-router-dom";
+import { Divider } from "../../Card.style";
 
 function ProjectPostCard({
   id,
@@ -43,9 +43,9 @@ function ProjectPostCard({
   return (
     <PostCardWrapper width="280px" height="440px" onClick={handleNavigation}>
       <InnerContainer direction="column">
-        <Thumbnail>
+        <CustomThumbnail>
           {img ? <img src={img[imgIndex].url} alt={`img ${imgIndex}`} /> : null}
-        </Thumbnail>
+        </CustomThumbnail>
         <Body>
           <CustomPostActions>
             <Interaction count={count} />
@@ -54,10 +54,12 @@ function ProjectPostCard({
               handleNextImage={(e) => handleNextImage(e)}
             />
           </CustomPostActions>
+          <Divider />
           <ContentBox>
             <p>{title}</p>
             <p>{content}</p>
           </ContentBox>
+          <Divider />
           <PostProfileBox name={name} job={job} email={email} />
         </Body>
       </InnerContainer>

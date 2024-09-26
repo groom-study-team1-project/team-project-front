@@ -71,6 +71,8 @@ export const InnerContainer = styled.div`
 
 export const Body = styled.div`
   display: flex;
+  flex-grow: 1;
+  gap: 10px;
   flex-direction: column;
   padding: 10px 10px 0 10px;
 `;
