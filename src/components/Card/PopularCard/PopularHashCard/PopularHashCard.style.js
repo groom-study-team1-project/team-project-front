@@ -11,17 +11,35 @@ export const Hash = styled.div`
   cursor: pointer;
 
   &:hover {
-    border: 1px solid white;
-
-    background-color: linear-gradient(
+    border: none;
+    background: linear-gradient(
       to bottom,
       rgba(255, 255, 255, 0.6),
       rgba(255, 255, 255, 0.5)
     );
-
-    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1), 0 15px 30px rgba(0, 0, 0, 0.1),
-      0 20px 40px rgba(0, 0, 0, 0.15);
+    box-shadow: 0 1px 0 rgba(0, 0, 0, 0.05), 0 4px 4px rgba(0, 0, 0, 0.05),
+      0 10px 10px rgba(0, 0, 0, 0.1);
     backdrop-filter: blur(20px);
+  }
+
+  &:hover::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-color: transparent;
+    border-radius: 8px;
+    border: 1px solid transparent;
+    background: linear-gradient(
+        10deg,
+        rgba(255, 255, 255, 0),
+        rgba(255, 255, 255, 1)
+      )
+      border-box;
+    -webkit-mask: linear-gradient(#fff 0 0) padding-box,
+      linear-gradient(#fff 0 0);
+    mask: linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: destination-out;
+    mask-composite: exclude;
   }
 `;
 
