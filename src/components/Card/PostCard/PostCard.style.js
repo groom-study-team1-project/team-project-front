@@ -7,6 +7,7 @@ export const ContentBox = styled.div`
 export const Thumbnail = styled.div`
   flex-grow: 1;
   max-width: 260px;
+  max-height: 200px;
   border-radius: 10px;
   overflow: hidden;
   box-shadow: 0 5px 10px rgba(0, 0, 0, 0.05), 0 15px 30px rgba(0, 0, 0, 0.15),
@@ -17,13 +18,17 @@ export const Thumbnail = styled.div`
     height: 100%;
     object-fit: cover;
   }
+  @media (max-width: 210px) {
+    display: none;
+  }
 `;
 
-export const PostCardWrapper = styled.div`
+export const PostCardContainer = styled.div`
   position: relative;
   display: flex;
   width: ${({ width }) => width || "100%"};
-  height: ${({ height }) => height || "100%"};
+  height: ${({ height }) => height || "auto"};
+  aspect-ratio: 1/1.5;
   cursor: pointer;
   transition: transform 450ms;
 

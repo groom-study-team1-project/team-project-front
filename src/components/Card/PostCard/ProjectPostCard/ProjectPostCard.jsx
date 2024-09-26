@@ -4,7 +4,7 @@ import {
   Body,
   ContentBox,
   InnerContainer,
-  PostCardWrapper,
+  PostCardContainer,
 } from "../PostCard.style";
 import { PostProfileBox } from "../PostProfile";
 import { CustomPostActions, CustomThumbnail } from "./ProjectPostCard.style";
@@ -41,7 +41,7 @@ function ProjectPostCard({
   };
 
   return (
-    <PostCardWrapper width="280px" height="440px" onClick={handleNavigation}>
+    <PostCardContainer onClick={handleNavigation}>
       <InnerContainer direction="column">
         <CustomThumbnail>
           {img ? <img src={img[imgIndex].url} alt={`img ${imgIndex}`} /> : null}
@@ -63,7 +63,7 @@ function ProjectPostCard({
           <PostProfileBox name={name} job={job} email={email} />
         </Body>
       </InnerContainer>
-    </PostCardWrapper>
+    </PostCardContainer>
   );
 }
 

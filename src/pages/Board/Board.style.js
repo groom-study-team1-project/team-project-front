@@ -28,7 +28,7 @@ export const SearchSortWrapper = styled.div`
 `;
 
 export const PostCardWrapper = styled.div`
-  display: flex;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: repeat(minmax(300px, 1fr));
   gap: 40px;
 `;

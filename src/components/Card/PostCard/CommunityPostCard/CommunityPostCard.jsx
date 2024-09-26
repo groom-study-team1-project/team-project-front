@@ -4,11 +4,10 @@ import {
   ContentBox,
   InnerContainer,
   PostActions,
-  PostCardWrapper,
-  Thumbnail,
+  PostCardContainer,
 } from "../PostCard.style";
 import { PostProfileBox } from "../PostProfile";
-import { CustomBody } from "./CommunityPostCard.style";
+import { CustomBody, CustomThumbnail } from "./CommunityPostCard.style";
 import { useNavigate } from "react-router-dom";
 import { Divider } from "../../Card.style";
 
@@ -43,13 +42,13 @@ function CommunityPostCard({
 
   return (
     <>
-      <PostCardWrapper height="232px" onClick={handleNavigation}>
+      <PostCardContainer height="232px" onClick={handleNavigation}>
         <InnerContainer>
-          <Thumbnail>
+          <CustomThumbnail>
             {img ? (
               <img src={img[imgIndex].url} alt={`img ${imgIndex}`} />
             ) : null}
-          </Thumbnail>
+          </CustomThumbnail>
           <CustomBody>
             <PostActions>
               <PostProfileBox name={name} job={job} email={email} />
@@ -68,7 +67,7 @@ function CommunityPostCard({
             />
           </CustomBody>
         </InnerContainer>
-      </PostCardWrapper>
+      </PostCardContainer>
     </>
   );
 }
