@@ -1,7 +1,7 @@
 import React, { useRef, useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { CKEditor } from "@ckeditor/ckeditor5-react";
-import { DecoupledEditor } from "ckeditor5";
+import { ClassicEditor } from "ckeditor5";
 import Slide from "../../components/Common/imgSlide";
 import heart from "../../assets/images/heart.png";
 import commentsubmit from "../../assets/images/commentsubmit.png";
@@ -102,8 +102,8 @@ function DetailPage() {
           <PostWrap>
             <Postheader>
               <PostProfileBox
-                name={post.result.memberInfo.nickname}
-                job={post.result.memberInfo.development}
+                name={post.memberInfo.nickname}
+                job={post.memberInfo.development}
               />
               <div>
                 {post.postInfo.isModified ? (
@@ -154,14 +154,20 @@ function DetailPage() {
             )}
 
             <Title>{post.postInfo.title}</Title>
-            <CKEditor
-              editor={DecoupledEditor}
-              data={post.postInfo.content}
-              config={{
-                toolbar: [],
-              }}
-              disabled={true}
-            />
+            <div>{post.postInfo.content}</div>
+            {post.postInfo.content ? (
+              <CKEditor
+                key={post.postInfo.content}
+                editor={ClassicEditor}
+                data={post.postInfo.content}
+                config={{
+                  toolbar: [],
+                }}
+                disabled={true}
+              />
+            ) : (
+              <p>No content available</p>
+            )}
           </PostWrap>
           <PostFooter>
             <div>
