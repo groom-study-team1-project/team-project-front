@@ -13,6 +13,8 @@ export const MainContentWrapper = styled.div`
   flex-grow: 1;
   display: flex;
   flex-direction: column;
+  background-color: rgba(255, 255, 255, 0.2);
+  border-left: 1px solid rgb(255, 255, 255);
 `;
 
 export const Content = styled.div`
