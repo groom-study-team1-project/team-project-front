@@ -6,6 +6,7 @@ export const Container = styled.div`
 `;
 
 export const SidebarWrapper = styled.div`
+  width: 320px;
   flex-shrink: 0;
 `;
 
