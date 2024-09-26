@@ -9,7 +9,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEllipsisVertical } from "@fortawesome/free-solid-svg-icons";
 import { fetchcomment, createcomment } from "../../../services/api";
 import Navbar from "../../../Layout/Navbar/Navbar";
-import { editorConfig } from "../../Board/BoardWrite/editor";
+import { editorConfig } from "../BoardWrite/WriteBoard/editor";
 import { fetchPostDetail } from "../../../services/postApi";
 import {
   PostProfileBox,
@@ -44,6 +44,7 @@ import {
   CommentInput,
   InputImg,
   CategoryTitle,
+  CommentWrap,
 } from "./BoardDetail.style";
 import { ContentWrapper } from "../Board.style";
 function BoardDetail() {
@@ -191,7 +192,7 @@ function BoardDetail() {
 
             <CommetHr />
             {commentsData.result.map((commentData, index) => (
-              <CommentsWrap key={index}>
+              <CommentWrap key={index}>
                 <Comment>
                   <ProfileImage />
                   <CommentText>
@@ -215,7 +216,7 @@ function BoardDetail() {
                     </CommnetModalIcon>
                   )}
                 </CommentRight>
-              </CommentsWrap>
+              </CommentWrap>
             ))}
             <hr />
             <form onSubmit={onSubmit}>

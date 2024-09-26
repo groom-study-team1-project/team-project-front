@@ -96,6 +96,7 @@ export const CommentWrap = styled.div`
   padding: 0px 12px;
   border-radius: 15px;
   margin-bottom: 16px;
+  background: white;
 `;
 
 export const Comment = styled.div`

@@ -6,13 +6,13 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPhotoFilm, faXmark } from "@fortawesome/free-solid-svg-icons";
 import { editorConfig } from "./editor";
 import axios from "axios";
-import GlobalStyle from "../../../assets/styles/GlobalStyle";
+import GlobalStyle from "../../../../assets/styles/GlobalStyle";
 import {
   createPost,
   fetchPostChange,
   uploadAdapter,
-} from "../../../services/postApi";
-import backBtn from "../../../assets/images/back-removebg-preview.png";
+} from "../../../../services/postApi";
+import backBtn from "../../../../assets/images/back-removebg-preview.png";
 import {
   BackImg,
   Categoryselect,
