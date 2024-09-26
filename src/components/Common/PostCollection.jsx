@@ -18,28 +18,45 @@ const UserName = styled.div`
   margin-bottom: ${(props) => (props.$bottom ? props.$bottom : "20px")};
 `;
 
+const UserJob = styled.div`
+  font-size: ${(props) => (props.$jobSize ? props.$jobSize : "16px")};
+  color: ${(props) => (props.$color ? props.$color : "black")};
+`;
+
 const Mypost = styled.div`
-  border: 1px solid black;
-  margin: 10px;
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.6) 50%,
+    rgba(255, 255, 255, 0.5) 100%
+  );
+  border-radius: 20px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  margin: 24px;
   border-radius: 10px;
-  padding: 10px;
+  padding: 16px;
 `;
 
 const Myboard = styled.div`
-  padding: 10px;
-  border: 1px solid black;
+  padding: 10px 16px;
+  border: 1px solid rgba(0, 0, 0, 0.1);
   margin: 10px;
   display: flex;
   justify-content: space-between;
   border-radius: 8px;
+
   span {
     cursor: pointer;
+    color: #575757;
+    padding-right: 10px;
   }
 `;
 
 const ProfileImages = styled(ProfileImage)`
   width: ${(props) => (props.$width ? props.$width : "100px")};
   height: ${(props) => (props.$height ? props.$height : "100px")};
+  background-color: lightblue; // 임시 배경색 지정
+  border: 2px solid white;
+  margin-right: ${(props) => (props.$marginRight ? props.marginRight : "0")};
 `;
 
 const BoardContentsWrap = styled.div`
@@ -51,18 +68,35 @@ const BoardContentsWrap = styled.div`
 
 const BoardContent = styled.div`
   flex: 4;
-  margin-left: 75px;
+  overflow: hidden;
+  max-width: 300px;
 `;
 
-export const ProfileLeft = ({ width, height, size, bottom, nickName, job }) => {
+export const ProfileLeft = ({
+  width,
+  height,
+  marginRight,
+  size,
+  bottom,
+  nickName,
+  jobSize,
+  color,
+  job,
+}) => {
   return (
     <ProfileHeaderLeft>
-      <ProfileImages $width={width} $height={height} />
-      <div>
+      <ProfileImages
+        $width={width}
+        $height={height}
+        $marginRight={marginRight}
+      />
+      <div style={{ marginLeft: "24px" }}>
         <UserName $size={size} $bottom={bottom}>
           {nickName}
         </UserName>
-        <div>{job}</div>
+        <UserJob $jobSize={jobSize} $color={color}>
+          {job}
+        </UserJob>
       </div>
     </ProfileHeaderLeft>
   );
@@ -73,13 +107,15 @@ const BoardContents = ({ contents }) => {
 
   return contents.map((content) => (
     <BoardContentsWrap key={content.postId}>
-      <div style={{ flex: "1" }}>
+      <div style={{ flex: "1.1" }}>
         <ProfileLeft
           width={"30px"}
           height={"30px"}
-          size={"16px"}
-          bottom={"2px"}
-          nickName={userInfo.nickName}
+          size={"14px"}
+          bottom={"8px"}
+          nickName={userInfo.nickname}
+          jobSize={"10px"}
+          color={"#828282"}
           job={userInfo.role}
         />
       </div>
@@ -142,9 +178,9 @@ export const PostCollection = ({ memberId }) => {
 
   return (
     <Mypost>
-      <div>
-        <span>내가 쓴 글</span>
-        <span>
+      <div style={{ padding: "10px" }}>
+        <span style={{ fontWeight: "bold", fontSize: "17px" }}>내가 쓴 글</span>
+        <span style={{ fontSize: "14px", paddingLeft: "5px" }}>
           {` ${freeBoard.length + projectBoard.length + questionBoard.length}`}
         </span>
       </div>

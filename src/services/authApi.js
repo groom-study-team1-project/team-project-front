@@ -12,6 +12,14 @@ export const login = async (body) => {
       result: {
         accessToken: "aenfaef.aefaefae.faefae",
         refreshToken: "asfasfasf.asfasf.safasf",
+        userInfo: {
+          nickname: "구름이",
+          email: "sdad@sad.sadf",
+          role: "NORMAL, STUDENT, GRADUATE",
+          imageUrl: "image.png",
+          aboutMe: "안녕하세요. 구름톤 딥다이브 수강생입니다.",
+          phoneNumber: "010-1234-5678",
+        },
       },
     };
 
@@ -211,11 +219,26 @@ export const findUserId = async (nickname, tel) => {
     const response = {
       code: 1006,
       message: "이메일 찾기에 성공했습니다.",
+      success: true,
+      params: {
+        nickname: "구름이",
+        tel: "010-1234-5678",
+      },
       result: {
         email: "test@mail.com",
       },
     };
-    return response;
+
+    if (nickname === response.params.nickname && tel === response.params.tel) {
+      return response;
+    } else {
+      return {
+        success: false,
+        message: "이메일 찾기에 실패했습니다.",
+      };
+    }
+
+    // return response;
   } catch (error) {
     console.error("회원 정보를 가져오는 중 오류 발생:", error);
   }
@@ -233,11 +256,29 @@ export const findUserPw = async (email, nickname, tel) => {
     const response = {
       code: 1007,
       message: "비밀번호 찾기에 성공했습니다.",
+      success: true,
+      params: {
+        email: "test@mail.com",
+        nickname: "구름이",
+        tel: "010-1234-5678",
+      },
       result: {
         password: "testPassword",
       },
     };
-    return response;
+
+    if (
+      email === response.params.email &&
+      nickname === response.params.nickname &&
+      tel === response.params.tel
+    ) {
+      return response;
+    } else {
+      return {
+        success: false,
+        message: "비밀번호 찾기에 실패했습니다.",
+      };
+    }
   } catch (error) {
     console.error("비밀번호를 찾던 중 오류 발생:", error);
     throw error;

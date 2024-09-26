@@ -57,18 +57,23 @@ function MyProfile() {
   }
 
   const redirectToEditPage = () => {
-    navigate("/edit");
+    navigate("/my-page/edit");
   };
 
   return (
     <>
       <Wrap>
         <ProfileWrap>
-          <ProfileTitle>프로필</ProfileTitle>
+          <ProfileTitle>
+            <h1>프로필</h1>
+          </ProfileTitle>
         </ProfileWrap>
         <Main>
           <ProfileHeader>
             <ProfileLeft
+              width={"200px"}
+              height={"200px"}
+              marginRight={"32px"}
               nickName={profileData.result.nickname}
               job={profileData.result.role}
             />
@@ -78,10 +83,15 @@ function MyProfile() {
               </ProfileSetting>
             ) : null}
           </ProfileHeader>
-          <hr />
-          <Userintroduce>{profileData.result.aboutMe}</Userintroduce>
-          <hr />
-          {isMine ? <PostCollection memberId={memberId} /> : null}
+          <div
+            style={{
+              width: "90%",
+              marginLeft: "5%",
+            }}
+          >
+            <Userintroduce>{profileData.result.aboutMe}</Userintroduce>
+            {isMine ? <PostCollection memberId={memberId} /> : null}
+          </div>
         </Main>
       </Wrap>
     </>

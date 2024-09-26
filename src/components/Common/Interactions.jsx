@@ -48,9 +48,9 @@ export const Interaction = ({ count }) => (
   </InteractionsWrapper>
 );
 
-export const ArrowButton = () => (
+export const ArrowButton = ({ handlePrevImage, handleNextImage }) => (
   <div>
-    <DefaultArrow></DefaultArrow>
-    <MirroredArrow></MirroredArrow>
+    <DefaultArrow onClick={handlePrevImage}></DefaultArrow>
+    <MirroredArrow onClick={handleNextImage}></MirroredArrow>
   </div>
 );

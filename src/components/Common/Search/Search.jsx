@@ -6,7 +6,7 @@ import {
   InnerSearch,
   SearchIcon,
 } from "./Search.style";
-import searchIcon from "../../assets/images/search.png";
+import searchIcon from "../../../assets/images/search.png";
 
 function Search({ onSearch }) {
   const [searchTerm, setSearchTerm] = useState("");
