@@ -1,14 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { fetchPostItems } from "../../../services/api";
 import ProjectPostCard from "../../../components/Card/PostCard/ProjectPostCard/ProjectPostCard";
-import {
-  BoardTitle,
-  ContentWrapper,
-  PostCardWrapper,
-  SearchSortWrapper,
-} from "../Board.style";
+import { BoardTitle, ContentWrapper, SearchSortWrapper } from "../Board.style";
 import Search from "../../../components/Common/Search/Search";
 import SortOptionButton from "../../../components/Common/SortOptionButton/SortOptionButton";
+import { ProjectPostCardWrapper } from "./ProjectBoard.style";
 
 function ProjectBoard() {
   const [postItems, setPostItems] = useState([]);
@@ -26,7 +22,7 @@ function ProjectBoard() {
         <Search />
         <SortOptionButton />
       </SearchSortWrapper>
-      <PostCardWrapper>
+      <ProjectPostCardWrapper>
         {postItems.map((postItem) => (
           <ProjectPostCard
             key={postItem.id}
@@ -40,7 +36,7 @@ function ProjectBoard() {
             img={postItem.imgUrl}
           />
         ))}
-      </PostCardWrapper>
+      </ProjectPostCardWrapper>
     </ContentWrapper>
   );
 }
