@@ -45,8 +45,18 @@ nav,
 section {
   display: block;
 }
+html,
 body {
+  width:100vw;
+  height:100vh;
   line-height: 1;
+}
+#root{
+  width:100%;
+  height:100%;
+}
+::-webkit-scrollbar {
+  display: none;
 }
 ol,
 ul {

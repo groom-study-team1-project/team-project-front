@@ -1,15 +1,7 @@
 import styled from "styled-components";
 
-export const CenteredContainer = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
-  width: 100vw;
-`;
-
 export const Wrap = styled.div`
-  width: 1028px;
+  width: 50vw;
   margin: auto auto;
   font-size: 16px;
 `;
@@ -17,13 +9,25 @@ export const Wrap = styled.div`
 export const CategotyWrap = styled.div`
   width: 260px;
   height: 54px;
-  border: 1px solid black;
   align-items: center;
   display: flex;
   justify-content: center;
   border-radius: 20px;
   margin-bottom: 130px;
   margin-right: -100px;
+  background: linear-gradient(
+    to bottom,
+    rgba(255, 255, 255, 1),
+    rgba(255, 255, 255, 0.5)
+  );
+`;
+
+export const CategoryTitle = styled.div`
+  font-size: 30px;
+  background: linear-gradient(to right bottom, #0b0611, #42469c);
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
 `;
 
 export const Postheader = styled.div`
@@ -50,6 +54,11 @@ export const PostWrap = styled.div`
   padding: 10px;
   border-radius: 10px;
   width: 100%;
+  background-color: white;
+  .ck.ck-editor__editable:not(.ck-editor__nested-editable) {
+    min-height: 0px;
+    margin-bottom: 0px;
+  }
 `;
 
 export const Title = styled.div`

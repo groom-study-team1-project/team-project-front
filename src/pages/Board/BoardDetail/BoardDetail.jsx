@@ -1,13 +1,15 @@
 import React, { useRef, useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { CKEditor } from "@ckeditor/ckeditor5-react";
-import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
+import { DecoupledEditor } from "ckeditor5";
 import Slide from "../../../components/Common/imgSlide";
 import heart from "../../../assets/images/heart.png";
 import commentsubmit from "../../../assets/images/commentsubmit.png";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEllipsisVertical } from "@fortawesome/free-solid-svg-icons";
 import { fetchcomment, createcomment } from "../../../services/api";
+import Navbar from "../../../Layout/Navbar/Navbar";
+import { editorConfig } from "../../Board/BoardWrite/editor";
 import { fetchPostDetail } from "../../../services/postApi";
 import {
   PostProfileBox,
@@ -17,11 +19,10 @@ import {
   Interaction,
   InteractionItem,
 } from "../../../components/Common/Interactions";
-import { Wrap } from "../BoardWrite/BoardWrite.style";
 import { deletepost } from "../../../services/postApi";
 import {
   CategotyWrap,
-  CenteredContainer,
+  Wrap,
   PostWrap,
   Postheader,
   PostheaderRignt,
@@ -42,17 +43,18 @@ import {
   CommentInputWrap,
   CommentInput,
   InputImg,
+  CategoryTitle,
 } from "./BoardDetail.style";
-
+import { ContentWrapper } from "../Board.style";
 function BoardDetail() {
   const [post, setPost] = useState(null);
   const [commentsData, setCommentData] = useState(null);
   const [commentValue, setCommentValue] = useState("");
   const [modalcurrent, setModalcurrnet] = useState(false);
+  const [postData, setPostData] = useState("");
   const modalRef = useRef(null);
   const navigate = useNavigate();
   const { postId } = useParams();
-
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -61,12 +63,13 @@ function BoardDetail() {
 
         setPost(postResponse);
         setCommentData(commentsResponse);
+        setPostData(postResponse.postInfo.content);
       } catch (error) {
         console.error("데이터를 가져오는데 실패", error);
       }
     };
     fetchData();
-  }, []);
+  }, [postId]);
 
   const onSubmit = async (e) => {
     await e.preventDefault();
@@ -97,9 +100,11 @@ function BoardDetail() {
 
   return (
     <>
-      <CenteredContainer>
+      <ContentWrapper>
         <Wrap>
-          <CategotyWrap>{post.categoryInfo.title}</CategotyWrap>
+          <CategotyWrap>
+            <CategoryTitle>{post.categoryInfo.title}</CategoryTitle>
+          </CategotyWrap>
 
           <PostWrap>
             <Postheader>
@@ -148,7 +153,7 @@ function BoardDetail() {
                 )}
               </div>
             </Postheader>
-            {post.categoryInfo.title === "프로젝트 자랑 게시판" ? (
+            {post.categoryInfo.title === "프로젝트 게시판" ? (
               <div>
                 <Slide imgUrls={post.postInfo.imgUrl} />
               </div>
@@ -158,11 +163,9 @@ function BoardDetail() {
 
             <Title>{post.postInfo.title}</Title>
             <CKEditor
-              editor={ClassicEditor}
-              data={post.postInfo.content}
-              config={{
-                toolbar: [],
-              }}
+              editor={DecoupledEditor}
+              config={editorConfig}
+              data={postData}
               disabled={true}
             />
           </PostWrap>
@@ -172,10 +175,20 @@ function BoardDetail() {
                 <span key={index}>{hashtag}</span>
               ))}
             </div>
-            <Interaction count={{ view: 12, like: 12, comment: 12 }} />
+            <Interaction
+              count={{
+                view: post.postInfo.viewCount,
+                like: post.postInfo.recommedCount,
+                comment: post.postInfo.commentCount,
+              }}
+            />
           </PostFooter>
           <CommentsWrap>
-            <div style={{ fontSize: "24px" }}>댓글</div>
+            <div>
+              <span style={{ fontSize: "24px" }}>댓글</span>
+              <span>{post.postInfo.commentCount}</span>
+            </div>
+
             <CommetHr />
             {commentsData.result.map((commentData, index) => (
               <CommentsWrap key={index}>
@@ -221,7 +234,7 @@ function BoardDetail() {
             </form>
           </CommentsWrap>
         </Wrap>
-      </CenteredContainer>
+      </ContentWrapper>
     </>
   );
 }
