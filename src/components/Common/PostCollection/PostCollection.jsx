@@ -1,76 +1,19 @@
 import React, { useEffect, useState } from "react";
-import styled from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faAngleDown } from "@fortawesome/free-solid-svg-icons";
-import { Interaction } from "./Interactions";
-import { ProfileImage } from "../Card/PostCard/PostProfile";
-import { postInfo } from "../../services/authApi";
+import { Interaction } from "../Interactions";
+import { postInfo } from "../../../services/authApi";
 import { useSelector } from "react-redux";
-
-const ProfileHeaderLeft = styled.div`
-  display: flex;
-  align-items: center;
-`;
-
-const UserName = styled.div`
-  font-weight: bold;
-  font-size: ${(props) => (props.$size ? props.$size : "32px")};
-  margin-bottom: ${(props) => (props.$bottom ? props.$bottom : "20px")};
-`;
-
-const UserJob = styled.div`
-  font-size: ${(props) => (props.$jobSize ? props.$jobSize : "16px")};
-  color: ${(props) => (props.$color ? props.$color : "black")};
-`;
-
-const Mypost = styled.div`
-  background: linear-gradient(
-    180deg,
-    rgba(255, 255, 255, 0.6) 50%,
-    rgba(255, 255, 255, 0.5) 100%
-  );
-  border-radius: 20px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-  margin: 24px;
-  border-radius: 10px;
-  padding: 16px;
-`;
-
-const Myboard = styled.div`
-  padding: 10px 16px;
-  border: 1px solid rgba(0, 0, 0, 0.1);
-  margin: 10px;
-  display: flex;
-  justify-content: space-between;
-  border-radius: 8px;
-
-  span {
-    cursor: pointer;
-    color: #575757;
-    padding-right: 10px;
-  }
-`;
-
-const ProfileImages = styled(ProfileImage)`
-  width: ${(props) => (props.$width ? props.$width : "100px")};
-  height: ${(props) => (props.$height ? props.$height : "100px")};
-  background-color: lightblue; // 임시 배경색 지정
-  border: 2px solid white;
-  margin-right: ${(props) => (props.$marginRight ? props.marginRight : "0")};
-`;
-
-const BoardContentsWrap = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin: 0px 20px 10px 20px;
-`;
-
-const BoardContent = styled.div`
-  flex: 4;
-  overflow: hidden;
-  max-width: 300px;
-`;
+import {
+  BoardContent,
+  BoardContentsWrap,
+  Myboard,
+  Mypost,
+  ProfileHeaderLeft,
+  ProfileImages,
+  UserJob,
+  UserName,
+} from "./PostCollection.style";
 
 export const ProfileLeft = ({
   width,
@@ -134,13 +77,13 @@ const Board = ({ board, count, id, contents }) => {
 
   return (
     <div>
-      <Myboard>
+      <Myboard
+        onClick={() => {
+          onClickhandler(id);
+        }}
+      >
         <div>{board}</div>
-        <div
-          onClick={() => {
-            onClickhandler(id);
-          }}
-        >
+        <div>
           <span>{`${count}개의 게시글`}</span>
           <span style={{ marginLeft: "5px" }}>
             <FontAwesomeIcon icon={faAngleDown} />
