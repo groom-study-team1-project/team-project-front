@@ -19,10 +19,7 @@ export default function LoginModal({ closeModal, changeModal }) {
     try {
       let body = { email, password };
 
-      const response = await login(body);
-      console.log(response);
-
-      const { accessToken, refreshToken } = response.result;
+      const { accessToken, refreshToken } = await login(body);
 
       dispatch(userLogin({ accessToken: accessToken }));
       closeModal();

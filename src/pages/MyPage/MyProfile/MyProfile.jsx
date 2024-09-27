@@ -18,13 +18,12 @@ import { useNavigate, useParams } from "react-router-dom";
 
 function MyProfile() {
   const [profileData, setProfileData] = useState(null);
-  const [isMine, setIsMine] = useState(false);
-  const email = useSelector((state) => state.user.userInfo.email).split("@")[0];
+  const [isMe, setIsMe] = useState(false);
   const isLoggedIn = useSelector((state) => state.user.isLoggedIn);
   const [error, setError] = useState(null);
   let navigate = useNavigate();
 
-  const { id: memberId } = useParams();
+  const { memberId: memberId } = useParams();
 
   useEffect(() => {
     if (!isLoggedIn) {
@@ -32,17 +31,15 @@ function MyProfile() {
     }
 
     if (memberId) {
+      console.log("fetch");
       fetchProfileInfo(memberId)
-        .then((data) => setProfileData(data))
+        .then(({ isMe, data }) => {
+          setIsMe(isMe);
+          setProfileData(data);
+        })
         .catch((err) => setError(err));
     }
-
-    if (email === memberId) {
-      setIsMine(true);
-    } else {
-      setIsMine(false);
-    }
-  }, [memberId, isLoggedIn]);
+  }, []);
 
   if (!isLoggedIn) {
     return <div>로그인이 필요합니다.</div>;
@@ -53,6 +50,7 @@ function MyProfile() {
   }
 
   if (!profileData && isLoggedIn) {
+    console.log(profileData);
     return <div>Loading...</div>;
   }
 
@@ -74,10 +72,10 @@ function MyProfile() {
               width={"200px"}
               height={"200px"}
               marginRight={"32px"}
-              nickName={profileData.result.nickname}
-              job={profileData.result.role}
+              nickName={profileData.nickname}
+              job={profileData.role}
             />
-            {isMine ? (
+            {isMe ? (
               <ProfileSetting onClick={redirectToEditPage}>
                 프로필 수정
               </ProfileSetting>
@@ -89,8 +87,8 @@ function MyProfile() {
               marginLeft: "5%",
             }}
           >
-            <Userintroduce>{profileData.result.aboutMe}</Userintroduce>
-            {isMine ? <PostCollection memberId={memberId} /> : null}
+            <Userintroduce>{profileData.aboutMe}</Userintroduce>
+            {isMe ? <PostCollection memberId={memberId} /> : null}
           </div>
         </Main>
       </Wrap>

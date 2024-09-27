@@ -19,7 +19,7 @@ export const login = async (body) => {
     };
 
     if (response.status.code === 9999) {
-      return response;
+      return response.result;
     } else {
       throw new Error(response.status.message || "로그인 실패");
     }
@@ -147,31 +147,39 @@ export const logout = async (accessToken) => {
 };
 
 export const fetchProfileInfo = async (memberId) => {
+  let isMe = true;
+
   try {
-    //const response = await axios.get(`/api/members/${memberId}/me`);
+    //const response = await axios.get(`/api/members/me/${memberId}`);
 
     const response = {
       status: {
-        code: 9999,
-        message: "응답 성공 메시지입니다.",
+        code: 1002,
+        message: "본인 프로필 조회에 성공하였습니다.",
       },
       result: {
         nickname: "구름이",
-        role: "NORMAL, STUDENT, GRADUATE",
-        imageUrl: "image.png",
-        aboutMe: "안녕하세요. 구름톤 딥다이브 수강생입니다.",
-        contact: {
-          phoneNumber: "010-1234-5678",
-          githubUrl: "https://github.com",
-          blogUrl: "https://velog.io",
-        },
+        role: "NORMAL",
+        imageUrl: "http://localhost:8080/images/profile.png",
+        aboutMe: "나는 구름이",
+        phoneNumber: "010-1234-5678",
+        githubUrl: "",
+        blogUrl: "",
         activityStats: {
           postCount: 0,
           commentCount: 0,
         },
       },
     };
-    return response;
+
+    if (response.status.code === 1002) {
+      return { isMe, data: response.result };
+    } else if (response.status.code === 1003) {
+      isMe = false;
+      return { isMe, data: response.result };
+    } else {
+      throw new Error(response.message || "로그아웃 실패");
+    }
   } catch (error) {
     console.error("사용자 정보를 불러오는데 실패했습니다.", error);
     throw error;
