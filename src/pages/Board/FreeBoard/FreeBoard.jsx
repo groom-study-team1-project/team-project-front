@@ -35,7 +35,6 @@ function FreeBoard() {
             content={postItem.content}
             name={postItem.author.name}
             job={postItem.author.job}
-            email={postItem.author.email}
             count={postItem.count}
             img={postItem.imgUrl}
           />

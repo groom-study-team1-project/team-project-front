@@ -8,13 +8,11 @@ import {
   Userintroduce,
   Wrap,
 } from "./MyProfile.style";
-import {
-  PostCollection,
-  ProfileLeft,
-} from "../../../components/Common/PostCollection/PostCollection";
+import { MyPosts } from "../../../components/Card/MyPostsCard/MyPosts/MyPosts";
 import { useSelector } from "react-redux";
 import { fetchProfileInfo } from "../../../services/authApi";
 import { useNavigate, useParams } from "react-router-dom";
+import { BigProfileBox } from "../../../components/Card/PostCard/PostProfile";
 
 function MyProfile() {
   const [profileData, setProfileData] = useState(null);
@@ -68,10 +66,7 @@ function MyProfile() {
         </ProfileWrap>
         <Main>
           <ProfileHeader>
-            <ProfileLeft
-              width={"200px"}
-              height={"200px"}
-              marginRight={"32px"}
+            <BigProfileBox
               nickName={profileData.nickname}
               job={profileData.role}
             />
@@ -88,7 +83,9 @@ function MyProfile() {
             }}
           >
             <Userintroduce>{profileData.aboutMe}</Userintroduce>
-            {isMe ? <PostCollection memberId={memberId} /> : null}
+            {isMe ? (
+              <MyPosts postCount={profileData.activityStats.postCount} />
+            ) : null}
           </div>
         </Main>
       </Wrap>

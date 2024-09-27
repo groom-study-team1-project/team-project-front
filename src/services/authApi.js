@@ -150,7 +150,11 @@ export const fetchProfileInfo = async (memberId) => {
   let isMe = true;
 
   try {
-    //const response = await axios.get(`/api/members/me/${memberId}`);
+    // const response = await axios.get(`/api/members/me/${memberId}`, {
+    //   headers: {
+    //         Authorization: `Bearer ${yourAccessToken}`,
+    //       },
+    // });
 
     const response = {
       status: {
@@ -188,7 +192,11 @@ export const fetchProfileInfo = async (memberId) => {
 
 export const editProfile = async (body) => {
   try {
-    //const response = await axios.put("/api/members/me", body);
+    // const response = await axios.put("/api/members/me", body, {
+    //   headers: {
+    //     Authorization: `Bearer ${yourAccessToken}`,
+    //   },
+    // });
 
     const response = {
       status: {
@@ -298,31 +306,41 @@ export const findUserPw = async (email, nickname, tel) => {
   }
 };
 
-export const postInfo = async (memberId, categoryId) => {
+export const postInfo = async (categoryId, lastPostId) => {
   try {
-    // const response = await axios.get(`/api/post`, {
+    // const response = await axios.get(`/api/members/me/posts`, {
     //   params: {
-    //     memberId: memberId,
     //     categoryId: categoryId,
+    //     lastPostId: lastPostId,
     //   },
     //   headers: {
     //     Authorization: `Bearer ${yourAccessToken}`,
     //   },
     // });
 
-    const response = [
-      {
-        postId: 1,
-        postTitle: "게시글 제목",
-        count: {
-          view: 5,
-          like: 55,
-          comment: 555,
-        },
-        postCreatedAt: "게시글 작성 일자",
+    const response = {
+      status: {
+        code: 9999,
+        message: "응답 성공 메시지입니다.",
       },
-    ];
-    return response;
+      result: [
+        {
+          id: 0,
+          title: "string",
+          createdAt: "2024-09-27T14:02:42.188Z",
+          memberId: 0,
+          memberNickname: "John Doe",
+          memberJob: "IOS Developer",
+          likedMe: true,
+          count: {
+            view: 0,
+            like: 0,
+            comment: 0,
+          },
+        },
+      ],
+    };
+    return response.result;
   } catch (error) {
     console.error("사용자 정보를 불러오는데 실패했습니다.", error);
     throw error;

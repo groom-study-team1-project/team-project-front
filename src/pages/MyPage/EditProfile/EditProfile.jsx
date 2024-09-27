@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import {
-  EditProfileBox,
+  BigProfileBox,
   ProfileImage,
 } from "../../../components/Card/PostCard/PostProfile";
 import {
@@ -74,7 +74,7 @@ function EditProfile() {
       <form action="" method="post" onSubmit={handleEdit}>
         <EditProfileWrapper>
           <ProfileActionWrapper>
-            <EditProfileBox
+            <BigProfileBox
               name={profileData?.nickname}
               job={profileData?.role}
             />
