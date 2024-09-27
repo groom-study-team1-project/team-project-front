@@ -52,7 +52,12 @@ export const signUp = async (body) => {
 
 export const uploadProfileImage = async (body) => {
   try {
-    //const response = await axios.post("/api/members/profile-image", body);
+    // const response = await axios.post("/api/members/profile-image", body, {
+    //   headers: {
+    //     Authorization: `Bearer ${yourAccessToken}`,
+    //   },
+    // });
+
     const response = {
       status: {
         code: 9999,
