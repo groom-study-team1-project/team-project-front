@@ -62,6 +62,7 @@ function DetailPage() {
   const [modalcurrent, setModalcurrnet] = useState(false);
   const [commentmodalcurrent, setCommentModalcurrent] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
+  const [checkCommentInfo, setCheckCommentInfo] = useState("");
   const [editCommentValue, setEditCommentValue] = useState("");
   const modalRef = useRef(null);
   const commentModalRef = useRef(null);
@@ -202,7 +203,7 @@ function DetailPage() {
                   <CommentText>
                     <Bold>{commentData.memberInfo.nickname}</Bold>
                     {isEditing ? (
-                      commentData.commentInfo.content === editCommentValue ? (
+                      commentData.memberInfo.Id === checkCommentInfo ? (
                         <div>
                           <input
                             type="text"
@@ -271,6 +272,9 @@ function DetailPage() {
                                     setIsEditing(true);
                                     setEditCommentValue(
                                       commentData.commentInfo.content
+                                    );
+                                    setCheckCommentInfo(
+                                      commentData.memberInfo.Id
                                     );
                                     setCommentModalcurrent(false);
                                   }}
