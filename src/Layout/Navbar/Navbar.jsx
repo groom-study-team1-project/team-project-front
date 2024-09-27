@@ -25,6 +25,7 @@ import logoImg from "../../assets/images/DEEPDIVERS.png";
 import { selectMenuItem } from "../../store/category/menuSlice";
 import darkmodeIcon from "../../assets/images/darkmode.png";
 import profileIcon from "../../assets/images/profileIcon.png";
+import useJwt from "../../hooks/useJwt";
 
 Modal.setAppElement("#root");
 
@@ -33,13 +34,14 @@ function Navbar({ isMainPage = false }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalType, setModalType] = useState("login");
   const isLoggedIn = useSelector((state) => state.user.isLoggedIn);
-  const email = useSelector((state) =>
-    state.user.isLoggedIn && state.user.userInfo?.email
-      ? state.user.userInfo.email.split("@")[0]
-      : null
-  );
-  const userInfo = useSelector((state) => state.user.userInfo);
 
+  const payload = useJwt(
+    useSelector((state) => state.user.userInfo.accessToken)
+  );
+  const memberId = payload.memberId;
+  const userInfo = {
+    imageUrl: payload.memberImageUrl,
+  };
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -71,7 +73,7 @@ function Navbar({ isMainPage = false }) {
 
   const handleNavigation = (to, e) => {
     if (to === "my-profile") {
-      navigate(`/my-page/${email}`);
+      navigate(`/my-page/${memberId}`);
     } else if (to === "write") {
       navigate("/board/write");
     }

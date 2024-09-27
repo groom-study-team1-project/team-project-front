@@ -5,28 +5,23 @@ const API_URL = "http://localhost:8080";
 
 export const login = async (body) => {
   try {
-    //const response = await axios.post("/members/login", body);
+    // const response = await axios.post(`${API_URL}/members/login`, body);
     const response = {
-      code: 1001,
-      message: "사용자 로그인에 성공하였습니다.",
+      status: {
+        code: 9999,
+        message: "응답 성공 메시지입니다.",
+      },
       result: {
-        accessToken: "aenfaef.aefaefae.faefae",
-        refreshToken: "asfasfasf.asfasf.safasf",
-        userInfo: {
-          nickname: "구름이",
-          email: "sdad@sad.sadf",
-          role: "NORMAL, STUDENT, GRADUATE",
-          imageUrl: "image.png",
-          aboutMe: "안녕하세요. 구름톤 딥다이브 수강생입니다.",
-          phoneNumber: "010-1234-5678",
-        },
+        accessToken:
+          "eyJhbGciOiJIUzI1NiJ9.eyJtZW1iZXJOaWNrbmFtZSI6Iuq1rOumhOydtCIsIm1lbWJlclJvbGUiOiJOT1JNQUwiLCJtZW1iZXJJZCI6MTEsIm1lbWJlckltYWdlVXJsIjoiaHR0cDovL2xvY2FsaG9zdDo4MDgwL2ltYWdlcy9wcm9maWxlLnBuZyIsImV4cCI6MTcyNzQxOTAzNiwiaWF0IjoxNzI3NDE3MjM2fQ.2qPdHtUxJPMI6XHaeKvS0zTiqQ5N8v77Scij-XzyikM",
+        refreshToken: "header.payload.signature",
       },
     };
 
-    if (response.code === 1001) {
+    if (response.status.code === 9999) {
       return response;
     } else {
-      throw new Error(response.message || "로그인 실패");
+      throw new Error(response.status.message || "로그인 실패");
     }
   } catch (error) {
     console.log("로그인 실패:", error);

@@ -22,11 +22,9 @@ export default function LoginModal({ closeModal, changeModal }) {
       const response = await login(body);
       console.log(response);
 
-      const { accessToken, refreshToken, userInfo } = response.result;
+      const { accessToken, refreshToken } = response.result;
 
-      localStorage.setItem("accessToken", accessToken);
-
-      dispatch(userLogin(userInfo));
+      dispatch(userLogin({ accessToken: accessToken }));
       closeModal();
     } catch (err) {
       console.log(err);
