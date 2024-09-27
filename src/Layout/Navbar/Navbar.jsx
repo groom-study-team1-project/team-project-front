@@ -26,6 +26,7 @@ import { selectMenuItem } from "../../store/category/menuSlice";
 import darkmodeIcon from "../../assets/images/darkmode.png";
 import profileIcon from "../../assets/images/profileIcon.png";
 import ProfileMenu from "./ProfileMenu";
+import { changeTheme } from "../../store/theme/themeSlice";
 
 Modal.setAppElement("#root");
 
@@ -41,6 +42,7 @@ function Navbar({ isMainPage = false }) {
       : null
   );
   const userInfo = useSelector((state) => state.user.userInfo);
+  const isDarkMode = useSelector((state) => state.theme.isDarkMode);
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -111,6 +113,11 @@ function Navbar({ isMainPage = false }) {
     else console.log("토글메뉴 닫힘");
   };
 
+  const handleDarkMode = () => {
+    dispatch(changeTheme());
+    console.log("배경모드 변경");
+  };
+
   return (
     <NavbarWrapper>
       <NavbarInner>
@@ -134,7 +141,7 @@ function Navbar({ isMainPage = false }) {
 
         {isLoggedIn ? (
           <ButtonBox>
-            <Button>
+            <Button onClick={handleDarkMode}>
               <img src={darkmodeIcon} alt="다크모드" />
             </Button>
             <BorderButton onClick={() => handleNavigation("write")}>
@@ -162,7 +169,7 @@ function Navbar({ isMainPage = false }) {
           </ButtonBox>
         ) : (
           <ButtonBox>
-            <Button>
+            <Button onClick={handleDarkMode}>
               <img src={darkmodeIcon} alt="다크모드" />
             </Button>
             <Button onClick={() => openModal("login")}>Login</Button>
