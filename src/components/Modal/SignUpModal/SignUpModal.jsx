@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import profileIcon from "../../../assets/images/profileIcon.png";
+import profileIcon from "../../../assets/images/profileImg.png";
 import { Btn, Container, Divider, Form } from "../Modal.style";
 import { FormInputField } from "../FormInputField";
 import { ErrorMsg, ProfileImgDiv, SignUpHeader } from "./SignUpModal.style";
@@ -113,13 +113,29 @@ export default function SignUpModal({ changeModal }) {
         </SignUpHeader>
         <Form onSubmit={handleSignUp}>
           <ProfileImgDiv>
-            <img
-              src={previewImage ? previewImage : profileIcon}
-              alt="프로필사진"
-              style={{ width: "100px", height: "100px" }}
-            />
-            <div>
-              <input type="file" onChange={handleImageChange} />
+            <div
+              style={{
+                width: "120px",
+                height: "120px",
+                boxSizing: "border-box",
+                overflow: "hidden",
+                marginRight: "20px",
+                marginBottom: "10px",
+              }}
+            >
+              <label htmlFor="profileImgInput">
+                <img
+                  src={previewImage ? previewImage : profileIcon}
+                  alt="프로필사진"
+                  style={{ width: "150px", height: "150px" }}
+                />
+              </label>
+              <input
+                id="profileImgInput"
+                type="file"
+                onChange={handleImageChange}
+                style={{ display: "none" }}
+              />
             </div>
           </ProfileImgDiv>
 
