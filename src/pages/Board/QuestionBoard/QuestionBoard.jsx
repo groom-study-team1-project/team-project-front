@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { fetchPostItems } from "../../../services/api";
 import CommunityPostCard from "../../../components/Card/PostCard/CommunityPostCard/CommunityPostCard";
 import {
+  Title,
   BoardTitle,
   ContentWrapper,
   PostCardWrapper,
@@ -21,7 +22,9 @@ function QuestionBoard() {
 
   return (
     <ContentWrapper>
-      <BoardTitle>질문게시판</BoardTitle>
+      <BoardTitle>
+        <Title>질문게시판</Title>
+      </BoardTitle>
       <SearchSortWrapper>
         <Search />
         <SortOptionButton />
