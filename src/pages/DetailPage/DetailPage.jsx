@@ -6,7 +6,10 @@ import Slide from "../../components/Common/imgSlide";
 import heart from "../../assets/images/heart.png";
 import commentsubmit from "../../assets/images/commentsubmit.png";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faEllipsisVertical } from "@fortawesome/free-solid-svg-icons";
+import {
+  faDisplay,
+  faEllipsisVertical,
+} from "@fortawesome/free-solid-svg-icons";
 import {
   createComment,
   fetchComment,
@@ -58,7 +61,7 @@ function DetailPage() {
   const [commentValue, setCommentValue] = useState("");
   const [modalcurrent, setModalcurrnet] = useState(false);
   const [commentmodalcurrent, setCommentModalcurrent] = useState(false);
-  const [isEditing, setIsEditing] = useState(true);
+  const [isEditing, setIsEditing] = useState(false);
   const [editCommentValue, setEditCommentValue] = useState("");
   const modalRef = useRef(null);
   const commentModalRef = useRef(null);
@@ -198,7 +201,44 @@ function DetailPage() {
                   <ProfileImage />
                   <CommentText>
                     <Bold>{commentData.memberInfo.nickname}</Bold>
-                    <div>{commentData.commentInfo.content}</div>
+                    {isEditing ? (
+                      commentData.commentInfo.content === editCommentValue ? (
+                        <div>
+                          <input
+                            type="text"
+                            value={editCommentValue}
+                            onChange={(e) =>
+                              setEditCommentValue(e.target.value)
+                            }
+                            onKeyDown={async (e) => {
+                              if (e.key === "Enter") {
+                                await editComment({
+                                  content: editCommentValue,
+                                });
+                                setIsEditing(false);
+                                setCommentModalcurrent(false);
+                              }
+                            }}
+                            placeholder="댓글 수정"
+                          />
+                          {/* 수정 제출 버튼 */}
+                          <InputImg
+                            src={commentsubmit}
+                            alt="댓글 수정 제출"
+                            onClick={async () => {
+                              await editComment({
+                                content: editCommentValue,
+                              }); // 수정된 내용 전달
+                              setIsEditing(false); // 수정 모드 종료
+                            }}
+                          />
+                        </div>
+                      ) : (
+                        <div>{commentData.commentInfo.content}</div> // 조건이 일치하지 않을 때 원래 댓글 내용 표시
+                      )
+                    ) : (
+                      <div>{commentData.commentInfo.content}</div>
+                    )}
                   </CommentText>
                 </CommentProfile>
                 <CommentRight>
@@ -223,15 +263,16 @@ function DetailPage() {
 
                       {commentmodalcurrent && (
                         <CommentModalBackground>
-                          {isEditing ? (
+                          {isEditing ? null : (
                             <CommentModal ref={commentModalRef}>
                               <>
                                 <div
                                   onClick={() => {
-                                    setIsEditing(false);
+                                    setIsEditing(true);
                                     setEditCommentValue(
                                       commentData.commentInfo.content
                                     );
+                                    setCommentModalcurrent(false);
                                   }}
                                 >
                                   수정
@@ -240,44 +281,13 @@ function DetailPage() {
                                 <div
                                   onClick={() => {
                                     deleteComment();
+                                    setCommentModalcurrent(false);
                                   }}
                                 >
                                   삭제
                                 </div>
                               </>
                             </CommentModal>
-                          ) : (
-                            <CommentEditModal>
-                              <input
-                                type="text"
-                                value={editCommentValue}
-                                onChange={(e) =>
-                                  setEditCommentValue(e.target.value)
-                                }
-                                onKeyDown={async (e) => {
-                                  if (e.key === "Enter") {
-                                    await editComment({
-                                      content: editCommentValue,
-                                    });
-                                    setIsEditing(false);
-                                    setCommentModalcurrent(false);
-                                  }
-                                }}
-                                placeholder="댓글 수정"
-                              />
-                              {/* 수정 제출 버튼 */}
-                              <InputImg
-                                src={commentsubmit}
-                                alt="댓글 수정 제출"
-                                onClick={async () => {
-                                  await editComment({
-                                    content: editCommentValue,
-                                  }); // 수정된 내용 전달
-                                  setIsEditing(false); // 수정 모드 종료
-                                  setCommentModalcurrent(false); // 모달 닫기
-                                }}
-                              />
-                            </CommentEditModal>
                           )}
                         </CommentModalBackground>
                       )}
