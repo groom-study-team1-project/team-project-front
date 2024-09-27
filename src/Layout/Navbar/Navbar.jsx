@@ -140,25 +140,25 @@ function Navbar({ isMainPage = false }) {
             <BorderButton onClick={() => handleNavigation("write")}>
               새 글 작성
             </BorderButton>
-            {/* <Button onClick={handleLogout}>로그아웃</Button>
-            <Button onClick={() => handleNavigation("my-profile")}> */}
-            <Button onClick={handleToggleMenu}>
-              <img
-                src={userInfo?.imageUrl ? userInfo.imageUrl : profileIcon}
-                alt="프로필"
-                style={{
-                  borderRadius: "20px",
-                  marginTop: "3px",
-                  width: "40px",
-                  height: "40px",
-                }}
-              />
-              <ProfileMenu
-                isOpen={menuOpen}
-                onNavigate={() => handleNavigation("my-profile")}
-                onLogout={handleLogout}
-              ></ProfileMenu>
-            </Button>
+            <div style={{ position: "relative", display: "inline-block" }}>
+              <Button onClick={handleToggleMenu}>
+                <img
+                  src={userInfo?.imageUrl ? userInfo.imageUrl : profileIcon}
+                  alt="프로필"
+                  style={{
+                    borderRadius: "20px",
+                    marginTop: "3px",
+                    width: "40px",
+                    height: "40px",
+                  }}
+                />
+                <ProfileMenu
+                  isOpen={menuOpen}
+                  onNavigate={() => handleNavigation("my-profile")}
+                  onLogout={handleLogout}
+                ></ProfileMenu>
+              </Button>
+            </div>
           </ButtonBox>
         ) : (
           <ButtonBox>
