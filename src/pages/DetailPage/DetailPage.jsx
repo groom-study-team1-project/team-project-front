@@ -64,6 +64,12 @@ function DetailPage() {
   const [isEditing, setIsEditing] = useState(false);
   const [checkCommentInfo, setCheckCommentInfo] = useState("");
   const [editCommentValue, setEditCommentValue] = useState("");
+  const [replyData, setReplyData] = useState(null);
+  const [replyValue, setReplyValue] = useState("");
+  const [isReply, setIsReply] = useState(false);
+  const [checkReplyInfo, setCheckReplyInfo] = useState("");
+  const [editReplyValue, setEditReplyValue] = useState("");
+
   const modalRef = useRef(null);
   const commentModalRef = useRef(null);
   const navigate = useNavigate();
@@ -83,14 +89,24 @@ function DetailPage() {
     fetchData();
   }, []);
 
-  const onSubmit = async (e) => {
+  const onCommentSubmit = async (e) => {
     await e.preventDefault();
     const body = { commentValue };
     await createComment(body);
   };
 
-  const onChange = (e) => {
+  const onReplySubmit = async (e) => {
+    await e.preventDefault();
+    const body = { replyValue };
+    await createReply(body);
+  };
+
+  const onCommentChange = (e) => {
     setCommentValue(e.target.value);
+  };
+
+  const onReplyChange = (e) => {
+    setReplyValue(e.target.value);
   };
 
   const handleClickOutside = (e) => {
@@ -269,6 +285,15 @@ function DetailPage() {
                               <>
                                 <div
                                   onClick={() => {
+                                    setIsReply(true);
+                                    setCommentModalcurrent(false);
+                                  }}
+                                >
+                                  댓글작성
+                                </div>
+                                <hr style={{ margin: "0px", padding: "0px" }} />
+                                <div
+                                  onClick={() => {
                                     setIsEditing(true);
                                     setEditCommentValue(
                                       commentData.commentInfo.content
@@ -301,19 +326,34 @@ function DetailPage() {
               </Comment>
             ))}
             <hr />
-            <form onSubmit={onSubmit}>
-              <CommentInputWrap>
-                <CommentInput
-                  value={commentValue}
-                  onChange={onChange}
-                  placeholder="댓글 작성"
-                />
-                <InputImg
-                  src={commentsubmit}
-                  alt="댓글 제출"
-                  onClick={onSubmit}
-                />
-              </CommentInputWrap>
+            <form>
+              {isReply ? (
+                <CommentInputWrap>
+                  <CommentInput
+                    value={replyValue}
+                    onChange={onReplyChange}
+                    placeholder="대댓글 작성"
+                  />
+                  <InputImg
+                    src={commentsubmit}
+                    alt="대댓글 제출"
+                    onClick={onReplySubmit}
+                  />
+                </CommentInputWrap>
+              ) : (
+                <CommentInputWrap>
+                  <CommentInput
+                    value={commentValue}
+                    onChange={onCommentChange}
+                    placeholder="댓글 작성"
+                  />
+                  <InputImg
+                    src={commentsubmit}
+                    alt="댓글 제출"
+                    onClick={onCommentSubmit}
+                  />
+                </CommentInputWrap>
+              )}
             </form>
           </CommentsWrap>
         </Wrap>

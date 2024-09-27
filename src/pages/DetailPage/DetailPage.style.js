@@ -160,6 +160,7 @@ export const Modal = styled.div`
 export const CommentModalBackground = styled(ModalBackground)``;
 
 export const CommentModal = styled(Modal)`
+  height: 55px;
   position: absolute;
   margin-right: 100px;
 `;
