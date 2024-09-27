@@ -1,8 +1,14 @@
 import React, { useState } from "react";
 import profileIcon from "../../../assets/images/profileImg.png";
+import cameraIcon from "../../../assets/images/camera.png";
 import { Btn, Container, Divider, Form } from "../Modal.style";
 import { FormInputField } from "../FormInputField";
-import { ErrorMsg, ProfileImgDiv, SignUpHeader } from "./SignUpModal.style";
+import {
+  ErrorMsg,
+  ProfileImgDiv,
+  SignUpHeader,
+  ProfileImg,
+} from "./SignUpModal.style";
 import {
   checkDuplicatedEmail,
   checkDuplicatedNickname,
@@ -121,13 +127,23 @@ export default function SignUpModal({ changeModal }) {
                 overflow: "hidden",
                 marginRight: "20px",
                 marginBottom: "10px",
+                position: "relative",
               }}
             >
               <label htmlFor="profileImgInput">
-                <img
+                <ProfileImg
                   src={previewImage ? previewImage : profileIcon}
                   alt="프로필사진"
-                  style={{ width: "150px", height: "150px" }}
+                />
+                <img
+                  src={cameraIcon}
+                  alt="카메라 아이콘"
+                  style={{
+                    position: "absolute",
+                    bottom: "30px",
+                    right: "15px",
+                    cursor: "pointer",
+                  }}
                 />
               </label>
               <input

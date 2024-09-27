@@ -6,6 +6,12 @@ export const ProfileImgDiv = styled.div`
   padding-bottom: 16px;
 `;
 
+export const ProfileImg = styled.img`
+  width: 150px;
+  height: 150px;
+  cursor: pointer;
+`;
+
 export const SignUpHeader = styled(Logo)`
   margin-bottom: 0;
 `;
