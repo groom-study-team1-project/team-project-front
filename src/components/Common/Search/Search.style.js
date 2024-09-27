@@ -92,22 +92,29 @@ export const OptionList = styled.ul`
   left: 0;
   width: 100%;
   margin: 0;
-  padding: 0;
+  margin-top: 5px;
+  padding: 5px;
+
   list-style: none;
+  border-radius: 20px;
   border: 1px solid rgba(255, 255, 255, 0.5);
-  box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.1);
   background: linear-gradient(
     to bottom,
-    rgba(255, 255, 255, 0.05),
+    rgba(255, 255, 255, 0.6),
     rgba(255, 255, 255, 0.5)
   );
+  box-shadow: 0 1px 0 rgba(0, 0, 0, 0.05), 0 4px 4px rgba(0, 0, 0, 0.05),
+    0 10px 10px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(20px);
   z-index: 1;
 `;
 
 export const OptionItem = styled.li`
-  padding: 5px 10px;
+  padding: 10px 10px;
   cursor: pointer;
   &:hover {
-    background-color: rgba(0, 0, 0, 0.1);
+    font-weight: bold;
+    border-radius: 15px;
+    background-color: rgba(255, 255, 255, 0.8);
   }
 `;
