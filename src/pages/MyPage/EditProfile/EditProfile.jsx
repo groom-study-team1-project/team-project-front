@@ -58,6 +58,7 @@ function EditProfile() {
 
     try {
       const response = await editProfile(body);
+      console.log(response);
       GoBack();
     } catch (error) {
       console.error("프로필 수정 실패", error);
