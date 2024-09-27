@@ -330,7 +330,7 @@ export const postInfo = async (categoryId, lastPostId) => {
       },
       result: [
         {
-          id: 0,
+          id: 1,
           title: "string",
           createdAt: "2024-09-27T14:02:42.188Z",
           memberId: 0,

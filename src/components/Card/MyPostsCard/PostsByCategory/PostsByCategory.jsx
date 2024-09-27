@@ -9,6 +9,7 @@ import { faAngleDown } from "@fortawesome/free-solid-svg-icons";
 import { Interaction } from "../../../Common/Interactions";
 import { useState } from "react";
 import { PostProfileBox } from "../../PostCard/PostProfile";
+import { useNavigate } from "react-router-dom";
 
 const PostsByCategory = ({
   id,
@@ -19,9 +20,14 @@ const PostsByCategory = ({
   postCount,
 }) => {
   const [hidden, setHidden] = useState(true);
+  const navigate = useNavigate();
 
   const onClickhandler = () => {
     setHidden(!hidden);
+  };
+
+  const handleNavigation = (id) => {
+    navigate(`/board/detail/${id}`);
   };
 
   return (
@@ -40,7 +46,10 @@ const PostsByCategory = ({
       </Myboard>
       {!hidden
         ? contents.map((content) => (
-            <BoardContentsWrap key={content.id}>
+            <BoardContentsWrap
+              key={content.id}
+              onClick={() => handleNavigation(content.id)}
+            >
               <PostProfileBox
                 name={content.memberNickname}
                 job={content.memberJob}

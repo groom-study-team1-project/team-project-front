@@ -53,6 +53,7 @@ export const BoardContentsWrap = styled.div`
   align-items: center;
   justify-content: space-between;
   margin: 0px 20px 10px 20px;
+  cursor: pointer;
 `;
 
 export const BoardContent = styled.div`
