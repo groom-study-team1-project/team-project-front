@@ -1,185 +1,196 @@
-import React, { useState, useEffect } from "react";
-import {
-  EditProfileBox,
-  ProfileImage,
-} from "../../../components/Card/PostCard/PostProfile";
-import {
-  EditProfileWrapper,
-  FlexDiv,
-  Input,
-  JobSelect,
-  Label,
-  PasswordButton,
-  ProfileActionWrapper,
-  ProfileButton,
-  ProfileDetails,
-  ProfileImageWrapper,
-  SelfIntroductionTextarea,
-} from "./EditProfile.style";
-import { useSelector, useDispatch } from "react-redux";
+import React, { useState } from "react";
+import { ProfileImage } from "../../../components/Card/PostCard/PostProfile";
+import PasswordChange from "../../../components/Modal/PasswordChange/PasswordChange";
 import { editProfile } from "../../../services/authApi";
-import { updateUserInfo } from "../../../store/user/userSlice";
 import { useNavigate } from "react-router-dom";
+import {
+  PageNameWrap,
+  PageName,
+  Container,
+  Leftaside,
+  ProfileActions,
+  FormGroup,
+  RightSection,
+  Label,
+  ButtonGroup,
+  EmailWrap,
+  EmailDescription,
+  RightProfile,
+  SubmitBtn,
+  ProfileBottom,
+} from "./EditProfile.style";
 
-function EditProfile() {
-  const userInfo = useSelector((state) => state.user.userInfo);
-  const dispatch = useDispatch();
-
-  const [profileImg, setProfileImg] = useState(null);
-  const [email, setEmail] = useState("");
-  const [nickname, setNickname] = useState("");
-  const [tel, setTel] = useState("");
-  const [job, setJob] = useState("");
-  const [aboutMe, setAboutMe] = useState("");
+const EditProfile = () => {
+  const [form, setForm] = useState({
+    nickName: "구름이",
+    aboutMe: "나는야 ios 개발자",
+    imageUrl:
+      "https://w7.pngwing.com/pngs/710/71/png-transparent-profle-person-profile-user-circle-icons-icon-thumbnail.png",
+    phoneNumber: "010-1234-1234",
+    role: "STUDENT",
+  });
 
   const navigate = useNavigate();
+  // 모달 상태 관리
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
-  useEffect(() => {
-    if (userInfo) {
-      setNickname(userInfo.nickname);
-      setEmail(userInfo.email || "");
-      setTel(userInfo.phoneNumber || "");
-      setJob(userInfo.role);
-      setAboutMe(userInfo.aboutMe);
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      const imageUrl = URL.createObjectURL(file);
+      setForm({ ...form, imageUrl: imageUrl });
     }
-  }, [userInfo]);
+  };
 
-  async function handleEdit(e) {
+  const openModal = (e) => {
     e.preventDefault();
+    setIsModalOpen(true);
+  };
 
-    const body = {
-      profileImg,
-      nickname,
-      email,
-      tel,
-      job,
-      aboutMe,
-    };
+  const handleOnChange = (e) => {
+    setForm({
+      ...form,
+      [e.target.name]: e.target.value,
+    });
+  };
 
+  const handleonSubmit = async (e) => {
+    e.preventDefault();
+    const body = form;
+    console.log(form);
     try {
-      const response = await editProfile(body);
-
-      if (response.code === 1007) {
-        const {
-          nickname,
-          imageUrl,
-          aboutMe,
-          tel,
-          role,
-          githubUrl,
-          blogUrl,
-          activityStats,
-        } = response.result;
-
-        const updatedProfile = {
-          nickname,
-          email,
-          role,
-          imageUrl,
-          aboutMe,
-          phoneNumber: tel,
-        };
-
-        dispatch(updateUserInfo(updatedProfile));
-
-        GoBack();
-      } else {
-        console.error("프로필 수정 실패:", response.message);
-      }
+      const result = await editProfile(body);
+      console.log(result);
+      const res = result.result;
+      setForm({
+        nickName: res.nickName,
+        imageUrl: res.imageUrl,
+        aboutMe: res.aboutMe,
+        phoneNumber: res.tel,
+      });
     } catch (error) {
-      console.error("프로필 수정 실패", error);
+      console.log(error);
     }
-  }
-
-  const GoBack = () => {
-    navigate(-1);
   };
 
   return (
     <>
-      <form action="" method="post" onSubmit={handleEdit}>
-        <EditProfileWrapper>
-          <ProfileActionWrapper>
-            <EditProfileBox name={nickname} job={job} />
-            <div>
-              <ProfileButton type="button" onClick={GoBack}>
-                취소
-              </ProfileButton>
-              <ProfileButton type="submit">저장</ProfileButton>
-            </div>
-          </ProfileActionWrapper>
-
-          <FlexDiv>
-            <Label>닉네임</Label>
-            <Input
-              type="text"
-              value={nickname}
-              onChange={(e) => setNickname(e.target.value)}
+      <form onSubmit={handleonSubmit}>
+        <PageNameWrap>
+          <PageName>프로필 수정</PageName>
+        </PageNameWrap>
+        <Container>
+          <Leftaside>
+            <ProfileImage
+              width={"150px"}
+              height={"150px"}
+              src={form.imageUrl} // 이미지 미리보기
             />
-          </FlexDiv>
-
-          <FlexDiv>
-            <Label>이메일</Label>
-            <Input
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              disabled
-            />
-          </FlexDiv>
-
-          <FlexDiv>
-            <Label>휴대폰 번호</Label>
-            <Input
-              type="tel"
-              value={tel}
-              onChange={(e) => setTel(e.target.value)}
-            />
-          </FlexDiv>
-
-          <FlexDiv>
-            <Label>프로필 사진</Label>
-            <ProfileImageWrapper>
-              <ProfileImage
-                width="90px"
-                height="90px"
-                src={userInfo.imageUrl}
-              />
-              <div>
-                <ProfileButton type="button">삭제</ProfileButton>
-                <ProfileButton type="button">수정</ProfileButton>
-              </div>
-            </ProfileImageWrapper>
-          </FlexDiv>
-
-          <FlexDiv>
-            <Label>내 정보</Label>
-            <ProfileDetails>
-              <JobSelect
-                name="job"
-                value={job}
-                onChange={(e) => setJob(e.target.value)}
+            <ProfileActions>
+              <SubmitBtn
+                type="button"
+                $bgColor={"#7682FF"}
+                onClick={() => document.getElementById("imageUpload").click()} // 버튼 클릭 시 input 클릭
               >
-                <option value="IOS Developer">IOS Developer</option>
-                <option value="Frontend">Frontend</option>
-                <option value="Backend">Backend</option>
-                <option value="NORMAL, STUDENT, GRADUATE">
-                  NORMAL, STUDENT, GRADUATE
-                </option>
-              </JobSelect>
-              <SelfIntroductionTextarea
-                name="aboutMe"
-                value={aboutMe}
-                onChange={(e) => setAboutMe(e.target.value)}
+                사진 업로드
+              </SubmitBtn>
+              <input
+                id="imageUpload"
+                type="file"
+                accept="image/*"
+                style={{ display: "none" }}
+                onChange={handleImageChange}
               />
-              <p>400자 제한</p>
-            </ProfileDetails>
-          </FlexDiv>
-        </EditProfileWrapper>
+              <SubmitBtn
+                type="button"
+                $Color={"black"}
+                style={{ border: "1px solid #ACB6E5" }}
+                onClick={() => setForm({ ...form, imageUrl: "" })}
+              >
+                사진 제거
+              </SubmitBtn>
+            </ProfileActions>
+            <ProfileBottom>
+              <FormGroup>
+                <input
+                  placeholder="사용자 이름은 띄어쓰기 포함 총 20자"
+                  value={form.nickName}
+                  onChange={handleOnChange}
+                  name="nickName"
+                />
+              </FormGroup>
+              <FormGroup>
+                <select
+                  value={form.role} // form의 role 값과 일치시킴
+                  name="role"
+                  onChange={handleOnChange} // 역할 변경 시 상태 업데이트
+                >
+                  <option value="NORMAL">NORMAL</option>
+                  <option value="STUDENT">STUDENT</option>
+                  <option value="GRADUATE">GRADUATE</option>
+                </select>
+              </FormGroup>
+            </ProfileBottom>
+          </Leftaside>
+          <RightSection>
+            <RightProfile>
+              <Label>
+                <div>Email</div>
+                <EmailWrap>
+                  <input
+                    type="email"
+                    value={"test@test.com"}
+                    disabled
+                    style={{ backgroundColor: "#C0C0C0" }}
+                    name="email"
+                  />
+                  <EmailDescription>
+                    이메일은 변경할 수 없습니다
+                  </EmailDescription>
+                </EmailWrap>
+              </Label>
+
+              <Label>
+                <div>Phone</div>
+                <input
+                  value={form.phoneNumber}
+                  onChange={handleOnChange}
+                  name="phoneNumber"
+                />
+              </Label>
+              <Label>
+                <div>자기소개</div>
+                <textarea
+                  value={form.aboutMe}
+                  onChange={handleOnChange}
+                  name="aboutMe"
+                />
+              </Label>
+              <SubmitBtn type="button" $bgColor={"#7682FF"} onClick={openModal}>
+                비밀번호 변경
+              </SubmitBtn>
+            </RightProfile>
+            <ButtonGroup>
+              <SubmitBtn type="submit" $bgColor={"#7682FF"}>
+                확인
+              </SubmitBtn>
+              <SubmitBtn
+                type="button"
+                $Color={"#9DABED"}
+                onClick={() => {
+                  navigate(-1);
+                }}
+              >
+                취소
+              </SubmitBtn>
+            </ButtonGroup>
+          </RightSection>
+        </Container>
       </form>
-      <PasswordButton>비밀번호 변경</PasswordButton>
+
+      {isModalOpen && <PasswordChange setIsModalOpen={setIsModalOpen} />}
     </>
   );
-}
+};
 
 export default EditProfile;

@@ -1,68 +1,147 @@
 import styled from "styled-components";
 
-export const EditProfileWrapper = styled.div`
-  width: 1450px;
-  border: 1px solid;
-  padding: 40px;
-`;
-
-export const ProfileActionWrapper = styled.div`
-  display: flex;
+export const PageNameWrap = styled.div`
+  width: 260px;
+  height: 54px;
   align-items: center;
-  justify-content: space-between;
-  margin-bottom: 40px;
-`;
-
-export const FlexDiv = styled.div`
   display: flex;
-  border-bottom: 1px solid;
-  padding: 20px 0;
+  justify-content: center;
+  border-radius: 20px;
+  margin-bottom: 130px;
+  margin-right: -100px;
+  background: linear-gradient(
+    to bottom,
+    rgba(255, 255, 255, 1),
+    rgba(255, 255, 255, 0.5)
+  );
 `;
 
-export const Label = styled.p`
-  width: 400px;
+export const PageName = styled.h1`
+  font-size: 30px;
+  background: linear-gradient(to right bottom, #0b0611, #42469c);
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
 `;
 
-export const Input = styled.input`
-  width: 500px;
-  height: 36px;
+export const Container = styled.div`
+  display: flex;
+  justify-content: space-between;
+  width: 70vw;
 `;
 
-export const ProfileDetails = styled.div`
+export const Leftaside = styled.div`
   display: flex;
   flex-direction: column;
-`;
-
-export const ProfileImageWrapper = styled.div`
-  display: flex;
-  justify-content: space-between;
-  width: 500px;
-`;
-
-export const ProfileButton = styled.button`
-  width: 70px;
-  height: 35px;
-  margin-right: 10px;
-
-  &:last-child {
-    margin-right: 0;
+  align-items: center;
+  flex: 1;
+  padding: 20px;
+  border-radius: 10px;
+  background-color: #ffffff;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  * {
+    margin-top: 20px;
   }
 `;
 
-export const PasswordButton = styled.button`
-  width: 120px;
-  height: 40px;
-  margin-top: 10px;
+export const ProfileActions = styled.div`
+  display: flex;
+  justify-content: space-evenly;
+  width: 100%;
+  margin-top: 15px;
+  button {
+    padding: 20px;
+  }
 `;
 
-export const JobSelect = styled.select`
-  width: 250px;
-  height: 36px;
-  margin-bottom: 10px;
+export const ProfileBottom = styled.div`
+  display: flex;
+  flex-direction: column;
+  width: 80%;
+  margin-top: 0px;
 `;
 
-export const SelfIntroductionTextarea = styled.textarea`
-  width: 500px;
-  height: 108px;
+export const FormGroup = styled.div`
+  input,
+  select {
+    width: 100%;
+    height: 70px; // 고정된 높이 설정
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    box-sizing: border-box; // padding과 border를 포함하여 크기를 계산
+  }
+`;
+
+export const RightSection = styled.div`
+  flex: 2;
+  margin-left: 48px;
+  width: 60%;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end; /* 아래쪽으로 배치 */
+  align-items: flex-start; /* 왼쪽 정렬 */
+`;
+
+export const RightProfile = styled.div`
+  font-size: 20px;
+  background-color: #f9f9f9;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+  padding: 50px;
+  width: 100%;
+  margin-bottom: 20px; /* ButtonGroup과의 간격 조정 */
+  button {
+    padding: 10px 20px;
+  }
+`;
+export const Label = styled.label`
+  display: block;
   margin-bottom: 10px;
+  div:nth-child(1) {
+    font-weight: bold;
+  }
+  input,
+  textarea {
+    width: 80%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin-bottom: 10px;
+    margin-top: 24px;
+    resize: none;
+    overflow: scroll;
+  }
+`;
+export const EmailWrap = styled.div`
+  display: flex;
+  align-items: center;
+`;
+
+export const EmailDescription = styled.div`
+  font-size: 12px;
+  color: #ff0000;
+  margin-left: 24px;
+`;
+
+export const ButtonGroup = styled.div`
+  display: flex;
+  justify-content: flex-start; /* 왼쪽 정렬 */
+  align-items: center;
+
+  button {
+    margin-right: 10px;
+    padding: 10px 20px;
+    border-radius: 5px;
+  }
+`;
+
+export const SubmitBtn = styled.button`
+  background: ${(props) => props.$bgColor || "#fff"};
+  color: ${(props) => props.$Color || "#fff"};
+  border-radius: 10px;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+  white-space: nowrap;
 `;

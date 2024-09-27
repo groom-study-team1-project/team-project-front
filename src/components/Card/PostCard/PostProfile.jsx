@@ -6,7 +6,7 @@ export const ProfileWrapper = styled.div`
   align-items: center;
 `;
 
-export const ProfileImage = styled.div`
+export const ProfileImage = styled.img`
   width: ${({ width }) => width || "30px"};
   height: ${({ height }) => height || "30px"};
   border: 1px solid;
