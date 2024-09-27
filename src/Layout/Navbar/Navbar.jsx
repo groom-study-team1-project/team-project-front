@@ -25,6 +25,7 @@ import logoImg from "../../assets/images/DEEPDIVERS.png";
 import { selectMenuItem } from "../../store/category/menuSlice";
 import darkmodeIcon from "../../assets/images/darkmode.png";
 import profileIcon from "../../assets/images/profileIcon.png";
+import ProfileMenu from "./ProfileMenu";
 
 Modal.setAppElement("#root");
 
@@ -32,6 +33,7 @@ function Navbar({ isMainPage = false }) {
   const [menuItems, setMenuItems] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalType, setModalType] = useState("login");
+  const [menuOpen, setMenuOpen] = useState(false);
   const isLoggedIn = useSelector((state) => state.user.isLoggedIn);
   const email = useSelector((state) =>
     state.user.isLoggedIn && state.user.userInfo?.email
@@ -72,6 +74,7 @@ function Navbar({ isMainPage = false }) {
   const handleNavigation = (to, e) => {
     if (to === "my-profile") {
       navigate(`/my-page/${email}`);
+      setMenuOpen(false);
     } else if (to === "write") {
       navigate("/board/write");
     }
@@ -81,6 +84,8 @@ function Navbar({ isMainPage = false }) {
     try {
       await logout();
       dispatch(userLogout());
+      setMenuOpen(false);
+      navigate("/");
     } catch (err) {
       console.log(err);
     }
@@ -100,6 +105,12 @@ function Navbar({ isMainPage = false }) {
     openModal(type);
   };
 
+  const handleToggleMenu = () => {
+    setMenuOpen(!menuOpen);
+    if (!menuOpen) console.log("토글메뉴 열림");
+    else console.log("토글메뉴 닫힘");
+  };
+
   return (
     <NavbarWrapper>
       <NavbarInner>
@@ -114,10 +125,7 @@ function Navbar({ isMainPage = false }) {
         {isMainPage && (
           <Menu>
             {menuItems.map((item) => (
-              <MenuItem
-                key={item.id}
-                onClick={() => handleBoardNavigation(item.id)}
-              >
+              <MenuItem key={item.id} onClick={() => handleMenuClick(item.id)}>
                 {item.item}
               </MenuItem>
             ))}
@@ -132,19 +140,25 @@ function Navbar({ isMainPage = false }) {
             <BorderButton onClick={() => handleNavigation("write")}>
               새 글 작성
             </BorderButton>
-            <Button onClick={handleLogout}>로그아웃</Button>
-            <Button onClick={() => handleNavigation("my-profile")}>
-              <img
-                src={userInfo?.imageUrl ? userInfo.imageUrl : profileIcon}
-                alt="프로필"
-                style={{
-                  borderRadius: "20px",
-                  marginTop: "3px",
-                  width: "40px",
-                  height: "40px",
-                }}
-              />
-            </Button>
+            <div style={{ position: "relative", display: "inline-block" }}>
+              <Button onClick={handleToggleMenu}>
+                <img
+                  src={userInfo?.imageUrl ? userInfo.imageUrl : profileIcon}
+                  alt="프로필"
+                  style={{
+                    borderRadius: "20px",
+                    marginTop: "3px",
+                    width: "40px",
+                    height: "40px",
+                  }}
+                />
+                <ProfileMenu
+                  isOpen={menuOpen}
+                  onNavigate={() => handleNavigation("my-profile")}
+                  onLogout={handleLogout}
+                ></ProfileMenu>
+              </Button>
+            </div>
           </ButtonBox>
         ) : (
           <ButtonBox>
