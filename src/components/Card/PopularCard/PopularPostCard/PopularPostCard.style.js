@@ -11,7 +11,8 @@ export const Post = styled.div`
   cursor: pointer;
 
   &:hover {
-    border: none;
+    border: 1px solid transparent;
+    border-radius: 8px;
     background: linear-gradient(
       to bottom,
       rgba(255, 255, 255, 0.6),

@@ -11,7 +11,7 @@ import {
 import {
   PostCollection,
   ProfileLeft,
-} from "../../../components/Common/PostCollection";
+} from "../../../components/Common/PostCollection/PostCollection";
 import { useSelector } from "react-redux";
 import { fetchProfileInfo } from "../../../services/authApi";
 import { useNavigate, useParams } from "react-router-dom";

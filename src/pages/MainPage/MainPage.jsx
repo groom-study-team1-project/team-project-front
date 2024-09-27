@@ -13,8 +13,6 @@ import {
   PostCardImg,
 } from "./MainPage.style";
 import Navbar from "../../Layout/Navbar/Navbar";
-import ProjectPostCard from "../../components/Card/PostCard/ProjectPostCard/ProjectPostCard";
-import CommunityPostCard from "../../components/Card/PostCard/CommunityPostCard/CommunityPostCard";
 import redirectIcon from "../../assets/images/redirect-to-board.png";
 import { useNavigate } from "react-router-dom";
 import projectBoardCardImg from "../../assets/images/Template Card.png";
