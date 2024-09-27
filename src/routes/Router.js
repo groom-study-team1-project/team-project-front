@@ -5,7 +5,7 @@ import FreeBoard from "../pages/Board/FreeBoard/FreeBoard";
 import QuestionBoard from "../pages/Board/QuestionBoard/QuestionBoard";
 import NoticeBoard from "../pages/Board/NoticeBoard/NoticeBoard";
 import EditProfile from "../pages/MyPage/EditProfile/EditProfile";
-import BoardDetail from "../pages/Board/BoardDetail/BoardDetail";
+import BoardDetail from "../pages/Board/BoardDetail/Board/BoardDetail";
 import ProjectBoard from "../pages/Board/ProjectBoard/ProjectBoard";
 import Background from "../Layout/Background/Background";
 import BoardLayout from "../Layout/BoardLayout/BoardLayout";
