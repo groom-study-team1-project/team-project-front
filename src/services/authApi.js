@@ -340,7 +340,12 @@ export const postInfo = async (categoryId, lastPostId) => {
         },
       ],
     };
-    return response.result;
+
+    if (response.status.code === 9999) {
+      return response.result;
+    } else {
+      throw new Error(response.message || "내가 작성한 글 불러오기 실패");
+    }
   } catch (error) {
     console.error("사용자 정보를 불러오는데 실패했습니다.", error);
     throw error;
