@@ -42,6 +42,7 @@ function Navbar({ isMainPage = false }) {
   const userInfo = {
     imageUrl: payload.memberImageUrl,
   };
+
   const dispatch = useDispatch();
   const navigate = useNavigate();
 

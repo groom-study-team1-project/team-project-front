@@ -17,7 +17,7 @@ export default function SignUpModal({ changeModal }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-  const [tel, setTel] = useState("");
+  const [phoneNumber, setPhoneNumber] = useState("");
   const [errors, setErrors] = useState({});
 
   const validateForm = async () => {
@@ -52,8 +52,8 @@ export default function SignUpModal({ changeModal }) {
       errors.confirmPassword = "비밀번호가 일치하지 않습니다.";
     }
 
-    if (!/^\d{3}-\d{4}-\d{4}$/.test(tel)) {
-      errors.tel = "전화번호 형식을 맞춰주세요. 예: 010-0000-0000";
+    if (!/^\d{3}-\d{4}-\d{4}$/.test(phoneNumber)) {
+      errors.phoneNumber = "전화번호 형식을 맞춰주세요. 예: 010-0000-0000";
     }
 
     setErrors(errors);
@@ -82,12 +82,18 @@ export default function SignUpModal({ changeModal }) {
       try {
         const profileImgUrl = await uploadImageAndGetUrl();
 
-        let body = { email, password, nickname, imageUrl: profileImgUrl, tel };
+        let body = {
+          email,
+          password,
+          nickname,
+          imageUrl: profileImgUrl,
+          phoneNumber,
+        };
 
         const response = await signUp(body);
         console.log(response);
 
-        changeModal();
+        changeModal("login");
       } catch (err) {
         console.log(err);
       }
@@ -162,12 +168,12 @@ export default function SignUpModal({ changeModal }) {
 
           <FormInputField
             label={"휴대폰 번호"}
-            type={"tel"}
-            value={tel}
-            onChange={(e) => setTel(e.target.value)}
-            hasError={errors.tel}
+            type={"phoneNumber"}
+            value={phoneNumber}
+            onChange={(e) => setPhoneNumber(e.target.value)}
+            hasError={errors.phoneNumber}
           />
-          {errors.tel && <ErrorMsg>{errors.tel}</ErrorMsg>}
+          {errors.phoneNumber && <ErrorMsg>{errors.phoneNumber}</ErrorMsg>}
 
           <Divider />
           <Btn type="submit">계정 생성하기</Btn>

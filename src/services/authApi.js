@@ -33,13 +33,16 @@ export const signUp = async (body) => {
   try {
     //const response = await axios.post("/members/sign-up", body);
     const response = {
-      code: 1000,
-      message: "사용자 회원가입에 성공하였습니다.",
+      status: {
+        code: 1000,
+        message: "사용자 회원가입에 성공하였습니다.",
+      },
     };
-    if (response.code === 1000) {
+
+    if (response.status.code === 1000) {
       return response;
     } else {
-      throw new Error(response.message || "회원가입 실패");
+      throw new Error(response.status.message || "회원가입 실패");
     }
   } catch (error) {
     console.log("로그인 실패:", error);
