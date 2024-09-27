@@ -27,6 +27,7 @@ import darkmodeIcon from "../../assets/images/darkmode.png";
 import profileIcon from "../../assets/images/profileIcon.png";
 import ProfileMenu from "./ProfileMenu";
 import { changeTheme } from "../../store/theme/themeSlice";
+import lightmodeIcon from "../../assets/images/lightmode.png";
 
 Modal.setAppElement("#root");
 
@@ -142,7 +143,10 @@ function Navbar({ isMainPage = false }) {
         {isLoggedIn ? (
           <ButtonBox>
             <Button onClick={handleDarkMode}>
-              <img src={darkmodeIcon} alt="다크모드" />
+              <img
+                src={!isDarkMode ? darkmodeIcon : lightmodeIcon}
+                alt="다크모드"
+              />
             </Button>
             <BorderButton onClick={() => handleNavigation("write")}>
               새 글 작성
@@ -170,7 +174,10 @@ function Navbar({ isMainPage = false }) {
         ) : (
           <ButtonBox>
             <Button onClick={handleDarkMode}>
-              <img src={darkmodeIcon} alt="다크모드" />
+              <img
+                src={!isDarkMode ? darkmodeIcon : lightmodeIcon}
+                alt="다크모드"
+              />
             </Button>
             <Button onClick={() => openModal("login")}>Login</Button>
             <BorderButton onClick={() => openModal("signup")}>
