@@ -23,7 +23,6 @@ export const SearchSortWrapper = styled.div`
   height: 32px;
   display: flex;
   justify-content: space-between;
-  border: 1px solid black;
   margin-bottom: 48px;
 `;
 

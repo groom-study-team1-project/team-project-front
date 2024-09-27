@@ -4,27 +4,40 @@ export const SearchWrapper = styled.div`
   width: auto;
   height: 32px;
   display: flex;
-  border: 1px solid blue;
+
+  align-items: flex-end;
 `;
 
 export const SearchBox = styled.div`
   width: 378px;
   height: 32px;
-  border: 1px solid black;
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.1);
   display: flex;
   border-radius: 20px;
   padding-right: 20px;
+  margin-right: 10px;
   justify-content: space-between;
   align-items: center;
+  background: linear-gradient(
+    to bottom,
+    rgba(255, 255, 255, 0.05),
+    rgba(255, 255, 255, 0.5)
+  );
 `;
 
 export const InnerSearch = styled.input`
   width: 378px;
   height: 30px;
   font-size: 16px;
+  color: black;
   border: none;
   padding-left: 24px;
   background-color: transparent;
+
+  &::placeholder {
+    color: black;
+  }
 
   &:focus {
     outline: none;
@@ -37,10 +50,64 @@ export const SearchIcon = styled.img`
   cursor: pointer;
 `;
 
-export const SearchOption = styled.select`
+export const OptionContainer = styled.div`
+  position: relative;
+  width: 100px;
+`;
+
+export const OptionToggle = styled.div`
   width: 80px;
-  height: 24px;
-  border: 1px solid blue;
+  height: 8px;
   align-self: flex-end;
+  border-radius: 20px;
+  padding: 10px;
+  padding-left: 15px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 13px;
+  font-weight: bold;
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.1);
+  background: linear-gradient(
+    to bottom,
+    rgba(255, 255, 255, 0.9),
+    rgba(255, 255, 255, 0.5)
+  );
   cursor: pointer;
+  &:focus {
+    outline: none;
+  }
+`;
+
+export const OptionIcon = styled.img`
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
+`;
+
+export const OptionList = styled.ul`
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.1);
+  background: linear-gradient(
+    to bottom,
+    rgba(255, 255, 255, 0.05),
+    rgba(255, 255, 255, 0.5)
+  );
+  z-index: 1;
+`;
+
+export const OptionItem = styled.li`
+  padding: 5px 10px;
+  cursor: pointer;
+  &:hover {
+    background-color: rgba(0, 0, 0, 0.1);
+  }
 `;
