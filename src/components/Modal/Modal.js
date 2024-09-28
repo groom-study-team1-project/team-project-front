@@ -14,7 +14,6 @@ function ModalLayout({ isOpen, closeModal, children }) {
           left: 0,
           right: 0,
           bottom: 0,
-          backgroundColor: "rgba(255, 255, 255, 0.7)",
         },
         content: {
           position: "absolute",
@@ -24,13 +23,11 @@ function ModalLayout({ isOpen, closeModal, children }) {
           bottom: "auto",
           marginRight: "-50%",
           transform: "translate(-50%, -50%)",
-          background: "rgba(255, 255, 255, 0.9)",
-          padding: "0 1rem",
           borderRadius: "20px",
           maxWidth: "530px",
-          maxHeight: "918px",
-          boxShadow: "0px 4px 16px rgba(0, 0, 0, 0.2)",
+          maxHeight: "970px",
           overflow: "hidden",
+          padding: 0,
         },
       }}
     >

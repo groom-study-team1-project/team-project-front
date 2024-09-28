@@ -1,7 +1,13 @@
 import React, { useState } from "react";
-import { Btn, Container, Divider, Form } from "../Modal.style";
+import {
+  ModalTitle,
+  Btn,
+  Container,
+  Divider,
+  Form,
+  BtnBox,
+} from "../Modal.style";
 import { FormInputField } from "../FormInputField";
-import { FindUserPwHeader } from "./FindUserPw.style";
 import { findUserPw } from "../../../services/api/authApi";
 
 export default function FindUserPw({ changeModal }) {
@@ -28,12 +34,12 @@ export default function FindUserPw({ changeModal }) {
   }
 
   return (
-    <Container width="530px" height="628px">
+    <Container>
       {!foundPw ? (
-        <div>
-          <FindUserPwHeader>
+        <>
+          <ModalTitle>
             <h2>비밀번호 찾기</h2>
-          </FindUserPwHeader>
+          </ModalTitle>
           <Form onSubmit={handleFindUserPw}>
             <FormInputField
               label={"이메일"}
@@ -54,9 +60,11 @@ export default function FindUserPw({ changeModal }) {
               onChange={(e) => setTel(e.target.value)}
             />
             <Divider />
-            <Btn type="submit">비밀번호 찾기</Btn>
+            <BtnBox>
+              <Btn type="submit">비밀번호 찾기</Btn>
+            </BtnBox>
           </Form>
-        </div>
+        </>
       ) : (
         <div>
           <div
@@ -69,19 +77,11 @@ export default function FindUserPw({ changeModal }) {
             <span>비밀번호: </span>
             <span>{foundPw}</span>
           </div>
-          <div style={{ display: "flex", justifyContent: "center" }}>
-            <Btn
-              onClick={() => changeModal("login")}
-              style={{
-                width: "200px",
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-              }}
-            >
+          <BtnBox>
+            <Btn onClick={() => changeModal("login")}>
               로그인 화면으로 돌아가기
             </Btn>
-          </div>
+          </BtnBox>
         </div>
       )}
     </Container>

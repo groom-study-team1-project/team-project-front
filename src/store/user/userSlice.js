@@ -17,7 +17,10 @@ const userSlice = createSlice({
       state.isLoggedIn = true;
     },
     userLogout: (state) => {
-      state.userInfo = null;
+      state.userInfo = {
+        accessToken: "",
+        refreshToken: "",
+      };
       state.isLoggedIn = false;
     },
     updateToken: (state, action) => {
