@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { fetchPostItems } from "../../../services/api";
+import { fetchPostItems } from "../../../services/api/api";
 import CommunityPostCard from "../../../components/Card/PostCard/CommunityPostCard/CommunityPostCard";
 import {
   BoardTitle,

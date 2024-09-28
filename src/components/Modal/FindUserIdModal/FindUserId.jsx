@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Btn, Container, Divider, Form } from "../Modal.style";
 import { FindUserIdHeader } from "./FindUserId.style";
 import { FormInputField } from "../FormInputField";
-import { findUserId } from "../../../services/authApi";
+import { findUserId } from "../../../services/api/authApi";
 
 export default function FindUserId({ changeModal }) {
   const [nickname, setNickname] = useState("");

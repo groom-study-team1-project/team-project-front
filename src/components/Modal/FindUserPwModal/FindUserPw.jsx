@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Btn, Container, Divider, Form } from "../Modal.style";
 import { FormInputField } from "../FormInputField";
 import { FindUserPwHeader } from "./FindUserPw.style";
-import { findUserPw } from "../../../services/authApi";
+import { findUserPw } from "../../../services/api/authApi";
 
 export default function FindUserPw({ changeModal }) {
   const [email, setEmail] = useState("");

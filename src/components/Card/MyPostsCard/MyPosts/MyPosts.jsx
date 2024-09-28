@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { postInfo } from "../../../../services/authApi";
+import { postInfo } from "../../../../services/api/authApi";
 import { MyPost, MyPostTitle } from "./MyPosts.style";
 import PostsByCategory from "../PostsByCategory/PostsByCategory";
 

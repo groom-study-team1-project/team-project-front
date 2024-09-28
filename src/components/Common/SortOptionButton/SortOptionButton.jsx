@@ -1,4 +1,4 @@
-import { sortPostsByCriteria } from "../../../services/postApi";
+import { sortPostsByCriteria } from "../../../services/api/postApi";
 import { SortOption } from "./SortOptionButton.style";
 
 function SortOptionButton() {

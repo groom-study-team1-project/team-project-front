@@ -8,7 +8,7 @@ import {
   checkDuplicatedNickname,
   signUp,
   uploadProfileImage,
-} from "../../../services/authApi";
+} from "../../../services/api/authApi";
 
 export default function SignUpModal({ changeModal }) {
   const [previewImage, setPreviewImage] = useState(null);

@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { Btn, Container, Divider, Form, Logo } from "../Modal.style";
 import { FormInputField } from "../FormInputField";
 import { FindUserBtns, FindUserBtn } from "./LoginModal.style";
-import { login } from "../../../services/authApi";
+import { login } from "../../../services/api/authApi";
 import logoImg from "../../../assets/images/DEEPDIVERS.png";
 import { useDispatch } from "react-redux";
 import { userLogin } from "../../../store/user/userSlice";

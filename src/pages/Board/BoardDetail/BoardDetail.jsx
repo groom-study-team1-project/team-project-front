@@ -7,8 +7,8 @@ import heart from "../../../assets/images/heart.png";
 import commentsubmit from "../../../assets/images/commentsubmit.png";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEllipsisVertical } from "@fortawesome/free-solid-svg-icons";
-import { fetchcomment, createcomment } from "../../../services/api";
-import { fetchPostDetail } from "../../../services/postApi";
+import { fetchcomment, createcomment } from "../../../services/api/api";
+import { fetchPostDetail } from "../../../services/api/postApi";
 import {
   PostProfileBox,
   ProfileImage,
@@ -18,7 +18,7 @@ import {
   InteractionItem,
 } from "../../../components/Common/Interactions";
 import { Wrap } from "../BoardWrite/BoardWrite.style";
-import { deletepost } from "../../../services/postApi";
+import { deletepost } from "../../../services/api/postApi";
 import {
   CategotyWrap,
   CenteredContainer,

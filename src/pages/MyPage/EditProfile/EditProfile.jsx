@@ -17,7 +17,7 @@ import {
   SelfIntroductionTextarea,
 } from "./EditProfile.style";
 import { useSelector, useDispatch } from "react-redux";
-import { editProfile, fetchProfileInfo } from "../../../services/authApi";
+import { editProfile, fetchProfileInfo } from "../../../services/api/authApi";
 import { useNavigate } from "react-router-dom";
 import useJwt from "../../../hooks/useJwt";
 

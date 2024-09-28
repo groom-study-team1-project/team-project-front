@@ -1,5 +1,5 @@
 import { redirect } from "react-router-dom";
-import axiosInstance from "./axiosConfig";
+import axiosInstance from "../axiosConfig";
 
 export const login = async (body) => {
   try {

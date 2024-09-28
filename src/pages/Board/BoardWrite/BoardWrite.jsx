@@ -8,7 +8,7 @@ import {
   createPost,
   fetchPostChange,
   fetchPostDetail,
-} from "../../../services/postApi";
+} from "../../../services/api/postApi";
 import backBtn from "../../../assets/images/back-removebg-preview.png";
 import {
   BackImg,

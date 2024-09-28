@@ -10,7 +10,7 @@ import {
 } from "./MyProfile.style";
 import { MyPosts } from "../../../components/Card/MyPostsCard/MyPosts/MyPosts";
 import { useSelector } from "react-redux";
-import { fetchProfileInfo } from "../../../services/authApi";
+import { fetchProfileInfo } from "../../../services/api/authApi";
 import { useNavigate, useParams } from "react-router-dom";
 import { BigProfileBox } from "../../../components/Card/PostCard/PostProfile";
 
