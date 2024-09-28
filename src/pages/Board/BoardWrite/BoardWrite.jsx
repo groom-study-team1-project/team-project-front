@@ -35,7 +35,7 @@ const BoardWrite = () => {
   });
   const [postData, setPostData] = useState(null);
   const [selectedCategory, setSelectedCategory] = useState(0);
-  const [imgUrls, setImgUrls] = useState([]); // State to store multiple image URLs
+  const [imgUrls, setImgUrls] = useState([]);
   const fileInput = useRef(null);
   const { postId } = useParams();
 

@@ -1,11 +1,9 @@
-import axios from "axios";
 import { redirect } from "react-router-dom";
-
-const API_URL = "http://localhost:8080";
+import axiosInstance from "./axiosConfig";
 
 export const login = async (body) => {
   try {
-    // const response = await axios.post(`${API_URL}/members/login`, body);
+    // const response = await axiosInstance.post("/members/login", body);
     const response = {
       status: {
         code: 9999,
@@ -31,7 +29,7 @@ export const login = async (body) => {
 
 export const signUp = async (body) => {
   try {
-    //const response = await axios.post("/members/sign-up", body);
+    //const response = await axiosInstance.post("/members/sign-up", body);
     const response = {
       status: {
         code: 1000,
@@ -52,11 +50,7 @@ export const signUp = async (body) => {
 
 export const uploadProfileImage = async (body) => {
   try {
-    // const response = await axios.post("/api/members/profile-image", body, {
-    //   headers: {
-    //     Authorization: `Bearer ${yourAccessToken}`,
-    //   },
-    // });
+    // const response = await axiosInstance.post("/api/members/profile-image", body);
 
     const response = {
       status: {
@@ -83,7 +77,7 @@ export const uploadProfileImage = async (body) => {
 
 export const checkDuplicatedNickname = async (name) => {
   try {
-    // const response = await axios.get(`${API_URL}/members/validate/nickname`, {
+    // const response = await axiosInstance.get("/members/validate/nickname", {
     //   params: { nickname: name },
     // });
 
@@ -105,7 +99,7 @@ export const checkDuplicatedNickname = async (name) => {
 
 export const checkDuplicatedEmail = async (email) => {
   try {
-    // const response = await axios.get(`${API_URL}/members/validate/email`, {
+    // const response = await axiosInstance.get("/members/validate/email", {
     //   params: { email },
     // });
 
@@ -127,14 +121,8 @@ export const checkDuplicatedEmail = async (email) => {
 
 export const logout = async (accessToken) => {
   try {
-    // const response = await axios.post(
+    // const response = await axiosInstance.post(
     //   "/api/members/log-out",
-    //   {},
-    //   {
-    //     headers: {
-    //       Authorization: `Bearer ${accessToken}`,
-    //     },
-    //   }
     // );
     const response = {
       code: 1002,
@@ -155,11 +143,7 @@ export const fetchProfileInfo = async (memberId) => {
   let isMe = true;
 
   try {
-    // const response = await axios.get(`/api/members/me/${memberId}`, {
-    //   headers: {
-    //         Authorization: `Bearer ${yourAccessToken}`,
-    //       },
-    // });
+    // const response = await axiosInstance.get(`/api/members/me/${memberId}`);
 
     const response = {
       status: {
@@ -197,11 +181,7 @@ export const fetchProfileInfo = async (memberId) => {
 
 export const editProfile = async (body) => {
   try {
-    // const response = await axios.put("/api/members/me", body, {
-    //   headers: {
-    //     Authorization: `Bearer ${yourAccessToken}`,
-    //   },
-    // });
+    // const response = await axiosInstance.put("/api/members/me", body);
 
     const response = {
       status: {
@@ -236,7 +216,7 @@ export const editProfile = async (body) => {
 
 export const findUserId = async (nickname, tel) => {
   try {
-    // const response = await axios.get("/members/me/email", {
+    // const response = await axiosInstance.get("/members/me/email", {
     //   params: {
     //     nickname,
     //     tel,
@@ -272,7 +252,7 @@ export const findUserId = async (nickname, tel) => {
 
 export const findUserPw = async (email, nickname, tel) => {
   try {
-    // const response = await axios.get("/members/me/password", {
+    // const response = await axiosInstance.get("/members/me/password", {
     //   params: {
     //     email,
     //     nickname,
@@ -313,13 +293,10 @@ export const findUserPw = async (email, nickname, tel) => {
 
 export const postInfo = async (categoryId, lastPostId) => {
   try {
-    // const response = await axios.get(`/api/members/me/posts`, {
+    // const response = await axiosInstance.get("/api/members/me/posts", {
     //   params: {
     //     categoryId: categoryId,
     //     lastPostId: lastPostId,
-    //   },
-    //   headers: {
-    //     Authorization: `Bearer ${yourAccessToken}`,
     //   },
     // });
 

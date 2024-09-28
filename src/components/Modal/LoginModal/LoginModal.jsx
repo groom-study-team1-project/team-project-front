@@ -21,7 +21,9 @@ export default function LoginModal({ closeModal, changeModal }) {
 
       const { accessToken, refreshToken } = await login(body);
 
-      dispatch(userLogin({ accessToken: accessToken }));
+      dispatch(
+        userLogin({ accessToken: accessToken, refreshToken: refreshToken })
+      );
       closeModal();
     } catch (err) {
       console.log(err);

@@ -3,6 +3,7 @@ import { createSlice } from "@reduxjs/toolkit";
 const initialState = {
   userInfo: {
     accessToken: "",
+    refreshToken: "",
   },
   isLoggedIn: false,
 };
@@ -19,7 +20,7 @@ const userSlice = createSlice({
       state.userInfo = null;
       state.isLoggedIn = false;
     },
-    updateUserInfo: (state, action) => {
+    updateToken: (state, action) => {
       state.userInfo = {
         ...state.userInfo,
         ...action.payload,
@@ -28,6 +29,6 @@ const userSlice = createSlice({
   },
 });
 
-export const { userLogin, userLogout, updateUserInfo } = userSlice.actions;
+export const { userLogin, userLogout, updateToken } = userSlice.actions;
 
 export default userSlice.reducer;
