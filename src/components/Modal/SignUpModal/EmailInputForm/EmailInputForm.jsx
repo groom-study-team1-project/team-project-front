@@ -9,35 +9,57 @@ import {
   ModalTitle,
 } from "../../Modal.style";
 import { ErrorMsg } from "../SignUpModal.style";
-import { checkDuplicatedEmail } from "../../../../services/api/authApi";
+import {
+  checkDuplicatedEmail,
+  sendEmailVerificationCode,
+} from "../../../../services/api/authApi";
 
 function EmailInputForm({ handleNext, handleSubmitEmail }) {
   const [email, setEmail] = useState("");
-  const [errors, setErrors] = useState({});
+  const [error, setError] = useState("");
 
   const validateForm = async () => {
-    let errors = {};
+    let err = "";
+
+    if (email.length < 1) {
+      err = "이메일 주소를 입력해주세요.";
+    }
 
     if (!/\S+@\S+\.\S+/.test(email)) {
-      errors.email = "유효한 이메일 주소를 입력해주세요.";
+      err = "유효한 이메일 주소를 입력해주세요.";
     }
 
     if (await checkDuplicatedEmail(email)) {
-      errors.email = "중복된 이메일 주소입니다.";
+      err = "중복된 이메일 주소입니다.";
     }
 
-    setErrors(errors);
-    return Object.keys(errors).length === 0;
+    setError(err);
+    return err.length === 0;
   };
 
-  const handleSubmit = () => {
-    const isValid = validateForm();
+  async function handleSubmit(e) {
+    e.preventDefault();
 
-    if (isValid) {
-      handleNext();
-      handleSubmitEmail(email);
+    try {
+      const isValid = await validateForm();
+
+      if (isValid) {
+        let body = { email };
+
+        const { success, message } = await sendEmailVerificationCode(body);
+
+        if (!success) {
+          setError(message);
+          return;
+        }
+
+        handleNext();
+        handleSubmitEmail(email);
+      }
+    } catch (err) {
+      console.error(err);
     }
-  };
+  }
 
   return (
     <Container>
@@ -45,14 +67,16 @@ function EmailInputForm({ handleNext, handleSubmitEmail }) {
         <h1>회원가입</h1>
       </ModalTitle>
       <p>이메일을 입력해주세요</p>
-      <Form onSubmit={handleSubmit}>
-        <FormInputField
-          label={"이메일"}
-          type={"email"}
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-        />
-        {errors.email && <ErrorMsg>{errors.email}</ErrorMsg>}
+      <Form onSubmit={(e) => handleSubmit(e)}>
+        <div>
+          <FormInputField
+            label={"이메일"}
+            type={"email"}
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+          />
+          {error && <ErrorMsg>{error}</ErrorMsg>}
+        </div>
 
         <Divider />
         <BtnBox>

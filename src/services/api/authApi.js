@@ -334,19 +334,45 @@ export const postInfo = async (categoryId, lastPostId) => {
   }
 };
 
+// 인증 코드 검사
 export const verifyEmailCode = async (body) => {
   try {
     // const response = await axiosInstance.post("/accounts/verify/email", body);
 
     const response = {
       status: {
-        code: 9999,
-        message: "응답 성공 메시지입니다.",
+        code: 1101,
+        message: "사용자 이메일 인증이 성공하였습니다.",
       },
     };
 
-    if (response.status.code === 9999) {
+    if (response.status.code === 1101) {
       return true;
+    } else {
+      throw new Error(response.message || "유효하지 않은 인증코드");
+    }
+  } catch (error) {
+    console.error("유효하지 않은 인증코드", error);
+    throw error;
+  }
+};
+
+// 이메일 인증 코드 전송
+export const sendEmailVerificationCode = async (body) => {
+  try {
+    // const response = await axiosInstance.post("/accounts/authenticate/email", body);
+
+    const response = {
+      status: {
+        code: 1100,
+        message: "이메일로 인증코드가 전송되었습니다.",
+      },
+    };
+
+    if (response.status.code === 1100) {
+      return { success: true, message: response.status.message };
+    } else if (response.status.code === 2003) {
+      return { success: false, message: response.status.message };
     } else {
       throw new Error(response.message || "유효하지 않은 인증코드");
     }
