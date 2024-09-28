@@ -16,7 +16,6 @@ import Modal from "react-modal";
 import ModalLayout from "../../components/Modal/Modal";
 import LoginModal from "../../components/Modal/LoginModal/LoginModal";
 import SignUpModal from "../../components/Modal/SignUpModal/SignUpModal";
-import FindUserId from "../../components/Modal/FindUserIdModal/FindUserId";
 import FindUserPw from "../../components/Modal/FindUserPwModal/FindUserPw";
 import { logout } from "../../services/api/authApi";
 import { fetchCategoryItems } from "../../services/api/postApi";
@@ -171,9 +170,7 @@ function Navbar({ isMainPage = false }) {
             ? "로그인 모달"
             : modalType === "signup"
             ? "회원가입 모달"
-            : modalType === "findUserId"
-            ? "아이디 찾기 모달"
-            : "비밀번호 찾기 모달"
+            : "비밀번호 변경 모달"
         }
         style={{
           content: {
@@ -192,8 +189,6 @@ function Navbar({ isMainPage = false }) {
           <LoginModal closeModal={closeModal} changeModal={changeModal} />
         ) : modalType === "signup" ? (
           <SignUpModal changeModal={changeModal} />
-        ) : modalType === "findUserId" ? (
-          <FindUserId changeModal={changeModal} />
         ) : (
           <FindUserPw changeModal={changeModal} />
         )}

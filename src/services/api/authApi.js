@@ -214,42 +214,6 @@ export const editProfile = async (body) => {
   }
 };
 
-export const findUserId = async (nickname, tel) => {
-  try {
-    // const response = await axiosInstance.get("/members/me/email", {
-    //   params: {
-    //     nickname,
-    //     tel,
-    //   },
-    // });
-    const response = {
-      code: 1006,
-      message: "이메일 찾기에 성공했습니다.",
-      success: true,
-      params: {
-        nickname: "구름이",
-        tel: "010-1234-5678",
-      },
-      result: {
-        email: "test@mail.com",
-      },
-    };
-
-    if (nickname === response.params.nickname && tel === response.params.tel) {
-      return response;
-    } else {
-      return {
-        success: false,
-        message: "이메일 찾기에 실패했습니다.",
-      };
-    }
-
-    // return response;
-  } catch (error) {
-    console.error("회원 정보를 가져오는 중 오류 발생:", error);
-  }
-};
-
 export const findUserPw = async (email, nickname, tel) => {
   try {
     // const response = await axiosInstance.get("/members/me/password", {

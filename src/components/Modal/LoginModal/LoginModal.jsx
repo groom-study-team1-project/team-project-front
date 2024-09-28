@@ -37,12 +37,8 @@ export default function LoginModal({ closeModal, changeModal }) {
     }
   }
 
-  const handleFindUserId = () => {
-    changeModal("findUserId");
-  };
-
-  const handleFindUserPw = () => {
-    changeModal("findUserPw");
+  const handleChangeUserPw = () => {
+    changeModal("changeUserPw");
   };
 
   return (
@@ -78,12 +74,10 @@ export default function LoginModal({ closeModal, changeModal }) {
 
         <FindUserBtns>
           <div>
-            <span>아이디를 잃어버리셨나요?</span>
-            <FindUserBtn onClick={handleFindUserId}>아이디 찾기</FindUserBtn>
-          </div>
-          <div>
             <span>비밀번호를 잃어버리셨나요?</span>
-            <FindUserBtn onClick={handleFindUserPw}>비밀번호 찾기</FindUserBtn>
+            <FindUserBtn onClick={handleChangeUserPw}>
+              비밀번호 변경
+            </FindUserBtn>
           </div>
         </FindUserBtns>
       </Form>
