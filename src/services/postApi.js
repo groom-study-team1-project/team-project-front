@@ -22,7 +22,7 @@ export const fetchPostDetail = async (postId) => {
     result: {
       categoryInfo: {
         id: 2,
-        title: "프로젝트 자랑 게시판",
+        title: "프로젝트 게시판",
       },
       memberInfo: {
         Id: 0,
@@ -36,7 +36,7 @@ export const fetchPostDetail = async (postId) => {
         content:
           "<p>My first iOS app is available on the AppStore. I literally didn’t know anything about SwiftUI (still not much) and in probably 4 weeks was able to recreate my android app for iOS. Highly recommend MengTo video. My first iOS app is available on the AppStore. I literally didn’t know anything about SwiftUI (still not much) and in probably 4 weeks was able to recreate my android app for iOS. Highly recommend MengTo video. My first iOS app is available on the AppStore. I literally didn’t know anything about SwiftUI (still not much) and in probably 4 weeks was able to recreate my android app for iOS. Highly recommend MengTo video.My first iOS app is available on the AppStore. I literally didn’t know anything about SwiftUI (still not much) and in probably 4 weeks was able to recreate my android app for iOS. Highly recommend MengTo video. My first iOS app is available on the AppStore. I literally didn’t know anything about SwiftUI (still not much) and in probably 4 weeks was able to recreate my android app for iOS. </p>",
         viewCount: 12,
-        commentCount: 12,
+        commentCount: 2,
         recommedCount: 12,
         createdAt: new Date().toLocaleDateString(),
         isModified: true,
@@ -118,6 +118,30 @@ export const sortPostsByCriteria = async (categoty_id, sort, post_id) => {
   }
 };
 
+export const uploadAdapter = (loader) => {
+  const API_URL = "http://localhost:7000/api/post/image";
+
+  return {
+    upload: () => {
+      return new Promise((resolve, reject) => {
+        const body = new FormData();
+        loader.file.then((file) => {
+          body.append("upload", file);
+          axios
+            .post(`${API_URL}`, body)
+            .then((res) => {
+              resolve({
+                default: res.data.url[0],
+              });
+            })
+            .catch((err) => {
+              reject(err);
+            });
+        });
+      });
+    },
+  };
+};
 export async function fetchCategoryItems() {
   try {
     // const response = await axios.get("/categories");
