@@ -204,7 +204,7 @@ export const editProfile = async (body) => {
     };
 
     if (response.status.code === 9999) {
-      return response.message;
+      return response.status.message;
     } else {
       throw new Error(response.message || "프로필 수정 실패");
     }
@@ -330,6 +330,28 @@ export const postInfo = async (categoryId, lastPostId) => {
     }
   } catch (error) {
     console.error("사용자 정보를 불러오는데 실패했습니다.", error);
+    throw error;
+  }
+};
+
+export const verifyEmailCode = async (body) => {
+  try {
+    // const response = await axiosInstance.post("/accounts/verify/email", body);
+
+    const response = {
+      status: {
+        code: 9999,
+        message: "응답 성공 메시지입니다.",
+      },
+    };
+
+    if (response.status.code === 9999) {
+      return true;
+    } else {
+      throw new Error(response.message || "유효하지 않은 인증코드");
+    }
+  } catch (error) {
+    console.error("유효하지 않은 인증코드", error);
     throw error;
   }
 };

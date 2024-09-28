@@ -1,7 +1,7 @@
 import React, { useState, useRef } from "react";
 import { PinInput, PinInputWrapper } from "./PinCodeInput.style";
 
-const PinCodeInput = ({ pinLength = 6, setVerificationCode }) => {
+const PinCodeInput = ({ pinLength = 6, setVerifyCode }) => {
   const [pinValues, setPinValues] = useState(Array(pinLength).fill(""));
   const inputRefs = useRef([]);
 
@@ -17,7 +17,7 @@ const PinCodeInput = ({ pinLength = 6, setVerificationCode }) => {
       inputRefs.current[index + 1].focus();
     }
     if (newPinValues.every((pin) => pin !== "")) {
-      setVerificationCode(newPinValues.join(""));
+      setVerifyCode(newPinValues.join(""));
     }
   };
 
