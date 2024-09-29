@@ -9,7 +9,7 @@ import { editorConfig } from "../../BoardWrite/WriteBoard/editor";
 import { fetchPostDetail } from "../../../../services/postApi";
 import { PostProfileBox } from "../../../../components/Card/PostCard/PostProfile";
 import { Interaction } from "../../../../components/Common/Interactions";
-import { deletepost } from "../../../../services/postApi";
+import { deletepost } from "../../../../services/api/postApi";
 import Comments from "../Comment/Comment";
 import ModalComponent from "../../../../components/Modal/EditDeleteModal/EditDeleteModal"; // 모달 컴포넌트 추가
 import {

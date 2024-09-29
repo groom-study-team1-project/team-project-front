@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { fetchPopularPostItems } from "../../../../services/api";
+import { fetchPopularPostItems } from "../../../../services/api/api";
 import PopularContainer from "../PopularContainer";
 import { Post, PostStats, PostText } from "./PopularPostCard.style";
 import { Interaction } from "../../../Common/Interactions";

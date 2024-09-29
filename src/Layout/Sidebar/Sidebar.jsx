@@ -6,10 +6,11 @@ import {
   SidebarIcon,
   SidebarLi,
   SidebarLink,
+  SidebarTitle,
   SidebarUl,
 } from "./Sidebar.style";
 import { useNavigate } from "react-router-dom";
-import { fetchCategoryItems } from "../../services/postApi";
+import { fetchCategoryItems } from "../../services/api/postApi";
 import logoImg from "../../assets/images/DEEPDIVERS.png";
 import cardIcon from "../../assets/images/Card.png";
 import informaitonIcon from "../../assets/images/Help Badge.png";
@@ -64,11 +65,7 @@ function Sidebar() {
   return (
     <ContainerDiv>
       <Logo onClick={() => handleNavigation(5)}>
-        <img
-          src={logoImg}
-          alt="로고 이미지"
-          style={{ width: "128px", margin: "16px" }}
-        />
+        <img src={logoImg} alt="로고 이미지" />
       </Logo>
       <SidebarDiv>
         <SidebarUl>
@@ -79,10 +76,12 @@ function Sidebar() {
                 onClick={() => {
                   handleMenuClick(item.id);
                 }}
-                isSelected={selectedItem !== null && selectedItem === item.id}
               >
-                <SidebarLink>
-                  {item.item}
+                <SidebarLink
+                  className="link"
+                  isSelected={selectedItem !== null && selectedItem === item.id}
+                >
+                  <SidebarTitle>{item.item}</SidebarTitle>
                   {iconMapping[item.item]}
                 </SidebarLink>
               </SidebarLi>
