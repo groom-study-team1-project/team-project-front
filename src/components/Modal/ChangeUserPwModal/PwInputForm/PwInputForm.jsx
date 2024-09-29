@@ -41,7 +41,7 @@ export default function PwInputForm({ email, handlePrev, changeModal }) {
         let body = { email, password };
         const response = await changeUserPw(body);
 
-        console.log("응답 성공 여부", response.success);
+        console.log(response);
 
         changeModal("login");
       }

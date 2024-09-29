@@ -26,6 +26,7 @@ export default function SignUpModal({ changeModal }) {
         <EmailInputForm
           handleNext={handleNext}
           handleSubmitEmail={handleSubmitEmail}
+          sendEmail="email"
         />
       ) : SignupSteps[step] === "verificationCode" ? (
         <VerificationCodeInputForm

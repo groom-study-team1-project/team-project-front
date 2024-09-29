@@ -9,9 +9,12 @@ import {
   ModalTitle,
 } from "../../Modal.style";
 import { ErrorMsg } from "../../SignUpModal/SignUpModal.style";
-import { sendEmailVerificationCode } from "../../../../services/api/authApi";
+import {
+  sendEmailVerificationCode,
+  sendEmailVerificationCodePassword,
+} from "../../../../services/api/authApi";
 
-function EmailInputForm({ handleNext, handleSubmitEmail }) {
+function EmailInputForm({ handleNext, handleSubmitEmail, sendEmail }) {
   const [email, setEmail] = useState("");
   const [error, setError] = useState("");
 
@@ -39,7 +42,10 @@ function EmailInputForm({ handleNext, handleSubmitEmail }) {
       if (isValid) {
         let body = { email };
 
-        const { success, message } = await sendEmailVerificationCode(body);
+        const { success, message } =
+          sendEmail === "email"
+            ? await sendEmailVerificationCode(body)
+            : await sendEmailVerificationCodePassword(body);
 
         if (!success) {
           setError(message);

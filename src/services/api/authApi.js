@@ -305,3 +305,27 @@ export const sendEmailVerificationCode = async (body) => {
     throw error;
   }
 };
+
+export const sendEmailVerificationCodePassword = async (body) => {
+  try {
+    // const response = await axiosInstance.post("/accounts/authenticate/password", body);
+
+    const response = {
+      status: {
+        code: 1100,
+        message: "이메일로 인증코드가 전송되었습니다.",
+      },
+    };
+
+    if (response.status.code === 1100) {
+      return { success: true, message: response.status.message };
+    } else if (response.status.code === 2006) {
+      return { success: false, message: response.status.message };
+    } else {
+      throw new Error(response.message || "유효하지 않은 인증코드");
+    }
+  } catch (error) {
+    console.error("유효하지 않은 인증코드", error);
+    throw error;
+  }
+};

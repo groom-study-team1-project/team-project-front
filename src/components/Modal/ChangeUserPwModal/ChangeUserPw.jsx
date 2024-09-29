@@ -26,6 +26,7 @@ export default function ChangeUserPw({ changeModal }) {
         <EmailInputForm
           handleNext={handleNext}
           handleSubmitEmail={handleSubmitEmail}
+          sendEmail="password"
         />
       ) : ChangePwSteps[step] === "verificationCode" ? (
         <VerificationCodeInputForm
