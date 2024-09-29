@@ -230,7 +230,7 @@ export const postInfo = async (categoryId, lastPostId) => {
 
     const response = {
       status: {
-        code: 9999,
+        code: 1009,
         message: "응답 성공 메시지입니다.",
       },
       result: [
@@ -251,7 +251,7 @@ export const postInfo = async (categoryId, lastPostId) => {
       ],
     };
 
-    if (response.status.code === 9999) {
+    if (response.status.code === 1009) {
       return response.result;
     } else {
       throw new Error(response.message || "내가 작성한 글 불러오기 실패");
@@ -310,6 +310,7 @@ export const sendEmailVerificationCode = async (body) => {
   }
 };
 
+// 이메일 인증 코드 전송 (비밀번호)
 export const sendEmailVerificationCodePassword = async (body) => {
   try {
     // const response = await axiosInstance.post("/accounts/authenticate/password", body);

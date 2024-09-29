@@ -97,7 +97,7 @@ export const sortPostsByCriteria = async (categoty_id, sort, post_id) => {
     //   `/posts/${post_id}?sort=${sort}&categoty-id=${categoty_id}`
     // );
     // console.log(result);
-    await console.log(categoty_id, sort, post_id);
+    console.log(categoty_id, sort, post_id);
   } catch (error) {
     console.log(error);
   }
