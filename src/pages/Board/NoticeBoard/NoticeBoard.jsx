@@ -1,7 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { fetchNoticePostItems } from "../../../services/api/api";
 import NoticePostCard from "../../../components/Card/PostCard/NoticePostCard/NoticePostCard";
-import { BoardTitle, ContentWrapper, SearchSortWrapper } from "../Board.style";
+import {
+  Title,
+  BoardTitle,
+  ContentWrapper,
+  SearchSortWrapper,
+} from "../Board.style";
 import Search from "../../../components/Common/Search/Search";
 import SortOptionButton from "../../../components/Common/SortOptionButton/SortOptionButton";
 import { NoticePostCardWrapper } from "./NoticeBoard.style";
@@ -17,7 +22,9 @@ function NoticeBoard() {
 
   return (
     <ContentWrapper>
-      <BoardTitle>공지사항</BoardTitle>
+      <BoardTitle>
+        <Title>공지사항</Title>
+      </BoardTitle>
       <SearchSortWrapper>
         <Search />
         <SortOptionButton />

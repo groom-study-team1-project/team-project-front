@@ -2,15 +2,21 @@ import React, { useState } from "react";
 import {
   SearchWrapper,
   SearchBox,
-  SearchOption,
   InnerSearch,
   SearchIcon,
+  OptionIcon,
+  OptionContainer,
+  OptionToggle,
+  OptionList,
+  OptionItem,
 } from "./Search.style";
+import optionIcon from "../../../assets/images/option.png";
 import searchIcon from "../../../assets/images/search.png";
 
 function Search() {
   const [searchTerm, setSearchTerm] = useState("");
   const [filter, setFilter] = useState("title");
+  const [isChangeOption, setIsChangeOption] = useState(false);
 
   const handleFilterChange = (e) => {
     setFilter(e.target.value);

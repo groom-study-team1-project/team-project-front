@@ -1,7 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { fetchPostItems } from "../../../services/api/api";
 import ProjectPostCard from "../../../components/Card/PostCard/ProjectPostCard/ProjectPostCard";
-import { BoardTitle, ContentWrapper, SearchSortWrapper } from "../Board.style";
+import {
+  Title,
+  BoardTitle,
+  ContentWrapper,
+  SearchSortWrapper,
+} from "../Board.style";
 import Search from "../../../components/Common/Search/Search";
 import SortOptionButton from "../../../components/Common/SortOptionButton/SortOptionButton";
 import { ProjectPostCardWrapper } from "./ProjectBoard.style";
@@ -17,7 +22,9 @@ function ProjectBoard() {
 
   return (
     <ContentWrapper>
-      <BoardTitle>프로젝트 게시판</BoardTitle>
+      <BoardTitle>
+        <Title>프로젝트 게시판</Title>
+      </BoardTitle>
       <SearchSortWrapper>
         <Search />
         <SortOptionButton />
