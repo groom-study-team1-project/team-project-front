@@ -53,3 +53,13 @@ export const ModalActions = styled.div`
     color: black;
   }
 `;
+
+export const ErrMsg = styled.div`
+  display: block;
+  text-align: center;
+  color: white;
+  margin: 2px;
+  padding: 5px;
+  background: red;
+  border-radius: 5px;
+`;

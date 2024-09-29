@@ -1,23 +1,27 @@
 import React, { useState } from "react";
 import { ProfileImage } from "../../../components/Card/PostCard/PostProfile";
 import PasswordChange from "../../../components/Modal/PasswordChange/PasswordChange";
-import { editProfile } from "../../../services/api/authApi";
+import {
+  editProfile,
+  checkDuplicatedNickname,
+} from "../../../services/api/authApi";
 import { useNavigate } from "react-router-dom";
 import {
   PageNameWrap,
   PageName,
   Container,
-  Leftaside,
+  ProfileImageWraps,
   ProfileActions,
-  FormGroup,
-  RightSection,
   Label,
+  NicknameContainer,
+  CheckButton,
   ButtonGroup,
-  EmailWrap,
-  EmailDescription,
-  RightProfile,
+  Input,
+  ProfileFooter,
   SubmitBtn,
-  ProfileBottom,
+  ProfileImageWrapsRight,
+  JobSelect,
+  ChecknickName,
 } from "./EditProfile.style";
 
 const EditProfile = () => {
@@ -32,7 +36,8 @@ const EditProfile = () => {
 
   const navigate = useNavigate();
   const [isModalOpen, setIsModalOpen] = useState(false);
-
+  const [checkNickName, setCheckName] = useState(null);
+  const [btn, setBtn] = useState(true);
   const handleImageChange = (e) => {
     const file = e.target.files[0];
     if (file) {
@@ -47,10 +52,26 @@ const EditProfile = () => {
   };
 
   const handleOnChange = (e) => {
+    if (e.target.name === "nickName") {
+      if (e.target.value.length > 0) {
+        setBtn(false);
+      }
+      if (e.target.value.length === 0) {
+        setBtn(true);
+      }
+    }
     setForm({
       ...form,
       [e.target.name]: e.target.value,
     });
+  };
+
+  const handleOnchedknickName = async (e) => {
+    e.preventDefault();
+    console.log(form.nickName);
+    const useNickname = await checkDuplicatedNickname(form.nickName);
+    setCheckName(useNickname);
+    console.log(useNickname);
   };
 
   const handleonSubmit = async (e) => {
@@ -65,7 +86,8 @@ const EditProfile = () => {
         nickName: res.nickName,
         imageUrl: res.imageUrl,
         aboutMe: res.aboutMe,
-        phoneNumber: res.tel,
+        phoneNumber: res.phoneNumber,
+        role: res.role,
       });
       const response = await editProfile(body);
       console.log(response);
@@ -81,111 +103,108 @@ const EditProfile = () => {
           <PageName>프로필 수정</PageName>
         </PageNameWrap>
         <Container>
-          <Leftaside>
-            <ProfileImage
-              size={"150px"}
-              src={form.imageUrl} // 이미지 미리보기
-            />
-            <ProfileActions>
-              <SubmitBtn
-                type="button"
-                $bgColor={"#7682FF"}
-                onClick={() => document.getElementById("imageUpload").click()} // 버튼 클릭 시 input 클릭
-              >
-                사진 업로드
-              </SubmitBtn>
-              <input
-                id="imageUpload"
-                type="file"
-                accept="image/*"
-                style={{ display: "none" }}
-                onChange={handleImageChange}
-              />
-              <SubmitBtn
-                type="button"
-                $Color={"black"}
-                style={{ border: "1px solid #ACB6E5" }}
-                onClick={() => setForm({ ...form, imageUrl: "" })}
-              >
-                사진 제거
-              </SubmitBtn>
-            </ProfileActions>
-            <ProfileBottom>
-              <FormGroup>
-                <input
-                  placeholder="사용자 이름은 띄어쓰기 포함 총 20자"
-                  value={form.nickName}
-                  onChange={handleOnChange}
-                  name="nickName"
-                />
-              </FormGroup>
-              <FormGroup>
-                <select
-                  value={form.role} // form의 role 값과 일치시킴
-                  name="role"
-                  onChange={handleOnChange} // 역할 변경 시 상태 업데이트
+          <ProfileImageWraps>
+            <ProfileImage size={"150px"} src={form.imageUrl} />
+            <ProfileImageWrapsRight>
+              <ProfileActions>
+                <SubmitBtn
+                  type="button"
+                  $bgColor={"#7682FF"}
+                  onClick={() => document.getElementById("imageUpload").click()}
                 >
-                  <option value="NORMAL">NORMAL</option>
-                  <option value="STUDENT">STUDENT</option>
-                  <option value="GRADUATE">GRADUATE</option>
-                </select>
-              </FormGroup>
-            </ProfileBottom>
-          </Leftaside>
-          <RightSection>
-            <RightProfile>
-              <Label>
-                <div>Email</div>
-                <EmailWrap>
-                  <input
-                    type="email"
-                    value={"test@test.com"}
-                    disabled
-                    style={{ backgroundColor: "#C0C0C0" }}
-                    name="email"
-                  />
-                  <EmailDescription>
-                    이메일은 변경할 수 없습니다
-                  </EmailDescription>
-                </EmailWrap>
-              </Label>
-
-              <Label>
-                <div>Phone</div>
+                  사진 업로드
+                </SubmitBtn>
                 <input
-                  value={form.phoneNumber}
-                  onChange={handleOnChange}
-                  name="phoneNumber"
+                  id="imageUpload"
+                  type="file"
+                  accept="image/*"
+                  style={{ display: "none" }}
+                  onChange={handleImageChange}
                 />
-              </Label>
-              <Label>
-                <div>자기소개</div>
-                <textarea
-                  value={form.aboutMe}
-                  onChange={handleOnChange}
-                  name="aboutMe"
-                />
-              </Label>
-              <SubmitBtn type="button" $bgColor={"#7682FF"} onClick={openModal}>
-                비밀번호 변경
-              </SubmitBtn>
-            </RightProfile>
-            <ButtonGroup>
-              <SubmitBtn type="submit" $bgColor={"#7682FF"}>
-                확인
-              </SubmitBtn>
-              <SubmitBtn
-                type="button"
-                $Color={"#9DABED"}
-                onClick={() => {
-                  navigate(-1);
-                }}
+                <SubmitBtn
+                  type="button"
+                  $Color={"black"}
+                  style={{ border: "1px solid #ACB6E5" }}
+                  onClick={() => setForm({ ...form, imageUrl: "" })}
+                >
+                  사진 제거
+                </SubmitBtn>
+              </ProfileActions>
+              <JobSelect
+                value={form.role} // form의 role 값과 일치시킴
+                name="role"
+                onChange={handleOnChange} // 역할 변경 시 상태 업데이트
               >
-                취소
-              </SubmitBtn>
-            </ButtonGroup>
-          </RightSection>
+                <option value="NORMAL">NORMAL</option>
+                <option value="STUDENT">STUDENT</option>
+                <option value="GRADUATE">GRADUATE</option>
+              </JobSelect>
+            </ProfileImageWrapsRight>
+          </ProfileImageWraps>
+          <Label>
+            <div>닉네임 *</div>
+            <NicknameContainer>
+              <Input
+                placeholder="사용자 이름은 띄어쓰기 포함 총 20자"
+                value={form.nickName}
+                onChange={handleOnChange}
+                name="nickName"
+                width={"20%"}
+              />
+              <CheckButton onClick={handleOnchedknickName} disabled={btn}>
+                중복 확인
+              </CheckButton>
+            </NicknameContainer>
+            {checkNickName === false ? (
+              <ChecknickName>사용 가능한 닉네임입니다</ChecknickName>
+            ) : checkNickName === true ? (
+              <ChecknickName color={"red"}>중복된 닉네임입니다</ChecknickName>
+            ) : null}
+          </Label>
+          <Label>
+            <div>자기소개 *</div>
+            <NicknameContainer>
+              <Input
+                placeholder="간단한 자기소개를 입력해주세요"
+                value={form.aboutMe}
+                onChange={handleOnChange}
+                name="aboutMe"
+                width={"40%"}
+              />
+            </NicknameContainer>
+          </Label>
+          <Label>
+            <div>연락처 *</div>
+            <NicknameContainer>
+              <Input
+                placeholder="연락처를 입력해주세요"
+                value={form.phoneNumber}
+                onChange={handleOnChange}
+                name="phoneNumber"
+                width={"40%"}
+              />
+            </NicknameContainer>
+          </Label>
         </Container>
+        <ProfileFooter>
+          <SubmitBtn type="button" $bgColor={"#7682FF"} onClick={openModal}>
+            비밀번호 변경
+          </SubmitBtn>
+          <ButtonGroup>
+            <SubmitBtn type="submit" $bgColor={"#7682FF"}>
+              확인
+            </SubmitBtn>
+            <SubmitBtn
+              type="button"
+              $Color={"#9DABED"}
+              onClick={() => {
+                navigate(-1);
+              }}
+            >
+              취소
+            </SubmitBtn>
+          </ButtonGroup>
+        </ProfileFooter>
       </form>
 
       {isModalOpen && <PasswordChange setIsModalOpen={setIsModalOpen} />}

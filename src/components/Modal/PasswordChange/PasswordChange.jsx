@@ -5,18 +5,32 @@ import {
   ModalHeader,
   ModalInput,
   ModalActions,
+  ErrMsg,
 } from "./PasswordChange.style";
-
+import { changePW } from "../../../services/api/authApi";
 const PasswordChange = ({ setIsModalOpen }) => {
   const [currentPassword, setCurrentPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const closeModal = () => setIsModalOpen(false);
-
-  const handlePasswordChange = () => {
+  const [errmsg, setErrMsg] = useState("");
+  const [err, setErr] = useState(true);
+  const handlePasswordChange = async () => {
     if (newPassword === confirmPassword) {
-      console.log("비밀번호가 변경되었습니다:", newPassword);
-      closeModal();
+      const body = {
+        currentPassword: currentPassword,
+        newPassword: newPassword,
+      };
+      const response = await changePW(body);
+      console.log(response);
+      if (response.success === true) {
+        setErr(response.success);
+        alert(response.msg);
+        closeModal();
+      } else if (response.success === false) {
+        setErr(response.success);
+        setErrMsg(response.msg);
+      }
     } else {
       alert("새 비밀번호와 확인 비밀번호가 일치하지 않습니다.");
     }
@@ -44,6 +58,7 @@ const PasswordChange = ({ setIsModalOpen }) => {
             value={confirmPassword}
             onChange={(e) => setConfirmPassword(e.target.value)}
           />
+          {err ? "" : <ErrMsg>{errmsg}</ErrMsg>}
           <ModalActions>
             <button onClick={handlePasswordChange}>확인</button>
             <button className="cancel" onClick={closeModal}>
