@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { fetchNoticePostItems } from "../../../services/api";
+import { fetchNoticePostItems } from "../../../services/api/api";
 import NoticePostCard from "../../../components/Card/PostCard/NoticePostCard/NoticePostCard";
 import {
   Title,

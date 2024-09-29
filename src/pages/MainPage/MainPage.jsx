@@ -13,13 +13,11 @@ import {
   PostCardImg,
 } from "./MainPage.style";
 import Navbar from "../../Layout/Navbar/Navbar";
-import ProjectPostCard from "../../components/Card/PostCard/ProjectPostCard/ProjectPostCard";
-import CommunityPostCard from "../../components/Card/PostCard/CommunityPostCard/CommunityPostCard";
 import redirectIcon from "../../assets/images/redirect-to-board.png";
 import { useNavigate } from "react-router-dom";
 import projectBoardCardImg from "../../assets/images/Template Card.png";
 import freeBoardCardImg from "../../assets/images/Story Card Horizontal.png";
-import { fetchCategoryItems } from "../../services/postApi";
+import { fetchCategoryItems } from "../../services/api/postApi";
 import { useDispatch } from "react-redux";
 import { selectMenuItem } from "../../store/category/menuSlice";
 

@@ -1,4 +1,4 @@
-import { sortPostsByCriteria } from "../../../services/postApi";
+import { sortPostsByCriteria } from "../../../services/api/postApi";
 import { SortOption } from "./SortOptionButton.style";
 
 function SortOptionButton() {
@@ -11,14 +11,16 @@ function SortOptionButton() {
     }
   };
 
-  <SortOption
-    onChange={(e) => {
-      handleSortChange(e);
-    }}
-  >
-    <option value="date">최신순</option>
-    <option value="like">인기순</option>
-  </SortOption>;
+  return (
+    <SortOption
+      onChange={(e) => {
+        handleSortChange(e);
+      }}
+    >
+      <option value="date">최신순</option>
+      <option value="like">인기순</option>
+    </SortOption>
+  );
 }
 
 export default SortOptionButton;

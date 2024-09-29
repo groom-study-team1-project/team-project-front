@@ -29,7 +29,7 @@ function Router() {
         </Route>
         <Route path="/my-page">
           <Route element={<BoardLayout isMyPage={true} />}>
-            <Route path=":id" element={<MyProfile />} />
+            <Route path=":memberId" element={<MyProfile />} />
             <Route path="edit" element={<EditProfile />} />
           </Route>
         </Route>
