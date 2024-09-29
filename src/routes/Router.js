@@ -5,11 +5,11 @@ import FreeBoard from "../pages/Board/FreeBoard/FreeBoard";
 import QuestionBoard from "../pages/Board/QuestionBoard/QuestionBoard";
 import NoticeBoard from "../pages/Board/NoticeBoard/NoticeBoard";
 import EditProfile from "../pages/MyPage/EditProfile/EditProfile";
-import BoardDetail from "../pages/Board/BoardDetail/BoardDetail";
+import BoardDetail from "../pages/Board/BoardDetail/Board/BoardDetail";
 import ProjectBoard from "../pages/Board/ProjectBoard/ProjectBoard";
 import Background from "../Layout/Background/Background";
 import BoardLayout from "../Layout/BoardLayout/BoardLayout";
-import BoardWrite from "../pages/Board/BoardWrite/BoardWrite";
+import PostForm from "../pages/Board/BoardWrite/PostForm/postForm";
 
 function Router() {
   return (
@@ -22,10 +22,10 @@ function Router() {
             <Route path="questions" element={<QuestionBoard />} />
             <Route path="projects" element={<ProjectBoard />} />
             <Route path="notices" element={<NoticeBoard />} />
+            <Route path="detail/:postId" element={<BoardDetail />} />
           </Route>
-          <Route path="detail/:postId" element={<BoardDetail />} />
-          <Route path="write" element={<BoardWrite />} />
-          <Route path="edit/:postId" element={<BoardWrite />} />
+          <Route path="write" element={<PostForm />} />
+          <Route path="edit/:postId" element={<PostForm />} />
         </Route>
         <Route path="/my-page">
           <Route element={<BoardLayout isMyPage={true} />}>

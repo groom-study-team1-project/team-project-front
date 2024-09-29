@@ -7,18 +7,63 @@ import {
   ContentWrapper,
   PostCardWrapper,
   SearchSortWrapper,
+  LastPostEnd,
 } from "../Board.style";
 import Search from "../../../components/Common/Search/Search";
 import SortOptionButton from "../../../components/Common/SortOptionButton/SortOptionButton";
+import { useInView } from "react-intersection-observer";
 
 function QuestionBoard() {
   const [postItems, setPostItems] = useState([]);
+  const [visibleItems, setVisibleItems] = useState([]);
+  const [page, setPage] = useState(1);
+  const [hasMore, setHasMore] = useState(true);
+  const [isFetching, setIsFetching] = useState(false);
+  const itemsPerPage = 4;
+  const { ref, inView } = useInView({
+    threshold: 1,
+    triggerOnce: false,
+  });
 
   useEffect(() => {
-    fetchPostItems()
-      .then((data) => setPostItems(data))
-      .catch((err) => console.log(err));
+    const fetchData = async () => {
+      try {
+        const allPosts = await fetchPostItems();
+
+        setPostItems(allPosts);
+        setVisibleItems(allPosts.slice(0, itemsPerPage));
+
+        if (allPosts.length <= itemsPerPage) {
+          setHasMore(false);
+        }
+      } catch (err) {
+        console.log("Error fetching posts:", err);
+      }
+    };
+    fetchData();
   }, []);
+
+  // 새로운 포스트 로드
+  useEffect(() => {
+    if (inView && hasMore && !isFetching) {
+      setIsFetching(true);
+      const startIndex = page * itemsPerPage;
+      const endIndex = startIndex + itemsPerPage;
+
+      const newPosts = postItems.slice(startIndex, endIndex);
+
+      if (newPosts.length > 0) {
+        setVisibleItems((prevItems) => [...prevItems, ...newPosts]);
+        setPage((prevPage) => prevPage + 1);
+      } else {
+        setHasMore(false);
+      }
+
+      setTimeout(() => {
+        setIsFetching(false);
+      }, 500);
+    }
+  }, [inView, hasMore, isFetching, page, postItems]);
 
   return (
     <ContentWrapper>
@@ -30,7 +75,7 @@ function QuestionBoard() {
         <SortOptionButton />
       </SearchSortWrapper>
       <PostCardWrapper>
-        {postItems.map((postItem) => (
+        {visibleItems.map((postItem) => (
           <CommunityPostCard
             key={postItem.id}
             id={postItem.id}
@@ -44,6 +89,12 @@ function QuestionBoard() {
           />
         ))}
       </PostCardWrapper>
+
+      {hasMore ? (
+        <LastPostEnd ref={ref}>Loading more...</LastPostEnd>
+      ) : (
+        <LastPostEnd>더 이상의 포스트가 없습니다.</LastPostEnd>
+      )}
     </ContentWrapper>
   );
 }
