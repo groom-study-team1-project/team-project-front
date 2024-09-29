@@ -24,7 +24,6 @@ function BoardLayout({ isMyPage = false }) {
         <Navbar />
         <Content>
           <Outlet />
-
           {!isMyPage ? (
             <RightSidebarWrapper>
               <PopularCardWrapper>

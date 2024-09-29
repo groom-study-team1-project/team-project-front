@@ -149,42 +149,22 @@ export async function fetchPostItems() {
 }
 
 export async function fetchNoticePostItems() {
-  return [
-    {
-      id: 1,
-      title: "Title",
-      date: "2024-08-28",
-      count: {
-        view: 12,
-      },
-    },
-    {
-      id: 2,
-      title: "Title",
-      date: "2024-08-28",
-      count: {
-        view: 12,
-      },
-    },
-    {
-      id: 3,
-      title: "Title",
-      date: "2024-08-28",
-      count: {
-        view: 12,
-      },
-    },
-    {
-      id: 4,
-      title: "Title",
-      date: "2024-08-28",
-      count: {
-        view: 12,
-      },
-    },
-  ];
-}
+  const totalItems = 50; // 총 데이터 수
+  const postItems = [];
 
+  for (let i = 1; i <= totalItems; i++) {
+    postItems.push({
+      id: i,
+      title: `Title ${i}`, // 제목에 번호 추가
+      date: "2024-08-28",
+      count: {
+        view: Math.floor(Math.random() * 100), // 임의의 조회수 생성
+      },
+    });
+  }
+
+  return postItems;
+}
 export async function fetchPopularPostItems() {
   return [
     {
