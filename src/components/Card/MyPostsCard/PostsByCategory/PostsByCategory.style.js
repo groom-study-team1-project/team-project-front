@@ -1,34 +1,4 @@
-import { ProfileImage } from "../../Card/PostCard/PostProfile";
 import styled from "styled-components";
-
-export const ProfileHeaderLeft = styled.div`
-  display: flex;
-  align-items: center;
-`;
-
-export const UserName = styled.div`
-  font-weight: bold;
-  font-size: ${(props) => (props.$size ? props.$size : "32px")};
-  margin-bottom: ${(props) => (props.$bottom ? props.$bottom : "20px")};
-`;
-
-export const UserJob = styled.div`
-  font-size: ${(props) => (props.$jobSize ? props.$jobSize : "16px")};
-  color: ${(props) => (props.$color ? props.$color : "black")};
-`;
-
-export const Mypost = styled.div`
-  background: linear-gradient(
-    180deg,
-    rgba(255, 255, 255, 0.6) 50%,
-    rgba(255, 255, 255, 0.5) 100%
-  );
-  border-radius: 20px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-  margin: 24px;
-  border-radius: 10px;
-  padding: 16px;
-`;
 
 export const Myboard = styled.div`
   padding: 10px 16px;
@@ -78,23 +48,24 @@ export const Myboard = styled.div`
   }
 `;
 
-export const ProfileImages = styled(ProfileImage)`
-  width: ${(props) => (props.$width ? props.$width : "100px")};
-  height: ${(props) => (props.$height ? props.$height : "100px")};
-  background-color: lightblue; // 임시 배경색 지정
-  border: 2px solid white;
-  margin-right: ${(props) => (props.$marginRight ? props.marginRight : "0")};
-`;
-
 export const BoardContentsWrap = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
   margin: 0px 20px 10px 20px;
+  cursor: pointer;
 `;
 
 export const BoardContent = styled.div`
   flex: 4;
   overflow: hidden;
   max-width: 300px;
+`;
+
+export const LoadMore = styled.p`
+  margin: 20px;
+  cursor: pointer;
+  &:hover {
+    color: blue;
+  }
 `;

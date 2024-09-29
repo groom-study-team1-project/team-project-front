@@ -10,6 +10,8 @@ import { PostProfileBox } from "../PostProfile";
 import { CustomBody, CustomThumbnail } from "./CommunityPostCard.style";
 import { useNavigate } from "react-router-dom";
 import { Divider } from "../../Card.style";
+import useJwt from "../../../../hooks/useJwt";
+import { useSelector } from "react-redux";
 
 function CommunityPostCard({
   id,
@@ -17,11 +19,15 @@ function CommunityPostCard({
   content,
   name,
   job,
-  email,
   count = { view: 0, like: 0, comment: 0 },
   img,
 }) {
   const [imgIndex, setImgIndex] = useState(0);
+  const payload = useJwt(
+    useSelector((state) => state.user.userInfo.accessToken)
+  );
+  const memberId = payload.memberId;
+
   const navigate = useNavigate();
 
   const handleNavigation = () => {
@@ -51,7 +57,7 @@ function CommunityPostCard({
           </CustomThumbnail>
           <CustomBody>
             <PostActions>
-              <PostProfileBox name={name} job={job} email={email} />
+              <PostProfileBox name={name} job={job} memberId={memberId} />
               <Interaction count={count} />
             </PostActions>
             <Divider />
