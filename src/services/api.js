@@ -1,18 +1,20 @@
 export async function fetchPostItems() {
-  return [
-    {
-      id: 1,
-      title: "Title",
-      content: "This is content.",
+  const posts = [];
+
+  for (let i = 1; i <= 30; i++) {
+    posts.push({
+      id: i,
+      title: `Title ${i}`,
+      content: `This is content for post ${i}.`,
       author: {
-        name: "John Doe",
+        name: `John Doe ${i}`,
         job: "Software Engineer",
-        email: "sgerr",
+        email: `johndoe${i}@example.com`,
       },
       count: {
-        view: 12,
-        like: 23,
-        comment: 20,
+        view: Math.floor(Math.random() * 100),
+        like: Math.floor(Math.random() * 100),
+        comment: Math.floor(Math.random() * 50),
       },
       imgUrl: [
         {
@@ -28,124 +30,10 @@ export async function fetchPostItems() {
           url: "https://img1.daumcdn.net/thumb/R1280x0/?fname=http://t1.daumcdn.net/brunch/service/user/6H5a/image/VbC1Pts-64VW9-xWDV3qad5cLok.jpg",
         },
       ],
-    },
-    {
-      id: 2,
-      title: "Title",
-      content: "This is content.",
-      author: {
-        name: "John Doe",
-        job: "Software Engineer",
-        email: "sgerr",
-      },
-      count: {
-        view: 12,
-        like: 23,
-        comment: 20,
-      },
-      imgUrl: [
-        {
-          id: 1,
-          url: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS6KVvlziiJYFxZZIq3Xc_dVuzIbSLrgvtHPA&s",
-        },
-        {
-          id: 2,
-          url: "https://www.shutterstock.com/ko/blog/wp-content/uploads/sites/17/2021/01/2021-graphic-design-banner.jpg",
-        },
-        {
-          id: 3,
-          url: "https://img1.daumcdn.net/thumb/R1280x0/?fname=http://t1.daumcdn.net/brunch/service/user/6H5a/image/VbC1Pts-64VW9-xWDV3qad5cLok.jpg",
-        },
-      ],
-    },
-    {
-      id: 3,
-      title: "Title",
-      content: "This is content.",
-      author: {
-        name: "John Doe",
-        job: "Software Engineer",
-        email: "sgerr",
-      },
-      count: {
-        view: 12,
-        like: 23,
-        comment: 20,
-      },
-      imgUrl: [
-        {
-          id: 1,
-          url: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS6KVvlziiJYFxZZIq3Xc_dVuzIbSLrgvtHPA&s",
-        },
-        {
-          id: 2,
-          url: "https://www.shutterstock.com/ko/blog/wp-content/uploads/sites/17/2021/01/2021-graphic-design-banner.jpg",
-        },
-        {
-          id: 3,
-          url: "https://img1.daumcdn.net/thumb/R1280x0/?fname=http://t1.daumcdn.net/brunch/service/user/6H5a/image/VbC1Pts-64VW9-xWDV3qad5cLok.jpg",
-        },
-      ],
-    },
-    {
-      id: 4,
-      title: "Title",
-      content: "This is content.",
-      author: {
-        name: "John Doe",
-        job: "Software Engineer",
-        email: "sgerr",
-      },
-      count: {
-        view: 12,
-        like: 23,
-        comment: 20,
-      },
-      imgUrl: [
-        {
-          id: 1,
-          url: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS6KVvlziiJYFxZZIq3Xc_dVuzIbSLrgvtHPA&s",
-        },
-        {
-          id: 2,
-          url: "https://www.shutterstock.com/ko/blog/wp-content/uploads/sites/17/2021/01/2021-graphic-design-banner.jpg",
-        },
-        {
-          id: 3,
-          url: "https://img1.daumcdn.net/thumb/R1280x0/?fname=http://t1.daumcdn.net/brunch/service/user/6H5a/image/VbC1Pts-64VW9-xWDV3qad5cLok.jpg",
-        },
-      ],
-    },
-    {
-      id: 5,
-      title: "Title",
-      content: "This is content.",
-      author: {
-        name: "John Doe",
-        job: "Software Engineer",
-        email: "sgerr",
-      },
-      count: {
-        view: 12,
-        like: 23,
-        comment: 20,
-      },
-      imgUrl: [
-        {
-          id: 1,
-          url: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS6KVvlziiJYFxZZIq3Xc_dVuzIbSLrgvtHPA&s",
-        },
-        {
-          id: 2,
-          url: "https://www.shutterstock.com/ko/blog/wp-content/uploads/sites/17/2021/01/2021-graphic-design-banner.jpg",
-        },
-        {
-          id: 3,
-          url: "https://img1.daumcdn.net/thumb/R1280x0/?fname=http://t1.daumcdn.net/brunch/service/user/6H5a/image/VbC1Pts-64VW9-xWDV3qad5cLok.jpg",
-        },
-      ],
-    },
-  ];
+    });
+  }
+
+  return posts;
 }
 
 export async function fetchNoticePostItems() {

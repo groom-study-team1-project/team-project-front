@@ -32,3 +32,11 @@ export const PostCardWrapper = styled.div`
   flex-wrap: wrap;
   gap: 40px;
 `;
+
+export const LastPostEnd = styled.div`
+  padding: 20px;
+  text-align: center;
+  background-color: white;
+  margin-top: 48px;
+  font-weight: bold;
+`;
