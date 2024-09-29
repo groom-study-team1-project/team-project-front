@@ -14,7 +14,9 @@ import {
   signUp,
   uploadProfileImage,
 } from "../../../../services/api/authApi";
-import profileIcon from "../../../../assets/images/profileIcon.png";
+import profileIcon from "../../../../assets/images/profileImg.png";
+import cameraIcon from "../../../../assets/images/camera.png";
+import { ProfileImg } from "./UserDetailsInputForm.style";
 
 function UserDetailsInputForm({ email, handlePrev, changeModal }) {
   const [previewImage, setPreviewImage] = useState(null);
@@ -119,13 +121,40 @@ function UserDetailsInputForm({ email, handlePrev, changeModal }) {
       </ModalTitle>
       <Form onSubmit={handleSignUp}>
         <ProfileImgDiv>
-          <img
-            src={previewImage ? previewImage : profileIcon}
-            alt="프로필사진"
-            style={{ width: "100px", height: "100px" }}
-          />
-          <div>
-            <input type="file" onChange={handleImageChange} />
+          <div
+            style={{
+              width: "120px",
+              height: "120px",
+              boxSizing: "border-box",
+              overflow: "hidden",
+              marginRight: "20px",
+              marginBottom: "10px",
+              position: "relative",
+            }}
+          >
+            <label htmlFor="profileImgInput">
+              <ProfileImg
+                src={previewImage ? previewImage : profileIcon}
+                alt="프로필사진"
+                style={{ width: "150px", height: "150px" }}
+              />
+              <img
+                src={cameraIcon}
+                alt="카메라 아이콘"
+                style={{
+                  position: "absolute",
+                  bottom: "30px",
+                  right: "15px",
+                  cursor: "pointer",
+                }}
+              />
+            </label>
+            <input
+              id="profileImgInput"
+              type="file"
+              onChange={handleImageChange}
+              style={{ display: "none" }}
+            />
           </div>
         </ProfileImgDiv>
         <div>
