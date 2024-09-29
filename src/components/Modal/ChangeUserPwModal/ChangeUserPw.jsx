@@ -1,12 +1,12 @@
 import React, { useState } from "react";
+import PwInputForm from "./PwInputForm/PwInputForm";
 import EmailInputForm from "../VerifyCodeModal/EmailInputForm/EmailInputForm";
 import VerificationCodeInputForm from "../VerifyCodeModal/VerificationCodeInputForm/VerificationCodeInputForm";
-import UserDetailsInputForm from "./UserDetailsInputForm/UserDetailsInputForm";
 
-export default function SignUpModal({ changeModal }) {
+export default function ChangeUserPw({ changeModal }) {
   const [email, setEmail] = useState("");
   const [step, setIndexStep] = useState(0);
-  const SignupSteps = ["email", "verificationCode", "detail"];
+  const ChangePwSteps = ["email", "verificationCode", "password"];
 
   const handleNext = () => {
     setIndexStep((prev) => prev + 1);
@@ -22,19 +22,19 @@ export default function SignUpModal({ changeModal }) {
 
   return (
     <>
-      {SignupSteps[step] === "email" ? (
+      {ChangePwSteps[step] === "email" ? (
         <EmailInputForm
           handleNext={handleNext}
           handleSubmitEmail={handleSubmitEmail}
         />
-      ) : SignupSteps[step] === "verificationCode" ? (
+      ) : ChangePwSteps[step] === "verificationCode" ? (
         <VerificationCodeInputForm
           email={email}
           handlePrev={handlePrev}
           handleNext={handleNext}
         />
       ) : (
-        <UserDetailsInputForm
+        <PwInputForm
           email={email}
           handlePrev={handlePrev}
           changeModal={changeModal}

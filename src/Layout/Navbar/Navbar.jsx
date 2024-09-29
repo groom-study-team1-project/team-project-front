@@ -16,7 +16,7 @@ import Modal from "react-modal";
 import ModalLayout from "../../components/Modal/Modal";
 import LoginModal from "../../components/Modal/LoginModal/LoginModal";
 import SignUpModal from "../../components/Modal/SignUpModal/SignUpModal";
-import FindUserPw from "../../components/Modal/FindUserPwModal/FindUserPw";
+import ChangeUserPw from "../../components/Modal/ChangeUserPwModal/ChangeUserPw";
 import { logout } from "../../services/api/authApi";
 import { fetchCategoryItems } from "../../services/api/postApi";
 import { userLogout } from "../../store/user/userSlice";
@@ -190,7 +190,7 @@ function Navbar({ isMainPage = false }) {
         ) : modalType === "signup" ? (
           <SignUpModal changeModal={changeModal} />
         ) : (
-          <FindUserPw changeModal={changeModal} />
+          <ChangeUserPw changeModal={changeModal} />
         )}
       </ModalLayout>
     </NavbarWrapper>

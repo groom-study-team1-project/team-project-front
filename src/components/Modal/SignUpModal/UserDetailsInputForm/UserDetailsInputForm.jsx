@@ -16,7 +16,7 @@ import {
 } from "../../../../services/api/authApi";
 import profileIcon from "../../../../assets/images/profileIcon.png";
 
-function UserDetailsInputForm({ email, handlePrev, handleNext, changeModal }) {
+function UserDetailsInputForm({ email, handlePrev, changeModal }) {
   const [previewImage, setPreviewImage] = useState(null);
   const [profileImg, setProfileImg] = useState(null);
   const [nickname, setNickname] = useState("");

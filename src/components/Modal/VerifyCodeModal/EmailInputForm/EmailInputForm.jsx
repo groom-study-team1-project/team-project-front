@@ -15,7 +15,7 @@ function EmailInputForm({ handleNext, handleSubmitEmail }) {
   const [email, setEmail] = useState("");
   const [error, setError] = useState("");
 
-  const validateForm = async () => {
+  const validateForm = () => {
     let err = "";
 
     if (email.length < 1) {
@@ -34,7 +34,7 @@ function EmailInputForm({ handleNext, handleSubmitEmail }) {
     e.preventDefault();
 
     try {
-      const isValid = await validateForm();
+      const isValid = validateForm();
 
       if (isValid) {
         let body = { email };
