@@ -1,57 +1,85 @@
 import styled from "styled-components";
 
 export const ContainerDiv = styled.div`
-  max-height: 1080px;
-  height: 100vh;
-  width: 314px;
+  display: flex;
+  flex-direction: column;
+  padding: 24px 45px 24px 24px;
 `;
 
 export const SidebarDiv = styled.div`
-  margin-top: 8rem;
-  overflow: hidden;
-  box-sizing: border-box;
+  width: 100%;
   display: flex;
   flex-direction: column;
   justify-content: center;
 `;
 
 export const Logo = styled.div`
-  margin: 1rem;
-  box-sizing: border-box;
+  margin-bottom: 178px;
+  img {
+    width: 136px;
+  }
 `;
 
 export const SidebarUl = styled.ul`
+  width: 100%;
   list-style-type: none;
-  padding-left: 2rem;
-  padding-right: 8px;
 `;
 
 export const SidebarLi = styled.li`
-  margin-bottom: 1rem;
-  padding: 1rem 0;
+  padding: 15px 0;
   cursor: pointer;
   border-bottom: 1px solid rgba(0, 0, 0, 0.1);
-  background: ${(props) =>
-    props.isSelected
-      ? `-webkit-linear-gradient(45deg, rgba(38, 112, 233, 0.5) 0%, rgba(255, 255, 255, 0.1) 100%);
-      -moz-linear-gradient(45deg, rgba(38, 112, 233, 0.5) 0%, rgba(255, 255, 255, 0.1) 100%);
-      linear-gradient(45deg, rgba(38, 112, 233, 0.5) 0%, rgba(255, 255, 255, 0.1) 100%);
-      `
-      : "transparent"};
-  border-left: ${(props) => (props.isSelected ? "2px solid #2670E9" : "none")};
 
   &:last-child {
     border-bottom: none;
   }
+
+  &:hover .link {
+    border-left: 2px solid #2670e9;
+  }
+
+  &:hover .link::after {
+    transition: width 0.2s ease-in-out;
+    width: 100%;
+  }
 `;
 
 export const SidebarLink = styled.div`
+  position: relative;
+  height: 40px;
+  padding-left: 9px;
+  box-sizing: border-box;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   text-decoration: none;
   color: black;
-  margin-left: 8px;
+  border-left: 2px solid
+    ${(props) => (props.isSelected ? "#2670e9" : "transparent")};
+
+  &::after {
+    content: "";
+    position: absolute;
+
+    background: linear-gradient(
+      to right,
+      rgba(38, 112, 233, 1),
+      rgba(38, 112, 233, 0)
+    );
+    opacity: 0.3;
+    left: 0;
+    top: 0;
+    width: ${(props) => (props.isSelected ? "100%" : "0")};
+    height: 100%;
+    transition: 0.2s;
+    z-index: -1;
+  }
 `;
 
+export const SidebarTitle = styled.p``;
+
 export const SidebarIcon = styled.img`
-  float: right;
-  margin-right: 16px;
+  width: 20px;
+  height: 20px;
+  object-fit: contain;
 `;

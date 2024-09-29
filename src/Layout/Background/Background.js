@@ -2,8 +2,10 @@ import { Outlet } from "react-router-dom";
 import { Container } from "./Background.style";
 import useCanvas from "../../hooks/useCanvas";
 import usePoint from "../../hooks/usePoint";
+import { useSelector } from "react-redux";
 
 function Background() {
+  const isDarkMode = useSelector((state) => state.theme.isDarkMode);
   const width = window.innerWidth;
   const height = window.innerHeight;
 
@@ -32,8 +34,14 @@ function Background() {
     const ctx = canvas.getContext("2d");
 
     const gradient = ctx.createLinearGradient(0, 0, 0, canvas.height);
-    gradient.addColorStop(0, "rgba(172, 182, 229, 1)");
-    gradient.addColorStop(1, "rgba(199, 243, 243, 1)");
+    if (isDarkMode) {
+      gradient.addColorStop(0, "rgba(0, 0, 0, 1)");
+      gradient.addColorStop(0.49, "rgba(37, 41, 59, 1)");
+      gradient.addColorStop(1, "rgba(21, 27, 35, 1)");
+    } else {
+      gradient.addColorStop(0, "rgba(172, 182, 229, 1)");
+      gradient.addColorStop(1, "rgba(199, 243, 243, 1)");
+    }
 
     const waveGradient1 = ctx.createLinearGradient(0, 0, 0, canvas.height);
     waveGradient1.addColorStop(0, "rgba(217, 217, 217, 0.3)");
@@ -86,7 +94,7 @@ function Background() {
   });
 
   return (
-    <Container>
+    <Container isDarkMode={isDarkMode}>
       <canvas ref={canvasRef} />
       <Outlet />
     </Container>

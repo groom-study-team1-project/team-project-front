@@ -16,15 +16,18 @@ import Modal from "react-modal";
 import ModalLayout from "../../components/Modal/Modal";
 import LoginModal from "../../components/Modal/LoginModal/LoginModal";
 import SignUpModal from "../../components/Modal/SignUpModal/SignUpModal";
-import FindUserId from "../../components/Modal/FindUserIdModal/FindUserId";
-import FindUserPw from "../../components/Modal/FindUserPwModal/FindUserPw";
-import { logout } from "../../services/authApi";
-import { fetchCategoryItems } from "../../services/postApi";
+import ChangeUserPw from "../../components/Modal/ChangeUserPwModal/ChangeUserPw";
+import { logout } from "../../services/api/authApi";
+import { fetchCategoryItems } from "../../services/api/postApi";
 import { userLogout } from "../../store/user/userSlice";
 import logoImg from "../../assets/images/DEEPDIVERS.png";
 import { selectMenuItem } from "../../store/category/menuSlice";
 import darkmodeIcon from "../../assets/images/darkmode.png";
 import profileIcon from "../../assets/images/profileIcon.png";
+import useJwt from "../../hooks/useJwt";
+import ProfileMenu from "./ProfileMenu";
+import { changeTheme } from "../../store/theme/themeSlice";
+import lightmodeIcon from "../../assets/images/lightmode.png";
 
 Modal.setAppElement("#root");
 
@@ -32,13 +35,17 @@ function Navbar({ isMainPage = false }) {
   const [menuItems, setMenuItems] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalType, setModalType] = useState("login");
+  const [menuOpen, setMenuOpen] = useState(false);
   const isLoggedIn = useSelector((state) => state.user.isLoggedIn);
-  const email = useSelector((state) =>
-    state.user.isLoggedIn && state.user.userInfo?.email
-      ? state.user.userInfo.email.split("@")[0]
-      : null
+
+  const payload = useJwt(
+    useSelector((state) => state.user.userInfo.accessToken)
   );
-  const userInfo = useSelector((state) => state.user.userInfo);
+  const memberId = payload.memberId;
+  const userInfo = {
+    imageUrl: payload.memberImageUrl,
+  };
+  const isDarkMode = useSelector((state) => state.theme.isDarkMode);
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -64,14 +71,15 @@ function Navbar({ isMainPage = false }) {
       navigate("/board/projects");
     } else if (id === 4) {
       navigate("/board/notices");
-    } else if (id == 5) {
+    } else if (id === 5) {
       navigate("/");
     }
   };
 
   const handleNavigation = (to, e) => {
     if (to === "my-profile") {
-      navigate(`/my-page/${email}`);
+      navigate(`/my-page/${memberId}`);
+      setMenuOpen(false);
     } else if (to === "write") {
       navigate("/board/write");
     }
@@ -81,6 +89,8 @@ function Navbar({ isMainPage = false }) {
     try {
       await logout();
       dispatch(userLogout());
+      setMenuOpen(false);
+      navigate("/");
     } catch (err) {
       console.log(err);
     }
@@ -100,6 +110,17 @@ function Navbar({ isMainPage = false }) {
     openModal(type);
   };
 
+  const handleToggleMenu = () => {
+    setMenuOpen(!menuOpen);
+    if (!menuOpen) console.log("토글메뉴 열림");
+    else console.log("토글메뉴 닫힘");
+  };
+
+  const handleDarkMode = () => {
+    dispatch(changeTheme());
+    console.log("배경모드 변경");
+  };
+
   return (
     <NavbarWrapper>
       <NavbarInner>
@@ -114,10 +135,7 @@ function Navbar({ isMainPage = false }) {
         {isMainPage && (
           <Menu>
             {menuItems.map((item) => (
-              <MenuItem
-                key={item.id}
-                onClick={() => handleBoardNavigation(item.id)}
-              >
+              <MenuItem key={item.id} onClick={() => handleMenuClick(item.id)}>
                 {item.item}
               </MenuItem>
             ))}
@@ -126,30 +144,42 @@ function Navbar({ isMainPage = false }) {
 
         {isLoggedIn ? (
           <ButtonBox>
-            <Button>
-              <img src={darkmodeIcon} alt="다크모드" />
+            <Button onClick={handleDarkMode}>
+              <img
+                src={!isDarkMode ? darkmodeIcon : lightmodeIcon}
+                alt="다크모드"
+              />
             </Button>
             <BorderButton onClick={() => handleNavigation("write")}>
               새 글 작성
             </BorderButton>
-            <Button onClick={handleLogout}>로그아웃</Button>
-            <Button onClick={() => handleNavigation("my-profile")}>
-              <img
-                src={userInfo?.imageUrl ? userInfo.imageUrl : profileIcon}
-                alt="프로필"
-                style={{
-                  borderRadius: "20px",
-                  marginTop: "3px",
-                  width: "40px",
-                  height: "40px",
-                }}
-              />
-            </Button>
+            <div style={{ position: "relative", display: "inline-block" }}>
+              <Button onClick={handleToggleMenu}>
+                <img
+                  src={userInfo?.imageUrl ? userInfo.imageUrl : profileIcon}
+                  alt="프로필"
+                  style={{
+                    borderRadius: "20px",
+                    marginTop: "3px",
+                    width: "40px",
+                    height: "40px",
+                  }}
+                />
+                <ProfileMenu
+                  isOpen={menuOpen}
+                  onNavigate={() => handleNavigation("my-profile")}
+                  onLogout={handleLogout}
+                ></ProfileMenu>
+              </Button>
+            </div>
           </ButtonBox>
         ) : (
           <ButtonBox>
-            <Button>
-              <img src={darkmodeIcon} alt="다크모드" />
+            <Button onClick={handleDarkMode}>
+              <img
+                src={!isDarkMode ? darkmodeIcon : lightmodeIcon}
+                alt="다크모드"
+              />
             </Button>
             <Button onClick={() => openModal("login")}>Login</Button>
             <BorderButton onClick={() => openModal("signup")}>
@@ -167,9 +197,7 @@ function Navbar({ isMainPage = false }) {
             ? "로그인 모달"
             : modalType === "signup"
             ? "회원가입 모달"
-            : modalType === "findUserId"
-            ? "아이디 찾기 모달"
-            : "비밀번호 찾기 모달"
+            : "비밀번호 변경 모달"
         }
         style={{
           content: {
@@ -188,10 +216,8 @@ function Navbar({ isMainPage = false }) {
           <LoginModal closeModal={closeModal} changeModal={changeModal} />
         ) : modalType === "signup" ? (
           <SignUpModal changeModal={changeModal} />
-        ) : modalType === "findUserId" ? (
-          <FindUserId changeModal={changeModal} />
         ) : (
-          <FindUserPw changeModal={changeModal} />
+          <ChangeUserPw changeModal={changeModal} />
         )}
       </ModalLayout>
     </NavbarWrapper>
