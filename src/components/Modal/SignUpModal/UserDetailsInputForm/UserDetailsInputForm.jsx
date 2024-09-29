@@ -63,7 +63,7 @@ function UserDetailsInputForm({ email, handlePrev, handleNext, changeModal }) {
       formData.append("file", profileImg);
 
       const response = await uploadProfileImage(formData);
-      return response.result.imageUrl;
+      return response.imageUrl;
     } catch (err) {
       console.error("이미지 업로드 실패:", err);
       return null;

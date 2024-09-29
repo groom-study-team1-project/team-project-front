@@ -6,10 +6,10 @@ import {
   Form,
   ModalTitle,
 } from "../../Modal.style";
-import PinCodeInput from "../../../Common/PinCodeInput/PinCodeInput";
+import PinCodeInput from "../PinCodeInput/PinCodeInput";
 import { useState } from "react";
 import { verifyEmailCode } from "../../../../services/api/authApi";
-import { ErrorMsg } from "../SignUpModal.style";
+import { ErrorMsg } from "../../SignUpModal/SignUpModal.style";
 
 function VerifyCodeInputForm({ email, handlePrev, handleNext }) {
   const [verifyCode, setVerifyCode] = useState("");

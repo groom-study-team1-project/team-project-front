@@ -6,17 +6,18 @@ export const login = async (body) => {
     // const response = await axiosInstance.post("/members/login", body);
     const response = {
       status: {
-        code: 9999,
-        message: "응답 성공 메시지입니다.",
+        code: 1001,
+        message: "사용자 로그인에 성공하였습니다.",
       },
       result: {
         accessToken:
-          "eyJhbGciOiJIUzI1NiJ9.eyJtZW1iZXJOaWNrbmFtZSI6Iuq1rOumhOydtCIsIm1lbWJlclJvbGUiOiJOT1JNQUwiLCJtZW1iZXJJZCI6MTEsIm1lbWJlckltYWdlVXJsIjoiaHR0cDovL2xvY2FsaG9zdDo4MDgwL2ltYWdlcy9wcm9maWxlLnBuZyIsImV4cCI6MTcyNzQxOTAzNiwiaWF0IjoxNzI3NDE3MjM2fQ.2qPdHtUxJPMI6XHaeKvS0zTiqQ5N8v77Scij-XzyikM",
-        refreshToken: "header.payload.signature",
+          "eyJhbGciOiJIUzI1NiJ9.eyJtZW1iZXJOaWNrbmFtZSI6Iuq1rOumhOydtCIsIm1lbWJlclJvbGUiOiJOT1JNQUwiLCJtZW1iZXJJZCI6MTEsIm1lbWJlckltYWdlVXJsIjoiaHR0cDovL2xvY2FsaG9zdDo4MDgwL2ltYWdlcy9wcm9maWxlLnBuZyIsImV4cCI6MTcyNzU4MDE5OSwiaWF0IjoxNzI3NTc4Mzk5fQ.RPK9JfSyqtB2A3ptqbtDwBGPqDSzC1Cq_DSp16KgrUE",
+        refreshToken:
+          "eyJhbGciOiJIUzI1NiJ9.eyJtZW1iZXJJZCI6MTEsImV4cCI6MTcyNzYyMTU5OSwiaWF0IjoxNzI3NTc4Mzk5fQ.jpv5Tq9_MtaE8W40O4QaBHhzWdk5kyhLgN-iGwgseYs",
       },
     };
 
-    if (response.status.code === 9999) {
+    if (response.status.code === 1001) {
       return response.result;
     } else {
       throw new Error(response.status.message || "로그인 실패");
@@ -50,20 +51,20 @@ export const signUp = async (body) => {
 
 export const uploadProfileImage = async (body) => {
   try {
-    // const response = await axiosInstance.post("/api/members/profile-image", body);
+    // const response = await axiosInstance.post("/api/members/me/profile-image", body);
 
     const response = {
       status: {
-        code: 9999,
-        message: "응답 성공 메시지입니다.",
+        code: 1004,
+        message: "사용자 프로필 이미지 업로드에 성공하였습니다.",
       },
       result: {
         imageUrl:
-          "http://localhost:4566/test-bucket/profiles/11/2b776b15_1725181775362.jpeg",
+          "http://localhost:4566/test-bucket/profiles/11/a4b409a3_1727578574121.jpeg",
       },
     };
-    if (response.status.code === 9999) {
-      return response;
+    if (response.status.code === 1004) {
+      return response.result;
     } else {
       throw new Error(
         response.status.message || "업로드 할 수 없는 이미지입니다."
@@ -93,28 +94,6 @@ export const checkDuplicatedNickname = async (name) => {
     }
   } catch (error) {
     console.log("checking nickname error", error);
-    throw error;
-  }
-};
-
-export const checkDuplicatedEmail = async (email) => {
-  try {
-    // const response = await axiosInstance.get("/members/validate/email", {
-    //   params: { email },
-    // });
-
-    const response = {
-      code: 1004,
-      message: "사용가능한 이메일 입니다.",
-    };
-
-    if (response.code === 1004) {
-      return false;
-    } else {
-      return true;
-    }
-  } catch (error) {
-    console.log("checking email error", error);
     throw error;
   }
 };
@@ -185,14 +164,14 @@ export const editProfile = async (body) => {
 
     const response = {
       status: {
-        code: 9999,
-        message: "응답 성공 메시지입니다.",
+        code: 1007,
+        message: "프로필 수정이 성공하였습니다.",
       },
       result: {
         nickname: "구름이",
-        role: "NORMAL, STUDENT, GRADUATE",
-        imageUrl: "image.png",
-        aboutMe: "안녕하세요. 구름톤 딥다이브 수강생입니다.",
+        role: "NORMAL",
+        imageUrl: "http://localhost:4566/image",
+        aboutMe: "안녕하세요.",
         phoneNumber: "010-1234-5678",
         githubUrl: "https://github.com",
         blogUrl: "https://velog.io",
@@ -203,7 +182,7 @@ export const editProfile = async (body) => {
       },
     };
 
-    if (response.status.code === 9999) {
+    if (response.status.code === 1007) {
       return response.status.message;
     } else {
       throw new Error(response.message || "프로필 수정 실패");
@@ -214,40 +193,21 @@ export const editProfile = async (body) => {
   }
 };
 
-export const findUserPw = async (email, nickname, tel) => {
+export const changeUserPw = async (body) => {
   try {
-    // const response = await axiosInstance.get("/members/me/password", {
-    //   params: {
-    //     email,
-    //     nickname,
-    //     tel
-    //   },
-    // });
+    // const response = await axiosInstance.post("/accounts/reset/password", body);
+
     const response = {
-      code: 1007,
-      message: "비밀번호 찾기에 성공했습니다.",
-      success: true,
-      params: {
-        email: "test@mail.com",
-        nickname: "구름이",
-        tel: "010-1234-5678",
-      },
-      result: {
-        password: "testPassword",
+      status: {
+        code: 1008,
+        message: "비밀번호 변경이 성공하였습니다.",
       },
     };
 
-    if (
-      email === response.params.email &&
-      nickname === response.params.nickname &&
-      tel === response.params.tel
-    ) {
-      return response;
+    if (response.status.code === 1008) {
+      return response.status.message;
     } else {
-      return {
-        success: false,
-        message: "비밀번호 찾기에 실패했습니다.",
-      };
+      throw new Error(response.message || "프로필 수정 실패");
     }
   } catch (error) {
     console.error("비밀번호를 찾던 중 오류 발생:", error);

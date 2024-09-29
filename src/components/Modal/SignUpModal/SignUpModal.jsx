@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import EmailInputForm from "./EmailInputForm/EmailInputForm";
-import VerificationCodeInputForm from "./VerificationCodeInputForm/VerificationCodeInputForm";
+import EmailInputForm from "../VerifyCodeModal/EmailInputForm/EmailInputForm";
+import VerificationCodeInputForm from "../VerifyCodeModal/VerificationCodeInputForm/VerificationCodeInputForm";
 import UserDetailsInputForm from "./UserDetailsInputForm/UserDetailsInputForm";
 
 export default function SignUpModal() {

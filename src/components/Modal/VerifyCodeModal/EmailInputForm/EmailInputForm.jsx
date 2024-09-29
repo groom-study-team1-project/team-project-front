@@ -8,11 +8,8 @@ import {
   Form,
   ModalTitle,
 } from "../../Modal.style";
-import { ErrorMsg } from "../SignUpModal.style";
-import {
-  checkDuplicatedEmail,
-  sendEmailVerificationCode,
-} from "../../../../services/api/authApi";
+import { ErrorMsg } from "../../SignUpModal/SignUpModal.style";
+import { sendEmailVerificationCode } from "../../../../services/api/authApi";
 
 function EmailInputForm({ handleNext, handleSubmitEmail }) {
   const [email, setEmail] = useState("");
@@ -27,10 +24,6 @@ function EmailInputForm({ handleNext, handleSubmitEmail }) {
 
     if (!/\S+@\S+\.\S+/.test(email)) {
       err = "유효한 이메일 주소를 입력해주세요.";
-    }
-
-    if (await checkDuplicatedEmail(email)) {
-      err = "중복된 이메일 주소입니다.";
     }
 
     setError(err);

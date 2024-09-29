@@ -35,55 +35,36 @@ export default function FindUserPw({ changeModal }) {
 
   return (
     <Container>
-      {!foundPw ? (
-        <>
-          <ModalTitle>
-            <h2>비밀번호 찾기</h2>
-          </ModalTitle>
-          <Form onSubmit={handleFindUserPw}>
-            <FormInputField
-              label={"이메일"}
-              type={"email"}
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-            />
-            <FormInputField
-              label={"닉네임"}
-              type={"text"}
-              value={nickname}
-              onChange={(e) => setNickname(e.target.value)}
-            />
-            <FormInputField
-              label={"휴대폰 번호"}
-              type={"tel"}
-              value={tel}
-              onChange={(e) => setTel(e.target.value)}
-            />
-            <Divider />
-            <BtnBox>
-              <Btn type="submit">비밀번호 찾기</Btn>
-            </BtnBox>
-          </Form>
-        </>
-      ) : (
+      <ModalTitle>
+        <h2>비밀번호 변경</h2>
+      </ModalTitle>
+      <Form onSubmit={handleFindUserPw}>
         <div>
-          <div
-            style={{
-              textAlign: "center",
-              marginBottom: "4rem",
-              fontSize: "20px",
-            }}
-          >
-            <span>비밀번호: </span>
-            <span>{foundPw}</span>
-          </div>
-          <BtnBox>
-            <Btn onClick={() => changeModal("login")}>
-              로그인 화면으로 돌아가기
-            </Btn>
-          </BtnBox>
+          <FormInputField
+            label={"비밀번호"}
+            type={"password"}
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            hasError={errors.password}
+          />
+          {errors.password && <ErrorMsg>{errors.password}</ErrorMsg>}
         </div>
-      )}
+        <div>
+          <FormInputField
+            label={"비밀번호 확인"}
+            type={"password"}
+            value={confirmPassword}
+            onChange={(e) => setConfirmPassword(e.target.value)}
+          />
+          {errors.confirmPassword && (
+            <ErrorMsg>{errors.confirmPassword}</ErrorMsg>
+          )}
+        </div>
+        <Divider />
+        <BtnBox>
+          <Btn type="submit">비밀번호 찾기</Btn>
+        </BtnBox>
+      </Form>
     </Container>
   );
 }
