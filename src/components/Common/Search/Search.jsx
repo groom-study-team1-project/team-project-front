@@ -8,15 +8,9 @@ import {
 } from "./Search.style";
 import searchIcon from "../../../assets/images/search.png";
 
-function Search({ onSearch }) {
+function Search() {
   const [searchTerm, setSearchTerm] = useState("");
   const [filter, setFilter] = useState("title");
-
-  const handleKeyDown = (e) => {
-    if (e.key === "Enter") {
-      onSearch(searchTerm, filter);
-    }
-  };
 
   const handleFilterChange = (e) => {
     setFilter(e.target.value);
@@ -28,19 +22,15 @@ function Search({ onSearch }) {
         <InnerSearch
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
-          onKeyDown={handleKeyDown}
           placeholder="검색어를 입력하세요"
         />
-        <SearchIcon
-          src={searchIcon}
-          onClick={() => onSearch(searchTerm, filter)}
-        />
+        <SearchIcon src={searchIcon} />
       </SearchBox>
-      <SearchOption value={filter} onChange={handleFilterChange}>
+      {/* <SearchOption value={filter} onChange={handleFilterChange}>
         <option value="title">제목</option>
         <option value="author">작성자</option>
         <option value="hashtag">해시태그</option>
-      </SearchOption>
+      </SearchOption> */}
     </SearchWrapper>
   );
 }

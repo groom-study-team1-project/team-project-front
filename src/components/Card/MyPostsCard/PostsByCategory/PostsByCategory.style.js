@@ -1,14 +1,18 @@
 import styled from "styled-components";
 
-export const Post = styled.div`
-  height: 40px;
-  border-radius: 8px;
-  border: 1px solid rgba(0, 0, 0, 0.2);
-  background-color: transparent;
-  padding: 10px;
+export const Myboard = styled.div`
+  padding: 10px 16px;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  margin: 10px;
+  display: flex;
   justify-content: space-between;
-  align-items: center;
+  border-radius: 8px;
   cursor: pointer;
+
+  span {
+    color: #575757;
+    padding-right: 10px;
+  }
 
   &:hover {
     border: 1px solid transparent;
@@ -44,23 +48,24 @@ export const Post = styled.div`
   }
 `;
 
-export const PostText = styled.p`
-  font-size: 14px;
-  padding: 4px;
-  padding-bottom: 8px;
-  color: #000000;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-`;
-
-export const PostStats = styled.div`
+export const BoardContentsWrap = styled.div`
   display: flex;
   align-items: center;
-  font-size: 12px;
-  color: #666;
+  justify-content: space-between;
+  margin: 0px 20px 10px 20px;
+  cursor: pointer;
+`;
 
-  & > *:not(:last-child) {
-    margin-right: 5px;
+export const BoardContent = styled.div`
+  flex: 4;
+  overflow: hidden;
+  max-width: 300px;
+`;
+
+export const LoadMore = styled.p`
+  margin: 20px;
+  cursor: pointer;
+  &:hover {
+    color: blue;
   }
 `;
