@@ -26,35 +26,39 @@ function UserDetailsInputForm({ email, handlePrev, changeModal }) {
   const [errors, setErrors] = useState({});
 
   const validateForm = async () => {
-    let errors = {};
+    try {
+      let errors = {};
 
-    if (nickname.length < 2 || nickname.length > 20) {
-      errors.nickname = "닉네임은 2글자부터 20글자까지 가능합니다.";
+      if (nickname.length < 2 || nickname.length > 20) {
+        errors.nickname = "닉네임은 2글자부터 20글자까지 가능합니다.";
+      }
+
+      if (!/^[a-zA-Z0-9가-힣]+$/.test(nickname)) {
+        errors.nickname =
+          "닉네임은 영어 대소문자, 한글, 숫자의 조합이어야 합니다.";
+      }
+
+      if (await checkDuplicatedNickname(nickname)) {
+        errors.nickname = "중복된 닉네임입니다.";
+      }
+
+      if (password.length < 8 || password.length > 16) {
+        errors.password = "비밀번호는 8글자 이상 16글자 이하이어야 합니다.";
+      }
+
+      if (password !== confirmPassword) {
+        errors.confirmPassword = "비밀번호가 일치하지 않습니다.";
+      }
+
+      if (!/^\d{3}-\d{4}-\d{4}$/.test(phoneNumber)) {
+        errors.phoneNumber = "전화번호 형식을 맞춰주세요. 예: 010-0000-0000";
+      }
+
+      setErrors(errors);
+      return Object.keys(errors).length === 0;
+    } catch (err) {
+      errors.nickname = err.message || "닉네임 관련 에러가 발생했습니다.";
     }
-
-    if (!/^[a-zA-Z0-9가-힣]+$/.test(nickname)) {
-      errors.nickname =
-        "닉네임은 영어 대소문자, 한글, 숫자의 조합이어야 합니다.";
-    }
-
-    if (await checkDuplicatedNickname(nickname)) {
-      errors.nickname = "중복된 닉네임입니다.";
-    }
-
-    if (password.length < 8 || password.length > 16) {
-      errors.password = "비밀번호는 8글자 이상 16글자 이하이어야 합니다.";
-    }
-
-    if (password !== confirmPassword) {
-      errors.confirmPassword = "비밀번호가 일치하지 않습니다.";
-    }
-
-    if (!/^\d{3}-\d{4}-\d{4}$/.test(phoneNumber)) {
-      errors.phoneNumber = "전화번호 형식을 맞춰주세요. 예: 010-0000-0000";
-    }
-
-    setErrors(errors);
-    return Object.keys(errors).length === 0;
   };
 
   const uploadImageAndGetUrl = async () => {

@@ -76,21 +76,25 @@ export const uploadProfileImage = async (body) => {
   }
 };
 
-export const checkDuplicatedNickname = async (name) => {
+export const checkDuplicatedNickname = async (nickname) => {
   try {
-    // const response = await axiosInstance.get("/members/validate/nickname", {
-    //   params: { nickname: name },
+    // const response = await axiosInstance.get("/accounts/verify/nickname", {
+    //   params: { nickname: nickname },
     // });
 
     const response = {
-      code: 1003,
-      message: "사용가능한 이름 입니다.",
+      status: {
+        code: 1102,
+        message: "사용할 수 있는 닉네임입니다.",
+      },
     };
 
-    if (response.code === 1003) {
+    if (response.status.code === 1102) {
       return false;
-    } else {
+    } else if (response.status.code === 2004) {
       return true;
+    } else {
+      throw new Error(response.status.message || "닉네임 에러");
     }
   } catch (error) {
     console.log("checking nickname error", error);
