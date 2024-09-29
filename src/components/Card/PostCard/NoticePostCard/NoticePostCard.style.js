@@ -1,9 +1,4 @@
 import styled from "styled-components";
-import { PostCardWrapper } from "../PostCard.style";
-
-export const CustomPostCardWrapper = styled(PostCardWrapper)`
-  display: flex;
-`;
 
 export const PostContainer = styled.div`
   display: flex;

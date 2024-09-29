@@ -4,12 +4,14 @@ import {
   ContentBox,
   InnerContainer,
   PostActions,
-  PostCardWrapper,
-  Thumbnail,
+  PostCardContainer,
 } from "../PostCard.style";
 import { PostProfileBox } from "../PostProfile";
-import { CustomBody } from "./CommunityPostCard.style";
+import { CustomBody, CustomThumbnail } from "./CommunityPostCard.style";
 import { useNavigate } from "react-router-dom";
+import { Divider } from "../../Card.style";
+import useJwt from "../../../../hooks/useJwt";
+import { useSelector } from "react-redux";
 
 function CommunityPostCard({
   id,
@@ -17,11 +19,15 @@ function CommunityPostCard({
   content,
   name,
   job,
-  email,
   count = { view: 0, like: 0, comment: 0 },
   img,
 }) {
   const [imgIndex, setImgIndex] = useState(0);
+  const payload = useJwt(
+    useSelector((state) => state.user.userInfo.accessToken)
+  );
+  const memberId = payload.memberId;
+
   const navigate = useNavigate();
 
   const handleNavigation = () => {
@@ -41,27 +47,34 @@ function CommunityPostCard({
   };
 
   return (
-    <PostCardWrapper height="232px" onClick={handleNavigation}>
-      <InnerContainer>
-        <Thumbnail>
-          {img ? <img src={img[imgIndex].url} alt={`img ${imgIndex}`} /> : null}
-        </Thumbnail>
-        <CustomBody>
-          <PostActions>
-            <PostProfileBox name={name} job={job} email={email} />
-            <Interaction count={count} />
-          </PostActions>
-          <ContentBox>
-            <p>{title}</p>
-            <p>{content}</p>
-          </ContentBox>
-          <ArrowButton
-            handlePrevImage={(e) => handlePrevImage(e)}
-            handleNextImage={(e) => handleNextImage(e)}
-          />
-        </CustomBody>
-      </InnerContainer>
-    </PostCardWrapper>
+    <>
+      <PostCardContainer height="232px" onClick={handleNavigation}>
+        <InnerContainer>
+          <CustomThumbnail>
+            {img ? (
+              <img src={img[imgIndex].url} alt={`img ${imgIndex}`} />
+            ) : null}
+          </CustomThumbnail>
+          <CustomBody>
+            <PostActions>
+              <PostProfileBox name={name} job={job} memberId={memberId} />
+              <Interaction count={count} />
+            </PostActions>
+            <Divider />
+            <ContentBox>
+              <p>{title}</p>
+              <p>{content}</p>
+            </ContentBox>
+            <Divider />
+
+            <ArrowButton
+              handlePrevImage={(e) => handlePrevImage(e)}
+              handleNextImage={(e) => handleNextImage(e)}
+            />
+          </CustomBody>
+        </InnerContainer>
+      </PostCardContainer>
+    </>
   );
 }
 

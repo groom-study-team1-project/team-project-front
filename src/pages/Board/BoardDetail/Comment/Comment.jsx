@@ -6,7 +6,7 @@ import heart from "../../../../assets/images/heart.png";
 import commentsubmit from "../../../../assets/images/commentsubmit.png";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEllipsisVertical } from "@fortawesome/free-solid-svg-icons";
-import { createcomment, fetchcomment } from "../../../../services/api";
+import { createcomment, fetchcomment } from "../../../../services/api/api";
 import { Modify } from "../Board/BoardDetail.style";
 import ModalComponent from "../../../../components/Modal/EditDeleteModal/EditDeleteModal"; // 모달 컴포넌트 추가
 import {

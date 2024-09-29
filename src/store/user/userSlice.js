@@ -2,12 +2,8 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
   userInfo: {
-    nickName: "구름이",
-    email: "sdad@sad.sadf",
-    role: "NORMAL, STUDENT, GRADUATE",
-    imageUrl: "",
-    aboutMe: "안녕하세요. 구름톤 딥다이브 수강생입니다.",
-    phoneNumber: "010-1234-5678",
+    accessToken: "",
+    refreshToken: "",
   },
   isLoggedIn: false,
 };
@@ -21,10 +17,13 @@ const userSlice = createSlice({
       state.isLoggedIn = true;
     },
     userLogout: (state) => {
-      state.userInfo = null;
+      state.userInfo = {
+        accessToken: "",
+        refreshToken: "",
+      };
       state.isLoggedIn = false;
     },
-    updateUserInfo: (state, action) => {
+    updateToken: (state, action) => {
       state.userInfo = {
         ...state.userInfo,
         ...action.payload,
@@ -33,6 +32,6 @@ const userSlice = createSlice({
   },
 });
 
-export const { userLogin, userLogout, updateUserInfo } = userSlice.actions;
+export const { userLogin, userLogout, updateToken } = userSlice.actions;
 
 export default userSlice.reducer;

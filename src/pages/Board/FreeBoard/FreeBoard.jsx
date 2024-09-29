@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
-import { fetchPostItems } from "../../../services/api";
+import { fetchPostItems } from "../../../services/api/api";
 import CommunityPostCard from "../../../components/Card/PostCard/CommunityPostCard/CommunityPostCard";
 import {
+  Title,
   BoardTitle,
   ContentWrapper,
   PostCardWrapper,
@@ -66,7 +67,9 @@ function FreeBoard() {
 
   return (
     <ContentWrapper>
-      <BoardTitle>자유게시판</BoardTitle>
+      <BoardTitle>
+        <Title>자유게시판</Title>
+      </BoardTitle>
       <SearchSortWrapper>
         <Search />
         <SortOptionButton />
@@ -80,7 +83,6 @@ function FreeBoard() {
             content={postItem.content}
             name={postItem.author.name}
             job={postItem.author.job}
-            email={postItem.author.email}
             count={postItem.count}
             img={postItem.imgUrl}
           />

@@ -1,16 +1,18 @@
 import React, { useEffect, useState } from "react";
-import { fetchPostItems } from "../../../services/api";
+import { fetchPostItems } from "../../../services/api/api";
 import ProjectPostCard from "../../../components/Card/PostCard/ProjectPostCard/ProjectPostCard";
 import {
+  Title,
   BoardTitle,
   ContentWrapper,
-  PostCardWrapper,
   SearchSortWrapper,
   LastPostEnd,
-} from "../Board.style";
+  PostCardWrapper,
+} from "../Board.style"; // PostCardWrapper는 여기서 이미 import 되어 있음
 import Search from "../../../components/Common/Search/Search";
 import SortOptionButton from "../../../components/Common/SortOptionButton/SortOptionButton";
 import { useInView } from "react-intersection-observer";
+import { ProjectPostCardWrapper } from "./ProjectBoard.style"; // 이 부분은 프로젝트 내에 정의되어 있다고 가정
 
 function ProjectBoard() {
   const [postItems, setPostItems] = useState([]);
@@ -44,7 +46,6 @@ function ProjectBoard() {
 
   useEffect(() => {
     if (inView && hasMore && !isFetching) {
-      console.log("InView detected, loading more posts...");
       setIsFetching(true);
       const startIndex = page * itemsPerPage;
       const endIndex = startIndex + itemsPerPage;
@@ -66,24 +67,27 @@ function ProjectBoard() {
 
   return (
     <ContentWrapper>
-      <BoardTitle>프로젝트 게시판</BoardTitle>
+      <BoardTitle>
+        <Title>프로젝트 게시판</Title>
+      </BoardTitle>
       <SearchSortWrapper>
         <Search />
         <SortOptionButton />
       </SearchSortWrapper>
       <PostCardWrapper>
         {visibleItems.map((postItem) => (
-          <ProjectPostCard
-            key={postItem.id}
-            id={postItem.id}
-            title={postItem.title}
-            content={postItem.content}
-            name={postItem.author.name}
-            job={postItem.author.job}
-            email={postItem.author.email}
-            count={postItem.count}
-            img={postItem.imgUrl}
-          />
+          <ProjectPostCardWrapper key={postItem.id}>
+            <ProjectPostCard
+              id={postItem.id}
+              title={postItem.title}
+              content={postItem.content}
+              name={postItem.author.name}
+              job={postItem.author.job}
+              email={postItem.author.email}
+              count={postItem.count}
+              img={postItem.imgUrl}
+            />
+          </ProjectPostCardWrapper>
         ))}
       </PostCardWrapper>
 
