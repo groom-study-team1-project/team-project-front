@@ -7,7 +7,12 @@ import heart from "../../../assets/images/heart.png";
 import commentsubmit from "../../../assets/images/commentsubmit.png";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEllipsisVertical } from "@fortawesome/free-solid-svg-icons";
-import { fetchcomment, createcomment } from "../../../services/api";
+import {
+  fetchComment,
+  createComment,
+  editComment,
+  deleteComment,
+} from "../../../services/commentApi";
 import { fetchPostDetail } from "../../../services/postApi";
 import {
   PostProfileBox,
@@ -38,7 +43,11 @@ import {
   CommentRight,
   TimeAndLike,
   IconWrap,
-  CommnetModalIcon,
+  CommentProfile,
+  CommentModal,
+  CommentEditModal,
+  CommentModalBackground,
+  CommentModalIcon,
   CommentInputWrap,
   CommentInput,
   InputImg,
@@ -49,7 +58,13 @@ function BoardDetail() {
   const [commentsData, setCommentData] = useState(null);
   const [commentValue, setCommentValue] = useState("");
   const [modalcurrent, setModalcurrnet] = useState(false);
+  const [commentmodalcurrent, setCommentModalcurrent] = useState(false);
+  const [isEditing, setIsEditing] = useState(false);
+  const [checkCommentInfo, setCheckCommentInfo] = useState("");
+  const [editCommentValue, setEditCommentValue] = useState("");
+
   const modalRef = useRef(null);
+  const commentModalRef = useRef(null);
   const navigate = useNavigate();
   const { postId } = useParams();
 
@@ -57,7 +72,7 @@ function BoardDetail() {
     const fetchData = async () => {
       try {
         const postResponse = await fetchPostDetail(postId);
-        const commentsResponse = await fetchcomment();
+        const commentsResponse = await fetchComment();
 
         setPost(postResponse);
         setCommentData(commentsResponse);
@@ -71,7 +86,7 @@ function BoardDetail() {
   const onSubmit = async (e) => {
     await e.preventDefault();
     const body = { commentValue };
-    await createcomment(body);
+    await createComment(body);
   };
 
   const onChange = (e) => {
@@ -81,6 +96,11 @@ function BoardDetail() {
   const handleClickOutside = (e) => {
     if (modalRef.current && !modalRef.current.contains(e.target)) {
       setModalcurrnet(false);
+    } else if (
+      commentModalRef.current &&
+      !commentModalRef.current.contains(e.target)
+    ) {
+      setCommentModalcurrent(false);
     }
   };
 
@@ -180,30 +200,112 @@ function BoardDetail() {
             {commentsData.result.map((commentData, index) => (
               <CommentsWrap key={index}>
                 <Comment>
-                  <ProfileImage />
-                  <CommentText>
-                    <Bold>{commentData.memberInfo.nickname}</Bold>
-                    <div>{commentData.commentInfo.content}</div>
-                  </CommentText>
+                  <CommentProfile>
+                    <ProfileImage />
+                    <CommentText>
+                      <Bold>{commentData.memberInfo.nickname}</Bold>
+                      {isEditing ? (
+                        commentData.memberInfo.Id === checkCommentInfo ? (
+                          <div>
+                            <input
+                              type="text"
+                              value={editCommentValue}
+                              onChange={(e) =>
+                                setEditCommentValue(e.target.value)
+                              }
+                              onKeyDown={async (e) => {
+                                if (e.key === "Enter") {
+                                  await editComment({
+                                    content: editCommentValue,
+                                  });
+                                  setIsEditing(false);
+                                  setCommentModalcurrent(false);
+                                }
+                              }}
+                              placeholder="댓글 수정"
+                            />
+
+                            <InputImg
+                              src={commentsubmit}
+                              alt="댓글 수정 제출"
+                              onClick={async () => {
+                                await editComment({
+                                  content: editCommentValue,
+                                });
+                                setIsEditing(false);
+                              }}
+                            />
+                          </div>
+                        ) : (
+                          <div>{commentData.commentInfo.content}</div>
+                        )
+                      ) : (
+                        <div>{commentData.commentInfo.content}</div>
+                      )}
+                    </CommentText>
+                  </CommentProfile>
+                  <CommentRight>
+                    <TimeAndLike>
+                      <div>{commentData.commentInfo.createdAt}</div>
+                      <IconWrap>
+                        <InteractionItem
+                          icon={heart}
+                          count={commentData.commentInfo.recommedCount}
+                        />
+                      </IconWrap>
+                    </TimeAndLike>
+                    {commentData.commentInfo.isModified && (
+                      <CommentModalIcon>
+                        <Modify
+                          onClick={() => {
+                            setCommentModalcurrent(true);
+                          }}
+                        >
+                          <FontAwesomeIcon icon={faEllipsisVertical} />
+                        </Modify>
+
+                        {commentmodalcurrent && (
+                          <CommentModalBackground>
+                            {isEditing ? null : (
+                              <CommentModal ref={commentModalRef}>
+                                <>
+                                  <div
+                                    onClick={() => {
+                                      setIsEditing(true);
+                                      setEditCommentValue(
+                                        commentData.commentInfo.content
+                                      );
+                                      setCheckCommentInfo(
+                                        commentData.memberInfo.Id
+                                      );
+                                      setCommentModalcurrent(false);
+                                    }}
+                                  >
+                                    수정
+                                  </div>
+                                  <hr
+                                    style={{ margin: "0px", padding: "0px" }}
+                                  />
+                                  <div
+                                    onClick={() => {
+                                      deleteComment();
+                                      setCommentModalcurrent(false);
+                                    }}
+                                  >
+                                    삭제
+                                  </div>
+                                </>
+                              </CommentModal>
+                            )}
+                          </CommentModalBackground>
+                        )}
+                      </CommentModalIcon>
+                    )}
+                  </CommentRight>
                 </Comment>
-                <CommentRight>
-                  <TimeAndLike>
-                    <div>{commentData.commentInfo.createdAt}</div>
-                    <IconWrap>
-                      <InteractionItem
-                        icon={heart}
-                        count={commentData.commentInfo.recommedCount}
-                      />
-                    </IconWrap>
-                  </TimeAndLike>
-                  {commentData.commentInfo.isModified && (
-                    <CommnetModalIcon>
-                      <FontAwesomeIcon icon={faEllipsisVertical} />
-                    </CommnetModalIcon>
-                  )}
-                </CommentRight>
               </CommentsWrap>
             ))}
+
             <hr />
             <form onSubmit={onSubmit}>
               <CommentInputWrap>

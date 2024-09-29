@@ -69,7 +69,7 @@ export const IconWrap = styled.div`
 `;
 
 export const CommetHr = styled.hr`
-  width: 15%;
+  width: 100%;
   float: left;
 `;
 
@@ -89,7 +89,12 @@ export const CommentWrap = styled.div`
   margin-bottom: 16px;
 `;
 
-export const Comment = styled.div`
+export const Comment = styled(CommentWrap)`
+  display: columns;
+  align-items: center;
+`;
+
+export const CommentProfile = styled.div`
   display: flex;
   align-items: center;
 `;
@@ -151,10 +156,25 @@ export const Modal = styled.div`
     cursor: pointer;
   }
 `;
+
+export const CommentModalIcon = styled.div`
+  margin-left: 10px;
+  position: relative;
+`;
+
+export const CommentModalBackground = styled(ModalBackground)``;
+
+export const CommentModal = styled(Modal)`
+  height: 55px;
+  position: absolute;
+  margin-right: 100px;
+`;
+
+export const CommentEditModal = styled(Modal)`
+  width: auto;
+`;
+
 export const Bold = styled.div`
   font-weight: bold;
   margin-bottom: 5px;
-`;
-export const CommnetModalIcon = styled.div`
-  margin-left: 10px;
 `;
