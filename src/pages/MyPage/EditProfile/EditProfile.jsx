@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import {
-  EditProfileBox,
+  BigProfileBox,
   ProfileImage,
 } from "../../../components/Card/PostCard/PostProfile";
 import {
@@ -17,75 +17,49 @@ import {
   SelfIntroductionTextarea,
 } from "./EditProfile.style";
 import { useSelector, useDispatch } from "react-redux";
-import { editProfile } from "../../../services/authApi";
-import { updateUserInfo } from "../../../store/user/userSlice";
+import { editProfile, fetchProfileInfo } from "../../../services/api/authApi";
 import { useNavigate } from "react-router-dom";
+import useJwt from "../../../hooks/useJwt";
 
 function EditProfile() {
-  const userInfo = useSelector((state) => state.user.userInfo);
-  const dispatch = useDispatch();
+  const isLoggedIn = useSelector((state) => state.user.isLoggedIn);
+  const payload = useJwt(
+    useSelector((state) => state.user.userInfo.accessToken)
+  );
+  const memberId = payload.memberId;
 
-  const [profileImg, setProfileImg] = useState(null);
-  const [email, setEmail] = useState("");
-  const [nickname, setNickname] = useState("");
-  const [tel, setTel] = useState("");
-  const [job, setJob] = useState("");
-  const [aboutMe, setAboutMe] = useState("");
+  const [profileData, setProfileData] = useState(null);
 
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (userInfo) {
-      setNickname(userInfo.nickname);
-      setEmail(userInfo.email || "");
-      setTel(userInfo.phoneNumber || "");
-      setJob(userInfo.role);
-      setAboutMe(userInfo.aboutMe);
+    if (!isLoggedIn) {
+      return;
     }
-  }, [userInfo]);
+
+    fetchProfileInfo(memberId)
+      .then(({ data }) => {
+        setProfileData(data);
+      })
+      .catch((err) => console.log(err));
+  }, []);
 
   async function handleEdit(e) {
     e.preventDefault();
 
     const body = {
-      profileImg,
-      nickname,
-      email,
-      tel,
-      job,
-      aboutMe,
+      nickname: profileData.nickname,
+      imageUrl: profileData.imageUrl,
+      aboutMe: profileData.aboutMe,
+      phoneNumber: profileData.phoneNumber,
+      githubUrl: profileData.githubUrl,
+      blogUrl: profileData.blogUrl,
     };
 
     try {
       const response = await editProfile(body);
-
-      if (response.code === 1007) {
-        const {
-          nickname,
-          imageUrl,
-          aboutMe,
-          tel,
-          role,
-          githubUrl,
-          blogUrl,
-          activityStats,
-        } = response.result;
-
-        const updatedProfile = {
-          nickname,
-          email,
-          role,
-          imageUrl,
-          aboutMe,
-          phoneNumber: tel,
-        };
-
-        dispatch(updateUserInfo(updatedProfile));
-
-        GoBack();
-      } else {
-        console.error("프로필 수정 실패:", response.message);
-      }
+      console.log(response);
+      GoBack();
     } catch (error) {
       console.error("프로필 수정 실패", error);
     }
@@ -100,7 +74,10 @@ function EditProfile() {
       <form action="" method="post" onSubmit={handleEdit}>
         <EditProfileWrapper>
           <ProfileActionWrapper>
-            <EditProfileBox name={nickname} job={job} />
+            <BigProfileBox
+              name={profileData?.nickname}
+              job={profileData?.role}
+            />
             <div>
               <ProfileButton type="button" onClick={GoBack}>
                 취소
@@ -113,18 +90,13 @@ function EditProfile() {
             <Label>닉네임</Label>
             <Input
               type="text"
-              value={nickname}
-              onChange={(e) => setNickname(e.target.value)}
-            />
-          </FlexDiv>
-
-          <FlexDiv>
-            <Label>이메일</Label>
-            <Input
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              disabled
+              value={profileData?.nickname || ""}
+              onChange={(e) =>
+                setProfileData((prevData) => ({
+                  ...prevData,
+                  nickname: e.target.value,
+                }))
+              }
             />
           </FlexDiv>
 
@@ -132,8 +104,13 @@ function EditProfile() {
             <Label>휴대폰 번호</Label>
             <Input
               type="tel"
-              value={tel}
-              onChange={(e) => setTel(e.target.value)}
+              value={profileData?.phoneNumber || ""}
+              onChange={(e) =>
+                setProfileData((prevData) => ({
+                  ...prevData,
+                  phoneNumber: e.target.value,
+                }))
+              }
             />
           </FlexDiv>
 
@@ -143,7 +120,7 @@ function EditProfile() {
               <ProfileImage
                 width="90px"
                 height="90px"
-                src={userInfo.imageUrl}
+                src={profileData?.imageUrl}
               />
               <div>
                 <ProfileButton type="button">삭제</ProfileButton>
@@ -157,8 +134,13 @@ function EditProfile() {
             <ProfileDetails>
               <JobSelect
                 name="job"
-                value={job}
-                onChange={(e) => setJob(e.target.value)}
+                value={profileData?.role || ""}
+                onChange={(e) =>
+                  setProfileData((prevData) => ({
+                    ...prevData,
+                    role: e.target.value,
+                  }))
+                }
               >
                 <option value="IOS Developer">IOS Developer</option>
                 <option value="Frontend">Frontend</option>
@@ -169,14 +151,20 @@ function EditProfile() {
               </JobSelect>
               <SelfIntroductionTextarea
                 name="aboutMe"
-                value={aboutMe}
-                onChange={(e) => setAboutMe(e.target.value)}
+                value={profileData?.aboutMe || ""}
+                onChange={(e) =>
+                  setProfileData((prevData) => ({
+                    ...prevData,
+                    aboutMe: e.target.value,
+                  }))
+                }
               />
               <p>400자 제한</p>
             </ProfileDetails>
           </FlexDiv>
         </EditProfileWrapper>
       </form>
+
       <PasswordButton>비밀번호 변경</PasswordButton>
     </>
   );

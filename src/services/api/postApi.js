@@ -1,14 +1,9 @@
-import axios from "axios";
+import axiosInstance from "../axiosConfig";
 
 export const createPost = async (body, token) => {
   try {
     console.log(body);
-    // const headers = {
-    //   Authorization: `Bearer ${token}`,
-    // };
-    // const result = await axios.post("/api/posts/upload", body, {
-    //   headers: headers,
-    // });
+    // const result = await axiosInstance.post("/api/posts/upload", body);
     // redirect(`${result.result.id}`);
   } catch (error) {
     console.log(error);
@@ -59,7 +54,7 @@ export const fetchPostDetail = async (postId) => {
     },
   };
   try {
-    //const result = await axios.get(`/posts/${postId}`);
+    //const result = await axiosInstance.get(`/posts/${postId}`);
     if (response.code === 1201) {
       return response.result;
     } else {
@@ -76,12 +71,7 @@ export const fetchPostChange = async (body, postId, token) => {
   try {
     console.log(body);
     console.log(postId);
-    // const headers = {
-    //   Authorization: `Bearer ${token}`,
-    // };
-    // const result = await axios.put(`/api/posts/${postId}`, body, {
-    //   headers: headers,
-    // });
+    // const result = await axiosInstance.put(`/api/posts/${postId}`, body);
     // console.log(result);
   } catch (error) {
     console.log(error);
@@ -95,12 +85,7 @@ export const deletepost = async (postId, token) => {
       message: "해당 게시글이 삭제되었습니다.",
     };
     console.log(response.message);
-    // const headers = {
-    //   Authorization: `Bearer ${token}`,
-    // };
-    // await axios.delete(`/api/posts/${postId}`, {
-    //   headers: headers,
-    // });
+    // await axiosInstance.delete(`/api/posts/${postId}`);
   } catch (error) {
     console.log(error);
   }
@@ -108,11 +93,11 @@ export const deletepost = async (postId, token) => {
 
 export const sortPostsByCriteria = async (categoty_id, sort, post_id) => {
   try {
-    // const result = await axios.get(
+    // const result = await axiosInstance.get(
     //   `/posts/${post_id}?sort=${sort}&categoty-id=${categoty_id}`
     // );
     // console.log(result);
-    await console.log(categoty_id, sort, post_id);
+    console.log(categoty_id, sort, post_id);
   } catch (error) {
     console.log(error);
   }
@@ -120,7 +105,7 @@ export const sortPostsByCriteria = async (categoty_id, sort, post_id) => {
 
 export async function fetchCategoryItems() {
   try {
-    // const response = await axios.get("/categories");
+    // const response = await axiosInstance.get("/categories");
 
     const response = {
       code: 1200,

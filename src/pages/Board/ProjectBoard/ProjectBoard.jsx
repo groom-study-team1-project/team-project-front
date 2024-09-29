@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { fetchPostItems } from "../../../services/api";
+import { fetchPostItems } from "../../../services/api/api";
 import ProjectPostCard from "../../../components/Card/PostCard/ProjectPostCard/ProjectPostCard";
 import { BoardTitle, ContentWrapper, SearchSortWrapper } from "../Board.style";
 import Search from "../../../components/Common/Search/Search";

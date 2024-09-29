@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { fetchPopularHashItems } from "../../../../services/api";
+import { fetchPopularHashItems } from "../../../../services/api/api";
 import PopularContainer from "../PopularContainer";
 import { Hash, HashText } from "./PopularHashCard.style";
 import { PostStats } from "../PopularPostCard/PopularPostCard.style";
