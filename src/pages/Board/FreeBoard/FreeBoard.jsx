@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { fetchPostItems } from "../../../services/api";
+import { fetchPostItems } from "../../../services/api/api";
 import CommunityPostCard from "../../../components/Card/PostCard/CommunityPostCard/CommunityPostCard";
 import {
   BoardTitle,
@@ -35,7 +35,6 @@ function FreeBoard() {
             content={postItem.content}
             name={postItem.author.name}
             job={postItem.author.job}
-            email={postItem.author.email}
             count={postItem.count}
             img={postItem.imgUrl}
           />
