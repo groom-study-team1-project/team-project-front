@@ -32,7 +32,7 @@ export const fetchPostDetail = async (postId) => {
         imageUrl: "~~~",
       },
       postInfo: {
-        title: "UI Templates",
+        title: "title",
         content:
           "<p>My first iOS app is available on the AppStore. I literally didn’t know anything about SwiftUI (still not much) and in probably 4 weeks was able to recreate my android app for iOS. Highly recommend MengTo video. My first iOS app is available on the AppStore. I literally didn’t know anything about SwiftUI (still not much) and in probably 4 weeks was able to recreate my android app for iOS. Highly recommend MengTo video. My first iOS app is available on the AppStore. I literally didn’t know anything about SwiftUI (still not much) and in probably 4 weeks was able to recreate my android app for iOS. Highly recommend MengTo video.My first iOS app is available on the AppStore. I literally didn’t know anything about SwiftUI (still not much) and in probably 4 weeks was able to recreate my android app for iOS. Highly recommend MengTo video. My first iOS app is available on the AppStore. I literally didn’t know anything about SwiftUI (still not much) and in probably 4 weeks was able to recreate my android app for iOS. </p>",
         viewCount: 12,
@@ -59,7 +59,7 @@ export const fetchPostDetail = async (postId) => {
     },
   };
   try {
-    //const result = await axios.get(`/posts/${postId}`);
+    //const result = await axios.get(`/open/posts/${postId}`);
     if (response.code === 1201) {
       return response.result;
     } else {
