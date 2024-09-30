@@ -75,7 +75,7 @@ function EditProfile() {
         <EditProfileWrapper>
           <ProfileActionWrapper>
             <BigProfileBox
-              name={profileData?.nickname}
+              nickName={profileData?.nickname}
               job={profileData?.role}
             />
             <div>

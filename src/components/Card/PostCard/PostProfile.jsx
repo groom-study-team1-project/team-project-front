@@ -56,6 +56,6 @@ export const PostProfileBox = ({ name, job, memberId }) => {
   );
 };
 
-export const BigProfileBox = ({ name, job }) => (
-  <ProfileBox name={name} job={job} size="200px" isBig={true} />
+export const BigProfileBox = ({ nickName, job }) => (
+  <ProfileBox name={nickName} job={job} size="200px" isBig={true} />
 );
