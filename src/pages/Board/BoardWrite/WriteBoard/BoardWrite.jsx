@@ -5,6 +5,7 @@ import { DecoupledEditor } from "ckeditor5";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPhotoFilm, faXmark } from "@fortawesome/free-solid-svg-icons";
 import { editorConfig } from "./editor";
+import Navbar from "../../../../Layout/Navbar/Navbar";
 import axios from "axios";
 import GlobalStyle from "../../../../assets/styles/GlobalStyle";
 import {
@@ -165,6 +166,7 @@ const WriteBoard = ({ postData, postId }) => {
   return (
     <>
       <GlobalStyle />
+      <Navbar isMainPage={true} />
       <Wrap>
         <WriteWrap>
           <BackImg src={backBtn} alt="뒤로 가기" onClick={() => navigate(-1)} />
