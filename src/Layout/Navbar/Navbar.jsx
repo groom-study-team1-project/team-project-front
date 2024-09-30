@@ -71,7 +71,7 @@ function Navbar({ isMainPage = false }) {
       navigate("/board/projects");
     } else if (id === 4) {
       navigate("/board/notices");
-    } else if (id == 5) {
+    } else if (id === 5) {
       navigate("/");
     }
   };

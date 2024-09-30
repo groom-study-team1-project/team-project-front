@@ -21,15 +21,7 @@ time, mark, audio, video, select {
   font: inherit;
   vertical-align: baseline;
 }
-.ck.ck-editor__editable:not(.ck-editor__nested-editable) {
-    min-height: 400px;
-    margin-bottom: 20px;
-  }
 
-  .ck.ck-toolbar {
-    border: none;
-    border-radius: 10px;
-}
 
 /* HTML5 display-role reset for older browsers */
 article,

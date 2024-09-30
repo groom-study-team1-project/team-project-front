@@ -4,6 +4,17 @@ export const Wrap = styled.div`
   width: 1028px;
   margin: auto auto;
   font-size: 16px;
+  .ck.ck-editor__editable:not(.ck-editor__nested-editable) {
+    min-height: 400px;
+    margin-bottom: 20px;
+    background: white;
+    border-radius: 5px;
+  }
+
+  .ck.ck-toolbar {
+    border: none;
+    border-radius: 10px;
+  }
 `;
 
 export const WriteWrap = styled.div`
@@ -43,6 +54,9 @@ export const Categoryselect = styled.select`
 
 export const Hashtag = styled.input`
   border: none;
+  background: none;
+  border: 1px solid black;
+  border-radius: 5px;
 `;
 
 export const SubmitBtnWrap = styled.div`
