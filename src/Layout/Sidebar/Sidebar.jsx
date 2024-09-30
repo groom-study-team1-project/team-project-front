@@ -10,7 +10,7 @@ import {
   SidebarUl,
 } from "./Sidebar.style";
 import { useNavigate } from "react-router-dom";
-import { fetchCategoryItems } from "../../services/api/postApi";
+import { fetchCategoryItems } from "../../services/postApi";
 import logoImg from "../../assets/images/DEEPDIVERS.png";
 import cardIcon from "../../assets/images/Card.png";
 import informaitonIcon from "../../assets/images/Help Badge.png";

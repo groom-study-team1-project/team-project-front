@@ -21,7 +21,7 @@ function NoticePostCard({ id, title, date, count }) {
         <PostTitle>{title}</PostTitle>
         <PostContainer>{date}</PostContainer>
         <PostContainer>
-          <InteractionItem icon={eyeIcon} count={count.view} />
+          <InteractionItem icon={eyeIcon} count={count.viewCount} />
         </PostContainer>
       </InnerContainer>
     </PostCardContainer>

@@ -1,7 +1,8 @@
 import styled from "styled-components";
 
 export const ContentWrapper = styled.div`
-  flex-grow: 1;
+  height: 100%;
+  width: 100%;
   margin-right: 50px;
 `;
 
@@ -44,14 +45,17 @@ export const SearchSortWrapper = styled.div`
 
 export const PostCardWrapper = styled.div`
   display: grid;
+  max-height: 820px;
+
   grid-template-columns: repeat(minmax(300px, 1fr));
   gap: 40px;
+  overflow-y: auto;
 `;
 
 export const LastPostEnd = styled.div`
   padding: 20px;
   text-align: center;
   background-color: white;
-  margin-top: 48px;
+  //margin-top: 48px;
   font-weight: bold;
 `;
