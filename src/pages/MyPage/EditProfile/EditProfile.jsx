@@ -4,6 +4,7 @@ import PasswordChange from "../../../components/Modal/PasswordChange/PasswordCha
 import {
   editProfile,
   checkDuplicatedNickname,
+  uploadProfileImage,
 } from "../../../services/api/authApi";
 import { useNavigate } from "react-router-dom";
 import {
@@ -38,11 +39,13 @@ const EditProfile = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [checkNickName, setCheckName] = useState(null);
   const [btn, setBtn] = useState(true);
-  const handleImageChange = (e) => {
+  const handleImageChange = async (e) => {
     const file = e.target.files[0];
     if (file) {
       const imageUrl = URL.createObjectURL(file);
-      setForm({ ...form, imageUrl: imageUrl });
+      const response = await uploadProfileImage(imageUrl);
+      console.log(response.imageUrl);
+      setForm({ ...form, imageUrl: response.imageUrl });
     }
   };
 
