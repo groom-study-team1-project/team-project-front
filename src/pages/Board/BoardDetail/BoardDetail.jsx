@@ -4,9 +4,11 @@ import { CKEditor } from "@ckeditor/ckeditor5-react";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import Slide from "../../../components/Common/imgSlide";
 import heart from "../../../assets/images/heart.png";
+import fullheart from "../../../assets/images/fullheart.png";
 import commentsubmit from "../../../assets/images/commentsubmit.png";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEllipsisVertical } from "@fortawesome/free-solid-svg-icons";
+import { commentsLike, commentsUnlike } from "../../../services/commentApi";
 import {
   fetchComment,
   createComment,
@@ -62,6 +64,7 @@ function BoardDetail() {
   const [isEditing, setIsEditing] = useState(false);
   const [checkCommentInfo, setCheckCommentInfo] = useState("");
   const [editCommentValue, setEditCommentValue] = useState("");
+  const [isLikeTrue, setIsLikeTrue] = useState(false);
 
   const modalRef = useRef(null);
   const commentModalRef = useRef(null);
@@ -244,9 +247,11 @@ function BoardDetail() {
                       )}
                     </CommentText>
                   </CommentProfile>
+
                   <CommentRight>
                     <TimeAndLike>
                       <div>{commentData.commentInfo.createdAt}</div>
+
                       <IconWrap>
                         <InteractionItem
                           icon={heart}
@@ -254,6 +259,7 @@ function BoardDetail() {
                         />
                       </IconWrap>
                     </TimeAndLike>
+                    //
                     {commentData.commentInfo.isModified && (
                       <CommentModalIcon>
                         <Modify

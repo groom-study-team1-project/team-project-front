@@ -66,6 +66,7 @@ export const PostFooter = styled.div`
 export const IconWrap = styled.div`
   margin-top: 10px;
   margin-left: 16px;
+  cursor: pointer;
 `;
 
 export const CommetHr = styled.hr`
