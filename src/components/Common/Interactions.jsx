@@ -58,9 +58,9 @@ export const InteractionItem = ({ icon, count }) => (
 
 export const Interaction = ({ count }) => (
   <InteractionsWrapper>
-    <InteractionItem icon={eyeIcon} count={count.view} />
-    <InteractionItem icon={heartIcon} count={count.like} />
-    <InteractionItem icon={commentIcon} count={count.comment} />
+    <InteractionItem icon={eyeIcon} count={count.viewCount} />
+    <InteractionItem icon={heartIcon} count={count.likeCount} />
+    <InteractionItem icon={commentIcon} count={count.commentCount} />
   </InteractionsWrapper>
 );
 
