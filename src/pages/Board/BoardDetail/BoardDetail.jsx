@@ -172,7 +172,9 @@ function BoardDetail() {
                 <span key={index}>{hashtag}</span>
               ))}
             </div>
-            <Interaction count={{ view: 12, like: 12, comment: 12 }} />
+            <Interaction
+              count={{ viewCount: 12, likeCount: 12, commentCount: 12 }}
+            />
           </PostFooter>
           <CommentsWrap>
             <div style={{ fontSize: "24px" }}>댓글</div>

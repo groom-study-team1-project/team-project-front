@@ -32,9 +32,9 @@ export const PostCardContainer = styled.div`
   cursor: pointer;
   transition: transform 450ms;
 
-  &:hover {
+  /* &:hover {
     transform: scale(1.025);
-  }
+  } */
 `;
 
 export const InnerContainer = styled.div`

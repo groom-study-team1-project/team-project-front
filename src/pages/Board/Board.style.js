@@ -45,7 +45,7 @@ export const SearchSortWrapper = styled.div`
 
 export const PostCardWrapper = styled.div`
   display: grid;
-  max-height: 820px;
+  max-height: 830px;
 
   grid-template-columns: repeat(minmax(300px, 1fr));
   gap: 40px;
