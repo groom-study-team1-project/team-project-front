@@ -1,4 +1,7 @@
-export async function fetchPostItems() {
+import axiosInstance from "../axiosConfig";
+
+export async function fetchPostItems(body) {
+  const result = await axiosInstance.get("/open/posts");
   const posts = [];
 
   for (let i = 1; i <= 30; i++) {

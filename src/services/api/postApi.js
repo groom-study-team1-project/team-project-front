@@ -12,7 +12,7 @@ export const createPost = async (body, token) => {
 
 export const fetchPostDetail = async (postId) => {
   try {
-    //const result = await axiosInstance.get(`/posts/${postId}`);
+    //const result = await axiosInstance.get(`/open/posts/${postId}`);
 
     const response = {
       code: 1203,
