@@ -10,7 +10,7 @@ import {
   SidebarUl,
 } from "./Sidebar.style";
 import { useNavigate } from "react-router-dom";
-import { fetchCategoryItems } from "../../services/postApi";
+import { fetchCategoryItems } from "../../services/api/postApi";
 import logoImg from "../../assets/images/DEEPDIVERS.png";
 import cardIcon from "../../assets/images/Card.png";
 import informaitonIcon from "../../assets/images/Help Badge.png";
@@ -32,9 +32,9 @@ function Sidebar() {
       .catch((err) => console.log(err.message));
   }, []);
 
-  const handleMenuClick = (id) => {
-    dispatch(selectMenuItem(id));
-    handleNavigation(id);
+  const handleMenuClick = (item) => {
+    dispatch(selectMenuItem(item));
+    handleNavigation(item.id);
   };
 
   const handleNavigation = (id) => {
@@ -74,7 +74,7 @@ function Sidebar() {
               <SidebarLi
                 key={item.id}
                 onClick={() => {
-                  handleMenuClick(item.id);
+                  handleMenuClick(item);
                 }}
               >
                 <SidebarLink

@@ -94,7 +94,7 @@ function Background() {
   });
 
   return (
-    <Container isDarkMode={isDarkMode}>
+    <Container $isDarkMode={isDarkMode}>
       <canvas ref={canvasRef} />
       <Outlet />
     </Container>
