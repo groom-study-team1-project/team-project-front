@@ -71,7 +71,7 @@ function Navbar({ isMainPage = false }) {
       navigate("/board/projects");
     } else if (id === 4) {
       navigate("/board/notices");
-    } else if (id == 5) {
+    } else if (id === 5) {
       navigate("/");
     }
   };
@@ -126,7 +126,14 @@ function Navbar({ isMainPage = false }) {
       <NavbarInner>
         {isMainPage ? (
           <Logo>
-            <img src={logoImg} alt="로고 이미지" style={{ width: "128px" }} />
+            <img
+              src={logoImg}
+              alt="로고 이미지"
+              style={{ width: "128px" }}
+              onClick={() => {
+                navigate("/");
+              }}
+            />
           </Logo>
         ) : (
           <NonLogo />

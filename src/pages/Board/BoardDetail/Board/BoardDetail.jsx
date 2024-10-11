@@ -6,10 +6,10 @@ import Slide from "../../../../components/Common/imgSlide";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEllipsisVertical } from "@fortawesome/free-solid-svg-icons";
 import { editorConfig } from "../../BoardWrite/WriteBoard/editor";
-import { fetchPostDetail } from "../../../../services/postApi";
+import { fetchPostDetail } from "../../../../services/api/postApi";
 import { PostProfileBox } from "../../../../components/Card/PostCard/PostProfile";
 import { Interaction } from "../../../../components/Common/Interactions";
-import { deletepost } from "../../../../services/postApi";
+import { deletepost } from "../../../../services/api/postApi";
 import Comments from "../Comment/Comment";
 import ModalComponent from "../../../../components/Modal/EditDeleteModal/EditDeleteModal"; // 모달 컴포넌트 추가
 import {
@@ -28,21 +28,37 @@ import { ContentWrapper } from "../../Board.style";
 function BoardDetail() {
   const [post, setPost] = useState(null);
   const [modalVisible, setModalVisible] = useState(false); // 모달 상태 관리
-  const [postData, setPostData] = useState("");
   const navigate = useNavigate();
   const { postId } = useParams();
-
+  const [category, setCategory] = useState("");
   useEffect(() => {
     const fetchData = async () => {
       try {
         const postResponse = await fetchPostDetail(postId);
 
         setPost(postResponse);
-        setPostData(postResponse.postInfo.content);
+        switch (postResponse.categoryId) {
+          case 1:
+            setCategory("자유 게시판");
+            break;
+          case 2:
+            setCategory("질문 게시판");
+            break;
+          case 3:
+            setCategory("프로젝트 게시판");
+            break;
+          case 4:
+            setCategory("공지사항");
+            break;
+          default:
+            setCategory("정보를 찾지 못했습니다");
+            break;
+        }
       } catch (error) {
         console.error("데이터를 가져오는데 실패", error);
       }
     };
+
     fetchData();
   }, [postId]);
 
@@ -65,19 +81,20 @@ function BoardDetail() {
       <ContentWrapper>
         <Wrap>
           <CategotyWrap>
-            <CategoryTitle>{post.categoryInfo.title}</CategoryTitle>
+            <CategoryTitle>{category}</CategoryTitle>
           </CategotyWrap>
 
           <PostWrap>
             <Postheader>
               <PostProfileBox
                 name={post.memberInfo.nickname}
-                job={post.memberInfo.development}
+                job={post.memberInfo.memberJob}
                 email={post.memberInfo.email}
+                imgUrl={post.memberInfo.imageUrl}
               />
               <div>
                 <PostheaderRignt>
-                  <div>{post.postInfo.createdAt}</div>
+                  <div>{post.createdAt}</div>
                   <Modify onClick={() => setModalVisible(true)}>
                     <FontAwesomeIcon icon={faEllipsisVertical} />
                   </Modify>
@@ -90,31 +107,31 @@ function BoardDetail() {
                 </PostheaderRignt>
               </div>
             </Postheader>
-            {post.categoryInfo.title === "프로젝트 게시판" ? (
+            {category === "프로젝트 게시판" ? (
               <div>
-                <Slide imgUrls={post.postInfo.imgUrl} />
+                <Slide imgUrls={post.imgUrl} />
               </div>
             ) : null}
 
-            <Title>{post.postInfo.title}</Title>
+            <Title>{post.title}</Title>
             <CKEditor
               editor={DecoupledEditor}
               config={editorConfig}
-              data={postData}
+              data={post.content}
               disabled={true}
             />
           </PostWrap>
           <PostFooter>
             <div>
-              {post.postInfo.hashtags.map((hashtag, index) => (
+              {post.hashtags.map((hashtag, index) => (
                 <span key={index}>{hashtag}</span>
               ))}
             </div>
             <Interaction
               count={{
-                view: post.postInfo.viewCount,
-                like: post.postInfo.recommedCount,
-                comment: post.postInfo.commentCount,
+                viewCount: post.countInfo.viewCount,
+                likeCount: post.countInfo.likeCount,
+                commentCount: post.countInfo.commentCount,
               }}
             />
           </PostFooter>

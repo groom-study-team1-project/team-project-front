@@ -6,12 +6,12 @@ const ProfileWrapper = styled.div`
   align-items: center;
 `;
 
-export const ProfileImage = styled.div`
-  width: ${({ size }) => size || "30px"};
-  height: ${({ size }) => size || "30px"};
+export const ProfileImage = styled.img`
+  width: ${({ $size }) => $size || "30px"};
+  height: ${({ $size }) => $size || "30px"};
   border: 1px solid;
   border-radius: 50%;
-  margin-right: ${({ isBig }) => (isBig ? "20px" : "10px")};
+  margin-right: ${({ $isBig }) => ($isBig ? "20px" : "10px")};
 `;
 
 const ProfileInfo = styled.div`
@@ -20,24 +20,24 @@ const ProfileInfo = styled.div`
 `;
 
 const ProfileInfoName = styled.p`
-  font-size: ${({ isBig }) => (isBig ? "48px" : "14px")};
+  font-size: ${({ $isBig }) => ($isBig ? "48px" : "14px")};
 `;
 
 const ProfileInfoJob = styled.p`
-  font-size: ${({ isBig }) => (isBig ? "24px" : "13px")};
+  font-size: ${({ $isBig }) => ($isBig ? "24px" : "13px")};
 `;
 
-const ProfileBox = ({ name, job, size, isBig, onClick }) => (
+const ProfileBox = ({ name, job, size, isBig, onClick, imgUrl }) => (
   <ProfileWrapper onClick={onClick}>
-    <ProfileImage size={size} isBig={isBig} />
+    <ProfileImage $size={size} $isBig={isBig} src={imgUrl} />
     <ProfileInfo>
-      <ProfileInfoName isBig={isBig}>{name}</ProfileInfoName>
-      <ProfileInfoJob isBig={isBig}>{job}</ProfileInfoJob>
+      <ProfileInfoName $isBig={isBig}>{name}</ProfileInfoName>
+      <ProfileInfoJob $isBig={isBig}>{job}</ProfileInfoJob>
     </ProfileInfo>
   </ProfileWrapper>
 );
 
-export const PostProfileBox = ({ name, job, memberId }) => {
+export const PostProfileBox = ({ name, job, memberId, imgUrl }) => {
   const navigate = useNavigate();
 
   const handleProfileClick = (e) => {
@@ -51,6 +51,7 @@ export const PostProfileBox = ({ name, job, memberId }) => {
       job={job}
       size="30px"
       isBig={false}
+      imgUrl={imgUrl}
       onClick={handleProfileClick}
     />
   );

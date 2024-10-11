@@ -7,17 +7,20 @@ export const Wrap = styled.div`
 `;
 
 export const CategotyWrap = styled.div`
-  width: 260px;
-  height: 54px;
-  align-items: center;
+  width: 264px;
+  height: 48px;
   display: flex;
-  justify-content: center;
+  margin-bottom: 48px;
   border-radius: 20px;
-  margin-bottom: 130px;
-  margin-right: -100px;
+  justify-content: center;
+  align-items: center;
+  font-size: 30px;
+  font-weight: bold;
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.1);
   background: linear-gradient(
     to bottom,
-    rgba(255, 255, 255, 1),
+    rgba(255, 255, 255, 0.9),
     rgba(255, 255, 255, 0.5)
   );
 `;
@@ -33,6 +36,7 @@ export const CategoryTitle = styled.div`
 export const Postheader = styled.div`
   display: flex;
   justify-content: space-between;
+  margin-bottom: 20px;
 `;
 
 export const PostheaderRignt = styled.div`

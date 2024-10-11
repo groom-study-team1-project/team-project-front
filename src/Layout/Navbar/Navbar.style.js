@@ -23,6 +23,7 @@ export const Logo = styled.div`
   align-items: center;
   width: 136px;
   height: 38px;
+  cursor: pointer;
 `;
 
 export const NonLogo = styled(Logo)`

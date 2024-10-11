@@ -5,19 +5,15 @@ import {
   BoardTitle,
   ContentWrapper,
   SearchSortWrapper,
-  LastPostEnd,
 } from "../Board.style";
 import Search from "../../../components/Common/Search/Search";
 import SortOptionButton from "../../../components/Common/SortOptionButton/SortOptionButton";
-import { useInView } from "react-intersection-observer";
 import { ProjectPostCardWrapper } from "./ProjectBoard.style";
 import { fetchPostItems } from "../../../services/api/postApi";
 
 function ProjectBoard() {
   const [postItems, setPostItems] = useState([]);
   const [lastPostId, setLastPostId] = useState(10);
-  const [hasMore, setHasMore] = useState(false);
-  const [isFetching, setIsFetching] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -50,11 +46,6 @@ function ProjectBoard() {
           />
         ))}
       </ProjectPostCardWrapper>
-      {/* {hasMore ? (
-        <LastPostEnd>Loading more...</LastPostEnd>
-      ) : (
-        <LastPostEnd>더 이상의 포스트가 없습니다.</LastPostEnd>
-      )} */}
     </ContentWrapper>
   );
 }
