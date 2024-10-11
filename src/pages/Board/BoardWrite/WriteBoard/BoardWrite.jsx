@@ -2,25 +2,22 @@ import React, { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { CKEditor } from "@ckeditor/ckeditor5-react";
 import { DecoupledEditor } from "ckeditor5";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPhotoFilm, faXmark } from "@fortawesome/free-solid-svg-icons";
+
 import { editorConfig } from "./editor";
-import Navbar from "../../../../Layout/Navbar/Navbar";
-import axios from "axios";
+
 import GlobalStyle from "../../../../assets/styles/GlobalStyle";
 import {
   createPost,
   fetchPostChange,
   uploadAdapter,
-} from "../../../../services/postApi";
+} from "../../../../services/api/postApi";
 import backBtn from "../../../../assets/images/back-removebg-preview.png";
+import Navbar from "../../../../Layout/Navbar/Navbar";
+import ImageUploadCard from "../../../../components/Card/imgUploadCard/imageUploadCard";
 import {
   BackImg,
   Categoryselect,
   Hashtag,
-  ImgAdd,
-  ImgPreview,
-  ImgWrap,
   SubmitBtn,
   SubmitBtnWrap,
   Titleinput,
@@ -28,8 +25,6 @@ import {
   Wrap,
   Write,
   WriteWrap,
-  ImgPreviewDelete,
-  ImgPreviewWrap,
   Toolbar,
 } from "./BoardWrite.style";
 
@@ -40,12 +35,10 @@ const WriteBoard = ({ postData, postId }) => {
   const navigate = useNavigate();
   const [form, setValue] = useState({ title: "", content: "", hashtags: [] });
   const [selectedCategory, setSelectedCategory] = useState(0);
-  const [imgUrls, setImgUrls] = useState([]); // 이미지 URL을 저장하는 상태
-  const fileInput = useRef(null);
-  const [draggedItem, setDraggedItem] = useState(null); // 드래그된 항목 상태
+  const [imgUrls, setImgUrls] = useState([]);
 
-  const toolbarContainerRef = useRef(null); // 툴바 컨테이너 참조
-  const editorContainerRef = useRef(null); // 에디터 컨테이너 참조
+  const toolbarContainerRef = useRef(null);
+  const editorContainerRef = useRef(null);
 
   useEffect(() => {
     if (postData) {
@@ -64,36 +57,6 @@ const WriteBoard = ({ postData, postId }) => {
     setSelectedCategory(e.target.value);
   };
 
-  const handleClickImgadd = () => {
-    fileInput.current.click();
-  };
-
-  const handleFileChange = async (e) => {
-    const API_URL = "http://localhost:7000/api/post/image";
-
-    const files = Array.from(e.target.files);
-    const newImgUrls = [];
-
-    for (let file of files) {
-      const formData = new FormData();
-      formData.append("upload", file);
-
-      try {
-        const response = await axios.post(API_URL, formData, {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        });
-
-        newImgUrls.push(response.data.url);
-      } catch (error) {
-        console.error("이미지 업로드 실패:", error);
-      }
-    }
-
-    setImgUrls((prevImgUrls) => [...prevImgUrls, ...newImgUrls]);
-  };
-
   const handlehashtag = (e) => {
     const hashtagStr = e.target.value;
     const hashtagArray = hashtagStr
@@ -104,34 +67,6 @@ const WriteBoard = ({ postData, postId }) => {
 
   const onChange = (e) => {
     setValue({ ...form, title: e.target.value });
-  };
-
-  const deletePreviewImg = (indexToDelete) => {
-    setImgUrls((prevImgUrls) =>
-      prevImgUrls.filter((_, index) => index !== indexToDelete)
-    );
-  };
-
-  const handleDragStart = (index) => {
-    setDraggedItem(index);
-  };
-
-  const handleDragOver = (e) => {
-    e.preventDefault();
-  };
-
-  const handleDrop = (index) => {
-    const draggedOverItem = index;
-
-    if (draggedItem === draggedOverItem) return;
-
-    const items = [...imgUrls];
-    const item = items[draggedItem];
-
-    items.splice(draggedItem, 1);
-    items.splice(draggedOverItem, 0, item);
-
-    setImgUrls(items);
   };
 
   const onSubmit = async (e) => {
@@ -168,6 +103,7 @@ const WriteBoard = ({ postData, postId }) => {
       <GlobalStyle />
       <Navbar isMainPage={true} />
       <Wrap>
+        <Navbar isMainPage={true} />
         <WriteWrap>
           <BackImg src={backBtn} alt="뒤로 가기" onClick={() => navigate(-1)} />
           <Write>글 쓰기</Write>
@@ -195,37 +131,7 @@ const WriteBoard = ({ postData, postId }) => {
             </span>
           </TitleWrap>
           {Number(selectedCategory) === 2 && (
-            <ImgWrap>
-              {imgUrls.map((url, index) => (
-                <ImgPreviewWrap
-                  key={index}
-                  draggable
-                  onDragStart={() => handleDragStart(index)}
-                  onDragOver={handleDragOver}
-                  onDrop={() => handleDrop(index)}
-                >
-                  <ImgPreview src={url} alt={`Preview ${index}`} />
-                  <ImgPreviewDelete onClick={() => deletePreviewImg(index)}>
-                    <FontAwesomeIcon icon={faXmark} />
-                  </ImgPreviewDelete>
-                </ImgPreviewWrap>
-              ))}
-
-              <ImgAdd onClick={handleClickImgadd}>
-                <FontAwesomeIcon
-                  icon={faPhotoFilm}
-                  style={{ fontSize: "24px" }}
-                />
-                <input
-                  type="file"
-                  style={{ display: "none" }}
-                  accept="image/*"
-                  ref={fileInput}
-                  multiple
-                  onChange={handleFileChange}
-                />
-              </ImgAdd>
-            </ImgWrap>
+            <ImageUploadCard imgUrls={imgUrls} setImgUrls={setImgUrls} />
           )}
           <div ref={editorContainerRef}>
             <Toolbar

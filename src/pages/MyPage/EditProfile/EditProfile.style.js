@@ -17,11 +17,13 @@ export const PageNameWrap = styled.div`
 `;
 
 export const PageName = styled.h1`
-  font-size: 30px;
-  background: linear-gradient(to right bottom, #0b0611, #42469c);
+  background: linear-gradient(to bottom right, #0b0611, #47286f, #42469c);
   background-clip: text;
   -webkit-background-clip: text;
-  color: transparent;
+  -webkit-text-fill-color: transparent;
+  font-size: 30px;
+  font-weight: 800;
+  text-align: center;
 `;
 
 export const Container = styled.div`

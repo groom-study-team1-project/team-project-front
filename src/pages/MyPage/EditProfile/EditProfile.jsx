@@ -107,7 +107,7 @@ const EditProfile = () => {
         </PageNameWrap>
         <Container>
           <ProfileImageWraps>
-            <ProfileImage size={"150px"} src={form.imageUrl} />
+            <ProfileImage $size={"150px"} src={form.imageUrl} />
             <ProfileImageWrapsRight>
               <ProfileActions>
                 <SubmitBtn

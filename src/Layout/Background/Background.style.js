@@ -11,5 +11,5 @@ export const Container = styled.div`
     z-index: -1;
   }
 
-  color: ${({ isDarkMode }) => (isDarkMode ? "#FFFFFF" : "#000000")};
+  color: ${({ $isDarkMode }) => ($isDarkMode ? "#FFFFFF" : "#000000")};
 `;

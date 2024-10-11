@@ -32,9 +32,9 @@ function Sidebar() {
       .catch((err) => console.log(err.message));
   }, []);
 
-  const handleMenuClick = (id) => {
-    dispatch(selectMenuItem(id));
-    handleNavigation(id);
+  const handleMenuClick = (item) => {
+    dispatch(selectMenuItem(item));
+    handleNavigation(item.id);
   };
 
   const handleNavigation = (id) => {
@@ -74,7 +74,7 @@ function Sidebar() {
               <SidebarLi
                 key={item.id}
                 onClick={() => {
-                  handleMenuClick(item.id);
+                  handleMenuClick(item);
                 }}
               >
                 <SidebarLink

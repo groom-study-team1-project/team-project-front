@@ -126,7 +126,14 @@ function Navbar({ isMainPage = false }) {
       <NavbarInner>
         {isMainPage ? (
           <Logo>
-            <img src={logoImg} alt="로고 이미지" style={{ width: "128px" }} />
+            <img
+              src={logoImg}
+              alt="로고 이미지"
+              style={{ width: "128px" }}
+              onClick={() => {
+                navigate("/");
+              }}
+            />
           </Logo>
         ) : (
           <NonLogo />
