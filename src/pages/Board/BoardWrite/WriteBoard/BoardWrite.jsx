@@ -103,7 +103,6 @@ const WriteBoard = ({ postData, postId }) => {
       <GlobalStyle />
       <Navbar isMainPage={true} />
       <Wrap>
-        <Navbar isMainPage={true} />
         <WriteWrap>
           <BackImg src={backBtn} alt="뒤로 가기" onClick={() => navigate(-1)} />
           <Write>글 쓰기</Write>
