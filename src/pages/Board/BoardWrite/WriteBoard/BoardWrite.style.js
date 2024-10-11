@@ -8,6 +8,7 @@ export const Wrap = styled.div`
     min-height: 400px;
     margin-bottom: 20px;
     background: white;
+    border-radius: 5px;
   }
 
   .ck.ck-toolbar {
@@ -53,6 +54,9 @@ export const Categoryselect = styled.select`
 
 export const Hashtag = styled.input`
   border: none;
+  background: none;
+  border: 1px solid black;
+  border-radius: 5px;
 `;
 
 export const SubmitBtnWrap = styled.div`

@@ -4,6 +4,7 @@ import { CKEditor } from "@ckeditor/ckeditor5-react";
 import { DecoupledEditor } from "ckeditor5";
 
 import { editorConfig } from "./editor";
+
 import GlobalStyle from "../../../../assets/styles/GlobalStyle";
 import {
   createPost,
@@ -100,6 +101,7 @@ const WriteBoard = ({ postData, postId }) => {
   return (
     <>
       <GlobalStyle />
+      <Navbar isMainPage={true} />
       <Wrap>
         <Navbar isMainPage={true} />
         <WriteWrap>

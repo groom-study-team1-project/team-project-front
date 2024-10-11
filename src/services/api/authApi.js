@@ -165,14 +165,14 @@ export const fetchProfileInfo = async (memberId) => {
 export const editProfile = async (body) => {
   try {
     // const response = await axiosInstance.put("/api/members/me", body);
-
+    console.log(body);
     const response = {
       status: {
         code: 1007,
         message: "프로필 수정이 성공하였습니다.",
       },
       result: {
-        nickname: "구름이",
+        nickName: "구름이",
         role: "NORMAL",
         imageUrl: "http://localhost:4566/image",
         aboutMe: "안녕하세요.",
@@ -187,7 +187,7 @@ export const editProfile = async (body) => {
     };
 
     if (response.status.code === 1007) {
-      return response.status.message;
+      return response;
     } else {
       throw new Error(response.message || "프로필 수정 실패");
     }
@@ -328,6 +328,29 @@ export const sendEmailVerificationCodePassword = async (body) => {
       return { success: false, message: response.status.message };
     } else {
       throw new Error(response.message || "유효하지 않은 인증코드");
+    }
+  } catch (error) {
+    console.error("유효하지 않은 인증코드", error);
+    throw error;
+  }
+};
+
+export const changePW = async (body) => {
+  try {
+    // const response = await axiosInstance.patch(
+    //   "/api/members/me/password",
+    //   body
+    // );
+    const response = {
+      status: {
+        code: 1008,
+        message: "비밀번호 변경이 성공하였습니다.",
+      },
+    };
+    if (response.status.code === 1008) {
+      return { success: true, msg: response.status.message };
+    } else {
+      return { success: false, msg: response.status.message };
     }
   } catch (error) {
     console.error("유효하지 않은 인증코드", error);
