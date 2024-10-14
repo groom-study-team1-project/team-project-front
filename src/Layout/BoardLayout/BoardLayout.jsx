@@ -12,8 +12,11 @@ import Navbar from "../Navbar/Navbar";
 import PopularHashCard from "../../components/Card/PopularCard/PopularHashCard/PopularHashCard";
 import PopularPostCard from "../../components/Card/PopularCard/PopularPostCard/PopularPostCard";
 import { Outlet } from "react-router-dom";
-
+import { useMediaQuery } from "react-responsive";
 function BoardLayout({ isMyPage = false }) {
+  const isMobile = useMediaQuery({
+    query: "(max-width:1024px)",
+  });
   return (
     <Container>
       <SidebarWrapper>
@@ -21,7 +24,7 @@ function BoardLayout({ isMyPage = false }) {
       </SidebarWrapper>
 
       <MainContentWrapper>
-        <Navbar />
+        <Navbar isMobail={isMobile} />
         <Content>
           <Outlet />
           {!isMyPage ? (

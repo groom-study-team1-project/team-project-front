@@ -79,7 +79,9 @@ function Sidebar() {
               >
                 <SidebarLink
                   className="link"
-                  isSelected={selectedItem !== null && selectedItem === item.id}
+                  $isSelected={
+                    selectedItem !== null && selectedItem === item.id
+                  }
                 >
                   <SidebarTitle>{item.item}</SidebarTitle>
                   {iconMapping[item.item]}

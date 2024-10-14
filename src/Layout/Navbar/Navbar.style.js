@@ -15,6 +15,7 @@ export const NavbarInner = styled.div`
   width: 100%;
   max-width: 1440px;
   height: 80px;
+  margin: 0px 10px;
 `;
 
 export const Logo = styled.div`
@@ -77,4 +78,52 @@ export const BorderButton = styled.div`
   margin: 5px;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
   border: 2px solid rgba(255, 255, 255, 0.1);
+`;
+
+export const MobailDropDown = styled.div`
+  border-radius: 50%;
+  background: white;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  cursor: pointer;
+  transition: all 0.35s ease;
+  right: ${({ $dropDown }) => ($dropDown ? `10%` : `0`)};
+  span {
+    display: block;
+    position: absolute;
+    width: 70%;
+    height: 3px;
+    border-radius: 30px;
+    background-color: black;
+    transition: all 0.35s ease;
+    &:nth-child(1) {
+      ${({ $dropDown }) =>
+        $dropDown
+          ? `top: 50%;
+             transform: translateY(-50%) rotate(45deg);
+             z-index: 2;`
+          : `top: 30%; `}
+    }
+
+    &:nth-child(2) {
+      ${({ $dropDown }) =>
+        $dropDown
+          ? `opacity: 0;`
+          : `top: 50%;
+             transform: translateY(-50%);`}
+    }
+
+    &:nth-child(3) {
+      ${({ $dropDown }) =>
+        $dropDown
+          ? `bottom: 50%;
+             transform: translateY(50%) rotate(-45deg);
+             z-index: 2;`
+          : `bottom: 30%;`}
+    }
+  }
 `;
