@@ -9,6 +9,7 @@ import {
   Button,
   ButtonBox,
   BorderButton,
+  MobailDropDown,
 } from "./Navbar.style";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
@@ -31,11 +32,12 @@ import lightmodeIcon from "../../assets/images/lightmode.png";
 
 Modal.setAppElement("#root");
 
-function Navbar({ isMainPage = false }) {
+function Navbar({ isMainPage = false, isMobail }) {
   const [menuItems, setMenuItems] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalType, setModalType] = useState("login");
   const [menuOpen, setMenuOpen] = useState(false);
+  const [dropDown, setDropDown] = useState(false);
   const isLoggedIn = useSelector((state) => state.user.isLoggedIn);
 
   const payload = useJwt(
@@ -121,10 +123,14 @@ function Navbar({ isMainPage = false }) {
     console.log("배경모드 변경");
   };
 
+  const handleDropdown = () => {
+    console.log(dropDown);
+    setDropDown(!dropDown);
+  };
   return (
     <NavbarWrapper>
       <NavbarInner>
-        {isMainPage ? (
+        {isMainPage || isMobail ? (
           <Logo>
             <img
               src={logoImg}
@@ -149,7 +155,19 @@ function Navbar({ isMainPage = false }) {
           </Menu>
         )}
 
-        {isLoggedIn ? (
+        {isMobail ? (
+          <MobailDropDown
+            onClick={() => {
+              console.log(dropDown);
+              setDropDown(!dropDown);
+            }}
+            $dropDown={dropDown}
+          >
+            <span></span>
+            <span></span>
+            <span></span>
+          </MobailDropDown>
+        ) : isLoggedIn ? (
           <ButtonBox>
             <Button onClick={handleDarkMode}>
               <img

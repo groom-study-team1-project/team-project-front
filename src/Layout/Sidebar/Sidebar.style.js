@@ -55,7 +55,7 @@ export const SidebarLink = styled.div`
   text-decoration: none;
   color: black;
   border-left: 2px solid
-    ${(props) => (props.isSelected ? "#2670e9" : "transparent")};
+    ${($isSelected) => ($isSelected ? "#2670e9" : "transparent")};
 
   &::after {
     content: "";

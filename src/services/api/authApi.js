@@ -18,9 +18,9 @@ export const login = async (body) => {
     };
 
     if (response.status.code === 1001) {
-      return response.result;
+      return response;
     } else {
-      throw new Error(response.status.message || "로그인 실패");
+      return response;
     }
   } catch (error) {
     console.log("로그인 실패:", error);
@@ -44,7 +44,7 @@ export const signUp = async (body) => {
       throw new Error(response.status.message || "회원가입 실패");
     }
   } catch (error) {
-    console.log("로그인 실패:", error);
+    console.log("회원가입 실패:", error);
     throw error;
   }
 };
