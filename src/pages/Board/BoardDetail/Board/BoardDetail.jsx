@@ -92,20 +92,18 @@ function BoardDetail() {
                 email={post.memberInfo.email}
                 imgUrl={post.memberInfo.imageUrl}
               />
-              <div>
-                <PostheaderRignt>
-                  <div>{post.createdAt}</div>
-                  <Modify onClick={() => setModalVisible(true)}>
-                    <FontAwesomeIcon icon={faEllipsisVertical} />
-                  </Modify>
-                  <ModalComponent
-                    isVisible={modalVisible}
-                    onClose={handleModalClose}
-                    onEdit={handleEdit}
-                    onDelete={handleDelete}
-                  />
-                </PostheaderRignt>
-              </div>
+              <PostheaderRignt>
+                <div>{post.createdAt}</div>
+                <Modify onClick={() => setModalVisible(true)}>
+                  <FontAwesomeIcon icon={faEllipsisVertical} />
+                </Modify>
+                <ModalComponent
+                  isVisible={modalVisible}
+                  onClose={handleModalClose}
+                  onEdit={handleEdit}
+                  onDelete={handleDelete}
+                />
+              </PostheaderRignt>
             </Postheader>
             {category === "프로젝트 게시판" ? (
               <div>

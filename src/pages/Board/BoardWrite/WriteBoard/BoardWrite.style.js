@@ -1,7 +1,7 @@
 import styled from "styled-components";
 
 export const Wrap = styled.div`
-  width: 1028px;
+  width: 60%;
   margin: auto auto;
   font-size: 16px;
   .ck.ck-editor__editable:not(.ck-editor__nested-editable) {
@@ -35,21 +35,35 @@ export const Write = styled.div`
 export const TitleWrap = styled.div`
   display: flex;
   justify-content: space-between;
+  @media (max-width: 768px) {
+    flex-direction: column;
+    margin-bottom: 10px;
+    justify-content: none;
+  }
 `;
 
 export const Titleinput = styled.input`
-  width: 300%;
+  width: 400px;
   height: 43px;
   border-radius: 10px;
   border: none;
   margin-bottom: 32px;
+  @media (max-width: 1028px) {
+    width: 250px;
+  }
+  @media (max-width: 768px) {
+    width: 100%;
+  }
 `;
 
 export const Categoryselect = styled.select`
-  width: 196px;
   height: 43px;
   border: none;
   border-radius: 10px;
+  @media (max-width: 768px) {
+    width: 100%;
+    margin-top: -20px;
+  }
 `;
 
 export const Hashtag = styled.input`
