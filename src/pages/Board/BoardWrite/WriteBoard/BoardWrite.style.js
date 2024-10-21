@@ -28,9 +28,16 @@ export const BackImg = styled.img`
   width: 40px;
   height: 40px;
   cursor: pointer;
+  @media (max-width: 768px) {
+    width: 20px;
+    height: 20px;
+  }
 `;
 export const Write = styled.div`
   font-size: 40px;
+  @media (max-width: 768px) {
+    font-size: 20px;
+  }
 `;
 export const TitleWrap = styled.div`
   display: flex;
@@ -64,6 +71,8 @@ export const Categoryselect = styled.select`
     width: 100%;
     margin-top: -20px;
   }
+  background: white;
+  color: black;
 `;
 
 export const Hashtag = styled.input`
@@ -71,10 +80,17 @@ export const Hashtag = styled.input`
   background: none;
   border: 1px solid black;
   border-radius: 5px;
+  @media (max-width: 768px) {
+    width: 50%;
+    margin-bottom: 20px;
+  }
 `;
 
 export const SubmitBtnWrap = styled.div`
   float: right;
+  @media (max-width: 768px) {
+    width: 100%;
+  }
 `;
 
 export const SubmitBtn = styled.button`
@@ -85,6 +101,12 @@ export const SubmitBtn = styled.button`
   background: ${(props) => props.$bgColor};
   cursor: pointer;
   border: 1px solid ${(props) => props.$borderColor};
+  color: black;
+  @media (max-width: 768px) {
+    width: 50%;
+    margin: 0px;
+    display: inline;
+  }
 `;
 
 export const Toolbar = styled.div`
