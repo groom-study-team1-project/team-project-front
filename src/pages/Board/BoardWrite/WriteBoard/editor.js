@@ -54,9 +54,6 @@ import {
 export const editorConfig = {
   toolbar: {
     items: [
-      "undo",
-      "redo",
-      "|",
       "heading",
       "|",
       "fontSize",
@@ -77,6 +74,9 @@ export const editorConfig = {
       "|",
       "outdent",
       "indent",
+      "|",
+      "undo",
+      "redo",
     ],
     shouldNotGroupWhenFull: false,
   },

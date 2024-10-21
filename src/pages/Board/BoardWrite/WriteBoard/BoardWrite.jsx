@@ -27,11 +27,15 @@ import {
   WriteWrap,
   Toolbar,
 } from "./BoardWrite.style";
+import { useMediaQuery } from "react-responsive";
 
 import "./App.css";
 import "ckeditor5/ckeditor5.css";
 
 const WriteBoard = ({ postData, postId }) => {
+  const isMobile = useMediaQuery({
+    query: "(max-width:1024px)",
+  });
   const navigate = useNavigate();
   const [form, setValue] = useState({ title: "", content: "", hashtags: [] });
   const [selectedCategory, setSelectedCategory] = useState(0);
@@ -101,7 +105,8 @@ const WriteBoard = ({ postData, postId }) => {
   return (
     <>
       <GlobalStyle />
-      <Navbar isMainPage={true} />
+      {isMobile ? <Navbar isMobail={isMobile} /> : <Navbar isMainPage={true} />}
+
       <Wrap>
         <WriteWrap>
           <BackImg src={backBtn} alt="뒤로 가기" onClick={() => navigate(-1)} />
