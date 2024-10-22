@@ -29,7 +29,8 @@ export const SidebarLi = styled.li`
   padding: 15px 0;
   cursor: pointer;
   border-bottom: 1px solid rgba(0, 0, 0, 0.1);
-
+  list-style: none;
+    
   &:last-child {
     border-bottom: none;
   }
