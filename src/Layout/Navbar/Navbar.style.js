@@ -83,6 +83,7 @@ export const BorderButton = styled.div`
 export const MobailDropDown = styled.div`
   border-radius: 50%;
   background: white;
+  opacity: 0.5;
   width: 40px;
   height: 40px;
   display: flex;
@@ -91,7 +92,8 @@ export const MobailDropDown = styled.div`
   position: relative;
   cursor: pointer;
   transition: all 0.35s ease;
-  right: ${({ $dropDown }) => ($dropDown ? `10%` : `0`)};
+  z-index:1000;
+  right: ${({ $dropDown }) => ($dropDown ? `58%` : `0`)};    
   span {
     display: block;
     position: absolute;
