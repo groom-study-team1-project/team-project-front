@@ -29,15 +29,18 @@ import useJwt from "../../hooks/useJwt";
 import ProfileMenu from "./ProfileMenu";
 import { changeTheme } from "../../store/theme/themeSlice";
 import lightmodeIcon from "../../assets/images/lightmode.png";
+import NavBarSideModal from "../../components/Modal/NavBarSideModal/NavBarSideModal";
 
 Modal.setAppElement("#root");
 
-function Navbar({ isMainPage = false, isMobail }) {
+function Navbar({ isMainPage = false}) {
   const [menuItems, setMenuItems] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalType, setModalType] = useState("login");
   const [menuOpen, setMenuOpen] = useState(false);
   const [dropDown, setDropDown] = useState(false);
+  const [navModalOpen, setNavModalOpen] = useState(false);
+  const [isMobileState, setIsMobileState] = useState(false);
   const isLoggedIn = useSelector((state) => state.user.isLoggedIn);
 
   const payload = useJwt(
@@ -56,6 +59,16 @@ function Navbar({ isMainPage = false, isMobail }) {
     fetchCategoryItems()
       .then((menuItems) => setMenuItems(menuItems))
       .catch((err) => console.log(err.message));
+  }, []);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobileState(window.innerWidth <= 768);
+    };
+    window.addEventListener("resize", handleResize);
+    return() => {
+      window.removeEventListener("resize", handleResize);
+    }
   }, []);
 
   const handleMenuClick = (id) => {
@@ -77,6 +90,11 @@ function Navbar({ isMainPage = false, isMobail }) {
       navigate("/");
     }
   };
+
+  const handleNavClick = (to) => {
+    dispatch(logout());
+    handleNavigation(to);
+  }
 
   const handleNavigation = (to, e) => {
     if (to === "my-profile") {
@@ -124,13 +142,14 @@ function Navbar({ isMainPage = false, isMobail }) {
   };
 
   const handleDropdown = () => {
-    console.log(dropDown);
     setDropDown(!dropDown);
+    setNavModalOpen(!navModalOpen);
   };
+
   return (
     <NavbarWrapper>
       <NavbarInner>
-        {isMainPage || isMobail ? (
+        {isMainPage ? (
           <Logo>
             <img
               src={logoImg}
@@ -145,7 +164,7 @@ function Navbar({ isMainPage = false, isMobail }) {
           <NonLogo />
         )}
 
-        {isMainPage && (
+        {isMainPage && !isMobileState && (
           <Menu>
             {menuItems.map((item) => (
               <MenuItem key={item.id} onClick={() => handleMenuClick(item.id)}>
@@ -155,18 +174,35 @@ function Navbar({ isMainPage = false, isMobail }) {
           </Menu>
         )}
 
-        {isMobail ? (
-          <MobailDropDown
-            onClick={() => {
-              console.log(dropDown);
-              setDropDown(!dropDown);
-            }}
-            $dropDown={dropDown}
-          >
-            <span></span>
-            <span></span>
-            <span></span>
-          </MobailDropDown>
+        {isMobileState ? (
+          <>
+            <MobailDropDown
+              onClick={handleDropdown}
+              $dropDown={dropDown}
+            >
+              <span></span>
+              <span></span>
+              <span></span>
+            </MobailDropDown>
+            {isMobileState && (
+              <NavBarSideModal
+                  isOpen={navModalOpen}
+                  setIsOpen={setNavModalOpen}
+                  menuItems={menuItems}
+                  handleDropDown = {handleDropdown}
+                  handleMenuClick={handleMenuClick}
+                  handleDarkMode={handleDarkMode}
+                  isDarkMode={isDarkMode}
+                  islogin={isLoggedIn}
+                  userInfo={userInfo}
+                  navigateNewPost={() => handleNavClick("write")}
+                  navigateMyPage={() => handleNavigation("my-profile")}
+                  onLogout={handleLogout}
+                  onLogin={() => openModal("login")}
+                  onSignUp={() => openModal("signup")}
+              />
+            )}
+          </>
         ) : isLoggedIn ? (
           <ButtonBox>
             <Button onClick={handleDarkMode}>
