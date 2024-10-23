@@ -14,10 +14,11 @@ export const NavBarSideContainer = styled.div`
 `
 
 export const SectionTitle = styled.h3`
-        padding-top: 80px;
-        padding-bottom: 10px;
-        font-size: 32px;
-        border-bottom: 2px solid #7d7d7d;
+    padding-top: 80px;
+    padding-bottom: 10px;
+    font-size: 32px;
+    border-bottom: 2px solid #7d7d7d;
+    color: ${({ isDarkMode }) => (isDarkMode ? 'black' : 'black')};
 `
 
 export const NavMenu = styled.div`

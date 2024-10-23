@@ -21,8 +21,8 @@ import {
 } from "../../../Layout/Sidebar/Sidebar.style";
 import {useSelector} from "react-redux";
 
-const NavBarSideModal = ({isOpen, menuItems, handleMenuClick,
-                          handleDarkMode,isDarkMode,islogin, userInfo,
+const NavBarSideModal = ({isOpen, setIsOpen, menuItems, handleMenuClick,
+                          handleDarkMode, handleDropDown, isDarkMode, isLogin, userInfo,
                           navigateNewPost, navigateMyPage, onLogout, onLogin, onSignUp}) => {
 
     const selectedItem = useSelector((state) => state.menu?.selectedItem || null);
@@ -39,7 +39,7 @@ const NavBarSideModal = ({isOpen, menuItems, handleMenuClick,
                             alt="다크모드"
                         />
                     </Button>
-                    {islogin ? (
+                    {isLogin ? (
                         <>
                             <BorderButton onClick={navigateNewPost}>
                                 새 글 작성
@@ -51,17 +51,25 @@ const NavBarSideModal = ({isOpen, menuItems, handleMenuClick,
                         </>
                     ):(
                         <>
-                            <BorderButton onClick={onLogin}>
+                            <BorderButton onClick={() => {
+                                onLogin();
+                                setIsOpen(false);
+                                handleDropDown();
+                            }}>
                                 Login
                             </BorderButton>
-                            <BorderButton onClick={onSignUp}>
+                            <BorderButton onClick={() => {
+                                onSignUp();
+                                setIsOpen(false);
+                                handleDropDown();
+                            }}>
                                 Sign up
                             </BorderButton>
                         </>
                     )}
                 </NavModalButtonBox>
             )}
-            <SectionTitle>게시판</SectionTitle>
+            <SectionTitle isDarkMode={isDarkMode}>게시판</SectionTitle>
             <NavMenu>
                 {menuItems.map((item) => (
                     <SidebarLi
@@ -80,7 +88,7 @@ const NavBarSideModal = ({isOpen, menuItems, handleMenuClick,
                     </SidebarLi>
                 ))}
             </NavMenu>
-            <SectionTitle>마이 페이지</SectionTitle>
+            <SectionTitle isDarkMode={isDarkMode}>마이 페이지</SectionTitle>
             <NavMenu>
                 <SidebarLi onClick={navigateMyPage}>
                     <SidebarLink className="link">

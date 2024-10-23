@@ -187,7 +187,9 @@ function Navbar({ isMainPage = false}) {
             {isMobileState && (
               <NavBarSideModal
                   isOpen={navModalOpen}
+                  setIsOpen={setNavModalOpen}
                   menuItems={menuItems}
+                  handleDropDown = {handleDropdown}
                   handleMenuClick={handleMenuClick}
                   handleDarkMode={handleDarkMode}
                   isDarkMode={isDarkMode}

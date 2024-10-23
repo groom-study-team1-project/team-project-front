@@ -78,6 +78,7 @@ export const BorderButton = styled.div`
   margin: 5px;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
   border: 2px solid rgba(255, 255, 255, 0.1);
+  color: black;    
 `;
 
 export const MobailDropDown = styled.div`
