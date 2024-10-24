@@ -7,8 +7,8 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faAngleRight, faAngleLeft } from "@fortawesome/free-solid-svg-icons";
 
 const CustomSlider = styled(Slider)`
-  margin: 25px;
-
+  margin-left: 5%;
+  margin-right: 5%;
   .slick-slide img {
     display: block;
     padding: 15px;
@@ -16,6 +16,10 @@ const CustomSlider = styled(Slider)`
     width: 296px;
     height: 176px;
     object-fit: cover;
+    @media (max-width: 768px) {
+      width: 123px;
+      height: 50px;
+    }
   }
 
   .slick-arrow {
@@ -62,7 +66,7 @@ function Slide({ imgUrls }) {
         </CustomArrow>
       </SlickButtonFix>
     ),
-    dots: true,
+    dots: false,
     speed: 500,
     infinite: true,
     slidesToShow: 1,

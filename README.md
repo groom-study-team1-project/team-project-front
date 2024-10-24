@@ -49,6 +49,31 @@ git commit -am 'feat (#189) : 게시판 작성 기능 구현'
 
 ## 디렉토리 구조
 
+![image](https://github.com/user-attachments/assets/155cc581-25e1-4ce6-8820-97abead5a808)
+
+
+**1. static**
+
+    - assets
+    
+    - hooks
+    
+    - routes
+    
+**2. public**
+
+    - component: 일문님
+    
+    - Layout: 범조님
+    
+    - store: 용수님, 형진
+    
+    - services: 용수님, 형진
+    
+**3. page**
+
+    - 기존 담당자가 맡아서 반응형 진행
+ 
 ## 네이밍 컨벤션
 
 1. **디렉토리 및 폴더명**

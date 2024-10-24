@@ -15,7 +15,7 @@ export const createPost = async (body, token) => {
 };
 
 export const uploadAdapter = (loader) => {
-  const API_URL = "http://localhost:7000/api/post/image";
+  const API_URL = "http://203.232.193.208:7000/api/post/image";
 
   return {
     upload: () => {
