@@ -1,4 +1,8 @@
 import axiosInstance from "../axiosConfig";
+import { MdCreditCard } from "react-icons/md";
+import { IoDocumentsOutline } from "react-icons/io5";
+import { GrUserSettings } from "react-icons/gr";
+import { BsPatchQuestion } from "react-icons/bs";
 
 export const createPost = async (body, token) => {
   try {
@@ -11,7 +15,7 @@ export const createPost = async (body, token) => {
 };
 
 export const uploadAdapter = (loader) => {
-  const API_URL = "http://localhost:7000/api/post/image";
+  const API_URL = "http://203.232.193.208:7000/api/post/image";
 
   return {
     upload: () => {
@@ -363,10 +367,10 @@ export async function fetchCategoryItems() {
       code: 1200,
       message: "카테고리 목록 조회에 성공하였습니다.",
       result: [
-        { id: 1, item: "자유 게시판" },
-        { id: 2, item: "질문 게시판" },
-        { id: 3, item: "프로젝트 게시판" },
-        { id: 4, item: "공지사항" },
+        { id: 1, item: "자유 게시판", icon: <MdCreditCard />},
+        { id: 2, item: "질문 게시판", icon: <IoDocumentsOutline />},
+        { id: 3, item: "프로젝트 게시판", icon: <GrUserSettings />},
+        { id: 4, item: "공지사항", icon: <BsPatchQuestion />},
       ],
     };
 

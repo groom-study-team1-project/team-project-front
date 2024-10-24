@@ -2,7 +2,6 @@ import styled from "styled-components";
 
 export const Wrap = styled.div`
   width: 50vw;
-  margin: auto auto;
   font-size: 16px;
 `;
 
@@ -23,6 +22,9 @@ export const CategotyWrap = styled.div`
     rgba(255, 255, 255, 0.9),
     rgba(255, 255, 255, 0.5)
   );
+  @media (max-width: 768px) {
+    width: 100px;
+  }
 `;
 
 export const CategoryTitle = styled.div`
@@ -31,20 +33,27 @@ export const CategoryTitle = styled.div`
   background-clip: text;
   -webkit-background-clip: text;
   color: transparent;
+  @media (max-width: 768px) {
+    font-size: 13px;
+  }
 `;
 
 export const Postheader = styled.div`
   display: flex;
   justify-content: space-between;
   margin-bottom: 20px;
+  @media (max-width: 768px) {
+    font-size: 9px;
+  }
 `;
 
 export const PostheaderRignt = styled.div`
   display: flex;
   flex-wrap: nowrap;
   position: relative;
-  width: 100px;
-  margin-right: 10px;
+  @media (max-width: 768px) {
+    font-size: 9px;
+  }
 `;
 
 export const Modify = styled.div`
@@ -54,8 +63,11 @@ export const Modify = styled.div`
 `;
 
 export const PostWrap = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
   border: 1px solid black;
-  padding: 10px;
+  padding: 20px;
   border-radius: 10px;
   width: 100%;
   background-color: white;
@@ -74,6 +86,10 @@ export const PostFooter = styled.div`
   align-items: center;
   justify-content: space-between;
   margin-top: 16px;
+  width: 103%;
+  @media (max-width: 765px) {
+    width: 115%;
+  }
 `;
 
 export const IconWrap = styled.div`

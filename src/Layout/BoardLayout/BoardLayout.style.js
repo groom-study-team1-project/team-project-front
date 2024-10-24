@@ -11,9 +11,6 @@ export const SidebarWrapper = styled.div`
   flex-shrink: 0;
   position: sticky;
   top: 0;
-  @media (max-width: 1024px) {
-    display: none;
-  }
 `;
 
 export const MainContentWrapper = styled.div`
@@ -37,10 +34,6 @@ export const RightSidebarWrapper = styled.div`
   display: flex;
   flex-direction: column;
   margin-top: 176px;
-
-  @media (max-width: 768px) {
-    display: none;
-  }
 `;
 
 export const PopularCardWrapper = styled.div`
