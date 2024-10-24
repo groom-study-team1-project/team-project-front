@@ -48,7 +48,47 @@ git commit -am 'feat (#189) : 게시판 작성 기능 구현'
 # 디렉토리 구조 및 네이밍 컨벤션
 
 ## 디렉토리 구조
+   📦src
+ ┣ 📂assets
+ ┃ ┣ 📂fonts
+ ┃ ┣ 📂images
+ ┃ ┗ 📂styles
+ ┣ 📂components
+ ┃ ┣ 📂Card
+ ┃ ┣ 📂Common
+ ┃ ┗ 📂Modal
+ ┣ 📂hooks
+ ┣ 📂Layout
+ ┃ ┣ 📂Background
+ ┃ ┣ 📂BoardLayout
+ ┃ ┣ 📂Navbar
+ ┃ ┗ 📂Sidebar
+ ┣ 📂pages
+ ┃ ┣ 📂Board
+ ┃ ┣ 📂MainPage
+ ┃ ┗ 📂MyPage
+ ┣ 📂routes
+ ┣ 📂services
+ ┣ 📂store
+ ┣ 📂utils
+ ┣ 📜App.js
+ ┣ 📜App.test.js
+ ┣ 📜index.js
+ ┣ 📜reportWebVitals.js
+ ┗ 📜setupTests.js
 
+**1. static**
+    1. assets
+    2. hooks
+    3. routes
+**2. public**
+    1. component: 일문님
+    2. Layout: 범조님
+    3. store: 용수님, 형진
+    4. services: 용수님, 형진
+**3. page**
+    1. 기존 담당자가 맡아서 반응형 진행
+ 
 ## 네이밍 컨벤션
 
 1. **디렉토리 및 폴더명**
