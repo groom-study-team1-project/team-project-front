@@ -193,7 +193,6 @@ function Navbar({ isMainPage = false}) {
                   handleMenuClick={handleMenuClick}
                   handleDarkMode={handleDarkMode}
                   isDarkMode={isDarkMode}
-                  islogin={isLoggedIn}
                   userInfo={userInfo}
                   navigateNewPost={() => handleNavClick("write")}
                   navigateMyPage={() => handleNavigation("my-profile")}
