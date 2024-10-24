@@ -22,9 +22,10 @@ import {
 import {useSelector} from "react-redux";
 
 const NavBarSideModal = ({isOpen, setIsOpen, menuItems, handleMenuClick,
-                          handleDarkMode, handleDropDown, isDarkMode, userInfo,
-                          navigateNewPost, navigateMyPage, onLogout, onLogin, onSignUp}) => {
+                          handleDarkMode, handleDropDown, userInfo, navigateNewPost,
+                          navigateMyPage, onLogout, onLogin, onSignUp}) => {
 
+    const isDarkMode = useSelector((state) => state.theme.isDarkMode);
     const selectedItem = useSelector((state) => state.menu?.selectedItem || null);
     const isLoggedIn = useSelector((state) => state.user.isLoggedIn);
 

@@ -40,8 +40,6 @@ function Navbar({ isMainPage = false}) {
   const [menuOpen, setMenuOpen] = useState(false);
   const [dropDown, setDropDown] = useState(false);
   const [navModalOpen, setNavModalOpen] = useState(false);
-  /* 모바일 시 상태 변수  -> redux 이용 시 삭제 예정 */
-  const [isMobileState, setIsMobileState] = useState(false);
   const isLoggedIn = useSelector((state) => state.user.isLoggedIn);
   const { isMobile, isTablet, isDesktop } = useSelector(
       (state) => state.screenSize
@@ -178,16 +176,15 @@ function Navbar({ isMainPage = false}) {
               <span></span>
               <span></span>
             </MobailDropDown>
-            {isMobileState && (
+            {isMobile && (
               <NavBarSideModal
                   isOpen={navModalOpen}
                   setIsOpen={setNavModalOpen}
                   menuItems={menuItems}
                   handleDropDown = {handleDropdown}
+                  userInfo={userInfo}
                   handleMenuClick={handleMenuClick}
                   handleDarkMode={handleDarkMode}
-                  isDarkMode={isDarkMode}
-                  userInfo={userInfo}
                   navigateNewPost={() => handleNavClick("write")}
                   navigateMyPage={() => handleNavigation("my-profile")}
                   onLogout={handleLogout}
