@@ -90,7 +90,7 @@ export const MobailDropDown = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  position: relative;
+  position: fixed;
   cursor: pointer;
   transition: all 0.35s ease;
   z-index:1000;
