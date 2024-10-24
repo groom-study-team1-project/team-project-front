@@ -11,23 +11,24 @@ import Sidebar from "../Sidebar/Sidebar";
 import Navbar from "../Navbar/Navbar";
 import PopularHashCard from "../../components/Card/PopularCard/PopularHashCard/PopularHashCard";
 import PopularPostCard from "../../components/Card/PopularCard/PopularPostCard/PopularPostCard";
+import { useSelector } from "react-redux";
 import { Outlet } from "react-router-dom";
-import { useMediaQuery } from "react-responsive";
 function BoardLayout({ isMyPage = false }) {
-  const isMobile = useMediaQuery({
-    query: "(max-width:1024px)",
-  });
+  const { isMobile, isTablet, isDesktop } = useSelector(
+    (state) => state.screenSize
+  );
   return (
     <Container>
-      <SidebarWrapper>
-        <Sidebar />
-      </SidebarWrapper>
-
+      {isDesktop && (
+        <SidebarWrapper>
+          <Sidebar />
+        </SidebarWrapper>
+      )}
       <MainContentWrapper>
-        <Navbar isMobail={isMobile} />
+        <Navbar isMobail={isTablet} />
         <Content>
           <Outlet />
-          {!isMyPage ? (
+          {!isMyPage && !isMobile ? (
             <RightSidebarWrapper>
               <PopularCardWrapper>
                 <PopularPostCard />
