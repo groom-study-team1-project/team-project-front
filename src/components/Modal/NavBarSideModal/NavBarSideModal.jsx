@@ -77,6 +77,7 @@ const NavBarSideModal = ({isOpen, setIsOpen, menuItems, handleMenuClick,
                         key={item.id}
                         onClick={() => {
                             handleMenuClick(item.id);
+                            handleDropDown();
                         }}
                     >
                         <SidebarLink
@@ -93,13 +94,21 @@ const NavBarSideModal = ({isOpen, setIsOpen, menuItems, handleMenuClick,
                 <>
                     <SectionTitle isDarkMode={isDarkMode}>마이 페이지</SectionTitle>
                     <NavMenu>
-                        <SidebarLi onClick={navigateMyPage}>
+                        <SidebarLi onClick={() => {
+                            navigateMyPage();
+                            handleDropDown();
+                        }}>
                             <SidebarLink className="link">
                                 <span>마이 페이지</span>
                                 <span><RiLogoutBoxRLine /></span>
                             </SidebarLink>
                         </SidebarLi>
-                        <SidebarLi onClick={onLogout}>
+                        <SidebarLi
+                            onClick={() => {
+                                onLogout();
+                                handleDropDown();
+                            }}
+                        >
                             <SidebarLink className="link">
                                 <span>로그 아웃</span>
                                 <span><LuUserSquare2 /></span>

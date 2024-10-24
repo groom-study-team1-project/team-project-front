@@ -40,8 +40,12 @@ function Navbar({ isMainPage = false}) {
   const [menuOpen, setMenuOpen] = useState(false);
   const [dropDown, setDropDown] = useState(false);
   const [navModalOpen, setNavModalOpen] = useState(false);
+  /* 모바일 시 상태 변수  -> redux 이용 시 삭제 예정 */
   const [isMobileState, setIsMobileState] = useState(false);
   const isLoggedIn = useSelector((state) => state.user.isLoggedIn);
+  const { isMobile, isTablet, isDesktop } = useSelector(
+      (state) => state.screenSize
+  );
 
   const payload = useJwt(
     useSelector((state) => state.user.userInfo.accessToken)
@@ -59,16 +63,6 @@ function Navbar({ isMainPage = false}) {
     fetchCategoryItems()
       .then((menuItems) => setMenuItems(menuItems))
       .catch((err) => console.log(err.message));
-  }, []);
-
-  useEffect(() => {
-    const handleResize = () => {
-      setIsMobileState(window.innerWidth <= 768);
-    };
-    window.addEventListener("resize", handleResize);
-    return() => {
-      window.removeEventListener("resize", handleResize);
-    }
   }, []);
 
   const handleMenuClick = (id) => {
@@ -149,7 +143,7 @@ function Navbar({ isMainPage = false}) {
   return (
     <NavbarWrapper>
       <NavbarInner>
-        {isMainPage && isMobileState ?(
+        {isMainPage && isMobile ?(
           <Logo>
             <img
               src={logoImg}
@@ -164,7 +158,7 @@ function Navbar({ isMainPage = false}) {
           <NonLogo />
         )}
 
-        {isMainPage && !isMobileState && (
+        {isMainPage && !isMobile && (
           <Menu>
             {menuItems.map((item) => (
               <MenuItem key={item.id} onClick={() => handleMenuClick(item.id)}>
@@ -174,7 +168,7 @@ function Navbar({ isMainPage = false}) {
           </Menu>
         )}
 
-        {isMobileState ? (
+        {isMobile ? (
           <>
             <MobailDropDown
               onClick={handleDropdown}

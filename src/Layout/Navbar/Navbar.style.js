@@ -82,6 +82,7 @@ export const BorderButton = styled.div`
 `;
 
 export const MobailDropDown = styled.div`
+  margin-right: 10px;
   border-radius: 50%;
   background: white;
   opacity: 0.5;
