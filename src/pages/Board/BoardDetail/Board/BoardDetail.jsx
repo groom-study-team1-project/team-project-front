@@ -12,6 +12,7 @@ import { Interaction } from "../../../../components/Common/Interactions";
 import { deletepost } from "../../../../services/api/postApi";
 import Comments from "../Comment/Comment";
 import ModalComponent from "../../../../components/Modal/EditDeleteModal/EditDeleteModal"; // 모달 컴포넌트 추가
+import { useSelector } from "react-redux";
 import {
   CategotyWrap,
   Wrap,
@@ -28,6 +29,7 @@ import { ContentWrapper } from "../../Board.style";
 function BoardDetail() {
   const [post, setPost] = useState(null);
   const [modalVisible, setModalVisible] = useState(false); // 모달 상태 관리
+  const { isMobile } = useSelector((state) => state.screenSize);
   const navigate = useNavigate();
   const { postId } = useParams();
   const [category, setCategory] = useState("");
@@ -80,19 +82,19 @@ function BoardDetail() {
     <>
       <ContentWrapper>
         <Wrap>
-          <CategotyWrap>
-            <CategoryTitle>{category}</CategoryTitle>
+          <CategotyWrap isMobile={isMobile}>
+            <CategoryTitle isMobile={isMobile}>{category}</CategoryTitle>
           </CategotyWrap>
 
           <PostWrap>
-            <Postheader>
+            <Postheader isMobile={isMobile}>
               <PostProfileBox
                 name={post.memberInfo.nickname}
                 job={post.memberInfo.memberJob}
                 email={post.memberInfo.email}
                 imgUrl={post.memberInfo.imageUrl}
               />
-              <PostheaderRignt>
+              <PostheaderRignt isMobile={isMobile}>
                 <div>{post.createdAt}</div>
                 <Modify onClick={() => setModalVisible(true)}>
                   <FontAwesomeIcon icon={faEllipsisVertical} />
@@ -119,7 +121,7 @@ function BoardDetail() {
               disabled={true}
             />
           </PostWrap>
-          <PostFooter>
+          <PostFooter isMobile={isMobile}>
             <div>
               {post.hashtags.map((hashtag, index) => (
                 <span key={index}>{hashtag}</span>

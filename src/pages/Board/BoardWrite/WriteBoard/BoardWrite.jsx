@@ -2,10 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { CKEditor } from "@ckeditor/ckeditor5-react";
 import { DecoupledEditor } from "ckeditor5";
-
 import { editorConfig } from "./editor";
-
-import GlobalStyle from "../../../../assets/styles/GlobalStyle";
 import {
   createPost,
   fetchPostChange,
@@ -27,15 +24,12 @@ import {
   WriteWrap,
   Toolbar,
 } from "./BoardWrite.style";
-import { useMediaQuery } from "react-responsive";
-
+import { useSelector } from "react-redux";
 import "./App.css";
 import "ckeditor5/ckeditor5.css";
 
 const WriteBoard = ({ postData, postId }) => {
-  const isMobile = useMediaQuery({
-    query: "(max-width:1024px)",
-  });
+  const { isMobile } = useSelector((state) => state.screenSize);
   const navigate = useNavigate();
   const [form, setValue] = useState({ title: "", content: "", hashtags: [] });
   const [selectedCategory, setSelectedCategory] = useState(0);
@@ -104,28 +98,34 @@ const WriteBoard = ({ postData, postId }) => {
 
   return (
     <>
-      <GlobalStyle />
       {isMobile ? <Navbar isMobail={isMobile} /> : <Navbar isMainPage={true} />}
 
       <Wrap>
         <WriteWrap>
-          <BackImg src={backBtn} alt="뒤로 가기" onClick={() => navigate(-1)} />
-          <Write>글 쓰기</Write>
+          <BackImg
+            isMobail={isMobile}
+            src={backBtn}
+            alt="뒤로 가기"
+            onClick={() => navigate(-1)}
+          />
+          <Write isMobail={isMobile}>글 쓰기</Write>
         </WriteWrap>
         <form onSubmit={onSubmit}>
-          <TitleWrap>
+          <TitleWrap isMobail={isMobile}>
             <span>
               <Titleinput
                 type="text"
                 placeholder="제목을 입력하세요"
                 onChange={onChange}
                 value={form.title}
+                isMobail={isMobile}
               />
             </span>
             <span>
               <Categoryselect
                 onChange={handleCategoryChange}
                 value={selectedCategory}
+                isMobail={isMobile}
               >
                 <option value={0}>자유 게시판</option>
                 <option value={1}>질문 게시판</option>
@@ -174,12 +174,22 @@ const WriteBoard = ({ postData, postId }) => {
             name="hashtag"
             onChange={handlehashtag}
             value={form.hashtags.join(" ")}
+            isMobail={isMobile}
           />
-          <SubmitBtnWrap>
-            <SubmitBtn $borderColor="#929292" $bgColor="transparent">
+          <SubmitBtnWrap isMobail={isMobile}>
+            <SubmitBtn
+              $borderColor="#929292"
+              $bgColor="transparent"
+              isMobail={isMobile}
+            >
               임시저장
             </SubmitBtn>
-            <SubmitBtn $borderColor="#B1CDE9" $bgColor="#B1CDE9" type="submit">
+            <SubmitBtn
+              $borderColor="#B1CDE9"
+              $bgColor="#B1CDE9"
+              type="submit"
+              isMobail={isMobile}
+            >
               확인
             </SubmitBtn>
           </SubmitBtnWrap>

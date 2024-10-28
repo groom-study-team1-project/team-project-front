@@ -5,7 +5,7 @@ import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faAngleRight, faAngleLeft } from "@fortawesome/free-solid-svg-icons";
-
+import { useSelector } from "react-redux";
 const CustomSlider = styled(Slider)`
   margin-left: 5%;
   margin-right: 5%;
@@ -13,13 +13,14 @@ const CustomSlider = styled(Slider)`
     display: block;
     padding: 15px;
     pointer-events: none;
-    width: 296px;
-    height: 176px;
+
     object-fit: cover;
-    @media (max-width: 768px) {
-      width: 123px;
-      height: 50px;
-    }
+    ${(props) =>
+      props.isMobile
+        ? `width: 125px;
+      height: 50px;`
+        : `width: 296px;
+    height: 176px;`}
   }
 
   .slick-arrow {
@@ -48,6 +49,7 @@ const CustomArrow = styled.div`
 `;
 
 function Slide({ imgUrls }) {
+  const { isMobile } = useSelector((state) => state.screenSize);
   const SlickButtonFix = ({ currentSlide, slideCount, children, ...props }) => (
     <span {...props}>{children}</span>
   );
@@ -77,7 +79,7 @@ function Slide({ imgUrls }) {
 
   return (
     <div>
-      <CustomSlider {...settings}>
+      <CustomSlider {...settings} isMobile={isMobile}>
         {imgUrls.map((imgurl) => (
           <div key={imgurl.id}>
             <img src={imgurl.url} alt={`Slide ${imgurl.id}`} />
