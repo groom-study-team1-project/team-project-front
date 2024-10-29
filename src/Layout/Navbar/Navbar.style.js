@@ -95,7 +95,7 @@ export const MobailDropDown = styled.div`
   cursor: pointer;
   transition: all 0.35s ease;
   z-index:1000;
-  right: ${({ $dropDown }) => ($dropDown ? `58%` : `0`)};    
+  right: ${({ $dropDown }) => ($dropDown ? `58%` : `0`)};
   span {
     display: block;
     position: absolute;

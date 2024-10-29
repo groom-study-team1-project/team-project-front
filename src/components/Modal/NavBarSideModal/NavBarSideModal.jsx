@@ -117,7 +117,7 @@ const NavBarSideModal = ({isOpen, setIsOpen, menuItems, handleMenuClick,
                         </SidebarLi>
                     </NavMenu>
                 </>
-            )};
+            )}
         </NavBarSideContainer>
     )
 }

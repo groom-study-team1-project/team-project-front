@@ -11,6 +11,13 @@ export const NavBarSideContainer = styled.div`
     padding: 20px;
     font-weight: 500;
     opacity: 0.85;
+    overflow-y: scroll;
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+    scroll-behavior: smooth;
+    &::-webkit-scrollbar {
+        display: none;
+    }
 `
 
 export const SectionTitle = styled.h3`
