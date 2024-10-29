@@ -141,7 +141,7 @@ function Navbar({ isMainPage = false}) {
   return (
     <NavbarWrapper>
       <NavbarInner>
-        {isMainPage && isMobile ?(
+        {isMainPage || isMobile ? (
           <Logo>
             <img
               src={logoImg}
