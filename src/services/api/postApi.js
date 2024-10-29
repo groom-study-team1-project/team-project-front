@@ -48,208 +48,70 @@ export async function fetchPostItems(categoryId, lastPostId) {
     //   },
     // });
 
+    const posts = [];
+    const totalPostCount = 20; // Total posts example
+
+    const categories = [
+      { id: 1, name: "자유 게시판" },
+      { id: 2, name: "질문 게시판" },
+      { id: 3, name: "프로젝트 게시판" },
+      { id: 4, name: "공지사항" },
+    ];
+
+    const selectedCategory = categories.find((category) => category.id === categoryId);
+
+    if (!selectedCategory) {
+      throw new Error("Invalid category ID");
+    }
+
+    const startPostId = lastPostId ? lastPostId + 1 : 1;
+    const endPostId = Math.min(startPostId + 9, totalPostCount);
+
+    for (let postId = startPostId; postId <= endPostId; postId++) {
+      const post = {
+        postId: postId,
+        title: `${postId} 번째 ${selectedCategory.name} 게시글`,
+        content: `${postId} 번째 ${selectedCategory.name} 게시글의 내용입니다.`,
+        imgUrl: [
+          {
+            id: 1,
+            url: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS6KVvlziiJYFxZZIq3Xc_dVuzIbSLrgvtHPA&s",
+          },
+          {
+            id: 2,
+            url: "https://www.shutterstock.com/ko/blog/wp-content/uploads/sites/17/2021/01/2021-graphic-design-banner.jpg",
+          },
+          {
+            id: 3,
+            url: "https://img1.daumcdn.net/thumb/R1280x0/?fname=http://t1.daumcdn.net/brunch/service/user/6H5a/image/VbC1Pts-64VW9-xWDV3qad5cLok.jpg",
+          },
+        ],
+        categoryId: selectedCategory.id,
+        memberInfo: {
+          memberId: postId,
+          nickname: `User${postId}`,
+          imageUrl: `http://example.com/image${postId}.jpg`,
+        },
+        countInfo: {
+          viewCount: postId * 10,
+          likeCount: 0,
+          commentCount: 0,
+        },
+        hashtags: [],
+        createdAt: "2024-09-29 13:30:36",
+      };
+      posts.push(post);
+      console.log(postId);
+    }
+
     const response = {
       status: {
         code: 1203,
         message: "게시글 조회에 성공하였습니다.",
       },
       result: {
-        totalPostCount: 100,
-        posts: [
-          {
-            postId: 8,
-            title: "여덟 번째 게시글",
-            content: "여덟 번째 게시글의 내용입니다.",
-            imgUrl: [
-              {
-                id: 1,
-                url: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS6KVvlziiJYFxZZIq3Xc_dVuzIbSLrgvtHPA&s",
-              },
-              {
-                id: 2,
-                url: "https://www.shutterstock.com/ko/blog/wp-content/uploads/sites/17/2021/01/2021-graphic-design-banner.jpg",
-              },
-              {
-                id: 3,
-                url: "https://img1.daumcdn.net/thumb/R1280x0/?fname=http://t1.daumcdn.net/brunch/service/user/6H5a/image/VbC1Pts-64VW9-xWDV3qad5cLok.jpg",
-              },
-            ],
-            categoryId: 1,
-            memberInfo: {
-              memberId: 8,
-              nickname: "User8",
-              imageUrl: "http://example.com/image8.jpg",
-            },
-            countInfo: {
-              viewCount: 80,
-              likeCount: 0,
-              commentCount: 0,
-            },
-            hashtags: [],
-            createdAt: "2024-09-29 13:30:36",
-          },
-          {
-            postId: 4,
-            title: "네 번째 게시글",
-            content: "네 번째 게시글의 내용입니다.",
-            imgUrl: [
-              {
-                id: 1,
-                url: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS6KVvlziiJYFxZZIq3Xc_dVuzIbSLrgvtHPA&s",
-              },
-              {
-                id: 2,
-                url: "https://www.shutterstock.com/ko/blog/wp-content/uploads/sites/17/2021/01/2021-graphic-design-banner.jpg",
-              },
-              {
-                id: 3,
-                url: "https://img1.daumcdn.net/thumb/R1280x0/?fname=http://t1.daumcdn.net/brunch/service/user/6H5a/image/VbC1Pts-64VW9-xWDV3qad5cLok.jpg",
-              },
-            ],
-            categoryId: 1,
-            memberInfo: {
-              memberId: 4,
-              nickname: "User4",
-              imageUrl: "http://example.com/image4.jpg",
-            },
-            countInfo: {
-              viewCount: 40,
-              likeCount: 0,
-              commentCount: 0,
-            },
-            hashtags: [],
-            createdAt: "2024-09-29 13:30:36",
-          },
-          {
-            postId: 1,
-            title: "첫 번째 게시글",
-            content: "첫 번째 게시글의 내용입니다.",
-            imgUrl: [
-              {
-                id: 1,
-                url: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS6KVvlziiJYFxZZIq3Xc_dVuzIbSLrgvtHPA&s",
-              },
-              {
-                id: 2,
-                url: "https://www.shutterstock.com/ko/blog/wp-content/uploads/sites/17/2021/01/2021-graphic-design-banner.jpg",
-              },
-              {
-                id: 3,
-                url: "https://img1.daumcdn.net/thumb/R1280x0/?fname=http://t1.daumcdn.net/brunch/service/user/6H5a/image/VbC1Pts-64VW9-xWDV3qad5cLok.jpg",
-              },
-            ],
-            categoryId: 1,
-            memberInfo: {
-              memberId: 1,
-              nickname: "User1",
-              imageUrl: "http://example.com/image1.jpg",
-            },
-            countInfo: {
-              viewCount: 10,
-              likeCount: 0,
-              commentCount: 0,
-            },
-            hashtags: [],
-            createdAt: "2024-09-29 13:30:36",
-          },
-          {
-            postId: 9,
-            title: "아홉 번째 게시글",
-            content: "아홉 번째 게시글의 내용입니다.",
-            imgUrl: [
-              {
-                id: 1,
-                url: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS6KVvlziiJYFxZZIq3Xc_dVuzIbSLrgvtHPA&s",
-              },
-              {
-                id: 2,
-                url: "https://www.shutterstock.com/ko/blog/wp-content/uploads/sites/17/2021/01/2021-graphic-design-banner.jpg",
-              },
-              {
-                id: 3,
-                url: "https://img1.daumcdn.net/thumb/R1280x0/?fname=http://t1.daumcdn.net/brunch/service/user/6H5a/image/VbC1Pts-64VW9-xWDV3qad5cLok.jpg",
-              },
-            ],
-            categoryId: 2,
-            memberInfo: {
-              memberId: 9,
-              nickname: "User9",
-              imageUrl: "http://example.com/image9.jpg",
-            },
-            countInfo: {
-              viewCount: 90,
-              likeCount: 0,
-              commentCount: 0,
-            },
-            hashtags: [],
-            createdAt: "2024-09-29 13:30:36",
-          },
-          {
-            postId: 5,
-            title: "다섯 번째 게시글",
-            content: "다섯 번째 게시글의 내용입니다.",
-            imgUrl: [
-              {
-                id: 1,
-                url: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS6KVvlziiJYFxZZIq3Xc_dVuzIbSLrgvtHPA&s",
-              },
-              {
-                id: 2,
-                url: "https://www.shutterstock.com/ko/blog/wp-content/uploads/sites/17/2021/01/2021-graphic-design-banner.jpg",
-              },
-              {
-                id: 3,
-                url: "https://img1.daumcdn.net/thumb/R1280x0/?fname=http://t1.daumcdn.net/brunch/service/user/6H5a/image/VbC1Pts-64VW9-xWDV3qad5cLok.jpg",
-              },
-            ],
-            categoryId: 2,
-            memberInfo: {
-              memberId: 5,
-              nickname: "User5",
-              imageUrl: "http://example.com/image5.jpg",
-            },
-            countInfo: {
-              viewCount: 50,
-              likeCount: 0,
-              commentCount: 0,
-            },
-            hashtags: [],
-            createdAt: "2024-09-29 13:30:36",
-          },
-          {
-            postId: 2,
-            title: "두 번째 게시글",
-            content: "두 번째 게시글의 내용입니다.",
-
-            imgUrl: [
-              {
-                id: 1,
-                url: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS6KVvlziiJYFxZZIq3Xc_dVuzIbSLrgvtHPA&s",
-              },
-              {
-                id: 2,
-                url: "https://www.shutterstock.com/ko/blog/wp-content/uploads/sites/17/2021/01/2021-graphic-design-banner.jpg",
-              },
-              {
-                id: 3,
-                url: "https://img1.daumcdn.net/thumb/R1280x0/?fname=http://t1.daumcdn.net/brunch/service/user/6H5a/image/VbC1Pts-64VW9-xWDV3qad5cLok.jpg",
-              },
-            ],
-            categoryId: 2,
-            memberInfo: {
-              memberId: 2,
-              nickname: "User2",
-              imageUrl: "http://example.com/image2.jpg",
-            },
-            countInfo: {
-              viewCount: 20,
-              likeCount: 0,
-              commentCount: 0,
-            },
-            hashtags: [],
-            createdAt: "2024-09-29 13:30:36",
-          },
-        ],
+        totalPostCount: totalPostCount,
+        posts: posts,
       },
     };
 
