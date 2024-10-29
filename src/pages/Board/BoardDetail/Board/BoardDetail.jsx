@@ -113,7 +113,7 @@ function BoardDetail() {
               </div>
             ) : null}
 
-            <Title>{post.title}</Title>
+            <Title $isMobile={isMobile}>{post.title}</Title>
             <CKEditor
               editor={DecoupledEditor}
               config={editorConfig}

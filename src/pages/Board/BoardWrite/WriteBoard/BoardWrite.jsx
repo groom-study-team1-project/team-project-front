@@ -31,7 +31,12 @@ import "ckeditor5/ckeditor5.css";
 const WriteBoard = ({ postData, postId }) => {
   const { isMobile } = useSelector((state) => state.screenSize);
   const navigate = useNavigate();
-  const [form, setValue] = useState({ title: "", content: "", hashtags: [] });
+  const [form, setValue] = useState({
+    title: "",
+    content: "",
+    hashtags: [],
+    fileUrl: "",
+  });
   const [selectedCategory, setSelectedCategory] = useState(0);
   const [imgUrls, setImgUrls] = useState([]);
 
@@ -70,14 +75,14 @@ const WriteBoard = ({ postData, postId }) => {
   const onSubmit = async (e) => {
     e.preventDefault();
     try {
-      const { title, content, hashtags } = form;
+      const { title, content, hashtags, fileUrl } = form;
       let body = {};
       const category_id = Number(selectedCategory);
 
       if (category_id === 2) {
-        body = { title, content, hashtags, category_id, imgUrls };
+        body = { title, content, hashtags, category_id, imgUrls, fileUrl };
       } else {
-        body = { title, content, hashtags, category_id };
+        body = { title, content, hashtags, category_id, fileUrl };
       }
 
       if (postData) {
@@ -87,6 +92,51 @@ const WriteBoard = ({ postData, postId }) => {
       }
     } catch (error) {
       console.error(error);
+    }
+  };
+
+  const getDataFromCKEditor = (event, editor) => {
+    const data = editor.getData();
+    console.log(data);
+
+    if (data && data.match("<img src=")) {
+      const whereImg_start = data.indexOf("<img src=");
+      console.log(whereImg_start);
+      let whereImg_end = "";
+      let ext_name_find = "";
+      let result_Img_Url = "";
+
+      const ext_name = ["jpeg", "png", "jpg", "gif"];
+
+      for (let i = 0; i < ext_name.length; i++) {
+        if (data.match(ext_name[i])) {
+          console.log(data.indexOf(`${ext_name[i]}`));
+          ext_name_find = ext_name[i];
+          whereImg_end = data.indexOf(`${ext_name[i]}`);
+        }
+      }
+      console.log(ext_name_find);
+      console.log(whereImg_end);
+
+      if (ext_name_find === "jpeg") {
+        result_Img_Url = data.substring(whereImg_start + 10, whereImg_end + 4);
+      } else {
+        result_Img_Url = data.substring(whereImg_start + 10, whereImg_end + 3);
+      }
+
+      console.log(result_Img_Url, "result_Img_Url");
+      setValue({
+        ...form,
+        fileUrl: result_Img_Url,
+        content: data,
+      });
+    } else {
+      setValue({
+        ...form,
+        fileUrl:
+          "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS6KVvlziiJYFxZZIq3Xc_dVuzIbSLrgvtHPA&s",
+        content: data,
+      });
     }
   };
 
@@ -166,10 +216,7 @@ const WriteBoard = ({ postData, postId }) => {
                 editorContainerRef.current.appendChild(editableElement);
               }
             }}
-            onBlur={(event, editor) => {
-              const data = editor.getData();
-              setValue({ ...form, content: data });
-            }}
+            onBlur={getDataFromCKEditor}
           />
 
           <Hashtag

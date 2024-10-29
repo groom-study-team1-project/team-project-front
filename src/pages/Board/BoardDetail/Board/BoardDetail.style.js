@@ -69,7 +69,7 @@ export const PostWrap = styled.div`
 `;
 
 export const Title = styled.div`
-  font-size: 24px;
+  font-size: ${(props) => (props.$isMobile ? `20px` : `24px`)};
 `;
 
 export const PostFooter = styled.div`
