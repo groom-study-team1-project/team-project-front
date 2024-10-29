@@ -52,10 +52,10 @@ export const PostCardWrapper = styled.div`
   overflow-y: auto;
 `;
 
-export const LastPostEnd = styled.div`
-  padding: 20px;
-  text-align: center;
-  background-color: white;
-  //margin-top: 48px;
-  font-weight: bold;
+export const EndMessage = styled.div`
+    text-align: center;
+    padding: 20px;
+    width: 100%;
 `;
+
+
