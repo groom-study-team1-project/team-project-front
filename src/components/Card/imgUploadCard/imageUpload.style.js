@@ -5,11 +5,9 @@ export const ImgWrap = styled.div`
   background: rgba(239, 239, 239, 0.5);
   margin-bottom: 16px;
   padding: 10px;
-  overflow-x: auto;
+  overflow-x: scroll;
   white-space: nowrap;
-  @media (max-width: 768px) {
-    height: 80px;
-  }
+  height: ${(props) => props.$isMobile && "height: 80px;"};
 `;
 
 export const ImgPreviewWrap = styled.div`
@@ -17,12 +15,13 @@ export const ImgPreviewWrap = styled.div`
 `;
 export const ImgPreview = styled.img`
   object-fit: cover;
-  width: 288px;
-  height: 160px;
-  @media (max-width: 768px) {
-    width: 144px;
-    height: 80px;
-  }
+
+  ${(props) =>
+    props.$isMobile
+      ? `width: 144px;
+    height: 80px;`
+      : `width: 288px;
+  height: 160px;`}
   margin-right: 10px;
   flex-shrink: 0;
   cursor: pointer;
@@ -64,8 +63,10 @@ export const ImgAdd = styled.div`
   border: 1px solid #ccc;
   position: relative;
   flex-shrink: 0;
-  @media (max-width: 768px) {
-    width: 144px;
-    height: 80px;
-  }
+  ${(props) =>
+    props.$isMobile
+      ? `width: 144px;
+    height: 80px;`
+      : `width: 288px;
+  height: 160px;`}
 `;

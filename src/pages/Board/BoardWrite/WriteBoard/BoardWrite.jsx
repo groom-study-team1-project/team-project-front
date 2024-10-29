@@ -2,10 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { CKEditor } from "@ckeditor/ckeditor5-react";
 import { DecoupledEditor } from "ckeditor5";
-
 import { editorConfig } from "./editor";
-
-import GlobalStyle from "../../../../assets/styles/GlobalStyle";
 import {
   createPost,
   fetchPostChange,
@@ -27,17 +24,19 @@ import {
   WriteWrap,
   Toolbar,
 } from "./BoardWrite.style";
-import { useMediaQuery } from "react-responsive";
-
+import { useSelector } from "react-redux";
 import "./App.css";
 import "ckeditor5/ckeditor5.css";
 
 const WriteBoard = ({ postData, postId }) => {
-  const isMobile = useMediaQuery({
-    query: "(max-width:1024px)",
-  });
+  const { isMobile } = useSelector((state) => state.screenSize);
   const navigate = useNavigate();
-  const [form, setValue] = useState({ title: "", content: "", hashtags: [] });
+  const [form, setValue] = useState({
+    title: "",
+    content: "",
+    hashtags: [],
+    fileUrl: "",
+  });
   const [selectedCategory, setSelectedCategory] = useState(0);
   const [imgUrls, setImgUrls] = useState([]);
 
@@ -76,14 +75,14 @@ const WriteBoard = ({ postData, postId }) => {
   const onSubmit = async (e) => {
     e.preventDefault();
     try {
-      const { title, content, hashtags } = form;
+      const { title, content, hashtags, fileUrl } = form;
       let body = {};
       const category_id = Number(selectedCategory);
 
       if (category_id === 2) {
-        body = { title, content, hashtags, category_id, imgUrls };
+        body = { title, content, hashtags, category_id, imgUrls, fileUrl };
       } else {
-        body = { title, content, hashtags, category_id };
+        body = { title, content, hashtags, category_id, fileUrl };
       }
 
       if (postData) {
@@ -96,6 +95,51 @@ const WriteBoard = ({ postData, postId }) => {
     }
   };
 
+  const getDataFromCKEditor = (event, editor) => {
+    const data = editor.getData();
+    console.log(data);
+
+    if (data && data.match("<img src=")) {
+      const whereImg_start = data.indexOf("<img src=");
+      console.log(whereImg_start);
+      let whereImg_end = "";
+      let ext_name_find = "";
+      let result_Img_Url = "";
+
+      const ext_name = ["jpeg", "png", "jpg", "gif"];
+
+      for (let i = 0; i < ext_name.length; i++) {
+        if (data.match(ext_name[i])) {
+          console.log(data.indexOf(`${ext_name[i]}`));
+          ext_name_find = ext_name[i];
+          whereImg_end = data.indexOf(`${ext_name[i]}`);
+        }
+      }
+      console.log(ext_name_find);
+      console.log(whereImg_end);
+
+      if (ext_name_find === "jpeg") {
+        result_Img_Url = data.substring(whereImg_start + 10, whereImg_end + 4);
+      } else {
+        result_Img_Url = data.substring(whereImg_start + 10, whereImg_end + 3);
+      }
+
+      console.log(result_Img_Url, "result_Img_Url");
+      setValue({
+        ...form,
+        fileUrl: result_Img_Url,
+        content: data,
+      });
+    } else {
+      setValue({
+        ...form,
+        fileUrl:
+          "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS6KVvlziiJYFxZZIq3Xc_dVuzIbSLrgvtHPA&s",
+        content: data,
+      });
+    }
+  };
+
   function uploadPlugin(editor) {
     editor.plugins.get("FileRepository").createUploadAdapter = (loader) => {
       return uploadAdapter(loader);
@@ -104,28 +148,38 @@ const WriteBoard = ({ postData, postId }) => {
 
   return (
     <>
-      <GlobalStyle />
-      {isMobile ? <Navbar isMobail={isMobile} /> : <Navbar isMainPage={true} />}
+      {isMobile ? (
+        <Navbar $isMobile={isMobile} />
+      ) : (
+        <Navbar isMainPage={true} />
+      )}
 
       <Wrap>
         <WriteWrap>
-          <BackImg src={backBtn} alt="뒤로 가기" onClick={() => navigate(-1)} />
-          <Write>글 쓰기</Write>
+          <BackImg
+            $isMobile={isMobile}
+            src={backBtn}
+            alt="뒤로 가기"
+            onClick={() => navigate(-1)}
+          />
+          <Write $isMobile={isMobile}>글 쓰기</Write>
         </WriteWrap>
         <form onSubmit={onSubmit}>
-          <TitleWrap>
+          <TitleWrap $isMobile={isMobile}>
             <span>
               <Titleinput
                 type="text"
                 placeholder="제목을 입력하세요"
                 onChange={onChange}
                 value={form.title}
+                $isMobile={isMobile}
               />
             </span>
             <span>
               <Categoryselect
                 onChange={handleCategoryChange}
                 value={selectedCategory}
+                $isMobile={isMobile}
               >
                 <option value={0}>자유 게시판</option>
                 <option value={1}>질문 게시판</option>
@@ -162,10 +216,7 @@ const WriteBoard = ({ postData, postId }) => {
                 editorContainerRef.current.appendChild(editableElement);
               }
             }}
-            onBlur={(event, editor) => {
-              const data = editor.getData();
-              setValue({ ...form, content: data });
-            }}
+            onBlur={getDataFromCKEditor}
           />
 
           <Hashtag
@@ -174,12 +225,22 @@ const WriteBoard = ({ postData, postId }) => {
             name="hashtag"
             onChange={handlehashtag}
             value={form.hashtags.join(" ")}
+            $isMobile={isMobile}
           />
-          <SubmitBtnWrap>
-            <SubmitBtn $borderColor="#929292" $bgColor="transparent">
+          <SubmitBtnWrap $isMobile={isMobile}>
+            <SubmitBtn
+              $borderColor="#929292"
+              $bgColor="transparent"
+              $isMobile={isMobile}
+            >
               임시저장
             </SubmitBtn>
-            <SubmitBtn $borderColor="#B1CDE9" $bgColor="#B1CDE9" type="submit">
+            <SubmitBtn
+              $borderColor="#B1CDE9"
+              $bgColor="#B1CDE9"
+              type="submit"
+              $isMobile={isMobile}
+            >
               확인
             </SubmitBtn>
           </SubmitBtnWrap>

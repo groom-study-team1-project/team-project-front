@@ -1,6 +1,7 @@
 import React, { useRef, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPhotoFilm, faXmark } from "@fortawesome/free-solid-svg-icons";
+import { useSelector } from "react-redux";
 import axios from "axios";
 
 import {
@@ -12,6 +13,7 @@ import {
 } from "./imageUpload.style";
 
 const ImageUploadCard = ({ imgUrls, setImgUrls }) => {
+  const { isMobile } = useSelector((state) => state.screenSize);
   const fileInput = useRef(null);
   const [draggedItem, setDraggedItem] = useState(null); // 드래그된 항목 상태
   const handleClickImgadd = () => {
@@ -72,7 +74,7 @@ const ImageUploadCard = ({ imgUrls, setImgUrls }) => {
   };
   return (
     <>
-      <ImgWrap>
+      <ImgWrap isMobile={isMobile}>
         {imgUrls.map((url, index) => (
           <ImgPreviewWrap
             key={index}
@@ -81,14 +83,18 @@ const ImageUploadCard = ({ imgUrls, setImgUrls }) => {
             onDragOver={handleDragOver}
             onDrop={() => handleDrop(index)}
           >
-            <ImgPreview src={url} alt={`Preview ${index}`} />
+            <ImgPreview
+              src={url}
+              alt={`Preview ${index}`}
+              $isMobile={isMobile}
+            />
             <ImgPreviewDelete onClick={() => deletePreviewImg(index)}>
               <FontAwesomeIcon icon={faXmark} />
             </ImgPreviewDelete>
           </ImgPreviewWrap>
         ))}
 
-        <ImgAdd onClick={handleClickImgadd}>
+        <ImgAdd onClick={handleClickImgadd} $isMobile={isMobile}>
           <FontAwesomeIcon icon={faPhotoFilm} style={{ fontSize: "24px" }} />
           <input
             type="file"

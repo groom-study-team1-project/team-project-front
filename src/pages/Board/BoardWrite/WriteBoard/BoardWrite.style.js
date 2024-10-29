@@ -25,54 +25,69 @@ export const WriteWrap = styled.div`
 `;
 
 export const BackImg = styled.img`
-  width: 40px;
-  height: 40px;
+  ${(props) =>
+    props.$isMobile
+      ? `
+  width:30px;
+  height:30px;
+`
+      : `
+  width:40px;
+  height:40px;
+`}
   cursor: pointer;
-  @media (max-width: 768px) {
-    width: 20px;
-    height: 20px;
-  }
 `;
+
 export const Write = styled.div`
+  ${(props) =>
+    props.$isMobile
+      ? `
+    font-size: 30px;
+ 
+`
+      : `
   font-size: 40px;
-  @media (max-width: 768px) {
-    font-size: 20px;
-  }
+`}
 `;
+
 export const TitleWrap = styled.div`
   display: flex;
-  justify-content: space-between;
-  @media (max-width: 768px) {
+  ${(props) =>
+    props.$isMobile
+      ? `
     flex-direction: column;
     margin-bottom: 10px;
     justify-content: none;
-  }
+ 
+`
+      : `
+    justify-content: space-between;
+`}
 `;
 
 export const Titleinput = styled.input`
-  width: 400px;
   height: 43px;
   border-radius: 10px;
   border: none;
   margin-bottom: 32px;
-  @media (max-width: 1028px) {
-    width: 250px;
-  }
-  @media (max-width: 768px) {
-    width: 100%;
-  }
+  padding: 0px;
+  width: ${(props) => (props.$isMobile ? "100%" : "30vw")};
 `;
 
 export const Categoryselect = styled.select`
   height: 43px;
   border: none;
   border-radius: 10px;
-  @media (max-width: 768px) {
-    width: 100%;
-    margin-top: -20px;
-  }
   background: white;
   color: black;
+  ${(props) =>
+    props.$isMobile
+      ? `
+     width: 100%;
+    margin-top: -20px;
+ 
+`
+      : ``}
 `;
 
 export const Hashtag = styled.input`
@@ -80,33 +95,37 @@ export const Hashtag = styled.input`
   background: none;
   border: 1px solid black;
   border-radius: 5px;
-  @media (max-width: 768px) {
+  ${(props) =>
+    props.$isMobile
+      ? `
     width: 50%;
     margin-bottom: 20px;
-  }
+ 
+`
+      : ``}
 `;
 
 export const SubmitBtnWrap = styled.div`
   float: right;
-  @media (max-width: 768px) {
-    width: 100%;
-  }
+  width: ${(props) => props.$isMobile && "100%"};
 `;
 
 export const SubmitBtn = styled.button`
   margin-left: 16px;
-  width: 132px;
   height: 40px;
   border-radius: 10px;
   background: ${(props) => props.$bgColor};
   cursor: pointer;
   border: 1px solid ${(props) => props.$borderColor};
   color: black;
-  @media (max-width: 768px) {
-    width: 50%;
+  ${(props) =>
+    props.$isMobile
+      ? `width: 50%;
     margin: 0px;
-    display: inline;
-  }
+    display: inline;`
+      : `
+  width: 132px;
+    `}
 `;
 
 export const Toolbar = styled.div`

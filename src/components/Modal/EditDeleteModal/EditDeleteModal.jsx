@@ -1,9 +1,9 @@
 import React, { useRef, useEffect } from "react";
 import { ModalBackground, Modal } from "./EditDeleteModal.style"; // 모달 스타일 import
-
+import { useSelector } from "react-redux";
 const ModalComponent = ({ isVisible, onClose, onEdit, onDelete }) => {
   const modalRef = useRef(null);
-
+  const { isMobile } = useSelector((state) => state.screenSize);
   const handleClickOutside = (e) => {
     if (modalRef.current && !modalRef.current.contains(e.target)) {
       onClose(); // 모달 외부 클릭 시 모달 닫기
@@ -21,9 +21,9 @@ const ModalComponent = ({ isVisible, onClose, onEdit, onDelete }) => {
 
   return (
     <ModalBackground>
-      <Modal ref={modalRef}>
+      <Modal ref={modalRef} $isMobile={isMobile}>
         <div onClick={onEdit}>수정</div>
-        <hr style={{ margin: "0px", padding: "0px" }} />
+        <hr />
         <div onClick={onDelete}>삭제</div>
       </Modal>
     </ModalBackground>
