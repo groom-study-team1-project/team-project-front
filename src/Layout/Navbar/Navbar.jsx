@@ -33,7 +33,7 @@ import NavBarSideModal from "../../components/Modal/NavBarSideModal/NavBarSideMo
 
 Modal.setAppElement("#root");
 
-function Navbar({ isMainPage = false}) {
+function Navbar({ isMainPage = false }) {
   const [menuItems, setMenuItems] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalType, setModalType] = useState("login");
@@ -42,7 +42,7 @@ function Navbar({ isMainPage = false}) {
   const [navModalOpen, setNavModalOpen] = useState(false);
   const isLoggedIn = useSelector((state) => state.user.isLoggedIn);
   const { isMobile, isTablet, isDesktop } = useSelector(
-      (state) => state.screenSize
+    (state) => state.screenSize
   );
 
   const payload = useJwt(
@@ -86,7 +86,7 @@ function Navbar({ isMainPage = false}) {
   const handleNavClick = (to) => {
     dispatch(logout());
     handleNavigation(to);
-  }
+  };
 
   const handleNavigation = (to, e) => {
     if (to === "my-profile") {
@@ -141,7 +141,7 @@ function Navbar({ isMainPage = false}) {
   return (
     <NavbarWrapper>
       <NavbarInner>
-        {isMainPage || isMobile ? (
+        {isMainPage || !isDesktop ? (
           <Logo>
             <img
               src={logoImg}
@@ -156,7 +156,7 @@ function Navbar({ isMainPage = false}) {
           <NonLogo />
         )}
 
-        {isMainPage && !isMobile && (
+        {isMainPage && isDesktop && (
           <Menu>
             {menuItems.map((item) => (
               <MenuItem key={item.id} onClick={() => handleMenuClick(item.id)}>
@@ -166,30 +166,27 @@ function Navbar({ isMainPage = false}) {
           </Menu>
         )}
 
-        {isMobile ? (
+        {!isDesktop ? (
           <>
-            <MobailDropDown
-              onClick={handleDropdown}
-              $dropDown={dropDown}
-            >
+            <MobailDropDown onClick={handleDropdown} $dropDown={dropDown}>
               <span></span>
               <span></span>
               <span></span>
             </MobailDropDown>
-            {isMobile && (
+            {!isDesktop && (
               <NavBarSideModal
-                  isOpen={navModalOpen}
-                  setIsOpen={setNavModalOpen}
-                  menuItems={menuItems}
-                  handleDropDown = {handleDropdown}
-                  userInfo={userInfo}
-                  handleMenuClick={handleMenuClick}
-                  handleDarkMode={handleDarkMode}
-                  navigateNewPost={() => handleNavClick("write")}
-                  navigateMyPage={() => handleNavigation("my-profile")}
-                  onLogout={handleLogout}
-                  onLogin={() => openModal("login")}
-                  onSignUp={() => openModal("signup")}
+                isOpen={navModalOpen}
+                setIsOpen={setNavModalOpen}
+                menuItems={menuItems}
+                handleDropDown={handleDropdown}
+                userInfo={userInfo}
+                handleMenuClick={handleMenuClick}
+                handleDarkMode={handleDarkMode}
+                navigateNewPost={() => handleNavClick("write")}
+                navigateMyPage={() => handleNavigation("my-profile")}
+                onLogout={handleLogout}
+                onLogin={() => openModal("login")}
+                onSignUp={() => openModal("signup")}
               />
             )}
           </>

@@ -89,7 +89,8 @@ function UserDetailsInputForm({ email, handlePrev, changeModal }) {
           email,
           password,
           nickname,
-          imageUrl: profileImgUrl,
+          imageUrl:
+            "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS6KVvlziiJYFxZZIq3Xc_dVuzIbSLrgvtHPA&s",
           phoneNumber,
         };
 

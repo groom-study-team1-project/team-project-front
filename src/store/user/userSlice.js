@@ -1,11 +1,11 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-  userInfo: {
+  userInfo: JSON.parse(localStorage.getItem("userInfo")) || {
     accessToken: "",
     refreshToken: "",
   },
-  isLoggedIn: false,
+  isLoggedIn: JSON.parse(localStorage.getItem("isLoggedIn")) || false,
 };
 
 const userSlice = createSlice({
@@ -15,6 +15,8 @@ const userSlice = createSlice({
     userLogin: (state, action) => {
       state.userInfo = action.payload;
       state.isLoggedIn = true;
+      localStorage.setItem("userInfo", JSON.stringify(state.userInfo));
+      localStorage.setItem("isLoggedIn", JSON.stringify(state.isLoggedIn));
     },
     userLogout: (state) => {
       state.userInfo = {
@@ -22,12 +24,15 @@ const userSlice = createSlice({
         refreshToken: "",
       };
       state.isLoggedIn = false;
+      localStorage.removeItem("userInfo");
+      localStorage.removeItem("isLoggedIn");
     },
     updateToken: (state, action) => {
       state.userInfo = {
         ...state.userInfo,
         ...action.payload,
       };
+      localStorage.setItem("userInfo", JSON.stringify(state.userInfo));
     },
   },
 });

@@ -24,7 +24,7 @@ import {
   PostFooter,
   CategoryTitle,
 } from "./BoardDetail.style";
-import { ContentWrapper } from "../../Board.style";
+import { ContentWrapper, PostCardWrapper } from "../../Board.style";
 
 function BoardDetail() {
   const [post, setPost] = useState(null);
@@ -80,7 +80,7 @@ function BoardDetail() {
 
   return (
     <>
-      <ContentWrapper>
+      <ContentWrapper isDetail={true}>
         <Wrap>
           <CategotyWrap $isMobile={isMobile}>
             <CategoryTitle $isMobile={isMobile}>{category}</CategoryTitle>
