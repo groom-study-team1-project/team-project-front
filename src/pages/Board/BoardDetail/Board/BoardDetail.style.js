@@ -6,7 +6,7 @@ export const Wrap = styled.div`
 `;
 
 export const CategotyWrap = styled.div`
-  width: ${(props) => (props.isMobile ? `100px` : `264px`)};
+  width: ${(props) => (props.$isMobile ? `100px` : `264px`)};
   height: 48px;
   display: flex;
   margin-bottom: 48px;
@@ -25,7 +25,7 @@ export const CategotyWrap = styled.div`
 `;
 
 export const CategoryTitle = styled.div`
-  font-size: ${(props) => (props.isMobile ? `13px` : `30px`)};
+  font-size: ${(props) => (props.$isMobile ? `13px` : `30px`)};
 
   background: linear-gradient(to right bottom, #0b0611, #42469c);
   background-clip: text;
@@ -37,14 +37,14 @@ export const Postheader = styled.div`
   display: flex;
   justify-content: space-between;
   margin-bottom: 20px;
-  font-size: ${(props) => (props.isMobile ? `9px` : ``)};
+  font-size: ${(props) => (props.$isMobile ? `9px` : ``)};
 `;
 
 export const PostheaderRignt = styled.div`
   display: flex;
   flex-wrap: nowrap;
   position: relative;
-  font-size: ${(props) => (props.isMobile ? `11px` : ``)};
+  font-size: ${(props) => (props.$isMobile ? `11px` : ``)};
 `;
 
 export const Modify = styled.div`
@@ -77,7 +77,7 @@ export const PostFooter = styled.div`
   align-items: center;
   justify-content: space-between;
   margin-top: 16px;
-  width: ${(props) => (props.isMobile ? `115%;` : `103%;`)};
+  width: ${(props) => (props.$isMobile ? `115%;` : `103%;`)};
 `;
 
 export const IconWrap = styled.div`

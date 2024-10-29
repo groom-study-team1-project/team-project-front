@@ -7,7 +7,7 @@ export const ImgWrap = styled.div`
   padding: 10px;
   overflow-x: scroll;
   white-space: nowrap;
-  height: ${(isMobile) => isMobile && "height: 80px;"};
+  height: ${(props) => props.$isMobile && "height: 80px;"};
 `;
 
 export const ImgPreviewWrap = styled.div`
@@ -17,7 +17,7 @@ export const ImgPreview = styled.img`
   object-fit: cover;
 
   ${(props) =>
-    props.isMobile
+    props.$isMobile
       ? `width: 144px;
     height: 80px;`
       : `width: 288px;
@@ -64,7 +64,7 @@ export const ImgAdd = styled.div`
   position: relative;
   flex-shrink: 0;
   ${(props) =>
-    props.isMobile
+    props.$isMobile
       ? `width: 144px;
     height: 80px;`
       : `width: 288px;

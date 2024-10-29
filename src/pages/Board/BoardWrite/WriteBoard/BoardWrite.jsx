@@ -98,34 +98,38 @@ const WriteBoard = ({ postData, postId }) => {
 
   return (
     <>
-      {isMobile ? <Navbar isMobail={isMobile} /> : <Navbar isMainPage={true} />}
+      {isMobile ? (
+        <Navbar $isMobile={isMobile} />
+      ) : (
+        <Navbar isMainPage={true} />
+      )}
 
       <Wrap>
         <WriteWrap>
           <BackImg
-            isMobail={isMobile}
+            $isMobile={isMobile}
             src={backBtn}
             alt="뒤로 가기"
             onClick={() => navigate(-1)}
           />
-          <Write isMobail={isMobile}>글 쓰기</Write>
+          <Write $isMobile={isMobile}>글 쓰기</Write>
         </WriteWrap>
         <form onSubmit={onSubmit}>
-          <TitleWrap isMobail={isMobile}>
+          <TitleWrap $isMobile={isMobile}>
             <span>
               <Titleinput
                 type="text"
                 placeholder="제목을 입력하세요"
                 onChange={onChange}
                 value={form.title}
-                isMobail={isMobile}
+                $isMobile={isMobile}
               />
             </span>
             <span>
               <Categoryselect
                 onChange={handleCategoryChange}
                 value={selectedCategory}
-                isMobail={isMobile}
+                $isMobile={isMobile}
               >
                 <option value={0}>자유 게시판</option>
                 <option value={1}>질문 게시판</option>
@@ -174,13 +178,13 @@ const WriteBoard = ({ postData, postId }) => {
             name="hashtag"
             onChange={handlehashtag}
             value={form.hashtags.join(" ")}
-            isMobail={isMobile}
+            $isMobile={isMobile}
           />
-          <SubmitBtnWrap isMobail={isMobile}>
+          <SubmitBtnWrap $isMobile={isMobile}>
             <SubmitBtn
               $borderColor="#929292"
               $bgColor="transparent"
-              isMobail={isMobile}
+              $isMobile={isMobile}
             >
               임시저장
             </SubmitBtn>
@@ -188,7 +192,7 @@ const WriteBoard = ({ postData, postId }) => {
               $borderColor="#B1CDE9"
               $bgColor="#B1CDE9"
               type="submit"
-              isMobail={isMobile}
+              $isMobile={isMobile}
             >
               확인
             </SubmitBtn>

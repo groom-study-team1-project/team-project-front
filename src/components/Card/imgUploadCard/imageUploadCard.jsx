@@ -86,7 +86,7 @@ const ImageUploadCard = ({ imgUrls, setImgUrls }) => {
             <ImgPreview
               src={url}
               alt={`Preview ${index}`}
-              isMobile={isMobile}
+              $isMobile={isMobile}
             />
             <ImgPreviewDelete onClick={() => deletePreviewImg(index)}>
               <FontAwesomeIcon icon={faXmark} />
@@ -94,7 +94,7 @@ const ImageUploadCard = ({ imgUrls, setImgUrls }) => {
           </ImgPreviewWrap>
         ))}
 
-        <ImgAdd onClick={handleClickImgadd} isMobile={isMobile}>
+        <ImgAdd onClick={handleClickImgadd} $isMobile={isMobile}>
           <FontAwesomeIcon icon={faPhotoFilm} style={{ fontSize: "24px" }} />
           <input
             type="file"

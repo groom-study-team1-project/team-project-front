@@ -16,7 +16,7 @@ const CustomSlider = styled(Slider)`
 
     object-fit: cover;
     ${(props) =>
-      props.isMobile
+      props.$isMobile
         ? `width: 125px;
       height: 50px;`
         : `width: 296px;
@@ -79,7 +79,7 @@ function Slide({ imgUrls }) {
 
   return (
     <div>
-      <CustomSlider {...settings} isMobile={isMobile}>
+      <CustomSlider {...settings} $isMobile={isMobile}>
         {imgUrls.map((imgurl) => (
           <div key={imgurl.id}>
             <img src={imgurl.url} alt={`Slide ${imgurl.id}`} />

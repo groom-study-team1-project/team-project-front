@@ -82,19 +82,19 @@ function BoardDetail() {
     <>
       <ContentWrapper>
         <Wrap>
-          <CategotyWrap isMobile={isMobile}>
-            <CategoryTitle isMobile={isMobile}>{category}</CategoryTitle>
+          <CategotyWrap $isMobile={isMobile}>
+            <CategoryTitle $isMobile={isMobile}>{category}</CategoryTitle>
           </CategotyWrap>
 
           <PostWrap>
-            <Postheader isMobile={isMobile}>
+            <Postheader $isMobile={isMobile}>
               <PostProfileBox
                 name={post.memberInfo.nickname}
                 job={post.memberInfo.memberJob}
                 email={post.memberInfo.email}
                 imgUrl={post.memberInfo.imageUrl}
               />
-              <PostheaderRignt isMobile={isMobile}>
+              <PostheaderRignt $isMobile={isMobile}>
                 <div>{post.createdAt}</div>
                 <Modify onClick={() => setModalVisible(true)}>
                   <FontAwesomeIcon icon={faEllipsisVertical} />
@@ -121,7 +121,7 @@ function BoardDetail() {
               disabled={true}
             />
           </PostWrap>
-          <PostFooter isMobile={isMobile}>
+          <PostFooter $isMobile={isMobile}>
             <div>
               {post.hashtags.map((hashtag, index) => (
                 <span key={index}>{hashtag}</span>

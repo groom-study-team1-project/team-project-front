@@ -26,7 +26,7 @@ export const WriteWrap = styled.div`
 
 export const BackImg = styled.img`
   ${(props) =>
-    props.isMobail
+    props.$isMobile
       ? `
   width:30px;
   height:30px;
@@ -40,7 +40,7 @@ export const BackImg = styled.img`
 
 export const Write = styled.div`
   ${(props) =>
-    props.isMobail
+    props.$isMobile
       ? `
     font-size: 30px;
  
@@ -53,7 +53,7 @@ export const Write = styled.div`
 export const TitleWrap = styled.div`
   display: flex;
   ${(props) =>
-    props.isMobail
+    props.$isMobile
       ? `
     flex-direction: column;
     margin-bottom: 10px;
@@ -71,7 +71,7 @@ export const Titleinput = styled.input`
   border: none;
   margin-bottom: 32px;
   padding: 0px;
-  width: ${(props) => (props.isMobail ? "100%" : "30vw")};
+  width: ${(props) => (props.$isMobile ? "100%" : "30vw")};
 `;
 
 export const Categoryselect = styled.select`
@@ -81,7 +81,7 @@ export const Categoryselect = styled.select`
   background: white;
   color: black;
   ${(props) =>
-    props.isMobail
+    props.$isMobile
       ? `
      width: 100%;
     margin-top: -20px;
@@ -96,7 +96,7 @@ export const Hashtag = styled.input`
   border: 1px solid black;
   border-radius: 5px;
   ${(props) =>
-    props.isMobail
+    props.$isMobile
       ? `
     width: 50%;
     margin-bottom: 20px;
@@ -107,7 +107,7 @@ export const Hashtag = styled.input`
 
 export const SubmitBtnWrap = styled.div`
   float: right;
-  width: ${(props) => props.isMobail && "100%"};
+  width: ${(props) => props.$isMobile && "100%"};
 `;
 
 export const SubmitBtn = styled.button`
@@ -119,7 +119,7 @@ export const SubmitBtn = styled.button`
   border: 1px solid ${(props) => props.$borderColor};
   color: black;
   ${(props) =>
-    props.isMobail
+    props.$isMobile
       ? `width: 50%;
     margin: 0px;
     display: inline;`
