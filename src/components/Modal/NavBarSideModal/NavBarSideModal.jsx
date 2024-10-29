@@ -22,10 +22,12 @@ import {
 import {useSelector} from "react-redux";
 
 const NavBarSideModal = ({isOpen, setIsOpen, menuItems, handleMenuClick,
-                          handleDarkMode, handleDropDown, isDarkMode, isLogin, userInfo,
-                          navigateNewPost, navigateMyPage, onLogout, onLogin, onSignUp}) => {
+                          handleDarkMode, handleDropDown, userInfo, navigateNewPost,
+                          navigateMyPage, onLogout, onLogin, onSignUp}) => {
 
+    const isDarkMode = useSelector((state) => state.theme.isDarkMode);
     const selectedItem = useSelector((state) => state.menu?.selectedItem || null);
+    const isLoggedIn = useSelector((state) => state.user.isLoggedIn);
 
     if(!isOpen) return null;
 
@@ -39,7 +41,7 @@ const NavBarSideModal = ({isOpen, setIsOpen, menuItems, handleMenuClick,
                             alt="다크모드"
                         />
                     </Button>
-                    {isLogin ? (
+                    {isLoggedIn ? (
                         <>
                             <BorderButton onClick={navigateNewPost}>
                                 새 글 작성
@@ -76,6 +78,7 @@ const NavBarSideModal = ({isOpen, setIsOpen, menuItems, handleMenuClick,
                         key={item.id}
                         onClick={() => {
                             handleMenuClick(item.id);
+                            handleDropDown();
                         }}
                     >
                         <SidebarLink
@@ -88,21 +91,33 @@ const NavBarSideModal = ({isOpen, setIsOpen, menuItems, handleMenuClick,
                     </SidebarLi>
                 ))}
             </NavMenu>
-            <SectionTitle isDarkMode={isDarkMode}>마이 페이지</SectionTitle>
-            <NavMenu>
-                <SidebarLi onClick={navigateMyPage}>
-                    <SidebarLink className="link">
-                        <span>마이 페이지</span>
-                        <span><RiLogoutBoxRLine/></span>
-                    </SidebarLink>
-                </SidebarLi>
-                <SidebarLi onClick={onLogout}>
-                    <SidebarLink className="link">
-                        <span>로그 아웃</span>
-                        <span><LuUserSquare2/></span>
-                    </SidebarLink>
-                </SidebarLi>
-            </NavMenu>
+            {isLoggedIn && (
+                <>
+                    <SectionTitle isDarkMode={isDarkMode}>마이 페이지</SectionTitle>
+                    <NavMenu>
+                        <SidebarLi onClick={() => {
+                            navigateMyPage();
+                            handleDropDown();
+                        }}>
+                            <SidebarLink className="link">
+                                <span>마이 페이지</span>
+                                <span><RiLogoutBoxRLine /></span>
+                            </SidebarLink>
+                        </SidebarLi>
+                        <SidebarLi
+                            onClick={() => {
+                                onLogout();
+                                handleDropDown();
+                            }}
+                        >
+                            <SidebarLink className="link">
+                                <span>로그 아웃</span>
+                                <span><LuUserSquare2 /></span>
+                            </SidebarLink>
+                        </SidebarLi>
+                    </NavMenu>
+                </>
+            )};
         </NavBarSideContainer>
     )
 }
