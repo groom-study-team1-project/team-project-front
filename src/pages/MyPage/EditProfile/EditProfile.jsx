@@ -1,12 +1,13 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { ProfileImage } from "../../../components/Card/PostCard/PostProfile";
 import PasswordChange from "../../../components/Modal/PasswordChange/PasswordChange";
 import {
   editProfile,
   checkDuplicatedNickname,
   uploadProfileImage,
+  fetchProfileInfo,
 } from "../../../services/api/authApi";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import {
   PageNameWrap,
   PageName,
@@ -26,14 +27,34 @@ import {
 } from "./EditProfile.style";
 
 const EditProfile = () => {
+  const { memberId } = useParams();
   const [form, setForm] = useState({
-    nickName: "구름이",
-    aboutMe: "나는야 ios 개발자",
-    imageUrl:
-      "https://w7.pngwing.com/pngs/710/71/png-transparent-profle-person-profile-user-circle-icons-icon-thumbnail.png",
-    phoneNumber: "010-1234-1234",
-    role: "STUDENT",
+    nickName: "",
+    aboutMe: "",
+    imageUrl: "",
+    phoneNumber: "",
+    role: "",
   });
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetchProfileInfo(memberId);
+        console.log(response);
+        const data = response.data;
+        setForm({
+          ...form,
+          nickName: data.nickname,
+          imageUrl: data.imageUrl,
+          aboutMe: data.aboutMe,
+          phoneNumber: data.phoneNumber,
+          role: data.role,
+        });
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    fetchData();
+  }, [memberId]);
 
   const navigate = useNavigate();
   const [isModalOpen, setIsModalOpen] = useState(false);

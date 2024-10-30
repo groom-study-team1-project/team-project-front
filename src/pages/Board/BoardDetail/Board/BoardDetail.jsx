@@ -80,7 +80,7 @@ function BoardDetail() {
 
   return (
     <>
-      <ContentWrapper isDetail={true}>
+      <ContentWrapper $isDetail={true}>
         <Wrap>
           <CategotyWrap $isMobile={isMobile}>
             <CategoryTitle $isMobile={isMobile}>{category}</CategoryTitle>

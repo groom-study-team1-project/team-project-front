@@ -5,7 +5,7 @@ export const ContentWrapper = styled.div`
   width: 100%;
   margin-right: 50px;
   ${(props) =>
-    props.isDetail &&
+    props.$isDetail &&
     `
      display: flex;
   justify-content: center;

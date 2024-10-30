@@ -5,8 +5,8 @@ import {
   ModalHeader,
   ModalInput,
   ModalActions,
-  ErrMsg,
 } from "./PasswordChange.style";
+import { ErrMsg } from "../../../assets/styles/ErrMsg.style";
 import { changePW } from "../../../services/api/authApi";
 const PasswordChange = ({ setIsModalOpen }) => {
   const [currentPassword, setCurrentPassword] = useState("");
@@ -32,7 +32,8 @@ const PasswordChange = ({ setIsModalOpen }) => {
         setErrMsg(response.msg);
       }
     } else {
-      alert("새 비밀번호와 확인 비밀번호가 일치하지 않습니다.");
+      setErr(false);
+      setErrMsg("새 비밀번호와 확인 비밀번호가 일치하지 않습니다.");
     }
   };
   return (
@@ -59,7 +60,7 @@ const PasswordChange = ({ setIsModalOpen }) => {
             onChange={(e) => setConfirmPassword(e.target.value)}
           />
           {err ? "" : <ErrMsg>{errmsg}</ErrMsg>}
-          <ModalActions>
+          <ModalActions $err={!err}>
             <button onClick={handlePasswordChange}>확인</button>
             <button className="cancel" onClick={closeModal}>
               취소

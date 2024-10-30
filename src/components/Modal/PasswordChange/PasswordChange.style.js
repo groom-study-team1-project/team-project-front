@@ -38,7 +38,6 @@ export const ModalInput = styled.input`
 export const ModalActions = styled.div`
   display: flex;
   justify-content: space-between;
-
   button {
     padding: 10px 20px;
     border: none;
@@ -47,19 +46,9 @@ export const ModalActions = styled.div`
     background-color: #5b9bd5;
     color: #fff;
   }
-
+  ${(props) => props.$err && `margin-top: 10px;`}
   button.cancel {
     background-color: #ccc;
     color: black;
   }
-`;
-
-export const ErrMsg = styled.div`
-  display: block;
-  text-align: center;
-  color: white;
-  margin: 2px;
-  padding: 5px;
-  background: red;
-  border-radius: 5px;
 `;
