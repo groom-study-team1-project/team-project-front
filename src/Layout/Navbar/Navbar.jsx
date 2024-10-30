@@ -58,9 +58,16 @@ function Navbar({ isMainPage = false }) {
   const navigate = useNavigate();
 
   useEffect(() => {
-    fetchCategoryItems()
-      .then((menuItems) => setMenuItems(menuItems))
-      .catch((err) => console.log(err.message));
+    try {
+      const fetchData = async () => {
+        const response = await fetchCategoryItems();
+        console.log(response);
+        setMenuItems(response);
+      };
+      fetchData();
+    } catch (error) {
+      console.log(error);
+    }
   }, []);
 
   const handleMenuClick = (id) => {
@@ -160,7 +167,7 @@ function Navbar({ isMainPage = false }) {
           <Menu>
             {menuItems.map((item) => (
               <MenuItem key={item.id} onClick={() => handleMenuClick(item.id)}>
-                {item.item}
+                {item.title}
               </MenuItem>
             ))}
           </Menu>

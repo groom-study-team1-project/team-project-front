@@ -27,9 +27,16 @@ function Sidebar() {
   const selectedItem = useSelector((state) => state.menu?.selectedItem || null);
 
   useEffect(() => {
-    fetchCategoryItems()
-      .then((menuItems) => setMenuItems(menuItems))
-      .catch((err) => console.log(err.message));
+    try {
+      const fetchData = async () => {
+        const response = await fetchCategoryItems();
+        console.log(response);
+        setMenuItems(response);
+      };
+      fetchData();
+    } catch (error) {
+      console.log(error);
+    }
   }, []);
 
   const handleMenuClick = (item) => {
@@ -53,13 +60,14 @@ function Sidebar() {
   };
 
   const iconMapping = {
-    "HOT 게시판": <SidebarIcon src={userIcon} alt="HOT 게시판 아이콘" />,
-    "자유 게시판": <SidebarIcon src={cardIcon} alt="자유 게시판 아이콘" />,
-    "프로젝트 게시판": (
+    자유게시판: <SidebarIcon src={cardIcon} alt="자유 게시판 아이콘" />,
+    "프로젝트 자랑 게시판": (
       <SidebarIcon src={fileIcon} alt="프로젝트 게시판 아이콘" />
     ),
     "질문 게시판": <SidebarIcon src={questionIcon} alt="질문 게시판 아이콘" />,
-    공지사항: <SidebarIcon src={informaitonIcon} alt="공지사항 아이콘" />,
+    "공지사항 게시판": (
+      <SidebarIcon src={informaitonIcon} alt="공지사항 아이콘" />
+    ),
   };
 
   return (
@@ -83,8 +91,8 @@ function Sidebar() {
                     selectedItem !== null && selectedItem === item.id
                   }
                 >
-                  <SidebarTitle>{item.item}</SidebarTitle>
-                  {iconMapping[item.item]}
+                  <SidebarTitle>{item.title}</SidebarTitle>
+                  {iconMapping[item.title]}
                 </SidebarLink>
               </SidebarLi>
             ))

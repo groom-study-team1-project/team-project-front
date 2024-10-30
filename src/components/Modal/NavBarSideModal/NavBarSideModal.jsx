@@ -91,7 +91,7 @@ const NavBarSideModal = ({
               className="link"
               $isSelected={selectedItem !== null && selectedItem === item.id}
             >
-              {item.item}
+              {item.title}
               {item.icon}
             </SidebarLink>
           </SidebarLi>
