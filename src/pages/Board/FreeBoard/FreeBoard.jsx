@@ -20,6 +20,7 @@ function FreeBoard() {
     const [lastPostIdByCategory, setLastPostIdByCategory] = useState(null);
     const [loading, setLoading] = useState(false);
     const [hasMore, setHasMore] = useState(true);
+    const [isMobile, setIsMobile] = useState(false);
     const isThrottleActive = useRef(false);
     const listRef = useRef(null);
 
@@ -49,6 +50,7 @@ function FreeBoard() {
                     setHasMore(false);
                 }
             } catch (error) {
+                console.log(error);
             } finally {
                 setLoading(false);
                 isThrottleActive.current = false;
@@ -59,6 +61,20 @@ function FreeBoard() {
     useEffect(() => {
         fetchData();
     }, [dispatch]);
+
+    useEffect(() => {
+        // Detect screen size and adjust layout for mobile
+        const handleResize = () => {
+            setIsMobile(window.innerWidth <= 768); // Adjust breakpoint if necessary
+        };
+
+        handleResize();
+        window.addEventListener("resize", handleResize);
+
+        return () => {
+            window.removeEventListener("resize", handleResize);
+        };
+    }, []);
 
     const handleScroll = (e) => {
         const { scrollTop, scrollHeight, clientHeight } = e.target;
@@ -88,7 +104,14 @@ function FreeBoard() {
                 <Search />
                 <SortOptionButton />
             </SearchSortWrapper>
-            <PostCardWrapper ref={listRef} style={{ height: "750px", overflowY: "auto" }}>
+            <PostCardWrapper
+                ref={listRef}
+                style={{
+                    height: isMobile ? "650px" : "750px",
+                    overflowY: "auto",
+                    flexDirection: isMobile ? "column" : "row",
+                }}
+            >
                 {postItems.map((postItem, index) => (
                     <CommunityPostCard
                         key={`${postItem.postId}-${index}`}

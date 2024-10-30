@@ -20,6 +20,7 @@ function ProjectBoard() {
     const [lastPostIdByCategory, setLastPostIdByCategory] = useState(null);
     const [loading, setLoading] = useState(false);
     const [hasMore, setHasMore] = useState(true);
+    const [isMobile, setIsMobile] = useState(false);
     const isThrottleActive = useRef(false);
     const listRef = useRef(null);
 
@@ -48,6 +49,7 @@ function ProjectBoard() {
                     setHasMore(false);
                 }
             } catch (error) {
+                console.error(error);
             } finally {
                 setLoading(false);
                 isThrottleActive.current = false;
@@ -58,6 +60,20 @@ function ProjectBoard() {
     useEffect(() => {
         fetchData();
     }, [dispatch]);
+
+    useEffect(() => {
+        // Detect screen size and adjust layout for mobile
+        const handleResize = () => {
+            setIsMobile(window.innerWidth <= 768); // Adjust breakpoint if necessary
+        };
+
+        handleResize();
+        window.addEventListener("resize", handleResize);
+
+        return () => {
+            window.removeEventListener("resize", handleResize);
+        };
+    }, []);
 
     const handleScroll = (e) => {
         const { scrollTop, scrollHeight, clientHeight } = e.target;
@@ -87,7 +103,14 @@ function ProjectBoard() {
                 <Search />
                 <SortOptionButton />
             </SearchSortWrapper>
-            <ProjectPostCardWrapper ref={listRef} style={{ height: "750px", overflowY: "auto" }}>
+            <ProjectPostCardWrapper
+                ref={listRef}
+                style={{
+                    height: isMobile ? "650px" : "750px",
+                    overflowY: "auto",
+                    flexDirection: isMobile ? "column" : "row",
+                }}
+            >
                 {postItems.map((postItem, index) => (
                     <ProjectPostCard
                         key={`${postItem.postId}-${index}`}
