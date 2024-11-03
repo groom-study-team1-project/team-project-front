@@ -21,6 +21,7 @@ const ProfileInfo = styled.div`
 
 const ProfileInfoName = styled.p`
   font-size: ${({ $isBig }) => ($isBig ? "48px" : "14px")};
+    text-wrap: nowrap;
 `;
 
 const ProfileInfoJob = styled.p`
