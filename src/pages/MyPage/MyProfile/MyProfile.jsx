@@ -21,7 +21,7 @@ function MyProfile() {
   const [error, setError] = useState(null);
   let navigate = useNavigate();
 
-  const { memberId: memberId } = useParams();
+  const { memberId } = useParams();
 
   useEffect(() => {
     if (!isLoggedIn) {
@@ -53,7 +53,7 @@ function MyProfile() {
   }
 
   const redirectToEditPage = () => {
-    navigate("/my-page/edit");
+    navigate(`/my-page/edit/${memberId}`);
   };
 
   return (

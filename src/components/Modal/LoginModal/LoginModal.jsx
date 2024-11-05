@@ -9,12 +9,12 @@ import {
   ModalTitle,
 } from "../Modal.style";
 import { FormInputField } from "../FormInputField";
-import { FindUserBtns, FindUserBtn, ErrMsg } from "./LoginModal.style";
+import { FindUserBtns, FindUserBtn } from "./LoginModal.style";
 import { login } from "../../../services/api/authApi";
 import logoImg from "../../../assets/images/DEEPDIVERS.png";
 import { useDispatch } from "react-redux";
 import { userLogin } from "../../../store/user/userSlice";
-
+import { ErrMsg } from "../../../assets/styles/ErrMsg.style";
 export default function LoginModal({ closeModal, changeModal }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");

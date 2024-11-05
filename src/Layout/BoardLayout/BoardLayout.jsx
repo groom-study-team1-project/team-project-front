@@ -25,7 +25,7 @@ function BoardLayout({ isMyPage = false }) {
         </SidebarWrapper>
       )}
       <MainContentWrapper>
-        <Navbar isMobail={isTablet} />
+        <Navbar />
         <Content>
           <Outlet />
           {!isMyPage && !isMobile ? (

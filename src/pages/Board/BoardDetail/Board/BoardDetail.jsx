@@ -24,7 +24,7 @@ import {
   PostFooter,
   CategoryTitle,
 } from "./BoardDetail.style";
-import { ContentWrapper } from "../../Board.style";
+import { ContentWrapper, PostCardWrapper } from "../../Board.style";
 
 function BoardDetail() {
   const [post, setPost] = useState(null);
@@ -80,7 +80,7 @@ function BoardDetail() {
 
   return (
     <>
-      <ContentWrapper>
+      <ContentWrapper $isDetail={true}>
         <Wrap>
           <CategotyWrap $isMobile={isMobile}>
             <CategoryTitle $isMobile={isMobile}>{category}</CategoryTitle>
@@ -107,7 +107,7 @@ function BoardDetail() {
                 />
               </PostheaderRignt>
             </Postheader>
-            {category === "프로젝트 게시판" ? (
+            {category === "프로젝트 자랑 게시판" ? (
               <div>
                 <Slide imgUrls={post.imgUrl} />
               </div>

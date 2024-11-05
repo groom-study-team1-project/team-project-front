@@ -33,7 +33,7 @@ import NavBarSideModal from "../../components/Modal/NavBarSideModal/NavBarSideMo
 
 Modal.setAppElement("#root");
 
-function Navbar({ isMainPage = false}) {
+function Navbar({ isMainPage = false }) {
   const [menuItems, setMenuItems] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalType, setModalType] = useState("login");
@@ -42,7 +42,7 @@ function Navbar({ isMainPage = false}) {
   const [navModalOpen, setNavModalOpen] = useState(false);
   const isLoggedIn = useSelector((state) => state.user.isLoggedIn);
   const { isMobile, isTablet, isDesktop } = useSelector(
-      (state) => state.screenSize
+    (state) => state.screenSize
   );
 
   const payload = useJwt(
@@ -58,9 +58,15 @@ function Navbar({ isMainPage = false}) {
   const navigate = useNavigate();
 
   useEffect(() => {
-    fetchCategoryItems()
-      .then((menuItems) => setMenuItems(menuItems))
-      .catch((err) => console.log(err.message));
+    try {
+      const fetchData = async () => {
+        const response = await fetchCategoryItems();
+        setMenuItems(response);
+      };
+      fetchData();
+    } catch (error) {
+      console.log(error);
+    }
   }, []);
 
   const handleMenuClick = (id) => {
@@ -73,9 +79,9 @@ function Navbar({ isMainPage = false}) {
     if (id === 1) {
       navigate("/board/free");
     } else if (id === 2) {
-      navigate("/board/questions");
-    } else if (id === 3) {
       navigate("/board/projects");
+    } else if (id === 3) {
+      navigate("/board/questions");
     } else if (id === 4) {
       navigate("/board/notices");
     } else if (id === 5) {
@@ -86,7 +92,7 @@ function Navbar({ isMainPage = false}) {
   const handleNavClick = (to) => {
     dispatch(logout());
     handleNavigation(to);
-  }
+  };
 
   const handleNavigation = (to, e) => {
     if (to === "my-profile") {
@@ -141,7 +147,7 @@ function Navbar({ isMainPage = false}) {
   return (
     <NavbarWrapper>
       <NavbarInner>
-        {isMainPage || isMobile ? (
+        {isMainPage || !isDesktop ? (
           <Logo>
             <img
               src={logoImg}
@@ -156,40 +162,37 @@ function Navbar({ isMainPage = false}) {
           <NonLogo />
         )}
 
-        {isMainPage && !isMobile && (
+        {isMainPage && isDesktop && (
           <Menu>
             {menuItems.map((item) => (
               <MenuItem key={item.id} onClick={() => handleMenuClick(item.id)}>
-                {item.item}
+                {item.title}
               </MenuItem>
             ))}
           </Menu>
         )}
 
-        {isMobile ? (
+        {!isDesktop ? (
           <>
-            <MobailDropDown
-              onClick={handleDropdown}
-              $dropDown={dropDown}
-            >
+            <MobailDropDown onClick={handleDropdown} $dropDown={dropDown}>
               <span></span>
               <span></span>
               <span></span>
             </MobailDropDown>
-            {isMobile && (
+            {!isDesktop && (
               <NavBarSideModal
-                  isOpen={navModalOpen}
-                  setIsOpen={setNavModalOpen}
-                  menuItems={menuItems}
-                  handleDropDown = {handleDropdown}
-                  userInfo={userInfo}
-                  handleMenuClick={handleMenuClick}
-                  handleDarkMode={handleDarkMode}
-                  navigateNewPost={() => handleNavClick("write")}
-                  navigateMyPage={() => handleNavigation("my-profile")}
-                  onLogout={handleLogout}
-                  onLogin={() => openModal("login")}
-                  onSignUp={() => openModal("signup")}
+                isOpen={navModalOpen}
+                setIsOpen={setNavModalOpen}
+                menuItems={menuItems}
+                handleDropDown={handleDropdown}
+                userInfo={userInfo}
+                handleMenuClick={handleMenuClick}
+                handleDarkMode={handleDarkMode}
+                navigateNewPost={() => handleNavClick("write")}
+                navigateMyPage={() => handleNavigation("my-profile")}
+                onLogout={handleLogout}
+                onLogin={() => openModal("login")}
+                onSignUp={() => openModal("signup")}
               />
             )}
           </>

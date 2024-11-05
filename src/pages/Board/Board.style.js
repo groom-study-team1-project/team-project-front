@@ -4,10 +4,16 @@ export const ContentWrapper = styled.div`
   height: 100%;
   width: 100%;
   margin-right: 50px;
+  ${(props) =>
+    props.$isDetail &&
+    `
+     display: flex;
+  justify-content: center;
+  `}
 `;
 
 export const BoardTitle = styled.div`
-  width: 264px;
+  width: ${(props) => (props.$projectPage ? `350px` : `264px`)};
   height: 48px;
   display: flex;
   margin-bottom: 48px;
@@ -53,9 +59,7 @@ export const PostCardWrapper = styled.div`
 `;
 
 export const EndMessage = styled.div`
-    text-align: center;
-    padding: 20px;
-    width: 100%;
+  text-align: center;
+  padding: 20px;
+  width: 100%;
 `;
-
-

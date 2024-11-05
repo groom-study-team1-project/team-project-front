@@ -30,18 +30,18 @@ export const login = async (body) => {
 
 export const signUp = async (body) => {
   try {
-    //const response = await axiosInstance.post("/members/sign-up", body);
-    const response = {
-      status: {
-        code: 1000,
-        message: "사용자 회원가입에 성공하였습니다.",
-      },
-    };
+    const response = await axiosInstance.post("/members/sign-up", body);
+    // const response = {
+    //   status: {
+    //     code: 1000,
+    //     message: "사용자 회원가입에 성공하였습니다.",
+    //   },
+    // };
 
     if (response.status.code === 1000) {
       return response;
     } else {
-      throw new Error(response.status.message || "회원가입 실패");
+      return response;
     }
   } catch (error) {
     console.log("회원가입 실패:", error);
@@ -51,18 +51,21 @@ export const signUp = async (body) => {
 
 export const uploadProfileImage = async (body) => {
   try {
-    // const response = await axiosInstance.post("/api/members/me/profile-image", body);
+    const response = await axiosInstance.post(
+      "/api/members/me/profile-image",
+      body
+    );
 
-    const response = {
-      status: {
-        code: 1004,
-        message: "사용자 프로필 이미지 업로드에 성공하였습니다.",
-      },
-      result: {
-        imageUrl:
-          "http://localhost:4566/test-bucket/profiles/11/a4b409a3_1727578574121.jpeg",
-      },
-    };
+    // const response = {
+    //   status: {
+    //     code: 1004,
+    //     message: "사용자 프로필 이미지 업로드에 성공하였습니다.",
+    //   },
+    //   result: {
+    //     imageUrl:
+    //       "http://localhost:4566/test-bucket/profiles/11/a4b409a3_1727578574121.jpeg",
+    //   },
+    // };
     if (response.status.code === 1004) {
       return response.result;
     } else {

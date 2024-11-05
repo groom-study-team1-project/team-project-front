@@ -13,7 +13,6 @@ export const NavbarInner = styled.div`
   justify-content: space-between;
   align-items: center;
   width: 100%;
-  max-width: 1440px;
   height: 80px;
   margin: 0px 10px;
 `;
@@ -54,6 +53,7 @@ export const MenuItem = styled.div`
 
 export const ButtonBox = styled.div`
   display: flex;
+  margin-right: 5%;
 `;
 
 export const Button = styled.div`
@@ -78,7 +78,7 @@ export const BorderButton = styled.div`
   margin: 5px;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
   border: 2px solid rgba(255, 255, 255, 0.1);
-  color: black;    
+  color: black;
 `;
 
 export const MobailDropDown = styled.div`
@@ -94,7 +94,7 @@ export const MobailDropDown = styled.div`
   position: fixed;
   cursor: pointer;
   transition: all 0.35s ease;
-  z-index:1000;
+  z-index: 1000;
   right: ${({ $dropDown }) => ($dropDown ? `58%` : `0`)};
   span {
     display: block;
