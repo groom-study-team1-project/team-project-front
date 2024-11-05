@@ -83,8 +83,8 @@ function ProjectBoard() {
 
   return (
     <ContentWrapper>
-      <BoardTitle $projectPage={true}>
-        <Title>프로젝트 자랑 게시판</Title>
+      <BoardTitle>
+        <Title>프로젝트 게시판</Title>
       </BoardTitle>
       <SearchSortWrapper>
         <Search />
