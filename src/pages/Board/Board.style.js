@@ -13,7 +13,7 @@ export const ContentWrapper = styled.div`
 `;
 
 export const BoardTitle = styled.div`
-  width: 264px;
+  width: ${(props) => (props.$projectPage ? `350px` : `264px`)};
   height: 48px;
   display: flex;
   margin-bottom: 48px;

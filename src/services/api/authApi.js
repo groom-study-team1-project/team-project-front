@@ -51,18 +51,21 @@ export const signUp = async (body) => {
 
 export const uploadProfileImage = async (body) => {
   try {
-    // const response = await axiosInstance.post("/api/members/me/profile-image", body);
+    const response = await axiosInstance.post(
+      "/api/members/me/profile-image",
+      body
+    );
 
-    const response = {
-      status: {
-        code: 1004,
-        message: "사용자 프로필 이미지 업로드에 성공하였습니다.",
-      },
-      result: {
-        imageUrl:
-          "http://localhost:4566/test-bucket/profiles/11/a4b409a3_1727578574121.jpeg",
-      },
-    };
+    // const response = {
+    //   status: {
+    //     code: 1004,
+    //     message: "사용자 프로필 이미지 업로드에 성공하였습니다.",
+    //   },
+    //   result: {
+    //     imageUrl:
+    //       "http://localhost:4566/test-bucket/profiles/11/a4b409a3_1727578574121.jpeg",
+    //   },
+    // };
     if (response.status.code === 1004) {
       return response.result;
     } else {

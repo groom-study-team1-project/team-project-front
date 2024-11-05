@@ -41,86 +41,85 @@ export const uploadAdapter = (loader) => {
 
 export async function fetchPostItems(categoryId, lastPostId) {
   try {
-    // const response = await axiosInstance.get("/open/posts", {
-    //   params: {
-    //     categoryId: categoryId,
-    //     lastPostId: lastPostId,
+    const response = await axiosInstance.get("/open/posts", {
+      params: {
+        categoryId: categoryId,
+        lastPostId: lastPostId,
+      },
+    });
+    // const posts = [];
+
+    // const totalPostCount = 20; // Total posts example
+
+    // const categories = [
+    //   { id: 1, name: "자유 게시판" },
+    //   { id: 2, name: "프로젝트 자랑 게시판" },
+    //   { id: 3, name: "질문 게시판" },
+    //   { id: 4, name: "공지사항" },
+    // ];
+
+    // const selectedCategory = categories.find(
+    //   (category) => category.id === categoryId
+    // );
+
+    // if (!selectedCategory) {
+    //   throw new Error("Invalid category ID");
+    // }
+
+    // const startPostId = lastPostId ? lastPostId + 1 : 1;
+    // const endPostId = Math.min(startPostId + 9, totalPostCount);
+
+    // for (let postId = startPostId; postId <= endPostId; postId++) {
+    //   const post = {
+    //     postId: postId,
+    //     title: `${postId} 번째 ${selectedCategory.name} 게시글`,
+    //     content: `${postId} 번째 ${selectedCategory.name} 게시글의 내용입니다.`,
+    //     imgUrl: [
+    //       {
+    //         id: 1,
+    //         url: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS6KVvlziiJYFxZZIq3Xc_dVuzIbSLrgvtHPA&s",
+    //       },
+    //       {
+    //         id: 2,
+    //         url: "https://www.shutterstock.com/ko/blog/wp-content/uploads/sites/17/2021/01/2021-graphic-design-banner.jpg",
+    //       },
+    //       {
+    //         id: 3,
+    //         url: "https://img1.daumcdn.net/thumb/R1280x0/?fname=http://t1.daumcdn.net/brunch/service/user/6H5a/image/VbC1Pts-64VW9-xWDV3qad5cLok.jpg",
+    //       },
+    //     ],
+    //     categoryId: selectedCategory.id,
+    //     memberInfo: {
+    //       memberId: postId,
+    //       nickname: `User${postId}`,
+    //       imageUrl: `http://example.com/image${postId}.jpg`,
+    //     },
+    //     countInfo: {
+    //       viewCount: postId * 10,
+    //       likeCount: 0,
+    //       commentCount: 0,
+    //     },
+    //     hashtags: [],
+    //     createdAt: "2024-09-29 13:30:36",
+    //   };
+    //   posts.push(post);
+    // }
+
+    // const response = {
+    //   status: {
+    //     code: 1203,
+    //     message: "게시글 조회에 성공하였습니다.",
     //   },
-    // });
+    //   result: {
+    //     totalPostCount: totalPostCount,
+    //     posts: posts,
+    //   },
+    // };
 
-    const posts = [];
-    const totalPostCount = 20; // Total posts example
-
-    const categories = [
-      { id: 1, name: "자유 게시판" },
-      { id: 2, name: "질문 게시판" },
-      { id: 3, name: "프로젝트 게시판" },
-      { id: 4, name: "공지사항" },
-    ];
-
-    const selectedCategory = categories.find(
-      (category) => category.id === categoryId
-    );
-
-    if (!selectedCategory) {
-      throw new Error("Invalid category ID");
-    }
-
-    const startPostId = lastPostId ? lastPostId + 1 : 1;
-    const endPostId = Math.min(startPostId + 9, totalPostCount);
-
-    for (let postId = startPostId; postId <= endPostId; postId++) {
-      const post = {
-        postId: postId,
-        title: `${postId} 번째 ${selectedCategory.name} 게시글`,
-        content: `${postId} 번째 ${selectedCategory.name} 게시글의 내용입니다.`,
-        imgUrl: [
-          {
-            id: 1,
-            url: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS6KVvlziiJYFxZZIq3Xc_dVuzIbSLrgvtHPA&s",
-          },
-          {
-            id: 2,
-            url: "https://www.shutterstock.com/ko/blog/wp-content/uploads/sites/17/2021/01/2021-graphic-design-banner.jpg",
-          },
-          {
-            id: 3,
-            url: "https://img1.daumcdn.net/thumb/R1280x0/?fname=http://t1.daumcdn.net/brunch/service/user/6H5a/image/VbC1Pts-64VW9-xWDV3qad5cLok.jpg",
-          },
-        ],
-        categoryId: selectedCategory.id,
-        memberInfo: {
-          memberId: postId,
-          nickname: `User${postId}`,
-          imageUrl: `http://example.com/image${postId}.jpg`,
-        },
-        countInfo: {
-          viewCount: postId * 10,
-          likeCount: 0,
-          commentCount: 0,
-        },
-        hashtags: [],
-        createdAt: "2024-09-29 13:30:36",
-      };
-      posts.push(post);
-      console.log(postId);
-    }
-
-    const response = {
-      status: {
-        code: 1203,
-        message: "게시글 조회에 성공하였습니다.",
-      },
-      result: {
-        totalPostCount: totalPostCount,
-        posts: posts,
-      },
-    };
-
-    if (response.status.code === 1203) {
+    if (response.data.status.code === 1203) {
       return {
-        totalPostCount: response.result.totalPostCount,
-        posts: response.result.posts,
+        totalPostCount: response.data.result.totalPostCount,
+        posts: response.data.result.posts,
       };
     } else {
       throw new Error(response.message || "게시글 불러오기 실패");

@@ -30,7 +30,6 @@ function Sidebar() {
     try {
       const fetchData = async () => {
         const response = await fetchCategoryItems();
-        console.log(response);
         setMenuItems(response);
       };
       fetchData();
@@ -45,16 +44,15 @@ function Sidebar() {
   };
 
   const handleNavigation = (id) => {
-    console.log(id);
     if (id === 1) {
       navigate("/board/free");
     } else if (id === 2) {
-      navigate("/board/questions");
-    } else if (id === 3) {
       navigate("/board/projects");
+    } else if (id === 3) {
+      navigate("/board/questions");
     } else if (id === 4) {
       navigate("/board/notices");
-    } else if (id == 5) {
+    } else if (id === 5) {
       navigate("/");
     }
   };

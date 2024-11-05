@@ -107,7 +107,7 @@ function BoardDetail() {
                 />
               </PostheaderRignt>
             </Postheader>
-            {category === "프로젝트 게시판" ? (
+            {category === "프로젝트 자랑 게시판" ? (
               <div>
                 <Slide imgUrls={post.imgUrl} />
               </div>
