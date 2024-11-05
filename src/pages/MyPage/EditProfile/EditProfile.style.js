@@ -90,6 +90,10 @@ export const ProfileActions = styled.div`
   margin-top: 15px;
   margin-left: 20px;
   width: 120%;
+    @media (max-width: 550px) {
+        flex-direction: column;
+        gap: 20px;
+    }
   button {
     height: 40px;
   }
