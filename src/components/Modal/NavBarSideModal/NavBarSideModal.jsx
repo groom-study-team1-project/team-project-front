@@ -1,4 +1,5 @@
 import React from "react";
+import { useState, useEffect } from "react";
 import {
   NavBarSideContainer,
   SectionTitle,
@@ -14,11 +15,11 @@ import lightmodeIcon from "../../../assets/images/lightmode.png";
 import profileIcon from "../../../assets/images/profileIcon.png";
 import { SidebarLi, SidebarLink } from "../../../Layout/Sidebar/Sidebar.style";
 import { useSelector } from "react-redux";
+import { fetchCategoryItems } from "../../../services/api/postApi";
 
 const NavBarSideModal = ({
   isOpen,
   setIsOpen,
-  menuItems,
   handleMenuClick,
   handleDarkMode,
   handleDropDown,
@@ -29,9 +30,26 @@ const NavBarSideModal = ({
   onLogin,
   onSignUp,
 }) => {
+  const [categories, setCategories] = useState([]);
+  const [ error, setError ] = useState(null);
   const isDarkMode = useSelector((state) => state.theme.isDarkMode);
   const selectedItem = useSelector((state) => state.menu?.selectedItem || null);
   const isLoggedIn = useSelector((state) => state.user.isLoggedIn);
+
+  // 카테고리 데이터 불러오기
+  useEffect(() => {
+    const loadCategories = async () => {
+      try {
+        const data = await fetchCategoryItems();
+        setCategories(data);
+      } catch (error) {
+        console.error("카테고리 로드 실패:", error);
+        // Todo 에러 처리 로직 추가
+      }
+    };
+
+    loadCategories();
+  }, []);
 
   if (!isOpen) return null;
 
@@ -79,7 +97,7 @@ const NavBarSideModal = ({
       )}
       <SectionTitle $isDarkMode={isDarkMode}>게시판</SectionTitle>
       <NavMenu>
-        {menuItems.map((item) => (
+        {categories.map((item) => (
           <SidebarLi
             key={item.id}
             onClick={() => {
@@ -91,7 +109,7 @@ const NavBarSideModal = ({
               className="link"
               $isSelected={selectedItem !== null && selectedItem === item.id}
             >
-              {item.title}
+              {item.item}
               {item.icon}
             </SidebarLink>
           </SidebarLi>

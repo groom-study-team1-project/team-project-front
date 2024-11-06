@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { updateToken, userLogout } from "../store/user/userSlice";
 
 const axiosInstance = axios.create({
-  baseURL: "http://localhost:8080",
+  baseURL: "https://deepdivers.store",
   headers: {
     "Content-Type": "application/json",
   },

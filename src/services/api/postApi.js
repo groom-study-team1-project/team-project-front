@@ -227,7 +227,13 @@ export const sortPostsByCriteria = async (categoty_id, sort, post_id) => {
 
 export async function fetchCategoryItems() {
   try {
-    const response = await axiosInstance.get("/open/categories");
+    const response = await axiosInstance.get("https://deepdivers.store/open/categories");
+
+    const categoriesWithIcons = response.data.result.map(category => ({
+      ...category,
+      icon: getIconComponent(category.item)
+    }));
+
     // const response = {
     //   code: 1200,
     //   message: "카테고리 목록 조회에 성공하였습니다.",
@@ -238,16 +244,31 @@ export async function fetchCategoryItems() {
     //     { id: 4, item: "공지사항", icon: <BsPatchQuestion /> },
     //   ],
     // };
-
-    if (response.data.status.code === 1301) {
+    return categoriesWithIcons;
+    /*if (response.data.status.code === 1301) {
       return response.data.result;
     } else {
       throw new Error(
         response.data.status.message || "카테고리를 불러올 수 없습니다."
       );
-    }
+    }*/
   } catch (error) {
     console.log("checking nickname error", error);
     throw error;
+  }
+}
+
+function getIconComponent(cetegory){
+  switch (cetegory) {
+    case "자유 게시판":
+      return <MdCreditCard />;
+    case "질문 게시판":
+      return <IoDocumentsOutline />;
+    case "프로젝트 게시판":
+      return <GrUserSettings />;
+    case "공지사항":
+      return <BsPatchQuestion />;
+    default:
+      return null;
   }
 }
