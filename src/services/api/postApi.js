@@ -225,15 +225,33 @@ export const sortPostsByCriteria = async (categoty_id, sort, post_id) => {
   }
 };
 
+function getIconComponent(category){
+  switch (category) {
+    case "자유 게시판":
+      return <MdCreditCard />;
+    case "질문 게시판":
+      return <IoDocumentsOutline />;
+    case "프로젝트 게시판":
+      return <GrUserSettings />;
+    case "공지사항":
+      return <BsPatchQuestion />;
+    default:
+      return null;
+  }
+}
+
 export async function fetchCategoryItems() {
   try {
-    const response = await axiosInstance.get("https://deepdivers.store/open/categories");
+    const response = await axiosInstance.get("/open/categories");
 
-    const categoriesWithIcons = response.data.result.map(category => ({
-      ...category,
-      icon: getIconComponent(category.item)
-    }));
+    if (response.status === 200 || response.data.status.code === 9999) {
+      const categoriesWithIcons = response.data.result.map(category => ({
+        ...category,
+        icon: getIconComponent(category.title)
+      }));
 
+      return categoriesWithIcons;
+    }
     // const response = {
     //   code: 1200,
     //   message: "카테고리 목록 조회에 성공하였습니다.",
@@ -244,7 +262,6 @@ export async function fetchCategoryItems() {
     //     { id: 4, item: "공지사항", icon: <BsPatchQuestion /> },
     //   ],
     // };
-    return categoriesWithIcons;
     /*if (response.data.status.code === 1301) {
       return response.data.result;
     } else {
@@ -258,17 +275,4 @@ export async function fetchCategoryItems() {
   }
 }
 
-function getIconComponent(cetegory){
-  switch (cetegory) {
-    case "자유 게시판":
-      return <MdCreditCard />;
-    case "질문 게시판":
-      return <IoDocumentsOutline />;
-    case "프로젝트 게시판":
-      return <GrUserSettings />;
-    case "공지사항":
-      return <BsPatchQuestion />;
-    default:
-      return null;
-  }
-}
+
