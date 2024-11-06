@@ -225,29 +225,21 @@ export const sortPostsByCriteria = async (categoty_id, sort, post_id) => {
   }
 };
 
-function getIconComponent(category){
-  switch (category) {
-    case "자유 게시판":
-      return <MdCreditCard />;
-    case "질문 게시판":
-      return <IoDocumentsOutline />;
-    case "프로젝트 게시판":
-      return <GrUserSettings />;
-    case "공지사항":
-      return <BsPatchQuestion />;
-    default:
-      return null;
-  }
-}
-
 export async function fetchCategoryItems() {
   try {
     const response = await axiosInstance.get("/open/categories");
 
     if (response.status === 200 || response.data.status.code === 9999) {
+      const categoryIconMap = {
+        "자유게시판": <MdCreditCard />,
+        "프로젝트 자랑 게시판": <IoDocumentsOutline />,
+        "질문 게시판": <GrUserSettings />,
+        "공지 게시판": <BsPatchQuestion />
+      };
+
       const categoriesWithIcons = response.data.result.map(category => ({
         ...category,
-        icon: getIconComponent(category.title)
+        icon: categoryIconMap[category.title]
       }));
 
       return categoriesWithIcons;
