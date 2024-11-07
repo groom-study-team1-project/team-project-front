@@ -58,7 +58,7 @@ function Sidebar() {
   };
 
   const iconMapping = {
-    자유게시판: <SidebarIcon src={cardIcon} alt="자유 게시판 아이콘" />,
+    "자유게시판": <SidebarIcon src={cardIcon} alt="자유 게시판 아이콘" />,
     "프로젝트 자랑 게시판": (
       <SidebarIcon src={fileIcon} alt="프로젝트 게시판 아이콘" />
     ),

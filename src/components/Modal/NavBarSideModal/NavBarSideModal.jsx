@@ -31,7 +31,6 @@ const NavBarSideModal = ({
   onSignUp,
 }) => {
   const [categories, setCategories] = useState([]);
-  const [ error, setError ] = useState(null);
   const isDarkMode = useSelector((state) => state.theme.isDarkMode);
   const selectedItem = useSelector((state) => state.menu?.selectedItem || null);
   const isLoggedIn = useSelector((state) => state.user.isLoggedIn);
@@ -44,7 +43,6 @@ const NavBarSideModal = ({
         setCategories(data);
       } catch (error) {
         console.error("카테고리 로드 실패:", error);
-        // Todo 에러 처리 로직 추가
       }
     };
 
@@ -67,7 +65,7 @@ const NavBarSideModal = ({
             <>
               <BorderButton onClick={navigateNewPost}>새 글 작성</BorderButton>
               <UserImg
-                src={userInfo?.imageUrl ? userInfo.imageUrl : profileIcon}
+                src={ userInfo.imageUrl === undefined ? userInfo.imageUrl : profileIcon }
                 alt="프로필"
               />
             </>
