@@ -28,7 +28,7 @@ import { useSelector } from "react-redux";
 import "./App.css";
 import "ckeditor5/ckeditor5.css";
 
-const WriteBoard = ({ postData, postId }) => {
+const WriteBoard = ({ postData, postId, imgList }) => {
   const { isMobile } = useSelector((state) => state.screenSize);
   const navigate = useNavigate();
   const [form, setValue] = useState({
@@ -37,7 +37,7 @@ const WriteBoard = ({ postData, postId }) => {
     hashtags: [],
     fileUrl: "",
   });
-  const [selectedCategory, setSelectedCategory] = useState(0);
+  const [selectedCategory, setSelectedCategory] = useState(1);
   const [imgUrls, setImgUrls] = useState([]);
 
   const toolbarContainerRef = useRef(null);
@@ -46,13 +46,15 @@ const WriteBoard = ({ postData, postId }) => {
   useEffect(() => {
     if (postData) {
       setValue({
-        title: postData.postInfo.title || "",
-        content: postData.postInfo.content || "",
-        hashtags: postData.postInfo.hashtags || [],
+        title: postData.title || "",
+        content: postData.content || "",
+        hashtags: postData.hashtags || [],
       });
-      setSelectedCategory(postData.categoryInfo.id);
-      const imgurl = postData.postInfo.imgUrl.map((img) => img.url);
-      setImgUrls(imgurl);
+      setSelectedCategory(postData.categoryId);
+      if (postData.id === 2) {
+        const imgurl = imgList.imgUrl.map((img) => img.url);
+        setImgUrls(imgurl);
+      }
     }
   }, [postData]);
 
@@ -181,10 +183,10 @@ const WriteBoard = ({ postData, postId }) => {
                 value={selectedCategory}
                 $isMobile={isMobile}
               >
-                <option value={0}>자유 게시판</option>
-                <option value={1}>질문 게시판</option>
+                <option value={1}>자유 게시판</option>
                 <option value={2}>프로젝트 자랑 게시판</option>
-                <option value={3}>공지 게시판</option>
+                <option value={3}>질문 게시판</option>
+                <option value={4}>공지 게시판</option>
               </Categoryselect>
             </span>
           </TitleWrap>

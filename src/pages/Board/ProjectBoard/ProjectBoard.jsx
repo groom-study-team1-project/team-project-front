@@ -24,7 +24,7 @@ function ProjectBoard() {
   const listRef = useRef(null);
 
   const dispatch = useDispatch();
-  const categoryId = 3;
+  const categoryId = 2;
   const limit = 10;
 
   const fetchData = async () => {
