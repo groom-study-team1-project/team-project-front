@@ -63,9 +63,7 @@ function Sidebar() {
       <SidebarIcon src={fileIcon} alt="프로젝트 게시판 아이콘" />
     ),
     "질문 게시판": <SidebarIcon src={questionIcon} alt="질문 게시판 아이콘" />,
-    "공지사항 게시판": (
-      <SidebarIcon src={informaitonIcon} alt="공지사항 아이콘" />
-    ),
+    "공지사항 게시판": <SidebarIcon src={informaitonIcon} alt="공지 아이콘" />,
   };
 
   return (

@@ -24,7 +24,7 @@ function QuestionBoard() {
   const listRef = useRef(null);
 
   const dispatch = useDispatch();
-  const categoryId = 2;
+  const categoryId = 3;
   const limit = 10;
 
   const fetchData = async () => {

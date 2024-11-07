@@ -189,25 +189,25 @@ export const fetchPostDetail = async (postId) => {
   }
 };
 
-export const fetchPostChange = async (body, postId, token) => {
+export const fetchPostChange = async (body, postId) => {
   try {
-    console.log(body);
-    console.log(postId);
-    // const result = await axiosInstance.put(`/api/posts/${postId}`, body);
-    // console.log(result);
+    const result = await axiosInstance.put(`/api/posts/${postId}`, body);
+    console.log(result);
+    // console.log(body);
+    // console.log(postId);
   } catch (error) {
     console.log(error);
   }
 };
 
-export const deletepost = async (postId, token) => {
+export const deletepost = async (postId) => {
   try {
-    const response = {
-      code: 1204,
-      message: "해당 게시글이 삭제되었습니다.",
-    };
-    console.log(response.message);
-    // await axiosInstance.delete(`/api/posts/delete/${postId}`);
+    const response = await axiosInstance.delete(`/api/posts/delete/${postId}`);
+    console.log(response);
+    // const response = {
+    //   code: 1204,
+    //   message: "해당 게시글이 삭제되었습니다.",
+    // };
   } catch (error) {
     console.log(error);
   }
