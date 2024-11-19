@@ -134,7 +134,7 @@ export const fetchPostDetail = async (postId) => {
     console.log(postId);
     const response = await axiosInstance.get(`/open/posts/${postId}`);
     console.log(response);
-    // console.log(1);
+    console.log(1);
     // const response = {
     //   status: {
     //     code: 1203,
