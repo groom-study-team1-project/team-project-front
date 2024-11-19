@@ -92,7 +92,7 @@ function BoardDetail() {
                 name={post.memberInfo.nickname}
                 job={post.memberInfo.memberJob}
                 email={post.memberInfo.email}
-                imgUrl={post.memberInfo.imageUrl}
+                imgUrl={post.memberInfo.image_url}
               />
               <PostheaderRignt $isMobile={isMobile}>
                 <div>{post.createdAt}</div>
