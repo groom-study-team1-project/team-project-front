@@ -5,39 +5,20 @@ export const login = async (body) => {
   try {
     const response = await axiosInstance.post("/members/login", body);
     console.log(response);
-    // const response = {
-    //   status: {
-    //     code: 1001,
-    //     message: "사용자 로그인에 성공하였습니다.",
-    //   },
-    //   result: {
-    //     accessToken:
-    //       "eyJhbGciOiJIUzI1NiJ9.eyJtZW1iZXJOaWNrbmFtZSI6Iuq1rOumhOydtCIsIm1lbWJlclJvbGUiOiJOT1JNQUwiLCJtZW1iZXJJZCI6MTEsIm1lbWJlckltYWdlVXJsIjoiaHR0cDovL2xvY2FsaG9zdDo4MDgwL2ltYWdlcy9wcm9maWxlLnBuZyIsImV4cCI6MTcyNzU4MDE5OSwiaWF0IjoxNzI3NTc4Mzk5fQ.RPK9JfSyqtB2A3ptqbtDwBGPqDSzC1Cq_DSp16KgrUE",
-    //     refreshToken:
-    //       "eyJhbGciOiJIUzI1NiJ9.eyJtZW1iZXJJZCI6MTEsImV4cCI6MTcyNzYyMTU5OSwiaWF0IjoxNzI3NTc4Mzk5fQ.jpv5Tq9_MtaE8W40O4QaBHhzWdk5kyhLgN-iGwgseYs",
-    //   },
-    // };
-
-    if (response.data.status.code === 1001) {
-      return response.data;
-    } else {
-      return response.data;
-    }
   } catch (error) {
-    console.log("로그인 실패:", error);
-    throw error;
+    console.log(error);
+    if (error.response) {
+      console.log("Error Response Data:", error.response.data); // 에러 응답 데이터 출력
+      return error.response.data;
+    } else {
+      console.error("Unexpected Error:", error);
+    }
   }
 };
 
 export const signUp = async (body) => {
   try {
     const response = await axiosInstance.post("/members/sign-up", body);
-    // const response = {
-    //   status: {
-    //     code: 1000,
-    //     message: "사용자 회원가입에 성공하였습니다.",
-    //   },
-    // };
 
     if (response.status.code === 1000) {
       return response;
@@ -57,16 +38,6 @@ export const uploadProfileImage = async (body) => {
       body
     );
 
-    // const response = {
-    //   status: {
-    //     code: 1004,
-    //     message: "사용자 프로필 이미지 업로드에 성공하였습니다.",
-    //   },
-    //   result: {
-    //     imageUrl:
-    //       "http://localhost:4566/test-bucket/profiles/11/a4b409a3_1727578574121.jpeg",
-    //   },
-    // };
     if (response.status.code === 1004) {
       return response.result;
     } else {
@@ -86,43 +57,20 @@ export const checkDuplicatedNickname = async (nickname) => {
       params: { nickname: nickname },
     });
     console.log(response);
-    // const response = {
-    //   status: {
-    //     code: 1102,
-    //     message: "사용할 수 있는 닉네임입니다.",
-    //   },
-    // };
 
     if (response.data.status.code === 1102) {
       return false;
-    } else if (response.data.status.code === 2004) {
+    } else {
       return true;
-    } else {
-      throw new Error(response.data.status.message || "닉네임 에러");
-    }
-  } catch (error) {
-    console.log("checking nickname error", error);
-    throw error;
-  }
-};
-
-export const logout = async (accessToken) => {
-  try {
-    // const response = await axiosInstance.post(
-    //   "/api/members/log-out",
-    // );
-    const response = {
-      code: 1002,
-      message: "사용자 로그아웃에 성공하였습니다.",
-    };
-
-    if (response.code === 1002) {
-      console.log("로그아웃 성공:", response.message);
-    } else {
-      throw new Error(response.data.message || "로그아웃 실패");
     }
   } catch (error) {
     console.log(error);
+    if (error.response) {
+      console.log("Error Response Data:", error.response.data); // 에러 응답 데이터 출력
+      return error.response.data;
+    } else {
+      throw error;
+    }
   }
 };
 

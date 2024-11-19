@@ -1,106 +1,103 @@
 import axios from "axios";
-import { useSelector, useDispatch } from "react-redux";
-import { useNavigate } from "react-router-dom";
 import { updateToken, userLogout } from "../store/user/userSlice";
 
 const axiosInstance = axios.create({
-  baseURL: "http://localhost:8080",
+  baseURL: "http://localhost:8080/",
   headers: {
     "Content-Type": "application/json",
   },
 });
 
-axiosInstance.interceptors.request.use(
-  (config) => {
-    const needsAuth = config.url.startsWith("/api");
-    if (needsAuth) {
-      const accessToken = useSelector(
-        (state) => state.user.userInfo.accessToken
-      );
-
-      config.headers["Authorization"] = `Bearer ${accessToken}`;
-    }
-    return config;
-  },
-  (error) => Promise.reject(error)
-);
-
-axiosInstance.interceptors.response.use(
-  (response) => response,
-  async (error) => {
-    const originalRequest = error.config;
-    const dispatch = useDispatch();
-    const navigate = useNavigate();
-
-    const statusCode = error.response ? error.response.status : null;
-    const errorCode =
-      error.response && error.response.data ? error.response.data.code : null;
-
-    if (originalRequest.url.startsWith("/api") && statusCode === 401) {
-      switch (errorCode) {
-        case 9001: // 토큰 유효기간 만료
-          if (!originalRequest._retry) {
-            originalRequest._retry = true;
-            try {
-              const refreshToken = useSelector(
-                (state) => state.user.userInfo.refreshToken
-              );
-
-              const response = await axiosInstance.patch("/tokens/re-issue", {
-                refreshToken: refreshToken,
-              });
-
-              if (response.status.code !== 8000) {
-                throw new Error(response.status.message || "토큰 재발급 실패");
-              }
-
-              // 새로운 Access Token 설정
-              axiosInstance.defaults.headers.common[
-                "Authorization"
-              ] = `Bearer ${response.result.accessToken}`;
-
-              dispatch(
-                updateToken({
-                  accessToken: response.result.accessToken,
-                  refreshToken: response.result.refreshToken,
-                })
-              );
-
-              // 원래 요청 재시도
-              originalRequest.headers[
-                "Authorization"
-              ] = `Bearer ${response.result.accessToken}`;
-
-              return axiosInstance(originalRequest);
-            } catch (refreshError) {
-              console.error("토큰 재발급 실패:", refreshError);
-
-              dispatch(userLogout());
-              navigate("/login");
-            }
-          }
-          break;
-
-        case 9000:
-        case 9002:
-        case 9003:
-        case 9004:
-        case 9005:
-          console.error("토큰 관련 오류 발생:", error.response.message);
-          dispatch(userLogout());
-          navigate("/");
-          break;
-
-        default:
-          console.error("기타 오류 발생:", error.response.message);
-          dispatch(userLogout());
-          navigate("/");
-          break;
+// Redux Toolkit과 React Router 통합
+export const setupAxiosInterceptors = (store, navigate) => {
+  // 요청 인터셉터
+  axiosInstance.interceptors.request.use(
+    (config) => {
+      const needsAuth = config.url.startsWith("/api"); // 인증이 필요한 요청만 처리
+      if (needsAuth) {
+        const accessToken = store.getState().user.userInfo.accessToken; // Redux Toolkit 상태에서 토큰 가져오기
+        if (accessToken) {
+          config.headers["Authorization"] = `Bearer ${accessToken}`;
+        }
       }
-    }
+      return config;
+    },
+    (error) => Promise.reject(error)
+  );
 
-    return Promise.reject(error);
-  }
-);
+  // 응답 인터셉터
+  axiosInstance.interceptors.response.use(
+    (response) => response,
+    async (error) => {
+      const originalRequest = error.config;
+
+      const statusCode = error.response ? error.response.status : null;
+      const errorCode =
+        error.response && error.response.data ? error.response.data.code : null;
+
+      if (originalRequest.url.startsWith("/api") && statusCode === 401) {
+        switch (errorCode) {
+          case 9001: // 토큰 유효기간 만료
+            if (!originalRequest._retry) {
+              originalRequest._retry = true;
+              try {
+                const refreshToken =
+                  store.getState().user.userInfo.refreshToken; // 리프레시 토큰 가져오기
+
+                const response = await axiosInstance.patch("/tokens/re-issue", {
+                  refreshToken: refreshToken,
+                });
+
+                if (response.data.status.code !== 8000) {
+                  throw new Error(
+                    response.data.status.message || "토큰 재발급 실패"
+                  );
+                }
+
+                // 새로운 Access Token Redux에 업데이트
+                store.dispatch(
+                  updateToken({
+                    accessToken: response.data.result.accessToken,
+                    refreshToken: response.data.result.refreshToken,
+                  })
+                );
+
+                // 원래 요청에 새로운 Access Token 적용
+                originalRequest.headers[
+                  "Authorization"
+                ] = `Bearer ${response.data.result.accessToken}`;
+
+                return axiosInstance(originalRequest); // 원래 요청 재시도
+              } catch (refreshError) {
+                console.error("토큰 재발급 실패:", refreshError);
+
+                store.dispatch(userLogout());
+                navigate("/login"); // 로그인 페이지로 이동
+              }
+            }
+            break;
+
+          case 9000: // 기타 토큰 관련 오류
+          case 9002:
+          case 9003:
+          case 9004:
+          case 9005:
+            console.error("토큰 관련 오류 발생:", error.response.data.message);
+            store.dispatch(userLogout());
+            navigate("/"); // 홈으로 이동
+            break;
+
+          default:
+            console.error("기타 오류 발생:", error.response.data.message);
+            store.dispatch(userLogout());
+            navigate("/");
+            break;
+        }
+      }
+
+      return Promise.reject(error);
+    }
+  );
+};
 
 export default axiosInstance;

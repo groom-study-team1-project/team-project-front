@@ -18,7 +18,6 @@ import ModalLayout from "../../components/Modal/Modal";
 import LoginModal from "../../components/Modal/LoginModal/LoginModal";
 import SignUpModal from "../../components/Modal/SignUpModal/SignUpModal";
 import ChangeUserPw from "../../components/Modal/ChangeUserPwModal/ChangeUserPw";
-import { logout } from "../../services/api/authApi";
 import { fetchCategoryItems } from "../../services/api/postApi";
 import { userLogout } from "../../store/user/userSlice";
 import logoImg from "../../assets/images/DEEPDIVERS.png";
@@ -90,7 +89,6 @@ function Navbar({ isMainPage = false }) {
   };
 
   const handleNavClick = (to) => {
-    dispatch(logout());
     handleNavigation(to);
   };
 
@@ -105,7 +103,6 @@ function Navbar({ isMainPage = false }) {
 
   async function handleLogout(e) {
     try {
-      await logout();
       dispatch(userLogout());
       setMenuOpen(false);
       navigate("/");
