@@ -111,7 +111,8 @@ function UserDetailsInputForm({ email, handlePrev, changeModal }) {
           email,
           password,
           nickname,
-          imageUrl: profileImgUrl,
+          imageUrl:
+            "https://png.pngtree.com/png-vector/20191009/ourmid/pngtree-user-icon-png-image_1796659.jpg",
           phoneNumber,
         };
 
@@ -186,7 +187,6 @@ function UserDetailsInputForm({ email, handlePrev, changeModal }) {
             value={nickname}
             onChange={(e) => setNickname(e.target.value)}
             onBlur={(e) => handleNicknameBlur(e.target.value)}
-            hasError={errors.nickname}
           />
           {errors.nickname && <ErrorMsg>{errors.nickname}</ErrorMsg>}
         </div>

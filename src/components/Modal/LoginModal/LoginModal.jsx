@@ -28,10 +28,7 @@ export default function LoginModal({ closeModal, changeModal }) {
       let body = { email, password };
       setErrvisible(true);
       const response = await login(body);
-      console.log(response.message);
-      if (response.message) {
-        setErrmsg(response.message);
-      }
+      console.log(response);
       if (response.status.code === 1001) {
         dispatch(
           userLogin({
@@ -40,6 +37,9 @@ export default function LoginModal({ closeModal, changeModal }) {
           })
         );
         closeModal();
+      }
+      if (response.message) {
+        setErrmsg(response.message);
       }
     } catch (err) {
       console.log(err);

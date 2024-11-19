@@ -24,12 +24,6 @@ export const FormInputField = ({
 }) => (
   <FormInputContainer>
     <p>{label}</p>
-    <Input
-      type={type}
-      value={value}
-      onChange={onChange}
-      onBlur={onBlur}
-      hasError={hasError}
-    />
+    <Input type={type} value={value} onChange={onChange} onBlur={onBlur} />
   </FormInputContainer>
 );

@@ -10,7 +10,7 @@ function App() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    setupAxiosInterceptors(store, navigate);
+    setupAxiosInterceptors(store, navigate); // 인터셉터 등록
   }, [navigate]);
 
   return (
