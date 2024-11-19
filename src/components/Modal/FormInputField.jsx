@@ -14,9 +14,16 @@ const Input = styled.input`
   background-color: white;
 `;
 
-export const FormInputField = ({ label, type, value, onChange }) => (
+export const FormInputField = ({
+  label,
+  type,
+  value,
+  onChange,
+  onBlur,
+  hasError,
+}) => (
   <FormInputContainer>
     <p>{label}</p>
-    <Input type={type} value={value} onChange={onChange} />
+    <Input type={type} value={value} onChange={onChange} onBlur={onBlur} />
   </FormInputContainer>
 );

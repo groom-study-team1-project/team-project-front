@@ -42,10 +42,7 @@ function EmailInputForm({ handleNext, handleSubmitEmail, sendEmail }) {
       if (isValid) {
         let body = { email };
 
-        const { success, message } =
-          sendEmail === "email"
-            ? await sendEmailVerificationCode(body)
-            : await sendEmailVerificationCodePassword(body);
+        const { success, message } = await sendEmailVerificationCode(body);
 
         if (!success) {
           setError(message);

@@ -44,10 +44,10 @@ function BoardDetail() {
             setCategory("자유 게시판");
             break;
           case 2:
-            setCategory("질문 게시판");
+            setCategory("프로젝트 게시판");
             break;
           case 3:
-            setCategory("프로젝트 게시판");
+            setCategory("질문 게시판");
             break;
           case 4:
             setCategory("공지사항");
@@ -74,7 +74,7 @@ function BoardDetail() {
     setModalVisible(false);
   };
   const handleDelete = () => {
-    deletepost(`${postId}`);
+    deletepost(postId);
     setModalVisible(false);
   };
 
@@ -92,7 +92,7 @@ function BoardDetail() {
                 name={post.memberInfo.nickname}
                 job={post.memberInfo.memberJob}
                 email={post.memberInfo.email}
-                imgUrl={post.memberInfo.imageUrl}
+                imgUrl={post.memberInfo.image_url}
               />
               <PostheaderRignt $isMobile={isMobile}>
                 <div>{post.createdAt}</div>

@@ -30,20 +30,6 @@ function UserDetailsInputForm({ email, handlePrev, changeModal }) {
   const validateForm = async () => {
     try {
       let errors = {};
-
-      if (nickname.length < 2 || nickname.length > 20) {
-        errors.nickname = "닉네임은 2글자부터 20글자까지 가능합니다.";
-      }
-
-      if (!/^[a-zA-Z0-9가-힣]+$/.test(nickname)) {
-        errors.nickname =
-          "닉네임은 영어 대소문자, 한글, 숫자의 조합이어야 합니다.";
-      }
-
-      if (await checkDuplicatedNickname(nickname)) {
-        errors.nickname = "중복된 닉네임입니다.";
-      }
-
       if (password.length < 8 || password.length > 16) {
         errors.password = "비밀번호는 8글자 이상 16글자 이하이어야 합니다.";
       }
@@ -76,6 +62,42 @@ function UserDetailsInputForm({ email, handlePrev, changeModal }) {
     }
   };
 
+  const handleNicknameBlur = async (value) => {
+    console.log("handleNicknameBlur 호출됨:", value);
+
+    if (value.length < 2 || value.length > 20) {
+      console.log("닉네임 길이 조건 실패");
+      setErrors((prev) => ({
+        ...prev,
+        nickname: "닉네임은 2글자부터 20글자까지 가능합니다.",
+      }));
+      return;
+    }
+
+    try {
+      const isDuplicated = await checkDuplicatedNickname(value);
+      console.log("중복 검사 결과:", isDuplicated);
+
+      if (isDuplicated) {
+        setErrors((prev) => ({
+          ...prev,
+          nickname: "중복된 닉네임입니다.",
+        }));
+      } else {
+        setErrors((prev) => {
+          const { nickname, ...rest } = prev;
+          return rest; // 닉네임 에러 제거
+        });
+      }
+    } catch (err) {
+      console.error("API 호출 실패:", err);
+      setErrors((prev) => ({
+        ...prev,
+        nickname: "API 호출 실패: 닉네임 확인 중 오류가 발생했습니다.",
+      }));
+    }
+  };
+
   async function handleSignUp(e) {
     e.preventDefault();
 
@@ -90,7 +112,7 @@ function UserDetailsInputForm({ email, handlePrev, changeModal }) {
           password,
           nickname,
           imageUrl:
-            "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS6KVvlziiJYFxZZIq3Xc_dVuzIbSLrgvtHPA&s",
+            "https://png.pngtree.com/png-vector/20191009/ourmid/pngtree-user-icon-png-image_1796659.jpg",
           phoneNumber,
         };
 
@@ -164,7 +186,7 @@ function UserDetailsInputForm({ email, handlePrev, changeModal }) {
             type={"text"}
             value={nickname}
             onChange={(e) => setNickname(e.target.value)}
-            hasError={errors.nickname}
+            onBlur={(e) => handleNicknameBlur(e.target.value)}
           />
           {errors.nickname && <ErrorMsg>{errors.nickname}</ErrorMsg>}
         </div>
