@@ -2,7 +2,7 @@ import axios from "axios";
 import { updateToken, userLogout } from "../store/user/userSlice";
 
 const axiosInstance = axios.create({
-  baseURL: "http://localhost:8080/",
+  baseURL: "https://deepdivers.store/",
   headers: {
     "Content-Type": "application/json",
   },
@@ -11,18 +11,31 @@ const axiosInstance = axios.create({
 // Redux Toolkit과 React Router 통합
 export const setupAxiosInterceptors = (store, navigate) => {
   // 요청 인터셉터
+
   axiosInstance.interceptors.request.use(
     (config) => {
-      const needsAuth = config.url.startsWith("/api"); // 인증이 필요한 요청만 처리
-      if (needsAuth) {
-        const accessToken = store.getState().user.userInfo.accessToken; // Redux Toolkit 상태에서 토큰 가져오기
-        if (accessToken) {
-          config.headers["Authorization"] = `Bearer ${accessToken}`;
-        }
+      const accessToken = store.getState().user.userInfo.accessToken;
+      console.log("Access Token in Interceptor:", accessToken);
+      if (accessToken) {
+        config.headers["Authorization"] = `Bearer ${accessToken}`;
       }
       return config;
     },
-    (error) => Promise.reject(error)
+    (error) => {
+      console.error("Request Interceptor Error:", error);
+      return Promise.reject(error);
+    }
+  );
+
+  axiosInstance.interceptors.response.use(
+    (response) => {
+      console.log("Response Interceptor Triggered");
+      return response;
+    },
+    (error) => {
+      console.error("Response Interceptor Error:", error);
+      return Promise.reject(error);
+    }
   );
 
   // 응답 인터셉터

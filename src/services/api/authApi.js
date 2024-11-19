@@ -5,6 +5,7 @@ export const login = async (body) => {
   try {
     const response = await axiosInstance.post("/members/login", body);
     console.log(response);
+    return response.data;
   } catch (error) {
     console.log(error);
     if (error.response) {
@@ -19,7 +20,7 @@ export const login = async (body) => {
 export const signUp = async (body) => {
   try {
     const response = await axiosInstance.post("/members/sign-up", body);
-
+    console.log(response);
     if (response.status.code === 1000) {
       return response;
     } else {
@@ -78,38 +79,16 @@ export const fetchProfileInfo = async (memberId) => {
   let isMe = true;
 
   try {
-    // const response = await axiosInstance.get(`/api/members/me/${memberId}`);
-
-    const response = {
-      status: {
-        code: 1002,
-        message: "본인 프로필 조회에 성공하였습니다.",
-      },
-      result: {
-        nickname: "구름이",
-        role: "NORMAL",
-        imageUrl: "http://localhost:8080/images/profile.png",
-        aboutMe: "나는 구름이",
-        phoneNumber: "010-1234-5678",
-        githubUrl: "",
-        blogUrl: "",
-        activityStats: {
-          postCount: 0,
-          commentCount: 0,
-        },
-      },
-    };
-
-    if (response.status.code === 1002) {
-      return { isMe, data: response.result };
-    } else if (response.status.code === 1003) {
-      isMe = false;
-      return { isMe, data: response.result };
-    } else {
-      throw new Error(response.message || "프로필 조회 실패");
-    }
+    console.log("fetchProfileInfo called with memberId:", memberId); // 함수 호출 확인
+    console.log("Generated URL:", `/api/members/me/${memberId}`); // URL 확인
+    const response = await axiosInstance.get(`/api/members/me/${memberId}`);
+    console.log("Axios Response:", response); // 응답 확인
+    return response.data; // 응답 데이터 반환
   } catch (error) {
-    console.error("사용자 정보를 불러오는데 실패했습니다.", error);
+    console.error(
+      "Error in fetchProfileInfo:",
+      error.response || error.message
+    ); // 에러 메시지 출력
     throw error;
   }
 };
@@ -217,16 +196,10 @@ export const postInfo = async (categoryId, lastPostId) => {
 // 인증 코드 검사
 export const verifyEmailCode = async (body) => {
   try {
-    // const response = await axiosInstance.post("/accounts/verify/email", body);
+    const response = await axiosInstance.post("/accounts/verify/email", body);
+    console.log(response);
 
-    const response = {
-      status: {
-        code: 1101,
-        message: "사용자 이메일 인증이 성공하였습니다.",
-      },
-    };
-
-    if (response.status.code === 1101) {
+    if (response.data.status.code === 1101) {
       return true;
     } else {
       throw new Error(response.message || "유효하지 않은 인증코드");
@@ -240,25 +213,23 @@ export const verifyEmailCode = async (body) => {
 // 이메일 인증 코드 전송
 export const sendEmailVerificationCode = async (body) => {
   try {
-    // const response = await axiosInstance.post("/accounts/authenticate/email", body);
+    const response = await axiosInstance.post(
+      "/accounts/authenticate/email",
+      body
+    );
+    console.log(response);
 
-    const response = {
-      status: {
-        code: 1100,
-        message: "이메일로 인증코드가 전송되었습니다.",
-      },
-    };
-
-    if (response.status.code === 1100) {
-      return { success: true, message: response.status.message };
-    } else if (response.status.code === 2003) {
-      return { success: false, message: response.status.message };
-    } else {
-      throw new Error(response.message || "유효하지 않은 인증코드");
+    if (response.data.status.code === 1100) {
+      return { success: true, message: response.data.status.message };
     }
   } catch (error) {
-    console.error("유효하지 않은 인증코드", error);
-    throw error;
+    console.log(error);
+    if (error.response) {
+      console.log("Error Response Data:", error.response.data); // 에러 응답 데이터 출력
+      return { success: false, message: error.response.data.message };
+    } else {
+      console.error("Unexpected Error:", error);
+    }
   }
 };
 

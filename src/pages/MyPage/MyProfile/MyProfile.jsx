@@ -28,16 +28,20 @@ function MyProfile() {
       return;
     }
 
-    if (memberId) {
-      console.log("fetch");
-      fetchProfileInfo(memberId)
-        .then(({ isMe, data }) => {
-          setIsMe(isMe);
-          setProfileData(data);
-        })
-        .catch((err) => setError(err));
-    }
-  }, []);
+    // 프로필 데이터를 가져오는 함수
+    const getProfileData = async () => {
+      try {
+        const { isMe, data } = await fetchProfileInfo(memberId);
+        setIsMe(isMe); // 현재 사용자 여부 설정
+        setProfileData(data); // 프로필 데이터 설정
+      } catch (error) {
+        console.error("Error fetching profile data:", error);
+        setError(error); // 에러 설정
+      }
+    };
+
+    getProfileData();
+  }, [isLoggedIn, memberId]);
 
   if (!isLoggedIn) {
     return <div>로그인이 필요합니다.</div>;
