@@ -27,17 +27,6 @@ export const setupAxiosInterceptors = (store, navigate) => {
     }
   );
 
-  axiosInstance.interceptors.response.use(
-    (response) => {
-      console.log("Response Interceptor Triggered");
-      return response;
-    },
-    (error) => {
-      console.error("Response Interceptor Error:", error);
-      return Promise.reject(error);
-    }
-  );
-
   // 응답 인터셉터
   axiosInstance.interceptors.response.use(
     (response) => response,

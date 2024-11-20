@@ -106,18 +106,28 @@ function UserDetailsInputForm({ email, handlePrev, changeModal }) {
     if (isValid) {
       try {
         const profileImgUrl = await uploadImageAndGetUrl();
-
-        let body = {
-          email,
-          password,
-          nickname,
-          imageUrl:
-            "https://png.pngtree.com/png-vector/20191009/ourmid/pngtree-user-icon-png-image_1796659.jpg",
-          phoneNumber,
-        };
-
-        const response = await signUp(body);
-        console.log(response);
+        if (profileImgUrl) {
+          let body = {
+            email,
+            password,
+            nickname,
+            imageUrl: profileImgUrl,
+            phoneNumber,
+          };
+          const response = await signUp(body);
+          console.log(response);
+        } else {
+          let body = {
+            email,
+            password,
+            nickname,
+            imageUrl:
+              "https://png.pngtree.com/png-vector/20191009/ourmid/pngtree-user-icon-png-image_1796659.jpg",
+            phoneNumber,
+          };
+          const response = await signUp(body);
+          console.log(response);
+        }
 
         changeModal("login");
       } catch (err) {

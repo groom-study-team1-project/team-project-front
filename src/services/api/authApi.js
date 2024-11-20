@@ -39,11 +39,11 @@ export const uploadProfileImage = async (body) => {
       body
     );
 
-    if (response.status.code === 1004) {
-      return response.result;
+    if (response.data.status.code === 1004) {
+      return response.data.result;
     } else {
       throw new Error(
-        response.status.message || "업로드 할 수 없는 이미지입니다."
+        response.data.status.message || "업로드 할 수 없는 이미지입니다."
       );
     }
   } catch (error) {
