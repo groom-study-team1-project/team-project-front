@@ -58,12 +58,12 @@ function Sidebar() {
   };
 
   const iconMapping = {
-    "자유게시판": <SidebarIcon src={cardIcon} alt="자유 게시판 아이콘" />,
+    자유게시판: <SidebarIcon src={cardIcon} alt="자유 게시판 아이콘" />,
     "프로젝트 자랑 게시판": (
       <SidebarIcon src={fileIcon} alt="프로젝트 게시판 아이콘" />
     ),
     "질문 게시판": <SidebarIcon src={questionIcon} alt="질문 게시판 아이콘" />,
-    "공지사항 게시판": <SidebarIcon src={informaitonIcon} alt="공지 아이콘" />,
+    "공지 게시판": <SidebarIcon src={informaitonIcon} alt="공지 아이콘" />,
   };
 
   return (
