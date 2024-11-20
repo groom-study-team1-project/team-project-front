@@ -17,23 +17,13 @@ export const setupAxiosInterceptors = (store, navigate) => {
       const accessToken = store.getState().user.userInfo.accessToken;
       console.log("Access Token in Interceptor:", accessToken);
       if (accessToken) {
+        console.log(accessToken);
         config.headers["Authorization"] = `Bearer ${accessToken}`;
       }
       return config;
     },
     (error) => {
       console.error("Request Interceptor Error:", error);
-      return Promise.reject(error);
-    }
-  );
-
-  axiosInstance.interceptors.response.use(
-    (response) => {
-      console.log("Response Interceptor Triggered");
-      return response;
-    },
-    (error) => {
-      console.error("Response Interceptor Error:", error);
       return Promise.reject(error);
     }
   );
