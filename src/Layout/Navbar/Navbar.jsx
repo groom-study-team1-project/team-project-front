@@ -207,7 +207,7 @@ function Navbar({ isMainPage = false }) {
             <div style={{ position: "relative", display: "inline-block" }}>
               <Button onClick={handleToggleMenu}>
                 <img
-                  src={userInfo.imageUrl === undefined ? userInfo.imageUrl : profileIcon}
+                  src={userInfo.imageUrl}
                   alt="프로필"
                   style={{
                     borderRadius: "20px",
@@ -217,7 +217,7 @@ function Navbar({ isMainPage = false }) {
                   }}
                 />
                 <ProfileMenu
-                  isOpen={menuOpen}
+                  $isOpen={menuOpen}
                   onNavigate={() => handleNavigation("my-profile")}
                   onLogout={handleLogout}
                 ></ProfileMenu>
