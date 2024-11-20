@@ -17,6 +17,7 @@ export const setupAxiosInterceptors = (store, navigate) => {
       const accessToken = store.getState().user.userInfo.accessToken;
       console.log("Access Token in Interceptor:", accessToken);
       if (accessToken) {
+        console.log(accessToken);
         config.headers["Authorization"] = `Bearer ${accessToken}`;
       }
       return config;
