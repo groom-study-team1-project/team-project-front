@@ -41,7 +41,7 @@ const DropdownMenuItem = styled.div`
 function ProfileMenu({ isOpen, onNavigate, onLogout }) {
   return (
     <div>
-      <DropdownMenu isOpen={isOpen}>
+      <DropdownMenu $isOpen={isOpen}>
         <DropdownMenuItem onClick={onNavigate}>마이페이지</DropdownMenuItem>
         <p style={{ borderTop: "0.5px solid rgba(0, 0, 0, 0.2)" }}></p>
         <DropdownMenuItem onClick={onLogout}>로그아웃</DropdownMenuItem>

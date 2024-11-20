@@ -1,4 +1,5 @@
 import React from "react";
+import { useState, useEffect } from "react";
 import {
   NavBarSideContainer,
   SectionTitle,
@@ -14,24 +15,67 @@ import lightmodeIcon from "../../../assets/images/lightmode.png";
 import profileIcon from "../../../assets/images/profileIcon.png";
 import { SidebarLi, SidebarLink } from "../../../Layout/Sidebar/Sidebar.style";
 import { useSelector } from "react-redux";
+import { fetchCategoryItems } from "../../../services/api/postApi";
+import { fetchUserInfo } from "../../../services/api/api";
 
 const NavBarSideModal = ({
   isOpen,
   setIsOpen,
-  menuItems,
   handleMenuClick,
   handleDarkMode,
   handleDropDown,
-  userInfo,
   navigateNewPost,
   navigateMyPage,
   onLogout,
   onLogin,
   onSignUp,
 }) => {
+  const [categories, setCategories] = useState([]);
+  const [userInfo, setUserInfo] = useState([]);
   const isDarkMode = useSelector((state) => state.theme.isDarkMode);
   const selectedItem = useSelector((state) => state.menu?.selectedItem || null);
   const isLoggedIn = useSelector((state) => state.user.isLoggedIn);
+
+  let memberId = 1;
+
+  // 카테고리 데이터 불러오기
+  useEffect(() => {
+    const loadCategories = async () => {
+      try {
+        const data = await fetchCategoryItems();
+        setCategories(data);
+      } catch (error) {
+        console.error("카테고리 로드 실패: ", error);
+      }
+    };
+
+    loadCategories();
+  }, []);
+
+  useEffect(() => {
+    let isMounted = true;
+
+    const loadProfile = async () => {
+      if (!memberId) return;
+
+      try {
+        const data = await fetchUserInfo(memberId);
+        if (isMounted) {
+          setUserInfo(data);
+        }
+      } catch (error) {
+        if (isMounted) {
+          console.error("유저 정보 불러오기 실패: ", error);
+        }
+      }
+    };
+
+    loadProfile();
+
+    return () => {
+      isMounted = false;
+    };
+  }, [memberId]);
 
   if (!isOpen) return null;
 
@@ -49,7 +93,7 @@ const NavBarSideModal = ({
             <>
               <BorderButton onClick={navigateNewPost}>새 글 작성</BorderButton>
               <UserImg
-                src={userInfo?.imageUrl ? userInfo.imageUrl : profileIcon}
+                src={ userInfo?.imageUrl || profileIcon }
                 alt="프로필"
               />
             </>
@@ -79,7 +123,7 @@ const NavBarSideModal = ({
       )}
       <SectionTitle $isDarkMode={isDarkMode}>게시판</SectionTitle>
       <NavMenu>
-        {menuItems.map((item) => (
+        {categories.map((item) => (
           <SidebarLi
             key={item.id}
             onClick={() => {

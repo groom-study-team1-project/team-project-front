@@ -134,7 +134,7 @@ export const fetchPostDetail = async (postId) => {
     console.log(postId);
     const response = await axiosInstance.get(`/open/posts/${postId}`);
     console.log(response);
-    // console.log(1);
+    console.log(1);
     // const response = {
     //   status: {
     //     code: 1203,
@@ -228,6 +228,22 @@ export const sortPostsByCriteria = async (categoty_id, sort, post_id) => {
 export async function fetchCategoryItems() {
   try {
     const response = await axiosInstance.get("/open/categories");
+
+    if (response.status === 200 || response.data.status.code === 9999) {
+      const categoryIconMap = {
+        "자유게시판": <MdCreditCard />,
+        "프로젝트 자랑 게시판": <IoDocumentsOutline />,
+        "질문 게시판": <GrUserSettings />,
+        "공지 게시판": <BsPatchQuestion />
+      };
+
+      const categoriesWithIcons = response.data.result.map(category => ({
+        ...category,
+        icon: categoryIconMap[category.title]
+      }));
+
+      return categoriesWithIcons;
+    }
     // const response = {
     //   code: 1200,
     //   message: "카테고리 목록 조회에 성공하였습니다.",
@@ -238,16 +254,17 @@ export async function fetchCategoryItems() {
     //     { id: 4, item: "공지사항", icon: <BsPatchQuestion /> },
     //   ],
     // };
-
-    if (response.data.status.code === 1301) {
+    /*if (response.data.status.code === 1301) {
       return response.data.result;
     } else {
       throw new Error(
         response.data.status.message || "카테고리를 불러올 수 없습니다."
       );
-    }
+    }*/
   } catch (error) {
     console.log("checking nickname error", error);
     throw error;
   }
 }
+
+
