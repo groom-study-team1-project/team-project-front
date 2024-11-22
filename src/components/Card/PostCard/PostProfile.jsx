@@ -21,7 +21,7 @@ const ProfileInfo = styled.div`
 
 const ProfileInfoName = styled.p`
   font-size: ${({ $isBig }) => ($isBig ? "48px" : "14px")};
-    text-wrap: nowrap;
+  text-wrap: nowrap;
 `;
 
 const ProfileInfoJob = styled.p`
@@ -58,6 +58,12 @@ export const PostProfileBox = ({ name, job, memberId, imgUrl }) => {
   );
 };
 
-export const BigProfileBox = ({ nickName, job }) => (
-  <ProfileBox name={nickName} job={job} size="200px" isBig={true} />
+export const BigProfileBox = ({ nickName, job, src }) => (
+  <ProfileBox
+    name={nickName}
+    job={job}
+    size="200px"
+    isBig={true}
+    imgUrl={src}
+  />
 );

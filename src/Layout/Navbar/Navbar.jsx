@@ -23,7 +23,6 @@ import { userLogout } from "../../store/user/userSlice";
 import logoImg from "../../assets/images/DEEPDIVERS.png";
 import { selectMenuItem } from "../../store/category/menuSlice";
 import darkmodeIcon from "../../assets/images/darkmode.png";
-import profileIcon from "../../assets/images/profileIcon.png";
 import useJwt from "../../hooks/useJwt";
 import ProfileMenu from "./ProfileMenu";
 import { changeTheme } from "../../store/theme/themeSlice";
@@ -40,9 +39,7 @@ function Navbar({ isMainPage = false }) {
   const [dropDown, setDropDown] = useState(false);
   const [navModalOpen, setNavModalOpen] = useState(false);
   const isLoggedIn = useSelector((state) => state.user.isLoggedIn);
-  const { isMobile, isTablet, isDesktop } = useSelector(
-    (state) => state.screenSize
-  );
+  const { isDesktop } = useSelector((state) => state.screenSize);
 
   const payload = useJwt(
     useSelector((state) => state.user.userInfo.accessToken)

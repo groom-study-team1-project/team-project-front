@@ -90,10 +90,10 @@ export const ProfileActions = styled.div`
   margin-top: 15px;
   margin-left: 20px;
   width: 120%;
-    @media (max-width: 550px) {
-        flex-direction: column;
-        gap: 20px;
-    }
+  @media (max-width: 550px) {
+    flex-direction: column;
+    gap: 20px;
+  }
   button {
     height: 40px;
   }
@@ -117,7 +117,9 @@ export const ButtonGroup = styled.div`
   }
 `;
 
-export const SubmitBtn = styled.button`
+export const SubmitBtn = styled.button.withConfig({
+  shouldForwardProp: (prop) => !["$bgColor", "$Color"].includes(prop),
+})`
   background: ${(props) => props.$bgColor || "#fff"};
   color: ${(props) => props.$Color || "#fff"};
   border-radius: 10px;
