@@ -18,6 +18,7 @@ import freeBoardCardImg from "../../assets/images/Story Card Horizontal.png";
 import { fetchCategoryItems } from "../../services/api/postApi";
 import { useDispatch } from "react-redux";
 import { selectMenuItem } from "../../store/category/menuSlice";
+import Comment from "../../components/Common/Comment/Comment";
 
 function MainPage() {
   const [menuItems, setMenuItems] = useState([]);
@@ -87,6 +88,7 @@ function MainPage() {
                 DeepDivers 게시판으로 바로가기
                 <img src={redirectIcon} alt="Redirect to board" />
               </Button>
+              <Comment></Comment>
             </LeftArea>
             {!isMobile && (
                 <PostCardLine>

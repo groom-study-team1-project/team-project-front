@@ -1,23 +1,55 @@
 import React from 'react';
 
-function Comment(props) {
+function Comment(postId) {
+
+    const [comments, setComments] = React.useState([]);
+    const [newComment, setNewComment] = React.useState("");
+
+    React.useEffect(() => {
+        fetchComment(postId).then(response =>
+            setComments(response.data)
+        );
+    }, []);
+
+    const fetchComment = async (postId) => {
+        const response = await fetch("/comments/" + postId);
+        const data = await response.json();
+        setComments(data);
+    };
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        const comment = {
+            id : Date.now(),
+            text : newComment,
+            date : new Date()
+        };
+
+        setComments([...comments, comment]);
+        setNewComment("");
+    }
+
     return (
         <div>
-            <form>
+            <form onSubmit={handleSubmit}>
                 <textarea
+                    value={newComment}
+                    onChange={(e) => setNewComment(e.target.value)}
                     placeholder="write your opinion..."
                 />
                 <button type="submit">작성</button>
             </form>
-            {/* 이전에 등록된 댓글들 보여주게 */}
-            <div>
-                <div>
-                    <p>댓글 1</p>
-                    <small>2 시간 전</small>
-                </div>
+
+            <div className="previousComments">
+                {comments.map((comment) => (
+                    <div>
+                        <p>{comment.text}</p>
+                        <small>{comment.date.toString()}</small>
+                    </div>
+                ))}
             </div>
         </div>
-    )
+    );
 }
 
 export default Comment;
