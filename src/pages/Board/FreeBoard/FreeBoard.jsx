@@ -17,7 +17,7 @@ import { BarLoading } from "../../../components/Common/LodingSpinner";
 
 function FreeBoard() {
   const [postItems, setPostItems] = useState([]);
-  const [lastPostIdByCategory, setLastPostIdByCategory] = useState(null);
+  const [lastPostIdByCategory, setLastPostIdByCategory] = useState(Number.MAX_SAFE_INTEGER);
   const [loading, setLoading] = useState(false);
   const [hasMore, setHasMore] = useState(true);
   const isThrottleActive = useRef(false);
@@ -35,11 +35,11 @@ function FreeBoard() {
     setTimeout(async () => {
       try {
         const { posts } = await fetchPostItems(
-          categoryId,
-          lastPostIdByCategory
+            categoryId,
+            lastPostIdByCategory
         );
         const filteredPosts = posts.filter(
-          (post) => post.categoryId === categoryId
+            (post) => post.categoryId === categoryId
         );
         if (filteredPosts.length > 0) {
           setPostItems((prevPosts) => [...prevPosts, ...filteredPosts]);
@@ -83,34 +83,34 @@ function FreeBoard() {
   }, [lastPostIdByCategory, loading, hasMore]);
 
   return (
-    <ContentWrapper>
-      <BoardTitle>
-        <Title>자유게시판</Title>
-      </BoardTitle>
-      <SearchSortWrapper>
-        <Search />
-        <SortOptionButton />
-      </SearchSortWrapper>
-      <PostCardWrapper
-        ref={listRef}
-        style={{ height: "750px", overflowY: "auto" }}
-      >
-        {postItems.map((postItem, index) => (
-          <CommunityPostCard
-            key={`${postItem.postId}-${index}`}
-            id={postItem.postId}
-            title={postItem.title}
-            content={postItem.content}
-            name={postItem.memberInfo.nickname}
-            job={"IOS Developer"}
-            count={postItem.countInfo}
-            img={postItem.imgUrl}
-          />
-        ))}
-        {loading && <BarLoading />}
-        {!hasMore && <EndMessage>모든 게시글을 불러왔습니다.</EndMessage>}
-      </PostCardWrapper>
-    </ContentWrapper>
+      <ContentWrapper>
+        <BoardTitle>
+          <Title>자유게시판</Title>
+        </BoardTitle>
+        <SearchSortWrapper>
+          <Search />
+          <SortOptionButton />
+        </SearchSortWrapper>
+        <PostCardWrapper
+            ref={listRef}
+            style={{ height: "750px", overflowY: "auto" }}
+        >
+          {postItems.map((postItem, index) => (
+              <CommunityPostCard
+                  key={`${postItem.postId}-${index}`}
+                  id={postItem.postId}
+                  title={postItem.title}
+                  content={postItem.content}
+                  name={postItem.memberInfo.nickname}
+                  job={"IOS Developer"}
+                  count={postItem.countInfo}
+                  img={postItem.imgUrl}
+              />
+          ))}
+          {loading && <BarLoading />}
+          {!hasMore && <EndMessage>모든 게시글을 불러왔습니다.</EndMessage>}
+        </PostCardWrapper>
+      </ContentWrapper>
   );
 }
 
