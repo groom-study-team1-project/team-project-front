@@ -15,6 +15,7 @@ const PasswordChange = ({ setIsModalOpen }) => {
   const closeModal = () => setIsModalOpen(false);
   const [errmsg, setErrMsg] = useState("");
   const [err, setErr] = useState(true);
+
   const handlePasswordChange = async () => {
     if (newPassword === confirmPassword) {
       const body = {
@@ -36,6 +37,7 @@ const PasswordChange = ({ setIsModalOpen }) => {
       setErrMsg("새 비밀번호와 확인 비밀번호가 일치하지 않습니다.");
     }
   };
+
   return (
     <>
       <ModalBackground>

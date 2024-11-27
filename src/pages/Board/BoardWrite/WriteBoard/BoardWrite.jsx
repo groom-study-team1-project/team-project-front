@@ -27,7 +27,6 @@ import {
 import { useSelector } from "react-redux";
 import "./App.css";
 import "ckeditor5/ckeditor5.css";
-
 const WriteBoard = ({ postData, postId, imgList }) => {
   const { isMobile } = useSelector((state) => state.screenSize);
   const navigate = useNavigate();
@@ -39,10 +38,8 @@ const WriteBoard = ({ postData, postId, imgList }) => {
   });
   const [selectedCategory, setSelectedCategory] = useState(1);
   const [imgUrls, setImgUrls] = useState([]);
-
   const toolbarContainerRef = useRef(null);
   const editorContainerRef = useRef(null);
-
   useEffect(() => {
     if (postData) {
       setValue({
@@ -57,11 +54,9 @@ const WriteBoard = ({ postData, postId, imgList }) => {
       }
     }
   }, [postData]);
-
   const handleCategoryChange = (e) => {
     setSelectedCategory(e.target.value);
   };
-
   const handlehashtag = (e) => {
     const hashtagStr = e.target.value;
     const hashtagArray = hashtagStr
@@ -69,47 +64,61 @@ const WriteBoard = ({ postData, postId, imgList }) => {
       .filter((item) => item.startsWith("#"));
     setValue({ ...form, hashtags: hashtagArray });
   };
-
   const onChange = (e) => {
     setValue({ ...form, title: e.target.value });
   };
-
   const onSubmit = async (e) => {
     e.preventDefault();
     try {
       const { title, content, hashtags, fileUrl } = form;
+      const processedHashtags = hashtags
+        .filter((item) => item.startsWith("#")) // #으로 시작하는 것만 필터링
+        .map((item) => item.replace("#", "")); // # 제거
+
       let body = {};
-      const category_id = Number(selectedCategory);
+      const category_id = Number(selectedCategory); // 카테고리 ID를 숫자로 변환
 
-      if (category_id === 2) {
-        body = { title, content, hashtags, category_id, imgUrls, fileUrl };
-      } else {
-        body = { title, content, hashtags, category_id, fileUrl };
+      if (!category_id) {
+        throw new Error("카테고리를 선택해야 합니다.");
       }
-
+      if (category_id === 2) {
+        body = {
+          title,
+          content,
+          hashtags: processedHashtags,
+          categoryId: category_id,
+          imgUrls,
+          fileUrl,
+        };
+      } else {
+        body = {
+          title,
+          content,
+          hashtags: processedHashtags,
+          categoryId: category_id,
+          fileUrl,
+        };
+      }
       if (postData) {
         await fetchPostChange(body, postId);
       } else {
         await createPost(body);
       }
+      navigate(-1);
     } catch (error) {
-      console.error(error);
+      alert(error.message || "게시글 수정 중 오류가 발생했습니다.");
     }
   };
-
   const getDataFromCKEditor = (event, editor) => {
     const data = editor.getData();
     console.log(data);
-
     if (data && data.match("<img src=")) {
       const whereImg_start = data.indexOf("<img src=");
       console.log(whereImg_start);
       let whereImg_end = "";
       let ext_name_find = "";
       let result_Img_Url = "";
-
       const ext_name = ["jpeg", "png", "jpg", "gif"];
-
       for (let i = 0; i < ext_name.length; i++) {
         if (data.match(ext_name[i])) {
           console.log(data.indexOf(`${ext_name[i]}`));
@@ -119,13 +128,11 @@ const WriteBoard = ({ postData, postId, imgList }) => {
       }
       console.log(ext_name_find);
       console.log(whereImg_end);
-
       if (ext_name_find === "jpeg") {
         result_Img_Url = data.substring(whereImg_start + 10, whereImg_end + 4);
       } else {
         result_Img_Url = data.substring(whereImg_start + 10, whereImg_end + 3);
       }
-
       console.log(result_Img_Url, "result_Img_Url");
       setValue({
         ...form,
@@ -141,13 +148,11 @@ const WriteBoard = ({ postData, postId, imgList }) => {
       });
     }
   };
-
   function uploadPlugin(editor) {
     editor.plugins.get("FileRepository").createUploadAdapter = (loader) => {
       return uploadAdapter(loader);
     };
   }
-
   return (
     <>
       {isMobile ? (
@@ -155,7 +160,6 @@ const WriteBoard = ({ postData, postId, imgList }) => {
       ) : (
         <Navbar isMainPage={true} />
       )}
-
       <Wrap>
         <WriteWrap>
           <BackImg
@@ -212,7 +216,6 @@ const WriteBoard = ({ postData, postId, imgList }) => {
                 toolbarContainerRef.current.innerHTML = "";
                 toolbarContainerRef.current.appendChild(toolbarElement);
               }
-
               const editableElement = editor.ui.view.editable.element;
               if (!editorContainerRef.current.contains(editableElement)) {
                 editorContainerRef.current.appendChild(editableElement);
@@ -220,7 +223,6 @@ const WriteBoard = ({ postData, postId, imgList }) => {
             }}
             onBlur={getDataFromCKEditor}
           />
-
           <Hashtag
             type="text"
             placeholder="#태그입력"
@@ -251,5 +253,4 @@ const WriteBoard = ({ postData, postId, imgList }) => {
     </>
   );
 };
-
 export default WriteBoard;

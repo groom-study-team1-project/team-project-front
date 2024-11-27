@@ -13,7 +13,7 @@ import { useSelector } from "react-redux";
 import { fetchProfileInfo } from "../../../services/api/authApi";
 import { useNavigate, useParams } from "react-router-dom";
 import { BigProfileBox } from "../../../components/Card/PostCard/PostProfile";
-
+import useJwt from "../../../hooks/useJwt";
 function MyProfile() {
   const [profileData, setProfileData] = useState(null);
   const [isMe, setIsMe] = useState(false);
@@ -22,7 +22,9 @@ function MyProfile() {
   let navigate = useNavigate();
 
   const { memberId } = useParams();
-
+  const payload = useJwt(
+    useSelector((state) => state.user.userInfo.accessToken)
+  );
   useEffect(() => {
     if (!isLoggedIn) {
       return;
@@ -31,9 +33,15 @@ function MyProfile() {
     // 프로필 데이터를 가져오는 함수
     const getProfileData = async () => {
       try {
-        const { isMe, data } = await fetchProfileInfo(memberId);
-        setIsMe(isMe); // 현재 사용자 여부 설정
-        setProfileData(data); // 프로필 데이터 설정
+        const body = {
+          isMe: payload.memberId,
+          memberId: memberId,
+        };
+        const { isMe, data } = await fetchProfileInfo(body);
+        if (data.status.code === 1002) {
+          setIsMe(isMe); // 현재 사용자 여부 설정
+          setProfileData(data.result); // 프로필 데이터 설정
+        }
       } catch (error) {
         console.error("Error fetching profile data:", error);
         setError(error); // 에러 설정
@@ -41,7 +49,7 @@ function MyProfile() {
     };
 
     getProfileData();
-  }, [isLoggedIn, memberId]);
+  }, [isLoggedIn, memberId, payload]);
 
   if (!isLoggedIn) {
     return <div>로그인이 필요합니다.</div>;
@@ -52,7 +60,6 @@ function MyProfile() {
   }
 
   if (!profileData && isLoggedIn) {
-    console.log(profileData);
     return <div>Loading...</div>;
   }
 
@@ -73,6 +80,7 @@ function MyProfile() {
             <BigProfileBox
               nickName={profileData.nickname}
               job={profileData.role}
+              src={profileData.imageUrl}
             />
             {isMe ? (
               <ProfileSetting onClick={redirectToEditPage}>
@@ -87,9 +95,7 @@ function MyProfile() {
             }}
           >
             <Userintroduce>{profileData.aboutMe}</Userintroduce>
-            {isMe ? (
-              <MyPosts postCount={profileData.activityStats.postCount} />
-            ) : null}
+            <MyPosts postCount={profileData.postCount} />
           </div>
         </Main>
       </Wrap>

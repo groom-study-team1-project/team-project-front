@@ -23,7 +23,6 @@ import { userLogout } from "../../store/user/userSlice";
 import logoImg from "../../assets/images/DEEPDIVERS.png";
 import { selectMenuItem } from "../../store/category/menuSlice";
 import darkmodeIcon from "../../assets/images/darkmode.png";
-import profileIcon from "../../assets/images/profileIcon.png";
 import useJwt from "../../hooks/useJwt";
 import ProfileMenu from "./ProfileMenu";
 import { changeTheme } from "../../store/theme/themeSlice";
@@ -40,13 +39,9 @@ function Navbar({ isMainPage = false }) {
   const [dropDown, setDropDown] = useState(false);
   const [navModalOpen, setNavModalOpen] = useState(false);
   const isLoggedIn = useSelector((state) => state.user.isLoggedIn);
-  const { isMobile, isTablet, isDesktop } = useSelector(
-    (state) => state.screenSize
-  );
-
-  const payload = useJwt(
-    useSelector((state) => state.user.userInfo.accessToken)
-  );
+  const { isDesktop } = useSelector((state) => state.screenSize);
+  const accessToken = useSelector((state) => state.user.userInfo.accessToken);
+  const payload = useJwt(accessToken);
   const memberId = payload.memberId;
   const userInfo = {
     imageUrl: payload.memberImageUrl,
@@ -66,7 +61,7 @@ function Navbar({ isMainPage = false }) {
     } catch (error) {
       console.log(error);
     }
-  }, []);
+  }, [accessToken]);
 
   const handleMenuClick = (id) => {
     dispatch(selectMenuItem(id));
@@ -127,8 +122,6 @@ function Navbar({ isMainPage = false }) {
 
   const handleToggleMenu = () => {
     setMenuOpen(!menuOpen);
-    if (!menuOpen) console.log("토글메뉴 열림");
-    else console.log("토글메뉴 닫힘");
   };
 
   const handleDarkMode = () => {

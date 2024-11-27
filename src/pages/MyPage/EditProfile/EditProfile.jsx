@@ -6,8 +6,12 @@ import {
   checkDuplicatedNickname,
   uploadProfileImage,
   fetchProfileInfo,
+  reToken,
 } from "../../../services/api/authApi";
 import { useNavigate, useParams } from "react-router-dom";
+import useJwt from "../../../hooks/useJwt";
+import { useSelector, useDispatch } from "react-redux";
+import { updateToken } from "../../../store/user/userSlice";
 import {
   PageNameWrap,
   PageName,
@@ -28,26 +32,40 @@ import {
 
 const EditProfile = () => {
   const { memberId } = useParams();
+  const dispatch = useDispatch();
   const [form, setForm] = useState({
-    nickName: "",
-    aboutMe: "",
+    nickname: "",
     imageUrl: "",
+    aboutMe: "",
     phoneNumber: "",
-    role: "",
+    githubUrl: "",
+    blogUrl: "",
+    job: "",
   });
+
+  const payload = useJwt(
+    useSelector((state) => state.user.userInfo.accessToken)
+  );
+
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetchProfileInfo(memberId);
+        const body = {
+          isMe: payload.memberId,
+          memberId: memberId,
+        };
+        const { data } = await fetchProfileInfo(body);
+        const response = data.result;
         console.log(response);
-        const data = response.data;
         setForm({
           ...form,
-          nickName: data.nickname,
-          imageUrl: data.imageUrl,
-          aboutMe: data.aboutMe,
-          phoneNumber: data.phoneNumber,
-          role: data.role,
+          nickname: response.nickname || "",
+          imageUrl: response.imageUrl || "",
+          aboutMe: response.aboutMe || "",
+          phoneNumber: response.phoneNumber || "",
+          githubUrl: response.githubUrl || "",
+          blogUrl: response.blogUrl || "",
+          job: response.job || "",
         });
       } catch (error) {
         console.log(error);
@@ -60,13 +78,26 @@ const EditProfile = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [checkNickName, setCheckName] = useState(null);
   const [btn, setBtn] = useState(true);
+
   const handleImageChange = async (e) => {
     const file = e.target.files[0];
-    if (file) {
-      const imageUrl = URL.createObjectURL(file);
-      const response = await uploadProfileImage(imageUrl);
-      console.log(response.imageUrl);
-      setForm({ ...form, imageUrl: response.imageUrl });
+    if (!file) {
+      alert("파일을 선택해주세요.");
+      return;
+    }
+    try {
+      const formData = new FormData();
+      formData.append("imageFile", file);
+      const response = await uploadProfileImage(formData);
+      if (response?.data?.result?.imageUrl) {
+        setForm({ ...form, imageUrl: response.data.result.imageUrl });
+      } else {
+        console.error("Invalid response format:", response);
+        alert("이미지 업로드 실패: 서버 응답 오류");
+      }
+    } catch (error) {
+      console.error("Image upload failed:", error);
+      alert("이미지 업로드에 실패했습니다. 다시 시도해주세요.");
     }
   };
 
@@ -76,7 +107,7 @@ const EditProfile = () => {
   };
 
   const handleOnChange = (e) => {
-    if (e.target.name === "nickName") {
+    if (e.target.name === "nickname") {
       if (e.target.value.length > 0) {
         setBtn(false);
       }
@@ -92,29 +123,32 @@ const EditProfile = () => {
 
   const handleOnchedknickName = async (e) => {
     e.preventDefault();
-    console.log(form.nickName);
-    const useNickname = await checkDuplicatedNickname(form.nickName);
-    setCheckName(useNickname);
+    console.log(form.nickname);
+    const useNickname = await checkDuplicatedNickname(form.nickname);
     console.log(useNickname);
+    if (useNickname.code === 2004) {
+      setCheckName(true);
+    } else {
+      setCheckName(useNickname);
+    }
   };
 
   const handleonSubmit = async (e) => {
     e.preventDefault();
     const body = form;
-    console.log(form);
     try {
-      const result = await editProfile(body);
-      console.log(result);
-      const res = result.result;
-      setForm({
-        nickName: res.nickName,
-        imageUrl: res.imageUrl,
-        aboutMe: res.aboutMe,
-        phoneNumber: res.phoneNumber,
-        role: res.role,
-      });
-      const response = await editProfile(body);
-      console.log(response);
+      await editProfile(body);
+      const response = await reToken();
+      const newAccessToken = response.result.accessToken;
+      const decodedPayload = JSON.parse(atob(newAccessToken.split(".")[1]));
+      console.log(decodedPayload);
+      dispatch(
+        updateToken({
+          accessToken: response.result.accessToken,
+          refreshToken: response.result.refreshToken,
+        })
+      );
+      navigate(`/my-page/${memberId}`);
     } catch (error) {
       console.log(error);
     }
@@ -149,13 +183,18 @@ const EditProfile = () => {
                   type="button"
                   $Color={"black"}
                   style={{ border: "1px solid #ACB6E5" }}
-                  onClick={() => setForm({ ...form, imageUrl: "" })}
+                  onClick={() =>
+                    setForm({
+                      ...form,
+                      imageUrl:
+                        "https://deepdiver-community-files-dev.s3.ap-northeast-2.amazonaws.com/profiles/002da67c_1730807352645.png",
+                    })
+                  }
                 >
                   사진 제거
                 </SubmitBtn>
               </ProfileActions>
               <JobSelect
-                value={form.role} // form의 role 값과 일치시킴
                 name="role"
                 onChange={handleOnChange} // 역할 변경 시 상태 업데이트
               >
@@ -170,15 +209,16 @@ const EditProfile = () => {
             <NicknameContainer>
               <Input
                 placeholder="사용자 이름은 띄어쓰기 포함 총 20자"
-                value={form.nickName}
+                value={form.nickname}
                 onChange={handleOnChange}
-                name="nickName"
+                name="nickname"
                 width={"20%"}
               />
               <CheckButton onClick={handleOnchedknickName} disabled={btn}>
                 중복 확인
               </CheckButton>
             </NicknameContainer>
+
             {checkNickName === false ? (
               <ChecknickName>사용 가능한 닉네임입니다</ChecknickName>
             ) : checkNickName === true ? (

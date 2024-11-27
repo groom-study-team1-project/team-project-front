@@ -29,7 +29,7 @@ export default function LoginModal({ closeModal, changeModal }) {
       setErrvisible(true);
       const response = await login(body);
       console.log(response);
-      if (response.status.code === 1001) {
+      if (response?.status?.code === 1001) {
         dispatch(
           userLogin({
             accessToken: response.result.accessToken,
@@ -38,9 +38,10 @@ export default function LoginModal({ closeModal, changeModal }) {
         );
         closeModal();
       }
-      if (response.message) {
-        setErrmsg(response.message);
+      if (response?.code === 2006) {
+        setErrmsg(response?.message);
       }
+      console.log(errMsg);
     } catch (err) {
       console.log(err);
     }

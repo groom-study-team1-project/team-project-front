@@ -1,6 +1,4 @@
-import { redirect } from "react-router-dom";
 import axiosInstance from "../axiosConfig";
-
 export const login = async (body) => {
   try {
     const response = await axiosInstance.post("/members/login", body);
@@ -21,10 +19,12 @@ export const signUp = async (body) => {
   try {
     const response = await axiosInstance.post("/members/sign-up", body);
     console.log(response);
-    if (response.status.code === 1000) {
+    if (response.data.status.code === 1000) {
       return response;
     } else {
-      return response;
+      throw new Error(
+        response.data.status.message || "Unexpected response from the server"
+      );
     }
   } catch (error) {
     console.log("회원가입 실패:", error);
@@ -32,22 +32,20 @@ export const signUp = async (body) => {
   }
 };
 
-export const uploadProfileImage = async (body) => {
+export const uploadProfileImage = async (formData) => {
   try {
     const response = await axiosInstance.post(
       "/api/members/me/profile-image",
-      body
+      formData,
+      {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      }
     );
-
-    if (response.data.status.code === 1004) {
-      return response.data.result;
-    } else {
-      throw new Error(
-        response.data.status.message || "업로드 할 수 없는 이미지입니다."
-      );
-    }
+    return response;
   } catch (error) {
-    console.log("이미지 업로드 실패:", error);
+    console.error("Image upload failed:", error);
     throw error;
   }
 };
@@ -75,115 +73,87 @@ export const checkDuplicatedNickname = async (nickname) => {
   }
 };
 
-export const fetchProfileInfo = async (memberId) => {
-  let isMe = true;
-
+export const fetchProfileInfo = async (body) => {
   try {
-    console.log("fetchProfileInfo called with memberId:", memberId); // 함수 호출 확인
-    console.log("Generated URL:", `/api/members/me/${memberId}`); // URL 확인
+    const { isMe, memberId } = body;
+
     const response = await axiosInstance.get(`/api/members/me/${memberId}`);
-    console.log("Axios Response:", response); // 응답 확인
-    return response.data; // 응답 데이터 반환
+    console.log(response);
+    if (response.data.status.code === 1002) {
+      if (isMe === response.data.result.id) {
+        return { isMe: true, data: response.data }; // 응답 데이터 반환
+      } else {
+        return { isMe: false, data: response.data };
+      }
+    } else {
+      throw new Error(
+        response.data.status.message || "Unexpected response from the server"
+      );
+    }
   } catch (error) {
     console.error(
       "Error in fetchProfileInfo:",
       error.response || error.message
-    ); // 에러 메시지 출력
+    );
+    throw error;
+  }
+};
+
+export const reToken = async () => {
+  try {
+    const response = await axiosInstance.patch("/tokens/re-issue");
+    console.log(response);
+    if ((response.data.status.code = 8000)) {
+      return response.data;
+    } else {
+      throw new Error(
+        response.data.status.message || "Unexpected response from the server"
+      );
+    }
+  } catch (error) {
+    console.error("Error while re-issuing token:", error);
     throw error;
   }
 };
 
 export const editProfile = async (body) => {
   try {
-    // const response = await axiosInstance.put("/api/members/me", body);
     console.log(body);
-    const response = {
-      status: {
-        code: 1007,
-        message: "프로필 수정이 성공하였습니다.",
-      },
-      result: {
-        nickName: "구름이",
-        role: "NORMAL",
-        imageUrl: "http://localhost:4566/image",
-        aboutMe: "안녕하세요.",
-        phoneNumber: "010-1234-5678",
-        githubUrl: "https://github.com",
-        blogUrl: "https://velog.io",
-        activityStats: {
-          postCount: 0,
-          commentCount: 0,
-        },
-      },
-    };
-
-    if (response.status.code === 1007) {
-      return response;
-    } else {
-      throw new Error(response.message || "프로필 수정 실패");
-    }
+    const response = await axiosInstance.put("/api/members/me", body);
+    console.log(response);
   } catch (error) {
-    console.error("사용자 정보를 불러오는데 실패했습니다.", error);
+    console.error("사용자 정보를 수정하는데 실패했습니다.", error);
     throw error;
   }
 };
 
 export const changeUserPw = async (body) => {
   try {
-    // const response = await axiosInstance.post("/accounts/reset/password", body);
+    const response = await axiosInstance.post("/accounts/reset/password", body);
 
-    const response = {
-      status: {
-        code: 1008,
-        message: "비밀번호 변경이 성공하였습니다.",
-      },
-    };
-
-    if (response.status.code === 1008) {
-      return response.status.message;
-    } else {
-      throw new Error(response.message || "프로필 수정 실패");
+    if (response.data.status.code === 1008) {
+      return response.data.status.message;
     }
   } catch (error) {
-    console.error("비밀번호를 찾던 중 오류 발생:", error);
-    throw error;
+    if (error.response) {
+      console.log("Error Response Data:", error.response.data); // 에러 응답 데이터 출력
+      return { success: false, message: error.response.data.message };
+    } else {
+      console.error("Unexpected Error:", error);
+    }
   }
 };
 
 export const postInfo = async (categoryId, lastPostId) => {
   try {
-    // const response = await axiosInstance.get("/api/members/me/posts", {
-    //   params: {
-    //     categoryId: categoryId,
-    //     lastPostId: lastPostId,
-    //   },
-    // });
-
-    const response = {
-      status: {
-        code: 1009,
-        message: "응답 성공 메시지입니다.",
+    const response = await axiosInstance.get("/api/members/me/posts", {
+      params: {
+        categoryId: categoryId,
+        lastPostId: lastPostId,
       },
-      result: [
-        {
-          id: 1,
-          title: "string",
-          createdAt: "2024-09-27T14:02:42.188Z",
-          memberId: 0,
-          memberNickname: "John Doe",
-          memberJob: "IOS Developer",
-          likedMe: true,
-          count: {
-            view: 0,
-            like: 0,
-            comment: 0,
-          },
-        },
-      ],
-    };
-
-    if (response.status.code === 1009) {
-      return response.result;
+    });
+    if (response.data.status.code === 1009) {
+      return response.data.result;
     } else {
       throw new Error(response.message || "내가 작성한 글 불러오기 실패");
     }
@@ -197,7 +167,6 @@ export const postInfo = async (categoryId, lastPostId) => {
 export const verifyEmailCode = async (body) => {
   try {
     const response = await axiosInstance.post("/accounts/verify/email", body);
-    console.log(response);
 
     if (response.data.status.code === 1101) {
       return true;
@@ -236,23 +205,19 @@ export const sendEmailVerificationCode = async (body) => {
 // 이메일 인증 코드 전송 (비밀번호)
 export const sendEmailVerificationCodePassword = async (body) => {
   try {
-    // const response = await axiosInstance.post("/accounts/authenticate/password", body);
+    const response = await axiosInstance.post(
+      "/accounts/authenticate/password",
+      body
+    );
+    console.log(response);
 
-    const response = {
-      status: {
-        code: 1100,
-        message: "이메일로 인증코드가 전송되었습니다.",
-      },
-    };
-
-    if (response.status.code === 1100) {
-      return { success: true, message: response.status.message };
-    } else if (response.status.code === 2006) {
-      return { success: false, message: response.status.message };
-    } else {
-      throw new Error(response.message || "유효하지 않은 인증코드");
+    if (response.data.status.code === 1100) {
+      return { success: true, message: response.data.status.message };
     }
   } catch (error) {
+    if (error.response) {
+      return { success: false, message: error.response.data.message };
+    }
     console.error("유효하지 않은 인증코드", error);
     throw error;
   }
@@ -260,23 +225,23 @@ export const sendEmailVerificationCodePassword = async (body) => {
 
 export const changePW = async (body) => {
   try {
-    // const response = await axiosInstance.patch(
-    //   "/api/members/me/password",
-    //   body
-    // );
-    const response = {
-      status: {
-        code: 1008,
-        message: "비밀번호 변경이 성공하였습니다.",
-      },
-    };
-    if (response.status.code === 1008) {
-      return { success: true, msg: response.status.message };
+    const response = await axiosInstance.patch(
+      "/api/members/me/password",
+      body
+    );
+
+    if (response.data.status.code === 1008) {
+      return { success: true, msg: response.data.status.message };
     } else {
-      return { success: false, msg: response.status.message };
+      return { success: false, msg: response.data.status.message };
     }
   } catch (error) {
-    console.error("유효하지 않은 인증코드", error);
+    console.log(error);
+    if (error.response) {
+      return { success: false, msg: error.response.data.message };
+    } else {
+      console.error("유효하지 않은 인증코드", error);
+    }
     throw error;
   }
 };

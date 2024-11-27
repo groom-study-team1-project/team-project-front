@@ -41,12 +41,20 @@ function EmailInputForm({ handleNext, handleSubmitEmail, sendEmail }) {
 
       if (isValid) {
         let body = { email };
-
-        const { success, message } = await sendEmailVerificationCode(body);
-
-        if (!success) {
-          setError(message);
-          return;
+        if (sendEmail === "email") {
+          const { success, message } = await sendEmailVerificationCode(body);
+          if (!success) {
+            setError(message);
+            return;
+          }
+        } else if (sendEmail === "password") {
+          const { success, message } = await sendEmailVerificationCodePassword(
+            body
+          );
+          if (!success) {
+            setError(message);
+            return;
+          }
         }
 
         handleNext();
@@ -60,7 +68,7 @@ function EmailInputForm({ handleNext, handleSubmitEmail, sendEmail }) {
   return (
     <Container>
       <ModalTitle>
-        <h1>회원가입</h1>
+        {sendEmail === "email" ? <h1>회원가입</h1> : <h1>비밀번호 변경</h1>}
       </ModalTitle>
       <p>이메일을 입력해주세요</p>
       <Form onSubmit={(e) => handleSubmit(e)}>
@@ -76,7 +84,11 @@ function EmailInputForm({ handleNext, handleSubmitEmail, sendEmail }) {
 
         <Divider />
         <BtnBox>
-          <Btn type="submit">계정 생성하기</Btn>
+          {sendEmail === "email" ? (
+            <Btn type="submit">계정 생성하기</Btn>
+          ) : (
+            <Btn type="submit">인증 번호 입력하기</Btn>
+          )}
         </BtnBox>
       </Form>
     </Container>

@@ -30,8 +30,6 @@ export const MyPosts = ({ postCount }) => {
     postInfo(catergoryId.questionBoard, lastPostId.questionBoard)
       .then((data) => setQuestionBoard(data))
       .catch((err) => console.log(err));
-
-    console.log(lastPostId);
   }, [lastPostId]);
 
   const handleLoadMore = (boardType) => {
