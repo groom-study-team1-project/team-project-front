@@ -1,5 +1,7 @@
 import axiosInstance from "../axiosConfig";
 import axios from "axios";
+import useJwt from "../../hooks/useJwt";
+import { useSelector } from "react-redux";
 
 export async function fetchPostItems(body) {
   //const result = await axiosInstance.get("/open/posts");
@@ -178,14 +180,3 @@ export const fetchcomment = async (postId) => {
     ],
   };
 };
-
-export async function fetchUserInfo(memberId) {
-  try {
-    const response = await axiosInstance.get(`/api/members/me/${memberId}`);
-
-    const userInfo = response.data.result
-    return userInfo;
-  }catch(error) {
-    console.log("can't call userInfo", error);
-  }
-}
