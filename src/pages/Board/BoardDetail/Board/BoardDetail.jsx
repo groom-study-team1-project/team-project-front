@@ -68,14 +68,29 @@ function BoardDetail() {
     return <div>Loading...</div>;
   }
 
+  const formattedDate = new Date(new Date(post.createdAt).getTime() + 9 * 60 * 60 * 1000).toLocaleString("ko-KR", {
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+    hour: "2-digit",
+    minute: "2-digit",
+    second: "2-digit",
+    hour12: false, // 24시간 형식
+  });
+
   const handleModalClose = () => setModalVisible(false);
   const handleEdit = () => {
     navigate(`/board/edit/${postId}`);
     setModalVisible(false);
   };
-  const handleDelete = () => {
-    deletepost(postId);
-    setModalVisible(false);
+  const handleDelete = async () => {
+    try {
+      await deletepost(postId); // 게시글 삭제 API 호출
+      setModalVisible(false);
+      navigate(-1); // 이전 페이지로 리다이렉션
+    } catch (error) {
+      console.error("게시글 삭제 중 오류 발생:", error);
+    }
   };
 
   return (
@@ -95,7 +110,7 @@ function BoardDetail() {
                 imgUrl={post.memberInfo.image_url}
               />
               <PostheaderRignt $isMobile={isMobile}>
-                <div>{post.createdAt}</div>
+                <div>{formattedDate}</div>
                 <Modify onClick={() => setModalVisible(true)}>
                   <FontAwesomeIcon icon={faEllipsisVertical} />
                 </Modify>

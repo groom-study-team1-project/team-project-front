@@ -78,13 +78,21 @@ const WriteBoard = ({ postData, postId, imgList }) => {
     e.preventDefault();
     try {
       const { title, content, hashtags, fileUrl } = form;
+      const processedHashtags = hashtags
+          .filter((item) => item.startsWith("#")) // #으로 시작하는 것만 필터링
+          .map((item) => item.replace("#", "")); // # 제거
+
       let body = {};
-      const category_id = Number(selectedCategory);
+      const category_id = Number(selectedCategory); // 카테고리 ID를 숫자로 변환
+
+      if (!category_id) {
+        throw new Error("카테고리를 선택해야 합니다.");
+      }
 
       if (category_id === 2) {
-        body = { title, content, hashtags, category_id, imgUrls, fileUrl };
+        body = { title, content, hashtags: processedHashtags, categoryId: category_id, imgUrls, fileUrl };
       } else {
-        body = { title, content, hashtags, category_id, fileUrl };
+        body = { title, content, hashtags: processedHashtags, categoryId: category_id, fileUrl };
       }
 
       if (postData) {
@@ -92,10 +100,14 @@ const WriteBoard = ({ postData, postId, imgList }) => {
       } else {
         await createPost(body);
       }
+
+      navigate(-1);
     } catch (error) {
-      console.error(error);
+      alert(error.message || "게시글 수정 중 오류가 발생했습니다.");
     }
   };
+
+
 
   const getDataFromCKEditor = (event, editor) => {
     const data = editor.getData();

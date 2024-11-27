@@ -8,6 +8,8 @@ const PostForm = () => {
   const [post, setPost] = useState(null);
 
   useEffect(() => {
+    if (!postId) return; // postId가 없으면 요청하지 않음
+
     const fetchData = async () => {
       try {
         const postResponse = await fetchPostDetail(postId);

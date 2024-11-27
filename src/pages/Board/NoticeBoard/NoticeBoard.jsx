@@ -17,7 +17,7 @@ import { BarLoading } from "../../../components/Common/LodingSpinner";
 
 function NoticeBoard() {
   const [postItems, setPostItems] = useState([]);
-  const [lastPostIdByCategory, setLastPostIdByCategory] = useState(null);
+  const [lastPostIdByCategory, setLastPostIdByCategory] = useState(Number.MAX_SAFE_INTEGER);
   const [loading, setLoading] = useState(false);
   const [hasMore, setHasMore] = useState(true);
   const isThrottleActive = useRef(false);
