@@ -42,8 +42,8 @@ const userSlice = createSlice({
       const { accessToken, refreshToken } = action.payload;
       state.isLoggedIn = true;
       state.userInfo = {
-        ...state.userInfo,
-        ...action.payload,
+        accessToken,
+        refreshToken,
       };
       localStorage.setItem("accessToken", accessToken);
       localStorage.setItem("refreshToken", refreshToken);

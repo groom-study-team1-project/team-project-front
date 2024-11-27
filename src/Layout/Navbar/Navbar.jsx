@@ -40,10 +40,8 @@ function Navbar({ isMainPage = false }) {
   const [navModalOpen, setNavModalOpen] = useState(false);
   const isLoggedIn = useSelector((state) => state.user.isLoggedIn);
   const { isDesktop } = useSelector((state) => state.screenSize);
-
-  const payload = useJwt(
-    useSelector((state) => state.user.userInfo.accessToken)
-  );
+  const accessToken = useSelector((state) => state.user.userInfo.accessToken);
+  const payload = useJwt(accessToken);
   const memberId = payload.memberId;
   const userInfo = {
     imageUrl: payload.memberImageUrl,
@@ -63,7 +61,7 @@ function Navbar({ isMainPage = false }) {
     } catch (error) {
       console.log(error);
     }
-  }, []);
+  }, [accessToken]);
 
   const handleMenuClick = (id) => {
     dispatch(selectMenuItem(id));
@@ -124,8 +122,6 @@ function Navbar({ isMainPage = false }) {
 
   const handleToggleMenu = () => {
     setMenuOpen(!menuOpen);
-    if (!menuOpen) console.log("토글메뉴 열림");
-    else console.log("토글메뉴 닫힘");
   };
 
   const handleDarkMode = () => {

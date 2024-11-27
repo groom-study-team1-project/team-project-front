@@ -18,17 +18,12 @@ export default function PwInputForm({ email, handlePrev, changeModal }) {
 
   const validateForm = () => {
     let errors = {};
-
-    if (password.length < 8 || password.length > 16) {
-      errors.password = "비밀번호는 8글자 이상 16글자 이하이어야 합니다.";
-    }
-
     if (password !== confirmPassword) {
       errors.confirmPassword = "비밀번호가 일치하지 않습니다.";
+      setErrors(errors);
+      return false;
     }
-
-    setErrors(errors);
-    return Object.keys(errors).length === 0;
+    return true;
   };
 
   async function handleChangeUserPw(e) {
@@ -40,10 +35,12 @@ export default function PwInputForm({ email, handlePrev, changeModal }) {
       if (isValid) {
         let body = { email, password };
         const response = await changeUserPw(body);
-
         console.log(response);
-
-        changeModal("login");
+        if (response?.status?.code === 1008) {
+          changeModal("login");
+        } else {
+          setErrors({ apiError: response?.message });
+        }
       }
     } catch (err) {
       console.log(err);
@@ -63,7 +60,6 @@ export default function PwInputForm({ email, handlePrev, changeModal }) {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
           />
-          {errors.password && <ErrorMsg>{errors.password}</ErrorMsg>}
         </div>
         <div>
           <FormInputField
@@ -75,6 +71,7 @@ export default function PwInputForm({ email, handlePrev, changeModal }) {
           {errors.confirmPassword && (
             <ErrorMsg>{errors.confirmPassword}</ErrorMsg>
           )}
+          {errors.apiError && <ErrorMsg>{errors.apiError}</ErrorMsg>}
         </div>
         <Divider />
         <BtnBox>

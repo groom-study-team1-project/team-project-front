@@ -17,8 +17,6 @@ function useJwt(token) {
             .join("")
         );
         const parsedPayload = JSON.parse(jsonPayload);
-        console.log("isJwt");
-        console.log(parsedPayload);
         setPayload(parsedPayload);
       } catch (error) {
         console.error("Invalid JWT token", error);

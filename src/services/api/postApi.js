@@ -5,17 +5,8 @@ import { GrUserSettings } from "react-icons/gr";
 import { BsPatchQuestion } from "react-icons/bs";
 
 // 새 게시글 생성
-export const createPost = async (body, token) => {
+export const createPost = async (body) => {
   try {
-    console.log("게시글 생성 요청 데이터:", body);
-
-    const config = {
-      headers: {
-        Authorization: `Bearer ${token}`,
-        "Content-Type": "application/json",
-      },
-    };
-
     const requestBody = {
       title: body.title?.trim(), // 제목 (양끝 공백 제거)
       content: body.content?.trim(), // 내용 (양끝 공백 제거)
@@ -28,14 +19,16 @@ export const createPost = async (body, token) => {
       throw new Error("제목, 내용, 카테고리 ID는 필수 입력 항목입니다.");
     }
 
-    const result = await axiosInstance.post("/api/posts/upload", requestBody, config);
+    const result = await axiosInstance.post("/api/posts/upload", requestBody);
     console.log("게시글 생성 성공:", result.data);
     return result.data;
   } catch (error) {
     console.error(
-        error.response ? "서버 응답 에러: " + error.response.data :
-            error.request ? "응답 없음 에러: " + error.request :
-                "예상치 못한 에러: " + error.message
+      error.response
+        ? "서버 응답 에러: " + error.response.data
+        : error.request
+        ? "응답 없음 에러: " + error.request
+        : "예상치 못한 에러: " + error.message
     );
     throw error;
   }
@@ -51,9 +44,9 @@ export const uploadAdapter = (loader) => {
         loader.file.then((file) => {
           body.append("upload", file);
           axiosInstance
-              .post(API_URL, body)
-              .then((res) => resolve({ default: res.data.url[0] }))
-              .catch(reject);
+            .post(API_URL, body)
+            .then((res) => resolve({ default: res.data.url[0] }))
+            .catch(reject);
         });
       });
     },
@@ -70,8 +63,8 @@ export async function fetchPostItems(categoryId, lastPostId) {
     });
 
     if (
-        response.data?.status?.code === 1203 &&
-        Array.isArray(response.data.result)
+      response.data?.status?.code === 1203 &&
+      Array.isArray(response.data.result)
     ) {
       const posts = response.data.result;
       console.log("게시글 조회 성공:", posts);
@@ -93,7 +86,10 @@ export const fetchPostDetail = async (postId) => {
     if (response.data.status.code === 1203) {
       return response.data.result;
     } else {
-      throw new Error(response.data.status.message || "게시글을 불러올 수 없거나 존재하지 않습니다.");
+      throw new Error(
+        response.data.status.message ||
+          "게시글을 불러올 수 없거나 존재하지 않습니다."
+      );
     }
   } catch (error) {
     console.error("게시글 상세 조회 에러:", error);
@@ -104,23 +100,20 @@ export const fetchPostDetail = async (postId) => {
 // 게시글 수정
 export const fetchPostChange = async (body, postId) => {
   try {
-    const token = localStorage.getItem("token");
-    const config = {
-      headers: {
-        Authorization: `Bearer ${token}`,
-        "Content-Type": "application/json",
-      },
-    };
-
-    const url = `https://deepdivers.store/api/posts/update/${postId}`;
-    const result = await axiosInstance.post(url, body, config);
+    console.log(body);
+    const result = await axiosInstance.post(
+      `/api/posts/update/${postId}`,
+      body
+    );
     console.log("게시글 수정 성공:", result.data);
     return result.data;
   } catch (error) {
     console.error(
-        error.response ? "서버 응답 에러: " + error.response.data :
-            error.request ? "응답 없음 에러: " + error.request :
-                "예상치 못한 에러: " + error.message
+      error.response
+        ? "서버 응답 에러: " + error.response.data
+        : error.request
+        ? "응답 없음 에러: " + error.request
+        : "예상치 못한 에러: " + error.message
     );
     throw error;
   }
@@ -129,20 +122,16 @@ export const fetchPostChange = async (body, postId) => {
 // 게시글 삭제
 export const deletepost = async (postId) => {
   try {
-    const token = localStorage.getItem("token");
-    const response = await axiosInstance.patch(`/api/posts/delete/${postId}`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-        "Content-Type": "application/json",
-      },
-    });
+    const response = await axiosInstance.patch(`/api/posts/delete/${postId}`);
     console.log("게시글 삭제 성공:", response.data);
     return response.data;
   } catch (error) {
     console.error(
-        error.response ? "서버 응답 에러: " + error.response.data :
-            error.request ? "응답 없음 에러: " + error.request :
-                "예상치 못한 에러: " + error.message
+      error.response
+        ? "서버 응답 에러: " + error.response.data
+        : error.request
+        ? "응답 없음 에러: " + error.request
+        : "예상치 못한 에러: " + error.message
     );
     throw error;
   }
@@ -154,13 +143,13 @@ export async function fetchCategoryItems() {
     const response = await axiosInstance.get("/open/categories");
     if (response.status === 200 || response.data.status.code === 9999) {
       const categoryIconMap = {
-        "자유게시판": <MdCreditCard />,
+        자유게시판: <MdCreditCard />,
         "프로젝트 자랑 게시판": <IoDocumentsOutline />,
         "질문 게시판": <GrUserSettings />,
         "공지 게시판": <BsPatchQuestion />,
       };
 
-      return response.data.result.map(category => ({
+      return response.data.result.map((category) => ({
         ...category,
         icon: categoryIconMap[category.title],
       }));
@@ -183,4 +172,3 @@ export const sortPostsByCriteria = async (categoty_id, sort, post_id) => {
     console.log(error);
   }
 };
-

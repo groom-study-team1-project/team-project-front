@@ -122,7 +122,7 @@ function UserDetailsInputForm({ email, handlePrev, changeModal }) {
             password,
             nickname,
             imageUrl:
-              "https://png.pngtree.com/png-vector/20191009/ourmid/pngtree-user-icon-png-image_1796659.jpg",
+              "https://deepdiver-community-files-dev.s3.ap-northeast-2.amazonaws.com/profiles/002da67c_1730807352645.png",
             phoneNumber,
           };
           const response = await signUp(body);

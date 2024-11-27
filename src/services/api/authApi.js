@@ -1,5 +1,4 @@
 import axiosInstance from "../axiosConfig";
-
 export const login = async (body) => {
   try {
     const response = await axiosInstance.post("/members/login", body);
@@ -20,7 +19,7 @@ export const signUp = async (body) => {
   try {
     const response = await axiosInstance.post("/members/sign-up", body);
     console.log(response);
-    if (response.status.code === 1000) {
+    if (response.data.status.code === 1000) {
       return response;
     } else {
       throw new Error(
@@ -33,16 +32,20 @@ export const signUp = async (body) => {
   }
 };
 
-export const uploadProfileImage = async (body) => {
+export const uploadProfileImage = async (formData) => {
   try {
     const response = await axiosInstance.post(
       "/api/members/me/profile-image",
-      body
+      formData,
+      {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      }
     );
-    console.log(response);
     return response;
   } catch (error) {
-    console.log("이미지 업로드 실패:", error);
+    console.error("Image upload failed:", error);
     throw error;
   }
 };
@@ -96,6 +99,23 @@ export const fetchProfileInfo = async (body) => {
   }
 };
 
+export const reToken = async () => {
+  try {
+    const response = await axiosInstance.patch("/tokens/re-issue");
+    console.log(response);
+    if ((response.data.status.code = 8000)) {
+      return response.data;
+    } else {
+      throw new Error(
+        response.data.status.message || "Unexpected response from the server"
+      );
+    }
+  } catch (error) {
+    console.error("Error while re-issuing token:", error);
+    throw error;
+  }
+};
+
 export const editProfile = async (body) => {
   try {
     console.log(body);
@@ -109,23 +129,18 @@ export const editProfile = async (body) => {
 
 export const changeUserPw = async (body) => {
   try {
-    // const response = await axiosInstance.post("/accounts/reset/password", body);
+    const response = await axiosInstance.post("/accounts/reset/password", body);
 
-    const response = {
-      status: {
-        code: 1008,
-        message: "비밀번호 변경이 성공하였습니다.",
-      },
-    };
-
-    if (response.status.code === 1008) {
-      return response.status.message;
-    } else {
-      throw new Error(response.message || "프로필 수정 실패");
+    if (response.data.status.code === 1008) {
+      return response.data.status.message;
     }
   } catch (error) {
-    console.error("비밀번호를 찾던 중 오류 발생:", error);
-    throw error;
+    if (error.response) {
+      console.log("Error Response Data:", error.response.data); // 에러 응답 데이터 출력
+      return { success: false, message: error.response.data.message };
+    } else {
+      console.error("Unexpected Error:", error);
+    }
   }
 };
 
@@ -190,23 +205,19 @@ export const sendEmailVerificationCode = async (body) => {
 // 이메일 인증 코드 전송 (비밀번호)
 export const sendEmailVerificationCodePassword = async (body) => {
   try {
-    // const response = await axiosInstance.post("/accounts/authenticate/password", body);
+    const response = await axiosInstance.post(
+      "/accounts/authenticate/password",
+      body
+    );
+    console.log(response);
 
-    const response = {
-      status: {
-        code: 1100,
-        message: "이메일로 인증코드가 전송되었습니다.",
-      },
-    };
-
-    if (response.status.code === 1100) {
-      return { success: true, message: response.status.message };
-    } else if (response.status.code === 2006) {
-      return { success: false, message: response.status.message };
-    } else {
-      throw new Error(response.message || "유효하지 않은 인증코드");
+    if (response.data.status.code === 1100) {
+      return { success: true, message: response.data.status.message };
     }
   } catch (error) {
+    if (error.response) {
+      return { success: false, message: error.response.data.message };
+    }
     console.error("유효하지 않은 인증코드", error);
     throw error;
   }

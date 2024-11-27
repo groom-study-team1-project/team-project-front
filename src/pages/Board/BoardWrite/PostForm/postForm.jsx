@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import WriteBoard from "../WriteBoard/BoardWrite";
 import { fetchPostDetail } from "../../../../services/api/postApi";
-
 const PostForm = () => {
   const { postId } = useParams(); // URL에서 postId 가져오기
   const [post, setPost] = useState(null);
@@ -19,10 +18,8 @@ const PostForm = () => {
         console.error("데이터를 가져오는데 실패", error);
       }
     };
-
     fetchData();
   }, [postId]);
-
   const imgList = {
     imgUrl: [
       {
@@ -39,7 +36,6 @@ const PostForm = () => {
       },
     ],
   };
-
   if (postId) {
     if (post) {
       return <WriteBoard postData={post} imgList={imgList} postId={postId} />;
@@ -50,5 +46,4 @@ const PostForm = () => {
     return <WriteBoard />; // postId가 없을 경우 새 게시글 작성
   }
 };
-
 export default PostForm;

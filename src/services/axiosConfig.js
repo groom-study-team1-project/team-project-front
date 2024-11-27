@@ -38,7 +38,6 @@ export const setupAxiosInterceptors = (store, navigate) => {
         const urlsRequiringRefreshToken = ["/tokens/re-issue"];
         if (urlsRequiringRefreshToken.some((url) => config.url.includes(url))) {
           if (refreshToken) {
-            console.log(refreshToken);
             config.headers["Authorization"] = `Bearer ${accessToken}`;
             config.headers["Refresh-Token"] = refreshToken; // Refresh-Token 헤더에 추가
           } else {
@@ -62,8 +61,6 @@ export const setupAxiosInterceptors = (store, navigate) => {
   axiosInstance.interceptors.response.use(
     (response) => response,
     async (error) => {
-      console.log(error);
-
       const originalRequest = error.config;
       const errorCode =
         error.response && error.response.data ? error.response.data.code : null;
@@ -103,8 +100,8 @@ export const setupAxiosInterceptors = (store, navigate) => {
             } catch (refreshError) {
               console.error("토큰 재발급 실패:", refreshError);
 
-              // store.dispatch(userLogout());
-              // navigate("/login"); // 로그인 페이지로 이동
+              store.dispatch(userLogout());
+              navigate("/"); // 로그인 페이지로 이동
             }
             break;
 

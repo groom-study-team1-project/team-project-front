@@ -6,11 +6,12 @@ import {
   checkDuplicatedNickname,
   uploadProfileImage,
   fetchProfileInfo,
+  reToken,
 } from "../../../services/api/authApi";
 import { useNavigate, useParams } from "react-router-dom";
 import useJwt from "../../../hooks/useJwt";
-import { useSelector } from "react-redux";
-
+import { useSelector, useDispatch } from "react-redux";
+import { updateToken } from "../../../store/user/userSlice";
 import {
   PageNameWrap,
   PageName,
@@ -31,6 +32,7 @@ import {
 
 const EditProfile = () => {
   const { memberId } = useParams();
+  const dispatch = useDispatch();
   const [form, setForm] = useState({
     nickname: "",
     imageUrl: "",
@@ -40,9 +42,11 @@ const EditProfile = () => {
     blogUrl: "",
     job: "",
   });
+
   const payload = useJwt(
     useSelector((state) => state.user.userInfo.accessToken)
   );
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -50,7 +54,7 @@ const EditProfile = () => {
           isMe: payload.memberId,
           memberId: memberId,
         };
-        const { isMe, data } = await fetchProfileInfo(body);
+        const { data } = await fetchProfileInfo(body);
         const response = data.result;
         console.log(response);
         setForm({
@@ -77,29 +81,23 @@ const EditProfile = () => {
 
   const handleImageChange = async (e) => {
     const file = e.target.files[0];
-    if (file) {
-      try {
-        const formData = new FormData();
-        formData.append("file", file);
-
-        console.log("Uploading file:", formData);
-
-        // API 호출
-        const response = await uploadProfileImage(formData);
-
-        console.log(response);
-
-        // 서버에서 반환된 이미지 URL을 상태에 저장
-        if (response && response.imageUrl) {
-          setForm({ ...form, imageUrl: response.imageUrl });
-        } else {
-          console.error("Invalid response format:", response);
-        }
-      } catch (error) {
-        console.error("Image upload failed:", error);
+    if (!file) {
+      alert("파일을 선택해주세요.");
+      return;
+    }
+    try {
+      const formData = new FormData();
+      formData.append("imageFile", file);
+      const response = await uploadProfileImage(formData);
+      if (response?.data?.result?.imageUrl) {
+        setForm({ ...form, imageUrl: response.data.result.imageUrl });
+      } else {
+        console.error("Invalid response format:", response);
+        alert("이미지 업로드 실패: 서버 응답 오류");
       }
-    } else {
-      console.error("No file selected");
+    } catch (error) {
+      console.error("Image upload failed:", error);
+      alert("이미지 업로드에 실패했습니다. 다시 시도해주세요.");
     }
   };
 
@@ -140,6 +138,16 @@ const EditProfile = () => {
     const body = form;
     try {
       await editProfile(body);
+      const response = await reToken();
+      const newAccessToken = response.result.accessToken;
+      const decodedPayload = JSON.parse(atob(newAccessToken.split(".")[1]));
+      console.log(decodedPayload);
+      dispatch(
+        updateToken({
+          accessToken: response.result.accessToken,
+          refreshToken: response.result.refreshToken,
+        })
+      );
       navigate(`/my-page/${memberId}`);
     } catch (error) {
       console.log(error);
@@ -179,7 +187,7 @@ const EditProfile = () => {
                     setForm({
                       ...form,
                       imageUrl:
-                        "https://png.pngtree.com/png-vector/20191009/ourmid/pngtree-user-icon-png-image_1796659.jpg",
+                        "https://deepdiver-community-files-dev.s3.ap-northeast-2.amazonaws.com/profiles/002da67c_1730807352645.png",
                     })
                   }
                 >
