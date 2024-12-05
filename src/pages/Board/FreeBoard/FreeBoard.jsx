@@ -97,21 +97,16 @@ function FreeBoard() {
             style={{ height: "750px", overflowY: "auto" }}
         >
           {postItems.map((postItem, index) => (
-              <>
-                <CommunityPostCard
-                    key={`${postItem.postId}-${index}`}
-                    id={postItem.postId}
-                    title={postItem.title}
-                    content={postItem.content}
-                    name={postItem.memberInfo.nickname}
-                    job={"IOS Developer"}
-                    count={postItem.countInfo}
-                    img={postItem.imgUrl}
-                />
-                <Comment
-                  postId={`${postItem.postId}`}
-                />
-            </>
+              <CommunityPostCard
+                  key={`${postItem.postId}-${index}`}
+                  id={postItem.postId}
+                  title={postItem.title}
+                  content={postItem.content}
+                  name={postItem.memberInfo.nickname}
+                  job={"IOS Developer"}
+                  count={postItem.countInfo}
+                  img={postItem.imgUrl}
+              />
           ))}
           {loading && <BarLoading />}
           {!hasMore && <EndMessage>모든 게시글을 불러왔습니다.</EndMessage>}

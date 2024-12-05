@@ -1,90 +1,151 @@
 import React, { useState, useCallback, useEffect } from 'react';
+import { useParams } from 'react-router-dom';
+import { InteractionItem } from "../Interactions";
+import heart from "../../../assets/images/heart.png";
+import commentSubmitButton from "../../../assets/images/commentsubmit.png";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faEllipsisVertical } from "@fortawesome/free-solid-svg-icons";
+
 import {
     CommentWrapper,
 } from "./Comment.style";
 import axiosInstance from "../../../services/axiosConfig";
 import useUserInfo from "../../../hooks/useUserInfo";
+import {fetchcomment} from "../../../services/api/api";
+import {
+    Bold, CommentInput, CommentInputWrap, CommentRight,
+    CommentsWrap, Comment, CommentText, CommentWrap,
+    CommetHr, CommnetModalIcon, IconWrap, InputImg, TimeAndLike
+} from "../Comment/Comment.style";
+import {ProfileImage} from "../../Card/PostCard/PostProfile";
+import {Modify} from "../../../pages/Board/BoardDetail/Board/BoardDetail.style";
+import ModalComponent from "../../Modal/EditDeleteModal/EditDeleteModal";
+import commentsubmit from "../../../assets/images/commentsubmit.png";
+import comment from "../../../pages/Board/BoardDetail/Comment/Comment";
 
-function Comment({ postId }) {
+const Comments = ()  => {
 
-    const { userInfo, userError } = useUserInfo();
-    const [comments, setComments] = useState([]);
+    const { postId} = useParams();
+    const [commentsData, setCommentsData] = useState([]);
     const [newComment, setNewComment] = useState("");
+    const [modalIndex, setModalIndex] = useState(null);
     const [replyError, setReplyError] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
 
-    const fetchComment = useCallback(() => {
-       setReplyError(null);
-
-       axiosInstance.get(`api/comments/${postId}`)
-           .then(response => { setComments(response.data); })
-           .catch(error => {
-               setReplyError(error.message);
-               console.error("댓글을 불러오는데 실패했습니다: ", error)
-           })
+    const fetchComments = useCallback(() => {
+        setIsLoading(true);
+        axiosInstance
+            .get(`/comments/${postId}`)
+            .then((response) => {
+                console.log(response.data.result)
+                setCommentsData(response.data.result);
+                setReplyError(false);
+            })
+            .catch((error) => {
+                setReplyError(error.message);
+                console.error("댓글을 불러오는데 실패했습니다: ", error);
+            })
+            .finally(() => {
+                setIsLoading(false);
+            });
     }, [postId]);
 
     useEffect(() => {
-        fetchComment();
-    }, [fetchComment]);
+        fetchComments();
+    }, [fetchComments]);
 
-    const handleSubmit = async (e) => {
+    const handleSubmit = (e) => {
         e.preventDefault();
         if (!newComment.trim()) return;
 
         const commentData = {
-            postId,
-            content: newComment
+            postId: parseInt(postId),
+            content: newComment.trim()
         };
 
-        axiosInstance.post(`/api/comments/write`, commentData)
+        axiosInstance
+            .post(`/api/comments/write`, commentData)
             .then(() => {
                 setNewComment("");
-                fetchComment();
+                fetchComments();
             })
-            .catch(error => { console.error("댓글 작성을 하지 못하였습니다: ", error); });
+            .catch((error) => {
+                console.error("댓글 작성을 하지 못하였습니다: ", error);
+            });
+    };
 
-        const comment = {
-            id : Date.now(),
-            text : newComment,
-            date : new Date()
-        };
+    const onChange = (e) => {
+        setNewComment(e.target.value);
+    };
 
-        setComments([...comments, comment]);
-        setNewComment("");
-    }
+    const handleModalClose = () => setModalIndex(null);
+    const handleEdit = () => setModalIndex(null);
+    const handleDelete = () => setModalIndex(null);
+
+    if (isLoading) return <div>Loading...</div>;
+    if (replyError) return <div>Error: {replyError}</div>;
 
     return (
-        <CommentWrapper>
-            <div className="previousComments">
-                {comments.map((comment) => (
-                    <div>
-                        <div>
-                            <small><img src={userInfo.imageUrl} alt="프로필"/></small>
-                            <small>{userInfo.name}</small>
-                        </div>
-                        <div>
-                            <small>{comment.date.toString()}</small>
-                        </div>
-                        <p>{comment.text}</p>
-                    </div>
+        <div>
+            <CommentsWrap>
+                <div>
+                    <span style={{ fontSize: "24px", paddingRight: "0.5rem" }}>댓글</span>
+                    <span>{commentsData.length}</span>
+                </div>
+
+                <CommetHr />
+                {commentsData?.map((commentData, index) => (
+                    <CommentWrap key={commentData.id}>
+                        <Comment>
+                            <ProfileImage />
+                            <CommentText>
+                                <Bold>{commentData.memberNickName}</Bold>
+                                <div>{commentData.content}</div>
+                            </CommentText>
+                        </Comment>
+                        <CommentRight>
+                            <TimeAndLike>
+                                <div>{commentData.createdAt}</div>
+                                <IconWrap>
+                                    <InteractionItem
+                                        icon={heart}
+                                        count={commentData.likeCount || 0}
+                                    />
+                                </IconWrap>
+                            </TimeAndLike>
+
+                            {commentData?.commentInfo?.isModified && (
+                                <CommnetModalIcon>
+                                    <Modify onClick={() => setModalIndex(index)}>
+                                        <FontAwesomeIcon icon={faEllipsisVertical} />
+                                    </Modify>
+                                    {modalIndex !== null && (
+                                        <ModalComponent
+                                            isVisible={modalIndex !== null}
+                                            onClose={handleModalClose}
+                                            onEdit={handleEdit}
+                                            onDelete={handleDelete}
+                                        />
+                                    )}
+                                </CommnetModalIcon>
+                            )}
+                        </CommentRight>
+                    </CommentWrap>
                 ))}
-            </div>
-
-            <form onSubmit={handleSubmit}>
-                <img src={userInfo.imageUrl} />
-                <textarea
-                    value={newComment}
-                    onChange={(e) => setNewComment(e.target.value)}
-                    placeholder="write your opinion..."
-                />
-
-                <button
-                    type="submit"
-                >작성
-                </button>
-            </form>
-        </CommentWrapper>
+                <hr />
+                <form onSubmit={handleSubmit}>
+                    <CommentInputWrap>
+                        <CommentInput
+                            value={newComment}
+                            onChange={onChange}
+                            placeholder="댓글 작성"
+                        />
+                        <InputImg src={commentsubmit} alt="댓글 제출" onClick={handleSubmit} />
+                    </CommentInputWrap>
+                </form>
+            </CommentsWrap>
+        </div>
     );
-}
+};
 
-export default Comment;
+export default Comments;
