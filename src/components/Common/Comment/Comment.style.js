@@ -39,6 +39,9 @@ export const TimeAndLike = styled.div`
     display: flex;
     flex-direction: column;
     align-items: flex-end;
+    div {
+        font-size: 12px;
+    }
 `;
 
 export const CommentInputWrap = styled.div`
@@ -65,6 +68,7 @@ export const InputImg = styled.img`
 export const Bold = styled.div`
     font-weight: bold;
     margin-bottom: 5px;
+    font-size: 12px;
 `;
 
 export const IconWrap = styled.div`

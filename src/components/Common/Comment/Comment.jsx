@@ -2,16 +2,9 @@ import React, { useState, useCallback, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { InteractionItem } from "../Interactions";
 import heart from "../../../assets/images/heart.png";
-import commentSubmitButton from "../../../assets/images/commentsubmit.png";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEllipsisVertical } from "@fortawesome/free-solid-svg-icons";
-
-import {
-    CommentWrapper,
-} from "./Comment.style";
 import axiosInstance from "../../../services/axiosConfig";
-import useUserInfo from "../../../hooks/useUserInfo";
-import {fetchcomment} from "../../../services/api/api";
 import {
     Bold, CommentInput, CommentInputWrap, CommentRight,
     CommentsWrap, Comment, CommentText, CommentWrap,
@@ -21,7 +14,6 @@ import {ProfileImage} from "../../Card/PostCard/PostProfile";
 import {Modify} from "../../../pages/Board/BoardDetail/Board/BoardDetail.style";
 import ModalComponent from "../../Modal/EditDeleteModal/EditDeleteModal";
 import commentsubmit from "../../../assets/images/commentsubmit.png";
-import comment from "../../../pages/Board/BoardDetail/Comment/Comment";
 
 const Comments = ()  => {
 
@@ -37,8 +29,8 @@ const Comments = ()  => {
         axiosInstance
             .get(`/comments/${postId}`)
             .then((response) => {
-                console.log(response.data.result)
                 setCommentsData(response.data.result);
+                console.log("전체응답 : ", response.data.result);
                 setReplyError(false);
             })
             .catch((error) => {
@@ -74,6 +66,27 @@ const Comments = ()  => {
             });
     };
 
+    const getTime = (createdTime) => {
+        const now = new Date();
+        const created = new Date(createdTime);
+
+        const differTime = Math.floor((now - created) / 1000);
+        const minutes = Math.floor(differTime / 60);
+        const hours = Math.floor(minutes / 60);
+        const days = Math.floor(hours / 24);
+        const weeks = Math.floor(days / 7);
+        const months = Math.floor(days / 30);
+        const years = Math.floor(months / 12)
+
+        if (differTime < 60) return "now";
+        if (minutes < 60) return `${minutes}minute age`;
+        if (hours < 24) return `${hours}hour age`;
+        if (days < 7) return `${days}day ago`;
+        if (days < 30) return `${weeks}week ago`;
+        if (months < 12) return `${months}week ago`;
+        return `${years}year ago`;
+    }
+
     const onChange = (e) => {
         setNewComment(e.target.value);
     };
@@ -97,15 +110,15 @@ const Comments = ()  => {
                 {commentsData?.map((commentData, index) => (
                     <CommentWrap key={commentData.id}>
                         <Comment>
-                            <ProfileImage />
+                            <ProfileImage src={commentData.memberImageUrl}></ProfileImage>
                             <CommentText>
-                                <Bold>{commentData.memberNickName}</Bold>
+                                <div><Bold>{commentData.memberNickname}</Bold></div>
                                 <div>{commentData.content}</div>
                             </CommentText>
                         </Comment>
                         <CommentRight>
                             <TimeAndLike>
-                                <div>{commentData.createdAt}</div>
+                                <div>{getTime(commentData.createdAt)}</div>
                                 <IconWrap>
                                     <InteractionItem
                                         icon={heart}
