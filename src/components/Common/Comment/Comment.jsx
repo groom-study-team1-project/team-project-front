@@ -69,21 +69,31 @@ const Comments = ()  => {
     const getTime = (createdTime) => {
         const now = new Date();
         const created = new Date(createdTime);
+        created.setHours(created.getHours() + 9);
+
+        console.log('입력된 시간:', createdTime);
+        console.log('파싱된 생성 시간:', new Date(created).toISOString());
+        console.log('현재 시간:', new Date(now).toISOString())
 
         const differTime = Math.floor((now - created) / 1000);
-        const minutes = Math.floor(differTime / 60);
-        const hours = Math.floor(minutes / 60);
-        const days = Math.floor(hours / 24);
-        const weeks = Math.floor(days / 7);
-        const months = Math.floor(days / 30);
-        const years = Math.floor(months / 12)
-
         if (differTime < 60) return "now";
-        if (minutes < 60) return `${minutes}minute age`;
-        if (hours < 24) return `${hours}hour age`;
+
+        const minutes = Math.floor(differTime / 60);
+        if (minutes < 60) return `${minutes}minute ago`;
+
+        const hours = Math.floor(differTime / (60 * 60));
+        if (hours < 24) return `${hours}hour ago`;
+
+        const days = Math.floor(differTime / (60 * 60 * 24));
         if (days < 7) return `${days}day ago`;
+
+        const weeks = Math.floor(days / 7);
         if (days < 30) return `${weeks}week ago`;
+
+        const months = Math.floor(days / 30);
         if (months < 12) return `${months}week ago`;
+
+        const years = Math.floor(months / 12);
         return `${years}year ago`;
     }
 

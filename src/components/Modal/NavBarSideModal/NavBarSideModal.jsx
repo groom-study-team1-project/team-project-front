@@ -9,7 +9,7 @@ import {
 } from "./NavBarSideModal.style";
 import { Button, BorderButton } from "../../../Layout/Navbar/Navbar.style";
 import { RiLogoutBoxRLine } from "react-icons/ri";
-import { LuUserSquare2 } from "react-icons/lu";
+import { IoIosLogOut } from "react-icons/io";
 import darkmodeIcon from "../../../assets/images/darkmode.png";
 import lightmodeIcon from "../../../assets/images/lightmode.png";
 import profileIcon from "../../../assets/images/profileIcon.png";
@@ -146,7 +146,7 @@ const NavBarSideModal = ({
               <SidebarLink className="link">
                 <span>로그 아웃</span>
                 <span>
-                  <LuUserSquare2 />
+                  <IoIosLogOut />
                 </span>
               </SidebarLink>
             </SidebarLi>
