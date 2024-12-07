@@ -1,10 +1,10 @@
 import { useState } from "react";
 import { ArrowButton, Interaction } from "../../../Common/Interactions";
 import {
-  ContentBox,
-  InnerContainer,
-  PostActions,
-  PostCardContainer,
+    ContentBox,
+    InnerContainer,
+    PostActions,
+    PostCardContainer,
 } from "../PostCard.style";
 import { PostProfileBox } from "../PostProfile";
 import { CustomBody, CustomThumbnail } from "./CommunityPostCard.style";
@@ -14,68 +14,101 @@ import useJwt from "../../../../hooks/useJwt";
 import { useSelector } from "react-redux";
 
 function CommunityPostCard({
-  id,
-  title,
-  content,
-  name,
-  job,
-  count = { view: 0, like: 0, comment: 0 },
-  img,
-}) {
-  const [imgIndex, setImgIndex] = useState(0);
-  const payload = useJwt(
-    useSelector((state) => state.user.userInfo.accessToken)
-  );
-  const memberId = payload.memberId;
-
-  const navigate = useNavigate();
-
-  const handleNavigation = () => {
-    navigate(`/board/detail/${id}`);
-  };
-
-  const handlePrevImage = (e) => {
-    e.stopPropagation();
-    setImgIndex((prevIndex) => (prevIndex > 0 ? prevIndex - 1 : prevIndex));
-  };
-
-  const handleNextImage = (e) => {
-    e.stopPropagation();
-    setImgIndex((prevIndex) =>
-      prevIndex < img.length - 1 ? prevIndex + 1 : prevIndex
+                               id,
+                               title,
+                               content,
+                               name,
+                               job,
+                               count = { view: 0, like: 0, comment: 0 },
+                               img,
+                               thumbnail,
+                           }) {
+    const [imgIndex, setImgIndex] = useState(0);
+    const payload = useJwt(
+        useSelector((state) => state.user.userInfo.accessToken)
     );
-  };
+    const memberId = payload.memberId;
 
-  return (
-    <>
-      <PostCardContainer height="232px" onClick={handleNavigation}>
-        <InnerContainer>
-          <CustomThumbnail>
-            {img ? (
-              <img src={img[imgIndex].url} alt={`img ${imgIndex}`} />
-            ) : null}
-          </CustomThumbnail>
-          <CustomBody>
-            <PostActions>
-              <PostProfileBox name={name} job={job} memberId={memberId} />
-              <Interaction count={count} />
-            </PostActions>
-            <Divider />
-            <ContentBox>
-              <p>{title}</p>
-              <p>{content}</p>
-            </ContentBox>
-            <Divider />
+    const navigate = useNavigate();
 
-            <ArrowButton
-              handlePrevImage={(e) => handlePrevImage(e)}
-              handleNextImage={(e) => handleNextImage(e)}
-            />
-          </CustomBody>
-        </InnerContainer>
-      </PostCardContainer>
-    </>
-  );
+    const handleNavigation = () => {
+        navigate(`/board/detail/${id}`);
+    };
+
+    const handlePrevImage = (e) => {
+        e.stopPropagation();
+        setImgIndex((prevIndex) => (prevIndex > 0 ? prevIndex - 1 : prevIndex));
+    };
+
+    const handleNextImage = (e) => {
+        e.stopPropagation();
+        setImgIndex((prevIndex) =>
+            prevIndex < img.length - 1 ? prevIndex + 1 : prevIndex
+        );
+    };
+
+    const processContent = (htmlContent) => {
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(htmlContent, "text/html");
+        const imgElements = doc.querySelectorAll("img");
+
+        imgElements.forEach((img) => {
+            const imgSrc = img.getAttribute("src");
+            if (imgSrc) {
+                img.replaceWith(`[` + imgSrc + `]`);
+            }
+        });
+
+        return doc.body.textContent || "";
+    };
+
+    const truncateText = (text, maxLength) => {
+        return text.length > maxLength
+            ? text.substring(0, maxLength) + "..."
+            : text;
+    };
+
+    return (
+        <>
+            <PostCardContainer height="232px" onClick={handleNavigation}>
+                <InnerContainer>
+                    <CustomThumbnail>
+                        {thumbnail ? (
+                            <img
+                                src={thumbnail}
+                                alt={`Thumbnail`}
+                                style={{ maxWidth: "100%", height: "100%", objectFit: "cover" }}
+                            />
+                        ) : (
+                            <img
+                                src="https://via.placeholder.com/150"
+                                alt="Default placeholder"
+                                style={{ maxWidth: "100%", height: "100%", objectFit: "cover" }}
+                            />
+                        )}
+                    </CustomThumbnail>
+
+                    <CustomBody>
+                        <PostActions>
+                            <PostProfileBox name={name} job={job} memberId={memberId} />
+                            <Interaction count={count} />
+                        </PostActions>
+                        <Divider />
+                        <ContentBox>
+                            <p>{truncateText(title, 30)}</p> {/* 제목 글자수 제한 */}
+                            <p>{truncateText(processContent(content), 100)}</p> {/* 내용 글자수 제한 */}
+                        </ContentBox>
+                        <Divider />
+
+                        <ArrowButton
+                            handlePrevImage={(e) => handlePrevImage(e)}
+                            handleNextImage={(e) => handleNextImage(e)}
+                        />
+                    </CustomBody>
+                </InnerContainer>
+            </PostCardContainer>
+        </>
+    );
 }
 
 export default CommunityPostCard;

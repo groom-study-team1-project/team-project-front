@@ -38,6 +38,49 @@ export const PostCardContainer = styled.div`
 `;
 
 export const InnerContainer = styled.div`
+    display: flex;
+    flex-direction: ${({ direction }) => direction || "row"};
+    flex-grow: 1;
+    padding: 16px;
+    border-radius: 10px;
+    background: linear-gradient(
+            to bottom,
+            rgba(255, 255, 255, 0.6),
+            rgba(255, 255, 255, 0.5)
+    );
+    backdrop-filter: blur(20px);
+
+    &::before {
+        z-index: -1;
+        content: "";
+        position: absolute;
+        inset: 0;
+        border-radius: 10px;
+        border: 1px solid transparent;
+        background: linear-gradient(
+                10deg,
+                rgba(255, 255, 255, 0),
+                rgba(255, 255, 255, 1)
+        )
+        border-box;
+        -webkit-mask: linear-gradient(#fff 0 0) padding-box,
+        linear-gradient(#fff 0 0);
+        mask: linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0);
+        -webkit-mask-composite: destination-out;
+        mask-composite: exclude;
+    }
+
+    & > div:first-child {
+        flex: 1; /* CustomThumbnail의 비율 */
+    }
+
+    & > div:last-child {
+        flex: 2; /* CustomBody의 비율 */
+    }
+`;
+
+
+export const ProjectInnerContainer = styled.div`
   display: flex;
   flex-direction: ${({ direction }) => direction || "row"};
   flex-grow: 1;

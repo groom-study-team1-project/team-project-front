@@ -7,14 +7,32 @@ import { BsPatchQuestion } from "react-icons/bs";
 // 새 게시글 생성
 export const createPost = async (body) => {
   try {
+    const imageUrls = []; // 업로드된 이미지 URL 배열
+
+    // 이미지 업로드 처리
+    if (body.imageFiles) {
+      await Promise.all(
+          body.imageFiles.map((file) =>
+              uploadAdapter(
+                  { file: Promise.resolve(file) },
+                  (uploadedUrl) => {
+                    console.log("업로드된 이미지 URL:", uploadedUrl);
+                    imageUrls.push(uploadedUrl); // 여기서 imageUrls에 추가
+                  }
+              ).upload()
+          )
+      );
+    }
+
     const requestBody = {
-      title: body.title?.trim(), // 제목 (양끝 공백 제거)
-      content: body.content?.trim(), // 내용 (양끝 공백 제거)
-      categoryId: body.categoryId, // 카테고리 ID
-      hashtags: body.hashtags || [], // 해시태그
+      title: body.title?.trim(),
+      content: body.content?.trim(),
+      categoryId: body.categoryId,
+      hashtags: body.hashtags || [],
+      thumbnail: body.thumbnail || "",
+      imageUrls, // 추가된 이미지 URL 배열
     };
 
-    // 필수 입력값 확인
     if (!requestBody.title || !requestBody.content || !requestBody.categoryId) {
       throw new Error("제목, 내용, 카테고리 ID는 필수 입력 항목입니다.");
     }
@@ -24,34 +42,62 @@ export const createPost = async (body) => {
     return result.data;
   } catch (error) {
     console.error(
-      error.response
-        ? "서버 응답 에러: " + error.response.data
-        : error.request
-        ? "응답 없음 에러: " + error.request
-        : "예상치 못한 에러: " + error.message
+        error.response
+            ? "서버 응답 에러: " + error.response.data
+            : error.request
+                ? "응답 없음 에러: " + error.request
+                : "예상치 못한 에러: " + error.message
     );
     throw error;
   }
 };
 
-// 이미지 업로드 어댑터
-export const uploadAdapter = (loader) => {
-  const API_URL = "http://203.232.193.208:7000/api/post/image";
+export const uploadAdapter = (loader, onImageUploaded) => {
+  const uploadImage = async (file) => {
+    if (!file) {
+      console.error("업로드할 파일이 없습니다.");
+      throw new Error("파일이 존재하지 않습니다.");
+    }
+
+    const formData = new FormData();
+    formData.append("imageFile", file);
+
+    const response = await axiosInstance.post("/api/posts/upload/image", formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+      },
+    });
+
+    if (response.data?.status?.code === 1204) {
+      return response.data.result.imageUrl; // 성공 시 이미지 URL 반환
+    }
+
+    throw new Error(response.data?.status?.message || "이미지 업로드 실패");
+  };
+
   return {
     upload: () => {
-      return new Promise((resolve, reject) => {
-        const body = new FormData();
-        loader.file.then((file) => {
-          body.append("upload", file);
-          axiosInstance
-            .post(API_URL, body)
-            .then((res) => resolve({ default: res.data.url[0] }))
-            .catch(reject);
-        });
-      });
+      return loader.file
+          .then(uploadImage) // 파일 업로드 처리
+          .then((imageUrl) => {
+            console.log("이미지 업로드 성공:", imageUrl);
+
+            // 업로드된 이미지 URL 후처리를 위한 콜백 호출
+            if (onImageUploaded) {
+              onImageUploaded(imageUrl);
+            }
+
+            return { default: imageUrl }; // 에디터에 반환
+          })
+          .catch((error) => {
+            console.error("이미지 업로드 에러:", error.message);
+            throw error;
+          });
     },
   };
 };
+
 
 // 게시글 목록 조회
 export async function fetchPostItems(categoryId, lastPostId) {
@@ -63,8 +109,8 @@ export async function fetchPostItems(categoryId, lastPostId) {
     });
 
     if (
-      response.data?.status?.code === 1203 &&
-      Array.isArray(response.data.result)
+        response.data?.status?.code === 1203 &&
+        Array.isArray(response.data.result)
     ) {
       const posts = response.data.result;
       console.log("게시글 조회 성공:", posts);
@@ -87,7 +133,7 @@ export const fetchPostDetail = async (postId) => {
       return response.data.result;
     } else {
       throw new Error(
-        response.data.status.message ||
+          response.data.status.message ||
           "게시글을 불러올 수 없거나 존재하지 않습니다."
       );
     }
@@ -102,18 +148,18 @@ export const fetchPostChange = async (body, postId) => {
   try {
     console.log(body);
     const result = await axiosInstance.post(
-      `/api/posts/update/${postId}`,
-      body
+        `/api/posts/update/${postId}`,
+        body
     );
     console.log("게시글 수정 성공:", result.data);
     return result.data;
   } catch (error) {
     console.error(
-      error.response
-        ? "서버 응답 에러: " + error.response.data
-        : error.request
-        ? "응답 없음 에러: " + error.request
-        : "예상치 못한 에러: " + error.message
+        error.response
+            ? "서버 응답 에러: " + error.response.data
+            : error.request
+                ? "응답 없음 에러: " + error.request
+                : "예상치 못한 에러: " + error.message
     );
     throw error;
   }
@@ -127,11 +173,11 @@ export const deletepost = async (postId) => {
     return response.data;
   } catch (error) {
     console.error(
-      error.response
-        ? "서버 응답 에러: " + error.response.data
-        : error.request
-        ? "응답 없음 에러: " + error.request
-        : "예상치 못한 에러: " + error.message
+        error.response
+            ? "서버 응답 에러: " + error.response.data
+            : error.request
+                ? "응답 없음 에러: " + error.request
+                : "예상치 못한 에러: " + error.message
     );
     throw error;
   }
@@ -161,13 +207,13 @@ export async function fetchCategoryItems() {
   }
 }
 
-export const sortPostsByCriteria = async (categoty_id, sort, post_id) => {
+export const sortPostsByCriteria = async (category_id, sort, post_id) => {
   try {
     // const result = await axiosInstance.get(
-    //   `/posts/${post_id}?sort=${sort}&categoty-id=${categoty_id}`
+    //   `/posts/${post_id}?sort=${sort}&category-id=${category_id}`
     // );
     // console.log(result);
-    console.log(categoty_id, sort, post_id);
+    console.log(category_id, sort, post_id);
   } catch (error) {
     console.log(error);
   }
