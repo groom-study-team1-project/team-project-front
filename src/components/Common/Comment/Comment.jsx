@@ -1,19 +1,21 @@
 import React, { useState, useCallback, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import { InteractionItem } from "../Interactions";
-import heart from "../../../assets/images/heart.png";
+//import { InteractionItem } from "../Interactions";
+import outlineHeart from "../../../assets/images/heart.png";
+import fullHeart from "../../../assets/images/fullheart.png";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEllipsisVertical } from "@fortawesome/free-solid-svg-icons";
 import axiosInstance from "../../../services/axiosConfig";
 import {
     Bold, CommentInput, CommentInputWrap, CommentRight,
     CommentsWrap, Comment, CommentText, CommentWrap,
-    CommetHr, CommnetModalIcon, IconWrap, InputImg, TimeAndLike
+    CommetHr, CommnetModalIcon, IconWrap, InputImg, TimeAndLike, LikedButton, ReplyButton
 } from "../Comment/Comment.style";
 import {ProfileImage} from "../../Card/PostCard/PostProfile";
 import {Modify} from "../../../pages/Board/BoardDetail/Board/BoardDetail.style";
 import ModalComponent from "../../Modal/EditDeleteModal/EditDeleteModal";
 import commentsubmit from "../../../assets/images/commentsubmit.png";
+import ReplyComment from "../ReplyComment/replyComment";
 
 const Comments = ()  => {
 
@@ -24,12 +26,25 @@ const Comments = ()  => {
     const [replyError, setReplyError] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
 
+    //const [isEdit, setIsEdit] = useState(false);
+    //const [editContent, setEditContent] = useState("");
+    //const [heart, setHeart] = useState(false);
+
+    const [likedComment, setLikedComment] = useState(new Set());
+    const [openReply, setOpenReply] = useState(new Set());
+
     const fetchComments = useCallback(() => {
         setIsLoading(true);
         axiosInstance
             .get(`/comments/${postId}`)
             .then((response) => {
                 setCommentsData(response.data.result);
+                const likedComment = new Set(
+                    response.data.result
+                        .filter(comment => comment.likedMe)
+                        .map(comment => comment.id)
+                );
+                setLikedComment(likedComment);
                 console.log("전체응답 : ", response.data.result);
                 setReplyError(false);
             })
@@ -71,10 +86,6 @@ const Comments = ()  => {
         const created = new Date(createdTime);
         created.setHours(created.getHours() + 9);
 
-        console.log('입력된 시간:', createdTime);
-        console.log('파싱된 생성 시간:', new Date(created).toISOString());
-        console.log('현재 시간:', new Date(now).toISOString())
-
         const differTime = Math.floor((now - created) / 1000);
         if (differTime < 60) return "now";
 
@@ -97,13 +108,67 @@ const Comments = ()  => {
         return `${years}year ago`;
     }
 
+    const handleHeart = (commentId) => {
+        if (likedComment.has(commentId)) {
+            axiosInstance.delete(`/api/comments/unlike`)
+                .then((response) => {
+                    setLikedComment(prev => {
+                        const newSet = new Set(prev);
+                        newSet.delete(commentId);
+                        return newSet;
+                    });
+                    return fetchComments();
+                })
+                .catch((error) => {
+                    console.error("좋아요를 취소하지 못하였습니다 : ", error);
+                });
+        } else {
+            axiosInstance.post(`/api/comments/like`)
+                .then(() => {
+                    setLikedComment(prev => new Set([...prev, commentId]));
+                    return fetchComments();
+                })
+                .catch((error) => {
+                    console.error("좋아요를 반영하지 못하였습니다 : ", error);
+                });
+        }
+    };
+
     const onChange = (e) => {
         setNewComment(e.target.value);
     };
 
+    const handleDelete = () => {
+        axiosInstance.delete(`/api/comments/remove`)
+            .then(() => {
+                fetchComments();
+                setModalIndex(null);
+            })
+            .catch(error => { console.error("댓글 삭제를 하지 못하였습니다 : ", error); });
+    };
+
+    const handleEdit = (commentId, content) => {
+        axiosInstance.post(`/api/comments/edit`, { content })
+            .then(() => {
+                fetchComments();
+                setModalIndex(null);
+            })
+            .catch(error => { console.error("댓글 수정을 하지 못하였습니다 : ", error); });
+    };
+
     const handleModalClose = () => setModalIndex(null);
-    const handleEdit = () => setModalIndex(null);
-    const handleDelete = () => setModalIndex(null);
+
+    const handleReplyOpen = (commentId) => {
+        setOpenReply(prev => {
+            const newSet = new Set(prev);
+            if (newSet.has(commentId)) {
+                newSet.delete(commentId);
+            } else {
+                newSet.add(commentId);
+            }
+            return newSet;
+        });
+    };
 
     if (isLoading) return <div>Loading...</div>;
     if (replyError) return <div>Error: {replyError}</div>;
@@ -122,18 +187,27 @@ const Comments = ()  => {
                         <Comment>
                             <ProfileImage src={commentData.memberImageUrl}></ProfileImage>
                             <CommentText>
-                                <div><Bold>{commentData.memberNickname}</Bold></div>
-                                <div>{commentData.content}</div>
+                                <Bold>{commentData.memberNickname}</Bold>
+                                <p>{commentData.content}</p>
+                                <ReplyButton onClick={() => handleReplyOpen(commentData.id)}>답글</ReplyButton>
+                                {openReply.has(commentData.id) && (
+                                    <ReplyComment
+                                        commentId={commentData.id}
+                                        replyAdded={fetchComments}
+                                    />
+                                )}
                             </CommentText>
                         </Comment>
                         <CommentRight>
-                            <TimeAndLike>
+                        <TimeAndLike>
                                 <div>{getTime(commentData.createdAt)}</div>
                                 <IconWrap>
-                                    <InteractionItem
-                                        icon={heart}
-                                        count={commentData.likeCount || 0}
-                                    />
+                                    <div>
+                                        <LikedButton onClick={() => handleHeart(commentData.id)}>
+                                            <img src={likedComment.has(commentData.id) ? fullHeart : outlineHeart} alt="좋아요"/>
+                                        </LikedButton>
+                                        <span>{commentData.likeCount}</span>
+                                    </div>
                                 </IconWrap>
                             </TimeAndLike>
 
