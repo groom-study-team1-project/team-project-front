@@ -14,6 +14,7 @@ import { fetchPostItems } from "../../../services/api/postApi";
 import { useDispatch } from "react-redux";
 import { setAllPostItems } from "../../../store/post/postSlice";
 import { BarLoading } from "../../../components/Common/LodingSpinner";
+import Comment from "../../../components/Common/Comment/Comment";
 
 function FreeBoard() {
   const [postItems, setPostItems] = useState([]);

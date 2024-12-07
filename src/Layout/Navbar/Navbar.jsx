@@ -175,9 +175,9 @@ function Navbar({ isMainPage = false }) {
                 setIsOpen={setNavModalOpen}
                 menuItems={menuItems}
                 handleDropDown={handleDropdown}
-                userInfo={userInfo}
                 handleMenuClick={handleMenuClick}
                 handleDarkMode={handleDarkMode}
+                handleMyProfile={() => handleNavigation("my-profile")}
                 navigateNewPost={() => handleNavClick("write")}
                 navigateMyPage={() => handleNavigation("my-profile")}
                 onLogout={handleLogout}
