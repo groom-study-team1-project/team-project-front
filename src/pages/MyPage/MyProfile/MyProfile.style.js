@@ -78,3 +78,19 @@ export const Userintroduce = styled.div`
   border-bottom: 1px solid rgba(0, 0, 0, 0.1);
   margin: 24px;
 `;
+
+export const Label = styled.label`
+  display: flex;
+  align-items: center;
+  margin-top: 2%;
+`;
+
+export const LabelTitle = styled.div`
+  font-size: 1.5rem;
+`;
+
+export const Url = styled.a`
+  margin-left: 1%;
+  text-decoration: none;
+  color: black;
+`;

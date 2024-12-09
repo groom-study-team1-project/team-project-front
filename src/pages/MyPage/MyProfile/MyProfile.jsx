@@ -7,6 +7,9 @@ import {
   ProfileWrap,
   Userintroduce,
   Wrap,
+  Label,
+  LabelTitle,
+  Url,
 } from "./MyProfile.style";
 import { MyPosts } from "../../../components/Card/MyPostsCard/MyPosts/MyPosts";
 import { useSelector } from "react-redux";
@@ -88,12 +91,21 @@ function MyProfile() {
               </ProfileSetting>
             ) : null}
           </ProfileHeader>
+
           <div
             style={{
               width: "90%",
               marginLeft: "5%",
             }}
           >
+            <Label>
+              <LabelTitle>githubUrl:</LabelTitle>
+              <Url href={profileData.githubUrl}>{profileData.githubUrl}</Url>
+            </Label>
+            <Label>
+              <LabelTitle>blogUrl:</LabelTitle>
+              <Url href={profileData.blogUrl}>{profileData.blogUrl}</Url>
+            </Label>
             <Userintroduce>{profileData.aboutMe}</Userintroduce>
             <MyPosts postCount={profileData.postCount} />
           </div>
