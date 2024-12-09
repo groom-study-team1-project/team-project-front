@@ -43,6 +43,7 @@ const useUserInfo = () => {
             })
             .finally(() => {
                 console.log("유저 정보 불러오기 성공");
+                setIsUserInfoLoading(false);
             })
     }, [isLoggedIn, payload?.memberId]);
 

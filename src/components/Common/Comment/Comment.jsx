@@ -33,22 +33,31 @@ const Comments = ()  => {
     const [likedComment, setLikedComment] = useState(new Set());
     const [openReply, setOpenReply] = useState(new Set());
 
-    const fetchComments = useCallback((userInfo) => {
+    const fetchComments = useCallback((userInfo, lastCommentId) => {
 
-        if(!isUserInfoLoading) return;
-        const memberId = userInfo?.id;
-        const baseEndPoint = `/comments/${postId}`;
-        const addMemberEndPoint = userInfo ? `${baseEndPoint}?memberId=${memberId}` : baseEndPoint;
-        console.log(addMemberEndPoint, memberId);
-        axiosInstance.get(addMemberEndPoint)
+        setIsLoading(true);
+
+        const memberId = userInfo?.id
+        const baseEndpoint = `/comments/${postId}`;
+        const queryParams = new URLSearchParams();
+
+        if (memberId) queryParams.append("memberId", memberId);
+        if (lastCommentId) queryParams.append("lastCommentId", lastCommentId);
+
+        const endPoint = queryParams.toString() ? `${baseEndpoint}?${queryParams.toString()}` : baseEndpoint;
+        console.log("최종 : ", endPoint);
+        axiosInstance.get(endPoint)
             .then((response) => {
-                setCommentsData(response.data.result);
+                const commentInfo = response.data.result;
+
+                setCommentsData(prev => lastCommentId ? [...prev, ...commentInfo] : commentInfo);
+
                 const likedComment = new Set(
-                    response.data.result
+                    commentInfo
                         .filter(comment => comment.likedMe)
                         .map(comment => comment.id)
                 );
-                setLikedComment(likedComment);
+                setLikedComment(prev => new Set([...prev, ...likedComment]));
                 setReplyError(false);
             })
             .catch((error) => {
@@ -62,8 +71,10 @@ const Comments = ()  => {
     }, [postId]);
 
     useEffect(() => {
-        fetchComments(userInfo);
-    }, [fetchComments]);
+        if (!isUserInfoLoading) {
+            fetchComments(userInfo, null);
+        }
+    }, [userInfo, isUserInfoLoading, fetchComments]);
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -144,16 +155,19 @@ const Comments = ()  => {
     const handleDelete = () => {
         axiosInstance.delete(`/api/comments/remove`)
             .then(() => {
-                fetchComments();
+                fetchComments(userInfo, null);
                 setModalIndex(null);
             })
             .catch(error => { console.error("댓글 삭제를 하지 못하였습니다 : ", error); });
     };
 
     const handleEdit = (commentId, content) => {
-        axiosInstance.post(`/api/comments/edit`, { content })
+        axiosInstance.post(`/api/comments/edit`, {
+            commentId: commentId,
+            content: content
+        })
             .then(() => {
-                fetchComments();
+                fetchComments(userInfo, null);
                 setModalIndex(null);
             })
             .catch(error => { console.error("댓글 수정을 하지 못하였습니다 : ", error); });
@@ -214,7 +228,7 @@ const Comments = ()  => {
                                 </IconWrap>
                             </TimeAndLike>
 
-                            {!commentData.author && (
+                            {commentData.author && (
                                 <CommnetModalIcon>
                                     <Modify onClick={() => setModalIndex(commentData.id)}>
                                         <FontAwesomeIcon icon={faEllipsisVertical} />
