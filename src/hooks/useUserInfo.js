@@ -4,8 +4,9 @@ import { useEffect, useState } from "react";
 import axiosInstance from "../services/axiosConfig";
 
 const useUserInfo = () => {
-    const [userInfo, setUserInfo] = useState({});
+    const [userInfo, setUserInfo] = useState(null);
     const [userError, setUserError] = useState(null);
+    const [isUserInfoLoading, setIsUserInfoLoading] = useState(true);
 
     const accessToken = useSelector((state) => state.user.userInfo.accessToken);
     const isLoggedIn = useSelector((state) => state.user.isLoggedIn);
@@ -13,8 +14,11 @@ const useUserInfo = () => {
 
     useEffect(() => {
 
+        setIsUserInfoLoading(true);
+
         if (!isLoggedIn || !payload?.memberId) {
             setUserInfo(null);
+            setIsUserInfoLoading(false);
             return;
         }
 
@@ -22,14 +26,27 @@ const useUserInfo = () => {
         const memberId = payload.memberId;
 
         axiosInstance.get(`/api/members/me/${memberId}`)
-            .then((response) => {setUserInfo(response.data)})
+            .then((response) => {
+                const userData = response.data.result;
+                if (userData && userData.id) {
+                    setUserInfo(userData);
+                }
+                else {
+                    console.error("유효한 유저 정보를 가져오지 못했습니다.");
+                    setUserInfo(null);
+                }
+            })
             .catch(error => {
                 setUserError(error.message);
                 console.error("유저 정보 불러오기 실패 : ", error);
-            });
-    }, [isLoggedIn, payload.memberId]);
+                setUserInfo(null);
+            })
+            .finally(() => {
+                console.log("유저 정보 불러오기 성공");
+            })
+    }, [isLoggedIn, payload?.memberId]);
 
-    return { userInfo, userError };
-}
+    return { userInfo, isUserInfoLoading };
+};
 
 export default useUserInfo;

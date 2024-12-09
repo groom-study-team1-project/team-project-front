@@ -16,16 +16,16 @@ import {Modify} from "../../../pages/Board/BoardDetail/Board/BoardDetail.style";
 import ModalComponent from "../../Modal/EditDeleteModal/EditDeleteModal";
 import commentsubmit from "../../../assets/images/commentsubmit.png";
 import ReplyComment from "../ReplyComment/replyComment";
+import useUserInfo from "../../../hooks/useUserInfo";
 
 const Comments = ()  => {
-
+    const { userInfo, isUserInfoLoading } = useUserInfo();
     const { postId} = useParams();
     const [commentsData, setCommentsData] = useState([]);
     const [newComment, setNewComment] = useState("");
     const [modalIndex, setModalIndex] = useState(null);
     const [replyError, setReplyError] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
-
     //const [isEdit, setIsEdit] = useState(false);
     //const [editContent, setEditContent] = useState("");
     //const [heart, setHeart] = useState(false);
@@ -33,10 +33,14 @@ const Comments = ()  => {
     const [likedComment, setLikedComment] = useState(new Set());
     const [openReply, setOpenReply] = useState(new Set());
 
-    const fetchComments = useCallback(() => {
-        setIsLoading(true);
-        axiosInstance
-            .get(`/comments/${postId}`)
+    const fetchComments = useCallback((userInfo) => {
+
+        if(!isUserInfoLoading) return;
+        const memberId = userInfo?.id;
+        const baseEndPoint = `/comments/${postId}`;
+        const addMemberEndPoint = userInfo ? `${baseEndPoint}?memberId=${memberId}` : baseEndPoint;
+        console.log(addMemberEndPoint, memberId);
+        axiosInstance.get(addMemberEndPoint)
             .then((response) => {
                 setCommentsData(response.data.result);
                 const likedComment = new Set(
@@ -45,7 +49,6 @@ const Comments = ()  => {
                         .map(comment => comment.id)
                 );
                 setLikedComment(likedComment);
-                console.log("전체응답 : ", response.data.result);
                 setReplyError(false);
             })
             .catch((error) => {
@@ -54,11 +57,12 @@ const Comments = ()  => {
             })
             .finally(() => {
                 setIsLoading(false);
+                console.log("댓글 불러오기 성공");
             });
     }, [postId]);
 
     useEffect(() => {
-        fetchComments();
+        fetchComments(userInfo);
     }, [fetchComments]);
 
     const handleSubmit = (e) => {
@@ -70,8 +74,7 @@ const Comments = ()  => {
             content: newComment.trim()
         };
 
-        axiosInstance
-            .post(`/api/comments/write`, commentData)
+        axiosInstance.post(`/api/comments/write`, commentData)
             .then(() => {
                 setNewComment("");
                 fetchComments();
@@ -211,17 +214,17 @@ const Comments = ()  => {
                                 </IconWrap>
                             </TimeAndLike>
 
-                            {commentData?.commentInfo?.isModified && (
+                            {!commentData.author && (
                                 <CommnetModalIcon>
-                                    <Modify onClick={() => setModalIndex(index)}>
+                                    <Modify onClick={() => setModalIndex(commentData.id)}>
                                         <FontAwesomeIcon icon={faEllipsisVertical} />
                                     </Modify>
-                                    {modalIndex !== null && (
+                                    {modalIndex === commentData.id && (
                                         <ModalComponent
-                                            isVisible={modalIndex !== null}
-                                            onClose={handleModalClose}
-                                            onEdit={handleEdit}
-                                            onDelete={handleDelete}
+                                            isVisible={true}
+                                            onClose={() => handleModalClose(commentData.id)}
+                                            onEdit={(content) => handleEdit(commentData.id, content)}
+                                            onDelete={() => handleDelete(commentData.id)}
                                         />
                                     )}
                                 </CommnetModalIcon>
