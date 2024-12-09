@@ -7,22 +7,7 @@ import { BsPatchQuestion } from "react-icons/bs";
 // 새 게시글 생성
 export const createPost = async (body) => {
   try {
-    const imageUrls = []; // 업로드된 이미지 URL 배열
-
-    // 이미지 업로드 처리
-    if (body.imageFiles) {
-      await Promise.all(
-          body.imageFiles.map((file) =>
-              uploadAdapter(
-                  { file: Promise.resolve(file) },
-                  (uploadedUrl) => {
-                    console.log("업로드된 이미지 URL:", uploadedUrl);
-                    imageUrls.push(uploadedUrl); // 여기서 imageUrls에 추가
-                  }
-              ).upload()
-          )
-      );
-    }
+    const imageUrls = body.imageUrls || [];
 
     const requestBody = {
       title: body.title?.trim(),
@@ -32,6 +17,8 @@ export const createPost = async (body) => {
       thumbnail: body.thumbnail || "",
       imageUrls, // 추가된 이미지 URL 배열
     };
+
+    console.log("Final Request Body in createPost:", requestBody);
 
     if (!requestBody.title || !requestBody.content || !requestBody.categoryId) {
       throw new Error("제목, 내용, 카테고리 ID는 필수 입력 항목입니다.");
@@ -51,6 +38,7 @@ export const createPost = async (body) => {
     throw error;
   }
 };
+
 
 export const uploadAdapter = (loader, onImageUploaded) => {
   const uploadImage = async (file) => {

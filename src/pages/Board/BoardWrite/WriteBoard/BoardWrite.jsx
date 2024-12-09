@@ -11,6 +11,7 @@ import {
 import backBtn from "../../../../assets/images/back-removebg-preview.png";
 import Navbar from "../../../../Layout/Navbar/Navbar";
 import ImageUploadCard from "../../../../components/Card/imgUploadCard/imageUploadCard";
+import ProjectuploadAdapter from "../../../../components/Card/imgUploadCard/imageUploadCard";
 import {
   BackImg,
   Categoryselect,
@@ -27,6 +28,7 @@ import {
 import { useSelector } from "react-redux";
 import "./App.css";
 import "ckeditor5/ckeditor5.css";
+
 const WriteBoard = ({ postData, postId, imgList }) => {
   const { isMobile } = useSelector((state) => state.screenSize);
   const navigate = useNavigate();
@@ -78,7 +80,11 @@ const WriteBoard = ({ postData, postId, imgList }) => {
   const onSubmit = async (e) => {
     e.preventDefault();
     try {
+      // 상태 확인
+      console.log("Form State before Submit:", form);
+
       const { title, content, hashtags, imageUrls, thumbnail } = form;
+
       const processedHashtags = hashtags
           .filter((item) => item.startsWith("#"))
           .map((item) => item.replace("#", ""));
@@ -94,10 +100,13 @@ const WriteBoard = ({ postData, postId, imgList }) => {
         content: content.trim(),
         hashtags: processedHashtags,
         categoryId,
-        imageUrls,
+        imageUrls: [...imageUrls],
         thumbnail,
       };
 
+      console.log("Request Body before API call:", body);
+
+      // API 호출
       if (postData) {
         await fetchPostChange(body, postId);
       } else {
@@ -106,6 +115,7 @@ const WriteBoard = ({ postData, postId, imgList }) => {
 
       navigate(-1);
     } catch (error) {
+      console.error("Error on Submit:", error.message);
       alert(error.message || "게시글 저장 중 오류가 발생했습니다.");
     }
   };
@@ -133,11 +143,11 @@ const WriteBoard = ({ postData, postId, imgList }) => {
 
   function uploadPlugin(editor) {
     editor.plugins.get("FileRepository").createUploadAdapter = (loader) => {
-      return uploadAdapter(loader, (uploadedUrl) => {
-        // setImgUrls((prev) => [...prev, uploadedUrl]);
+      return ProjectuploadAdapter(loader, (uploadedUrl) => {
+        setImgUrls((prev) => [...prev, uploadedUrl]);
         setValue((prev) => ({
           ...prev,
-          // imageUrls: [...prev.imageUrls, uploadedUrl],
+          imageUrls: [...prev.imageUrls, uploadedUrl],
         }));
       });
     };
@@ -185,7 +195,13 @@ const WriteBoard = ({ postData, postId, imgList }) => {
             </span>
             </TitleWrap>
             {Number(selectedCategory) === 2 && (
-                <ImageUploadCard imgUrls={imgUrls} setImgUrls={setImgUrls} />
+                <ImageUploadCard
+                    imgUrls={imgUrls}
+                    setImgUrls={setImgUrls}
+                    form={form}
+                    setForm={setValue}
+                />
+
             )}
             <div ref={editorContainerRef}>
               <Toolbar
