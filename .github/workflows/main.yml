@@ -26,6 +26,6 @@ jobs:
           ssh -o StrictHostKeyChecking=no ubuntu@deepdivers.store << 'EOF'
             cd /home/front/team-project-front
             git pull origin main
-            docker-compose down
-            docker-compose up -d --build
+            npm install
+            npm start
           EOF
