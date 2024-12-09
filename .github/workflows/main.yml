@@ -24,7 +24,7 @@ jobs:
       - name: Deploy to EC2
         run: |
           ssh -o StrictHostKeyChecking=no ubuntu@deepdivers.store << 'EOF'
-            cd /home/front
+            cd /home/front/team-project-front
             git pull origin main
             docker-compose down
             docker-compose up -d --build
