@@ -27,5 +27,4 @@ jobs:
             cd /home/front/team-project-front
             git pull origin main
             npm install
-            npm start
           EOF
