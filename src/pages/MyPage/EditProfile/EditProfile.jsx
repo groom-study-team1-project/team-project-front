@@ -249,6 +249,30 @@ const EditProfile = () => {
               />
             </NicknameContainer>
           </Label>
+          <Label>
+            <div>githubUrl</div>
+            <NicknameContainer>
+              <Input
+                placeholder="github URL"
+                value={form.githubUrl}
+                onChange={handleOnChange}
+                name="githubUrl"
+                width={"40%"}
+              />
+            </NicknameContainer>
+          </Label>
+          <Label>
+            <div>blogUrl</div>
+            <NicknameContainer>
+              <Input
+                placeholder="github URL"
+                value={form.blogUrl}
+                onChange={handleOnChange}
+                name="blogUrl"
+                width={"40%"}
+              />
+            </NicknameContainer>
+          </Label>
         </Container>
         <ProfileFooter>
           <SubmitBtn type="button" $bgColor={"#7682FF"} onClick={openModal}>

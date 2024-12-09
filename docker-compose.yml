@@ -1,0 +1,13 @@
+version: "3.8"
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile # Dockerfile 참조
+    container_name: deepdiver_front # 컨테이너 이름 설정
+    ports:
+      - "3000:3000"
+    environment:
+      NODE_ENV: production
+    command: npm start
