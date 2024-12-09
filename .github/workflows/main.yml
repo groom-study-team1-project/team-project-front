@@ -1,63 +1,31 @@
-name: CI/CD Docker
+name: Deploy to EC2
 
-# 트리거를 수행할 브랜치를 지정합니다.
 on:
   push:
-    branches: [ main ]
-
-# 환경설정
-env:
-  DOCKER_IMAGE: ghcr.io/${{ github.actor }}/deepdivers
-  VERSION: ${{ github.sha }}
-  NAME: go_cicd
+    branches: [main]  # main 브랜치에 푸시될 때 실행
 
 jobs:
-  # 빌드 Job
-  build:
-    name: Build
-    runs-on: ubuntu-latest
-    steps:
-      # github repository에서 checkout
-      - uses: actions/checkout@v2
-      # docker build 수행
-      - name: Set up docker buildx
-        id: buildx
-        uses: docker/setup-buildx-action@v1
-      - name: Cache docker layers
-        uses: actions/cache@v2
-        with:
-          path: /tmp/.buildx-cache
-          key: ${{ runner.os }}-buildx-${{ env.VERSION }}
-          restore-keys: |
-            ${{ runner.os }}-buildx-
-      # GitHub 컨테이너 레지스트리에 로그인 후 빌드 & 푸시
-      - name: Login to ghcr
-        uses: docker/login-action@v1
-        with:
-          registry: ghcr.io
-          username: ${{ github.repository_owner }}
-          password: ${{ secrets.GITHUB_TOKEN }}
-      - name: Build and push
-        id: docker_build
-        uses: docker/build-push-action@v2
-        with:
-          builder: ${{ steps.buildx.outputs.name }}
-          push: true
-          tags: ${{ env.DOCKER_IMAGE }}:latest
-  # 배포 Job
   deploy:
-    needs: build  # build 후에 실행되도록 정의
-    name: Deploy
-    runs-on: [ self-hosted, label-go ] # AWS ./configure에서 사용할 label명
+    name: Deploy Application
+    runs-on: ubuntu-latest
+
     steps:
-      - name: Login to ghcr
-        uses: docker/login-action@v1
+      # GitHub Repository에서 Checkout
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      # SSH 비공개 키 설정
+      - name: Set up SSH
+        uses: webfactory/ssh-agent@v0.5.3
         with:
-          registry: ghcr.io
-          username: ${{ github.repository_owner }}
-          password: ${{ secrets.GITHUB_TOKEN }}
-      # 3000 -> 80 포트로 수행하도록 지정
-      - name: Docker run
+          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+
+      # 배포 스크립트를 실행
+      - name: Deploy to EC2
         run: |
-          docker stop ${{ env.NAME }} && docker rm ${{ env.NAME }} && docker rmi ${{ env.DOCKER_IMAGE }}:latest
-          docker run -d -p 80:3000 --name go_cicd --restart always ${{ env.DOCKER_IMAGE }}:latest
+          ssh -o StrictHostKeyChecking=no ubuntu@deepdivers.store << 'EOF'
+            cd /home/front
+            git pull origin main
+            Dockerfile down
+            Dockerfile up -d --build
+          EOF
