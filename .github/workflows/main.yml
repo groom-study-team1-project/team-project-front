@@ -26,6 +26,6 @@ jobs:
           ssh -o StrictHostKeyChecking=no ubuntu@deepdivers.store << 'EOF'
             cd /home/front
             git pull origin main
-            Dockerfile down
-            Dockerfile up -d --build
+            docker-compose down
+            docker-compose up -d --build
           EOF
