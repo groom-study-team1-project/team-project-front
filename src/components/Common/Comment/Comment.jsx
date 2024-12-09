@@ -1,5 +1,5 @@
 import React, { useState, useCallback, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import {useNavigate, useParams} from 'react-router-dom';
 //import { InteractionItem } from "../Interactions";
 import outlineHeart from "../../../assets/images/heart.png";
 import fullHeart from "../../../assets/images/fullheart.png";
@@ -8,7 +8,7 @@ import { faEllipsisVertical } from "@fortawesome/free-solid-svg-icons";
 import axiosInstance from "../../../services/axiosConfig";
 import {
     Bold, CommentInput, CommentInputWrap, CommentRight,
-    CommentsWrap, Comment, CommentText, CommentWrap,
+    CommentsWrap, Comment, CommentText, CommentWrap, CommentButton,
     CommetHr, CommnetModalIcon, IconWrap, InputImg, TimeAndLike, LikedButton, ReplyButton
 } from "../Comment/Comment.style";
 import {ProfileImage} from "../../Card/PostCard/PostProfile";
@@ -26,12 +26,15 @@ const Comments = ()  => {
     const [modalIndex, setModalIndex] = useState(null);
     const [replyError, setReplyError] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
+    const [editCommentId, setEditCommentId] = useState(null);
+    const [editCommentContent, setEditCommentContent] = useState("");
     //const [isEdit, setIsEdit] = useState(false);
     //const [editContent, setEditContent] = useState("");
     //const [heart, setHeart] = useState(false);
 
     const [likedComment, setLikedComment] = useState(new Set());
     const [openReply, setOpenReply] = useState(new Set());
+    const [commentList, setCommentList] = useState(commentsData);
 
     const fetchComments = useCallback((userInfo, lastCommentId) => {
 
@@ -162,16 +165,28 @@ const Comments = ()  => {
     };
 
     const handleEdit = (commentId, content) => {
+        setEditCommentId(commentId);
+        setEditCommentContent(content);
+    }
+
+    const handleEditSubmit = (commentId) => {
         axiosInstance.post(`/api/comments/edit`, {
             commentId: commentId,
-            content: content
+            content: editCommentContent.trim()
         })
             .then(() => {
+                setEditCommentId(null);
+                setEditCommentContent("");
                 fetchComments(userInfo, null);
                 setModalIndex(null);
             })
             .catch(error => { console.error("댓글 수정을 하지 못하였습니다 : ", error); });
     };
+
+    const handleEditCancel = () => {
+        setEditCommentId(null);
+        setEditCommentContent("");
+    }
 
     const handleModalClose = () => setModalIndex(null);
 
@@ -205,8 +220,21 @@ const Comments = ()  => {
                             <ProfileImage src={commentData.memberImageUrl}></ProfileImage>
                             <CommentText>
                                 <Bold>{commentData.memberNickname}</Bold>
-                                <p>{commentData.content}</p>
-                                <ReplyButton onClick={() => handleReplyOpen(commentData.id)}>답글</ReplyButton>
+                                {editCommentId === commentData.id ? (
+                                    <div>
+                                        <CommentInput
+                                            value = {editCommentContent}
+                                            onChange={(e) => setEditCommentContent(e.target.value)}
+                                        />
+                                        <CommentButton onClick={() => handleEditSubmit(commentData.id, commentData.content)}>수정</CommentButton>
+                                        <CommentButton onClick={handleEditCancel}>취소</CommentButton>
+                                    </div>
+                                ) : (
+                                    <>
+                                        <p>{commentData.content}</p>
+                                        <ReplyButton onClick={() => handleReplyOpen(commentData.id)}>답글</ReplyButton>
+                                    </>
+                                )}
                                 {openReply.has(commentData.id) && (
                                     <ReplyComment
                                         commentId={commentData.id}
@@ -237,7 +265,10 @@ const Comments = ()  => {
                                         <ModalComponent
                                             isVisible={true}
                                             onClose={() => handleModalClose(commentData.id)}
-                                            onEdit={(content) => handleEdit(commentData.id, content)}
+                                            onEdit={(content) => {
+                                                console.log("수정 대상 게시글 : ", commentData.id, commentData.content)
+                                                handleEdit(commentData.id, commentData.content);
+                                            }}
                                             onDelete={() => handleDelete(commentData.id)}
                                         />
                                     )}

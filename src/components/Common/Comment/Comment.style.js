@@ -103,3 +103,10 @@ export const ReplyButton = styled.button`
   background: none;
   border: none;
 `
+
+export const CommentButton = styled.button`
+  border: none;
+  background: black;
+  color: white;
+  font-weight: bold;
+`
