@@ -141,15 +141,26 @@ const WriteBoard = ({ postData, postId, imgList }) => {
   };
 
 
-  function uploadPlugin(editor) {
+  function uploadPlugin(editor, isProjectCategory) {
     editor.plugins.get("FileRepository").createUploadAdapter = (loader) => {
-      return ProjectuploadAdapter(loader, (uploadedUrl) => {
-        setImgUrls((prev) => [...prev, uploadedUrl]);
-        setValue((prev) => ({
-          ...prev,
-          imageUrls: [...prev.imageUrls, uploadedUrl],
-        }));
-      });
+      if (isProjectCategory) {
+        // 프로젝트 게시판일 경우 ProjectuploadAdapter 사용
+        return ProjectuploadAdapter(loader, (uploadedUrl) => {
+          setImgUrls((prev) => [...prev, uploadedUrl]);
+          setValue((prev) => ({
+            ...prev,
+            imageUrls: [...prev.imageUrls, uploadedUrl],
+          }));
+        });
+      } else {
+        // 일반 게시판의 경우 uploadAdapter 사용
+        return uploadAdapter(loader, (uploadedUrl) => {
+          setValue((prev) => ({
+            ...prev,
+            // imageUrls: [...prev.imageUrls, uploadedUrl],
+          }));
+        });
+      }
     };
   }
 
