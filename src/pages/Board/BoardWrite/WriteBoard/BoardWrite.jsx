@@ -54,9 +54,8 @@ const WriteBoard = ({ postData, postId, imgList }) => {
         thumbnail: postData.thumbnail || "",
       });
       setSelectedCategory(postData.categoryId);
-      if (postData.id === 2) {
-        const imgurl = imgList.imgUrl.map((img) => img.url);
-        setImgUrls(imgurl);
+      if (postData.imageUrls?.length) {
+        setImgUrls(postData.imageUrls);
       }
     }
   }, [postData]);
@@ -140,27 +139,13 @@ const WriteBoard = ({ postData, postId, imgList }) => {
     });
   };
 
-
-  function uploadPlugin(editor, isProjectCategory) {
+  function uploadPlugin(editor) {
     editor.plugins.get("FileRepository").createUploadAdapter = (loader) => {
-      if (isProjectCategory) {
-        // 프로젝트 게시판일 경우 ProjectuploadAdapter 사용
-        return ProjectuploadAdapter(loader, (uploadedUrl) => {
-          setImgUrls((prev) => [...prev, uploadedUrl]);
-          setValue((prev) => ({
-            ...prev,
-            imageUrls: [...prev.imageUrls, uploadedUrl],
-          }));
-        });
-      } else {
-        // 일반 게시판의 경우 uploadAdapter 사용
-        return uploadAdapter(loader, (uploadedUrl) => {
-          setValue((prev) => ({
-            ...prev,
-            // imageUrls: [...prev.imageUrls, uploadedUrl],
-          }));
-        });
-      }
+      return uploadAdapter(loader, (uploadedUrl) => {
+        setValue((prev) => ({
+          ...prev,
+        }));
+      });
     };
   }
 
@@ -212,7 +197,6 @@ const WriteBoard = ({ postData, postId, imgList }) => {
                     form={form}
                     setForm={setValue}
                 />
-
             )}
             <div ref={editorContainerRef}>
               <Toolbar

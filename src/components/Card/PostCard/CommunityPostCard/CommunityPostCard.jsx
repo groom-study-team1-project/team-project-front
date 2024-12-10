@@ -1,4 +1,4 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import { ArrowButton, Interaction } from "../../../Common/Interactions";
 import {
     ContentBox,
@@ -19,8 +19,8 @@ function CommunityPostCard({
                                content,
                                name,
                                job,
-                               count = { view: 0, like: 0, comment: 0 },
                                img,
+                               count,
                                thumbnail,
                            }) {
     const [imgIndex, setImgIndex] = useState(0);
@@ -81,8 +81,8 @@ function CommunityPostCard({
                             />
                         ) : (
                             <img
-                                src="https://via.placeholder.com/150"
-                                alt="Default placeholder"
+                                src="https://via.placeholder.com/150?text=None"
+                                alt="Default Thumbnail"
                                 style={{ maxWidth: "100%", height: "100%", objectFit: "cover" }}
                             />
                         )}
@@ -90,20 +90,21 @@ function CommunityPostCard({
 
                     <CustomBody>
                         <PostActions>
-                            <PostProfileBox name={name} job={job} memberId={memberId} />
-                            <Interaction count={count} />
+                            <PostProfileBox name={name} job={job} memberId={memberId} imgUrl={img}/>
+                            <Interaction
+                                count={{
+                                    viewCount: count.viewCount,
+                                    likeCount: count.likeCount,
+                                    commentCount: count.commentCount,
+                                }}
+                            />
                         </PostActions>
                         <Divider />
                         <ContentBox>
-                            <p>{truncateText(title, 30)}</p> {/* 제목 글자수 제한 */}
-                            <p>{truncateText(processContent(content), 100)}</p> {/* 내용 글자수 제한 */}
+                            <p>{truncateText(title, 30)}</p>
+                            <p>{truncateText(processContent(content), 100)}</p>
                         </ContentBox>
                         <Divider />
-
-                        <ArrowButton
-                            handlePrevImage={(e) => handlePrevImage(e)}
-                            handleNextImage={(e) => handleNextImage(e)}
-                        />
                     </CustomBody>
                 </InnerContainer>
             </PostCardContainer>

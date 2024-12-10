@@ -1,21 +1,23 @@
 import React, { useRef, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPhotoFilm, faXmark } from "@fortawesome/free-solid-svg-icons";
+import {faAngleLeft, faAngleRight, faPhotoFilm, faXmark} from "@fortawesome/free-solid-svg-icons";
 import { useSelector } from "react-redux";
 import axiosInstance from "../../../services/axiosConfig";
-
+import Slider from "react-slick";
 import {
   ImgWrap,
   ImgPreviewWrap,
   ImgPreview,
   ImgPreviewDelete,
+  ImgAddWrap,
   ImgAdd,
+  CustomArrow,
+  CustomSlider,
 } from "./imageUpload.style";
 
 const ImageUploadCard = ({ imgUrls, setImgUrls, form, setForm }) => {
   const { isMobile } = useSelector((state) => state.screenSize);
   const fileInput = useRef(null);
-  const [draggedItem, setDraggedItem] = useState(null);
 
   const handleClickImgadd = () => {
     fileInput.current.click();
@@ -33,53 +35,29 @@ const ImageUploadCard = ({ imgUrls, setImgUrls, form, setForm }) => {
     });
 
     if (response.data?.status?.code === 1204) {
-      const imageUrl = response.data.result.imageUrl;
-
-      console.log("Uploaded Image URL:", imageUrl);
-
-      return imageUrl; // URL만 반환
+      return response.data.result.imageUrl;
     }
 
     throw new Error(response.data?.status?.message || "이미지 업로드 실패");
   };
 
-
   const handleFileChange = async (e) => {
     const files = Array.from(e.target.files);
 
     try {
-      console.log("Files to upload:", files);
+      const uploadedUrls = await Promise.all(
+          files.map(async (file) => await ProjectuploadAdapter(file))
+      );
 
-      const uploadPromises = files.map(async (file) => {
-        const imageUrl = await ProjectuploadAdapter(file); // URL 반환
-        return imageUrl; // 반환된 URL 저장
-      });
-
-      const uploadedUrls = await Promise.all(uploadPromises);
-
-      // 상태 한 번만 업데이트
-      setImgUrls((prevImgUrls) => {
-        const updatedImgUrls = [...prevImgUrls, ...uploadedUrls];
-        console.log("Updated imgUrls after upload:", updatedImgUrls);
-        return updatedImgUrls;
-      });
-
-      setForm((prevForm) => {
-        const updatedForm = {
-          ...prevForm,
-          imageUrls: [...prevForm.imageUrls, ...uploadedUrls],
-        };
-        console.log("Updated form.imageUrls after upload:", updatedForm.imageUrls);
-        return updatedForm;
-      });
-
-      console.log("All files uploaded successfully.");
+      setImgUrls((prevImgUrls) => [...prevImgUrls, ...uploadedUrls]);
+      setForm((prevForm) => ({
+        ...prevForm,
+        imageUrls: [...prevForm.imageUrls, ...uploadedUrls],
+      }));
     } catch (error) {
       console.error("이미지 업로드 실패:", error.message);
     }
   };
-
-
 
   const deletePreviewImg = (indexToDelete) => {
     setImgUrls((prevImgUrls) =>
@@ -90,61 +68,61 @@ const ImageUploadCard = ({ imgUrls, setImgUrls, form, setForm }) => {
       ...prevForm,
       imageUrls: prevForm.imageUrls.filter((_, index) => index !== indexToDelete),
     }));
+  };
 
-    console.log("Deleted image at index:", indexToDelete); // 로그 추가
-    console.log("Updated imgUrls after deletion:", imgUrls); // 로그 추가
+  const SlickButtonFix = ({ currentSlide, slideCount, children, ...props }) => (
+      <span {...props}>{children}</span>
+  );
+
+  const settings = {
+    dots: false,
+    infinite: false,
+    slidesToShow: isMobile ? 2 : 3,
+    slidesToScroll: 1,
+    variableWidth: true,
+    nextArrow: (
+        <SlickButtonFix>
+          <CustomArrow>
+            <FontAwesomeIcon icon={faAngleRight} />
+          </CustomArrow>
+        </SlickButtonFix>
+    ),
+    prevArrow: (
+        <SlickButtonFix>
+          <CustomArrow>
+            <FontAwesomeIcon icon={faAngleLeft} />
+          </CustomArrow>
+        </SlickButtonFix>
+    ),
   };
 
   return (
-      <>
-        <ImgWrap isMobile={isMobile}>
+      <ImgWrap>
+        <CustomSlider {...settings}>
           {imgUrls.map((url, index) => (
-              <ImgPreviewWrap
-                  key={index}
-                  draggable
-                  onDragStart={() => setDraggedItem(index)}
-                  onDragOver={(e) => e.preventDefault()}
-                  onDrop={() => {
-                    const draggedOverItem = index;
-                    if (draggedItem === draggedOverItem) return;
-
-                    const items = [...imgUrls];
-                    const item = items[draggedItem];
-
-                    items.splice(draggedItem, 1);
-                    items.splice(draggedOverItem, 0, item);
-
-                    setImgUrls(items);
-                    setForm((prevForm) => ({
-                      ...prevForm,
-                      imageUrls: items,
-                    }));
-
-                    console.log("Reordered imgUrls:", items); // 로그 추가
-                  }}
-              >
+              <ImgPreviewWrap key={index}>
                 <ImgPreview src={url} alt={`Preview ${index}`} $isMobile={isMobile} />
                 <ImgPreviewDelete onClick={() => deletePreviewImg(index)}>
                   <FontAwesomeIcon icon={faXmark} />
                 </ImgPreviewDelete>
               </ImgPreviewWrap>
           ))}
-
-          <ImgAdd onClick={handleClickImgadd} $isMobile={isMobile}>
-            <FontAwesomeIcon icon={faPhotoFilm} style={{ fontSize: "24px" }} />
-            <input
-                type="file"
-                style={{ display: "none" }}
-                accept="image/*"
-                ref={fileInput}
-                multiple
-                onChange={handleFileChange}
-            />
-          </ImgAdd>
-        </ImgWrap>
-      </>
+          <ImgAddWrap>
+            <ImgAdd onClick={handleClickImgadd} $isMobile={isMobile}>
+              <FontAwesomeIcon icon={faPhotoFilm} style={{ fontSize: "24px" }} />
+              <input
+                  type="file"
+                  style={{ display: "none" }}
+                  accept="image/*"
+                  ref={fileInput}
+                  multiple
+                  onChange={handleFileChange}
+              />
+            </ImgAdd>
+          </ImgAddWrap>
+        </CustomSlider>
+      </ImgWrap>
   );
 };
 
 export default ImageUploadCard;
-

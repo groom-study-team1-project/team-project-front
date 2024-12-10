@@ -82,6 +82,19 @@ function NoticeBoard() {
     };
   }, [lastPostIdByCategory, loading, hasMore]);
 
+  const formatDate = (dateString) => {
+    const date = new Date(new Date(dateString).getTime() + 9 * 60 * 60 * 1000);
+    return date.toLocaleString("ko-KR", {
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit",
+      hour: "2-digit",
+      minute: "2-digit",
+      second: "2-digit",
+      hour12: false, // 24시간 형식
+    });
+  };
+
   return (
       <ContentWrapper>
         <BoardTitle>
@@ -100,7 +113,7 @@ function NoticeBoard() {
                   key={`${postItem.postId}-${index}`}
                   id={postItem.postId}
                   title={postItem.title}
-                  date={postItem.createdAt.split(" ")[0]}
+                  date={formatDate(postItem.createdAt)}
                   count={postItem.countInfo}
               />
           ))}

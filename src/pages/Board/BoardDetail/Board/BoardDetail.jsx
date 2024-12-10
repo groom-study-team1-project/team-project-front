@@ -130,11 +130,11 @@ function BoardDetail() {
                     name={post.memberInfo.nickname}
                     job={post.memberInfo.memberJob}
                     email={post.memberInfo.email}
-                    imgUrl={post.memberInfo.image_url}
+                    imgUrl={post.memberInfo.imageUrl}
                 />
                 <PostheaderRignt $isMobile={isMobile}>
                   <div>{formattedDate}</div>
-                  {isMe && ( // isMe가 true인 경우에만 수정/삭제 버튼 표시
+                  {isMe && (
                       <>
                         <Modify onClick={() => setModalVisible(true)}>
                           <FontAwesomeIcon icon={faEllipsisVertical} />
@@ -149,7 +149,11 @@ function BoardDetail() {
                   )}
                 </PostheaderRignt>
               </Postheader>
-              {category === "프로젝트 게시판" && <Slide imgUrls={post.imageUrls} />}
+              {category === "프로젝트 게시판" && post.imageUrls?.length > 0 && (
+                  <div style={{ marginBottom: '20px' }}>
+                    <Slide imgUrls={post.imageUrls} />
+                  </div>
+              )}
               <Title $isMobile={isMobile}>{post.title}</Title>
               <CKEditor
                   editor={DecoupledEditor}
@@ -157,6 +161,7 @@ function BoardDetail() {
                   data={post.content}
                   disabled={true}
               />
+
             </PostWrap>
             <PostFooter $isMobile={isMobile}>
               <div>

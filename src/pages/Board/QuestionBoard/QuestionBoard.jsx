@@ -100,9 +100,10 @@ function QuestionBoard() {
                   title={postItem.title}
                   content={postItem.content}
                   name={postItem.memberInfo.nickname}
-                  job={"IOS Developer"}
+                  job={postItem.memberInfo.memberJob || "직업 정보 없음"}
+                  img={postItem.memberInfo.imageUrl}
                   count={postItem.countInfo}
-                  img={postItem.imageUrls || []}
+                  thumbnail={postItem.thumbnail}
               />
           ))}
           {loading && <BarLoading />}
