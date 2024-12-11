@@ -35,11 +35,11 @@ function NoticeBoard() {
     setTimeout(async () => {
       try {
         const { posts } = await fetchPostItems(
-          categoryId,
-          lastPostIdByCategory
+            categoryId,
+            lastPostIdByCategory
         );
         const filteredPosts = posts.filter(
-          (post) => post.categoryId === categoryId
+            (post) => post.categoryId === categoryId
         );
         if (filteredPosts.length > 0) {
           setPostItems((prevPosts) => [...prevPosts, ...filteredPosts]);
@@ -82,32 +82,45 @@ function NoticeBoard() {
     };
   }, [lastPostIdByCategory, loading, hasMore]);
 
+  const formatDate = (dateString) => {
+    const date = new Date(new Date(dateString).getTime() + 9 * 60 * 60 * 1000);
+    return date.toLocaleString("ko-KR", {
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit",
+      hour: "2-digit",
+      minute: "2-digit",
+      second: "2-digit",
+      hour12: false, // 24시간 형식
+    });
+  };
+
   return (
-    <ContentWrapper>
-      <BoardTitle>
-        <Title>공지사항</Title>
-      </BoardTitle>
-      <SearchSortWrapper>
-        <Search />
-        <SortOptionButton />
-      </SearchSortWrapper>
-      <PostCardWrapper
-        ref={listRef}
-        style={{ height: "750px", overflowY: "auto" }}
-      >
-        {postItems.map((postItem, index) => (
-          <NoticePostCard
-            key={`${postItem.postId}-${index}`}
-            id={postItem.postId}
-            title={postItem.title}
-            date={postItem.createdAt.split(" ")[0]}
-            count={postItem.countInfo}
-          />
-        ))}
-        {loading && <BarLoading />}
-        {!hasMore && <EndMessage>모든 게시글을 불러왔습니다.</EndMessage>}
-      </PostCardWrapper>
-    </ContentWrapper>
+      <ContentWrapper>
+        <BoardTitle>
+          <Title>공지사항</Title>
+        </BoardTitle>
+        <SearchSortWrapper>
+          <Search />
+          <SortOptionButton />
+        </SearchSortWrapper>
+        <PostCardWrapper
+            ref={listRef}
+            style={{ height: "750px", overflowY: "auto" }}
+        >
+          {postItems.map((postItem, index) => (
+              <NoticePostCard
+                  key={`${postItem.postId}-${index}`}
+                  id={postItem.postId}
+                  title={postItem.title}
+                  date={formatDate(postItem.createdAt)}
+                  count={postItem.countInfo}
+              />
+          ))}
+          {loading && <BarLoading />}
+          {!hasMore && <EndMessage>모든 게시글을 불러왔습니다.</EndMessage>}
+        </PostCardWrapper>
+      </ContentWrapper>
   );
 }
 

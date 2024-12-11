@@ -49,45 +49,51 @@ const CustomArrow = styled.div`
 `;
 
 function Slide({ imgUrls }) {
-  const { isMobile } = useSelector((state) => state.screenSize);
-  const SlickButtonFix = ({ currentSlide, slideCount, children, ...props }) => (
-    <span {...props}>{children}</span>
-  );
-  const settings = {
-    nextArrow: (
-      <SlickButtonFix>
-        <CustomArrow>
-          <FontAwesomeIcon icon={faAngleRight} />
-        </CustomArrow>
-      </SlickButtonFix>
-    ),
-    prevArrow: (
-      <SlickButtonFix>
-        <CustomArrow>
-          <FontAwesomeIcon icon={faAngleLeft} />
-        </CustomArrow>
-      </SlickButtonFix>
-    ),
-    dots: false,
-    speed: 500,
-    infinite: true,
-    slidesToShow: 1,
-    slidesToScroll: 1,
-    variableWidth: true,
-    draggable: false,
-  };
+    const { isMobile } = useSelector((state) => state.screenSize);
 
-  return (
-    <div>
-      <CustomSlider {...settings} $isMobile={isMobile}>
-        {imgUrls.map((imgurl) => (
-          <div key={imgurl.id}>
-            <img src={imgurl.url} alt={`Slide ${imgurl.id}`} />
-          </div>
-        ))}
-      </CustomSlider>
-    </div>
-  );
+    // imgUrls 변환
+    const transformedImgUrls = imgUrls.map((url, index) => ({ id: index, url }));
+
+    const SlickButtonFix = ({ currentSlide, slideCount, children, ...props }) => (
+        <span {...props}>{children}</span>
+    );
+
+    const settings = {
+        nextArrow: (
+            <SlickButtonFix>
+                <CustomArrow>
+                    <FontAwesomeIcon icon={faAngleRight} />
+                </CustomArrow>
+            </SlickButtonFix>
+        ),
+        prevArrow: (
+            <SlickButtonFix>
+                <CustomArrow>
+                    <FontAwesomeIcon icon={faAngleLeft} />
+                </CustomArrow>
+            </SlickButtonFix>
+        ),
+        dots: false,
+        speed: 500,
+        infinite: false,
+        slidesToShow: 1,
+        slidesToScroll: 1,
+        variableWidth: true,
+        draggable: false,
+    };
+
+    return (
+        <div>
+            <CustomSlider {...settings} $isMobile={isMobile}>
+                {transformedImgUrls.map((imgurl) => (
+                    <div key={imgurl.id}>
+                        <img src={imgurl.url} alt={`Slide ${imgurl.id}`} />
+                    </div>
+                ))}
+            </CustomSlider>
+        </div>
+    );
 }
+
 
 export default Slide;

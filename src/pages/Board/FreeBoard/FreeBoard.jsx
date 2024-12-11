@@ -92,22 +92,22 @@ function FreeBoard() {
           <Search />
           <SortOptionButton />
         </SearchSortWrapper>
-        <PostCardWrapper
-            ref={listRef}
-            style={{ height: "750px", overflowY: "auto" }}
-        >
-          {postItems.map((postItem, index) => (
-              <CommunityPostCard
-                  key={`${postItem.postId}-${index}`}
-                  id={postItem.postId}
-                  title={postItem.title}
-                  content={postItem.content}
-                  name={postItem.memberInfo.nickname}
-                  job={"IOS Developer"}
-                  count={postItem.countInfo}
-                  img={postItem.imgUrl}
-              />
-          ))}
+        <PostCardWrapper ref={listRef} style={{ height: "750px", overflowY: "auto" }}>
+          {postItems.map((postItem, index) => {
+            return (
+                <CommunityPostCard
+                    key={`${postItem.postId}-${index}`}
+                    id={postItem.postId}
+                    title={postItem.title}
+                    content={postItem.content}
+                    name={postItem.memberInfo.nickname}
+                    job={postItem.memberInfo.memberJob || "직업 정보 없음"}
+                    img={postItem.memberInfo.imageUrl}
+                    count={postItem.countInfo}
+                    thumbnail={postItem.thumbnail}
+                />
+            );
+          })}
           {loading && <BarLoading />}
           {!hasMore && <EndMessage>모든 게시글을 불러왔습니다.</EndMessage>}
         </PostCardWrapper>

@@ -16,7 +16,11 @@ import profileIcon from "../../../assets/images/profileIcon.png";
 import { SidebarLi, SidebarLink } from "../../../Layout/Sidebar/Sidebar.style";
 import { useSelector } from "react-redux";
 import { fetchCategoryItems } from "../../../services/api/postApi";
+
 import useUserInfo from "../../../hooks/useUserInfo";
+
+import { fetchUserInfo } from "../../../services/api/api";
+
 
 const NavBarSideModal = ({
   isOpen,
