@@ -11,9 +11,7 @@ import { fetchProfileInfo } from "../../../../services/api/authApi";
 import { PostProfileBox } from "../../../../components/Card/PostCard/PostProfile";
 import { Interaction } from "../../../../components/Common/Interactions";
 
-import { deletepost } from "../../../../services/api/postApi";
 import Comments from "../../../../components/Common/Comment/Comment";
-
 
 import ModalComponent from "../../../../components/Modal/EditDeleteModal/EditDeleteModal"; // 모달 컴포넌트 추가
 import { useSelector } from "react-redux";
@@ -41,7 +39,7 @@ function BoardDetail() {
   const { postId } = useParams();
   const [category, setCategory] = useState("");
   const payload = useJwt(
-      useSelector((state) => state.user.userInfo.accessToken)
+    useSelector((state) => state.user.userInfo.accessToken)
   );
 
   useEffect(() => {
@@ -95,7 +93,9 @@ function BoardDetail() {
     return <div>Loading...</div>;
   }
 
-  const formattedDate = new Date(new Date(post.createdAt).getTime() + 9 * 60 * 60 * 1000).toLocaleString("ko-KR", {
+  const formattedDate = new Date(
+    new Date(post.createdAt).getTime() + 9 * 60 * 60 * 1000
+  ).toLocaleString("ko-KR", {
     year: "numeric",
     month: "2-digit",
     day: "2-digit",
@@ -121,71 +121,70 @@ function BoardDetail() {
   };
 
   return (
-      <>
-        <ContentWrapper $isDetail={true}>
-          <Wrap>
-            <CategotyWrap $isMobile={isMobile}>
-              <CategoryTitle $isMobile={isMobile}>{category}</CategoryTitle>
-            </CategotyWrap>
+    <>
+      <ContentWrapper $isDetail={true}>
+        <Wrap>
+          <CategotyWrap $isMobile={isMobile}>
+            <CategoryTitle $isMobile={isMobile}>{category}</CategoryTitle>
+          </CategotyWrap>
 
-            <PostWrap>
-              <Postheader $isMobile={isMobile}>
-                <PostProfileBox
-                    name={post.memberInfo.nickname}
-                    job={post.memberInfo.memberJob}
-                    email={post.memberInfo.email}
-                    imgUrl={post.memberInfo.imageUrl}
-                />
-                <PostheaderRignt $isMobile={isMobile}>
-                  <div>{formattedDate}</div>
-                  {isMe && (
-                      <>
-                        <Modify onClick={() => setModalVisible(true)}>
-                          <FontAwesomeIcon icon={faEllipsisVertical} />
-                        </Modify>
-                        <ModalComponent
-                            isVisible={modalVisible}
-                            onClose={handleModalClose}
-                            onEdit={handleEdit}
-                            onDelete={handleDelete}
-                        />
-                      </>
-                  )}
-                </PostheaderRignt>
-              </Postheader>
-              {category === "프로젝트 게시판" && post.imageUrls?.length > 0 && (
-                  <div style={{ marginBottom: '20px' }}>
-                    <Slide imgUrls={post.imageUrls} />
-                  </div>
-              )}
-              <Title $isMobile={isMobile}>{post.title}</Title>
-              <CKEditor
-                  editor={DecoupledEditor}
-                  config={editorConfig}
-                  data={post.content}
-                  disabled={true}
+          <PostWrap>
+            <Postheader $isMobile={isMobile}>
+              <PostProfileBox
+                name={post.memberInfo.nickname}
+                job={post.memberInfo.memberJob}
+                email={post.memberInfo.email}
+                imgUrl={post.memberInfo.imageUrl}
               />
-
-            </PostWrap>
-            <PostFooter $isMobile={isMobile}>
-              <div>
-                {post.hashtags &&
-                    post.hashtags.map((hashtag, index) => (
-                        <span key={index}>{hashtag}</span>
-                    ))}
+              <PostheaderRignt $isMobile={isMobile}>
+                <div>{formattedDate}</div>
+                {isMe && (
+                  <>
+                    <Modify onClick={() => setModalVisible(true)}>
+                      <FontAwesomeIcon icon={faEllipsisVertical} />
+                    </Modify>
+                    <ModalComponent
+                      isVisible={modalVisible}
+                      onClose={handleModalClose}
+                      onEdit={handleEdit}
+                      onDelete={handleDelete}
+                    />
+                  </>
+                )}
+              </PostheaderRignt>
+            </Postheader>
+            {category === "프로젝트 게시판" && post.imageUrls?.length > 0 && (
+              <div style={{ marginBottom: "20px" }}>
+                <Slide imgUrls={post.imageUrls} />
               </div>
-              <Interaction
-                  count={{
-                    viewCount: post.countInfo.viewCount,
-                    likeCount: post.countInfo.likeCount,
-                    commentCount: post.countInfo.commentCount,
-                  }}
-              />
-            </PostFooter>
-            <Comments />
-          </Wrap>
-        </ContentWrapper>
-      </>
+            )}
+            <Title $isMobile={isMobile}>{post.title}</Title>
+            <CKEditor
+              editor={DecoupledEditor}
+              config={editorConfig}
+              data={post.content}
+              disabled={true}
+            />
+          </PostWrap>
+          <PostFooter $isMobile={isMobile}>
+            <div>
+              {post.hashtags &&
+                post.hashtags.map((hashtag, index) => (
+                  <span key={index}>{hashtag}</span>
+                ))}
+            </div>
+            <Interaction
+              count={{
+                viewCount: post.countInfo.viewCount,
+                likeCount: post.countInfo.likeCount,
+                commentCount: post.countInfo.commentCount,
+              }}
+            />
+          </PostFooter>
+          <Comments />
+        </Wrap>
+      </ContentWrapper>
+    </>
   );
 }
 
