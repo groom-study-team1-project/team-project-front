@@ -121,9 +121,11 @@ const Comments = ()  => {
         return `${years}year ago`;
     }
 
-    const handleHeart = (commentId) => {
+    const handleLike = (commentId, userInfo) => {
         if (likedComment.has(commentId)) {
-            axiosInstance.delete(`/api/comments/unlike`)
+            axiosInstance.delete(`/api/comments/unlike`, {
+                targetId: commentId
+            })
                 .then((response) => {
                     setLikedComment(prev => {
                         const newSet = new Set(prev);
@@ -136,10 +138,12 @@ const Comments = ()  => {
                     console.error("좋아요를 취소하지 못하였습니다 : ", error);
                 });
         } else {
-            axiosInstance.post(`/api/comments/like`)
+            axiosInstance.post(`/api/comments/like`, {
+                targetId: commentId
+            })
                 .then(() => {
                     setLikedComment(prev => new Set([...prev, commentId]));
-                    return fetchComments();
+                    return fetchComments(userInfo, null);
                 })
                 .catch((error) => {
                     console.error("좋아요를 반영하지 못하였습니다 : ", error);
@@ -245,15 +249,13 @@ const Comments = ()  => {
                             </CommentText>
                         </Comment>
                         <CommentRight>
-                        <TimeAndLike>
+                            <TimeAndLike>
                                 <div>{getTime(commentData.createdAt)}</div>
                                 <IconWrap>
-                                    <div>
-                                        <LikedButton onClick={() => handleHeart(commentData.id)}>
-                                            <img src={likedComment.has(commentData.id) ? fullHeart : outlineHeart} alt="좋아요"/>
-                                        </LikedButton>
-                                        <span>{commentData.likeCount}</span>
-                                    </div>
+                                    <LikedButton onClick={() => handleLike(commentData.id)}>
+                                        <img src={likedComment.has(commentData.id) ? fullHeart : outlineHeart} alt="좋아요"/>
+                                    </LikedButton>
+                                    <span>{commentData.likeCount}</span>
                                 </IconWrap>
                             </TimeAndLike>
 

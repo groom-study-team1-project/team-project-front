@@ -1,12 +1,13 @@
 import styled from "styled-components";
 
 export const CommentsWrap = styled.div`
-    margin-top: 50px;
+    display: flex;
+    flex-direction: column;
+    margin-top: 25px;
 `;
 
 export const CommetHr = styled.hr`
-    width: 10%;
-    float: left;
+    width: 100%;
 `;
 
 export const CommentWrap = styled.div`
@@ -14,7 +15,7 @@ export const CommentWrap = styled.div`
     min-height: 70px;
     height: auto;
     display: flex;
-    justify-content: start;
+    justify-content: space-between;
     align-items: center;
     padding: 5px 12px 5px 12px;
     border-radius: 10px;
@@ -24,8 +25,9 @@ export const CommentWrap = styled.div`
 
 export const Comment = styled.div`
     display: flex;
+    flex-direction: row;
     align-items: center;
-    width: 85%;
+    width: 80%;
     margin-right: 1rem;
 `;
 
@@ -37,6 +39,7 @@ export const CommentText = styled.div`
 
 export const CommentRight = styled.div`
     display: flex;
+    justify-content: flex-end;
 `;
 
 export const TimeAndLike = styled.div`
@@ -82,47 +85,49 @@ export const Bold = styled.div`
 `;
 
 export const IconWrap = styled.div`
-  margin-top: 10px;
-  margin-left: 16px;  
+    margin-top: 10px;
+    margin-left: auto;
 `;
 
 export const CommnetModalIcon = styled.div`
-  margin-left: 10px;
-  position: relative;
+    margin-left: 10px;
+    position: relative;
 `;
 
 export const LikedButton = styled.button`
-  border: none;
-  background: none;
-  img {
-      object-fit: contain;
-      width : 30%;
-      padding-top: 5px;
-  } 
+    border: none;
+    background: none;
+    width: 10%;
+    align-items: end;
+    img {
+        object-fit: cover;
+        width : 100%;
+        padding-top: 5px;
+    }
 `;
 
 export const ReplyButton = styled.button`
-  padding: 8px 0px 0px 0px;
-  background: none;
-  border: none;
-  cursor: pointer;  
+    padding: 8px 0px 0px 0px;
+    background: none;
+    border: none;
+    cursor: pointer;
 `
 
 export const EditCommentWrap = styled.div`
-  width: 100%;  
+    width: 100%;
 `
 
 export const CommentButton = styled.button`
-  margin: 5px 2px 5px 5px;
-  border-radius: 30px;  
-  border: none;
-  background: black;
-  color: white;
-  font-weight: bold;
-  float: right;  
+    margin: 5px 2px 5px 5px;
+    border-radius: 30px;
+    border: none;
+    background: black;
+    color: white;
+    font-weight: bold;
+    float: right;
 `
 
 export const CommentInputForm = styled.form`
-  margin: 0px 0px 0px 0px;
-  width: 100%;  
+    margin: 0px 0px 0px 0px;
+    width: 100%;
 `
