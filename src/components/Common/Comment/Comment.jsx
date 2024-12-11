@@ -1,5 +1,5 @@
 import React, { useState, useCallback, useEffect } from 'react';
-import {useNavigate, useParams} from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 //import { InteractionItem } from "../Interactions";
 import outlineHeart from "../../../assets/images/heart.png";
 import fullHeart from "../../../assets/images/fullheart.png";
@@ -8,8 +8,8 @@ import { faEllipsisVertical } from "@fortawesome/free-solid-svg-icons";
 import axiosInstance from "../../../services/axiosConfig";
 import {
     Bold, CommentInput, CommentInputWrap, CommentRight,
-    CommentsWrap, Comment, CommentText, CommentWrap, CommentButton,
-    CommetHr, CommnetModalIcon, IconWrap, InputImg, TimeAndLike, LikedButton, ReplyButton
+    CommentsWrap, Comment, CommentText, CommentWrap, CommentButton, CommetHr,
+    CommnetModalIcon, IconWrap, InputImg, TimeAndLike, LikedButton, ReplyButton, EditCommentWrap
 } from "../Comment/Comment.style";
 import {ProfileImage} from "../../Card/PostCard/PostProfile";
 import {Modify} from "../../../pages/Board/BoardDetail/Board/BoardDetail.style";
@@ -34,7 +34,6 @@ const Comments = ()  => {
 
     const [likedComment, setLikedComment] = useState(new Set());
     const [openReply, setOpenReply] = useState(new Set());
-    const [commentList, setCommentList] = useState(commentsData);
 
     const fetchComments = useCallback((userInfo, lastCommentId) => {
 
@@ -91,7 +90,7 @@ const Comments = ()  => {
         axiosInstance.post(`/api/comments/write`, commentData)
             .then(() => {
                 setNewComment("");
-                fetchComments();
+                fetchComments(userInfo, null);
             })
             .catch((error) => {
                 console.error("댓글 작성을 하지 못하였습니다: ", error);
@@ -155,13 +154,18 @@ const Comments = ()  => {
         setNewComment(e.target.value);
     };
 
-    const handleDelete = () => {
-        axiosInstance.delete(`/api/comments/remove`)
+    const handleDelete = (commentId) => {
+        axiosInstance.delete(`/api/comments/remove`, {
+            data: { commentId: commentId }
+        })
             .then(() => {
                 fetchComments(userInfo, null);
                 setModalIndex(null);
             })
-            .catch(error => { console.error("댓글 삭제를 하지 못하였습니다 : ", error); });
+            .catch(error => {
+                console.log('Request Config : ', error.config);
+                console.log('Error: ', error.response?.data);
+            });
     };
 
     const handleEdit = (commentId, content) => {
@@ -170,7 +174,7 @@ const Comments = ()  => {
     }
 
     const handleEditSubmit = (commentId) => {
-        axiosInstance.post(`/api/comments/edit`, {
+        axiosInstance.post(`/api/comments/edit/`, {
             commentId: commentId,
             content: editCommentContent.trim()
         })
@@ -221,14 +225,14 @@ const Comments = ()  => {
                             <CommentText>
                                 <Bold>{commentData.memberNickname}</Bold>
                                 {editCommentId === commentData.id ? (
-                                    <div>
+                                    <EditCommentWrap>
                                         <CommentInput
                                             value = {editCommentContent}
                                             onChange={(e) => setEditCommentContent(e.target.value)}
                                         />
                                         <CommentButton onClick={() => handleEditSubmit(commentData.id, commentData.content)}>수정</CommentButton>
                                         <CommentButton onClick={handleEditCancel}>취소</CommentButton>
-                                    </div>
+                                    </EditCommentWrap>
                                 ) : (
                                     <>
                                         <p>{commentData.content}</p>
@@ -265,11 +269,14 @@ const Comments = ()  => {
                                         <ModalComponent
                                             isVisible={true}
                                             onClose={() => handleModalClose(commentData.id)}
-                                            onEdit={(content) => {
+                                            onEdit={() => {
                                                 console.log("수정 대상 게시글 : ", commentData.id, commentData.content)
                                                 handleEdit(commentData.id, commentData.content);
                                             }}
-                                            onDelete={() => handleDelete(commentData.id)}
+                                            onDelete={() => {
+                                                console.log("삭제할 게시글 아이디 : ", commentData.id)
+                                                handleDelete(commentData.id)
+                                            }}
                                         />
                                     )}
                                 </CommnetModalIcon>

@@ -110,3 +110,7 @@ export const CommentButton = styled.button`
   color: white;
   font-weight: bold;
 `
+
+export const EditCommentWrap = styled.div`
+
+`
