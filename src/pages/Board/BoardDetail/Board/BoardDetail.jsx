@@ -11,7 +11,6 @@ import { fetchProfileInfo } from "../../../../services/api/authApi";
 import { PostProfileBox } from "../../../../components/Card/PostCard/PostProfile";
 import { Interaction } from "../../../../components/Common/Interactions";
 
-import { deletepost } from "../../../../services/api/postApi";
 import Comments from "../../../../components/Common/Comment/Comment";
 
 
