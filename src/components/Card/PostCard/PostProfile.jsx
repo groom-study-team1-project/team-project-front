@@ -49,7 +49,7 @@ export const PostProfileBox = ({ name, job, memberId, imgUrl }) => {
   return (
     <ProfileBox
       name={name}
-      job={job}
+      job={job || "직업 정보 없음"}
       size="30px"
       isBig={false}
       imgUrl={imgUrl}

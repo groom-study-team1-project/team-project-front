@@ -6,10 +6,10 @@ import Slide from "../../../../components/Common/imgSlide";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEllipsisVertical } from "@fortawesome/free-solid-svg-icons";
 import { editorConfig } from "../../BoardWrite/WriteBoard/editor";
-import { fetchPostDetail } from "../../../../services/api/postApi";
+import { fetchPostDetail, deletepost } from "../../../../services/api/postApi";
+import { fetchProfileInfo } from "../../../../services/api/authApi";
 import { PostProfileBox } from "../../../../components/Card/PostCard/PostProfile";
 import { Interaction } from "../../../../components/Common/Interactions";
-import { deletepost } from "../../../../services/api/postApi";
 import Comments from "../Comment/Comment";
 import ModalComponent from "../../../../components/Modal/EditDeleteModal/EditDeleteModal"; // 모달 컴포넌트 추가
 import { useSelector } from "react-redux";
@@ -24,37 +24,60 @@ import {
   PostFooter,
   CategoryTitle,
 } from "./BoardDetail.style";
-import { ContentWrapper, PostCardWrapper } from "../../Board.style";
+import { ContentWrapper } from "../../Board.style";
+import useJwt from "../../../../hooks/useJwt";
 
 function BoardDetail() {
   const [post, setPost] = useState(null);
   const [modalVisible, setModalVisible] = useState(false); // 모달 상태 관리
   const { isMobile } = useSelector((state) => state.screenSize);
+  const isLoggedIn = useSelector((state) => state.user.isLoggedIn);
+  const [isMe, setIsMe] = useState(false); // isMe 상태 관리
   const navigate = useNavigate();
   const { postId } = useParams();
   const [category, setCategory] = useState("");
+  const payload = useJwt(
+      useSelector((state) => state.user.userInfo.accessToken)
+  );
+
   useEffect(() => {
     const fetchData = async () => {
       try {
+        // 게시글 상세 정보 가져오기
         const postResponse = await fetchPostDetail(postId);
+        console.log("Fetched Post Detail:", postResponse);
 
         setPost(postResponse);
+
+        let categoryText = "";
         switch (postResponse.categoryId) {
           case 1:
-            setCategory("자유 게시판");
+            categoryText = "자유 게시판";
             break;
           case 2:
-            setCategory("프로젝트 게시판");
+            categoryText = "프로젝트 게시판";
             break;
           case 3:
-            setCategory("질문 게시판");
+            categoryText = "질문 게시판";
             break;
           case 4:
-            setCategory("공지사항");
+            categoryText = "공지사항";
             break;
           default:
-            setCategory("정보를 찾지 못했습니다");
+            categoryText = "정보를 찾지 못했습니다";
             break;
+        }
+        setCategory(categoryText);
+
+        // 사용자 여부 확인
+        if (isLoggedIn) {
+          const body = {
+            isMe: payload.memberId,
+            memberId: postResponse.memberInfo.memberId,
+          };
+          const { isMe } = await fetchProfileInfo(body);
+          setIsMe(isMe); // isMe 설정
+          console.log("isMe Value:", isMe);
         }
       } catch (error) {
         console.error("데이터를 가져오는데 실패", error);
@@ -62,7 +85,7 @@ function BoardDetail() {
     };
 
     fetchData();
-  }, [postId]);
+  }, [postId, isLoggedIn, payload]);
 
   if (!post) {
     return <div>Loading...</div>;
@@ -94,66 +117,71 @@ function BoardDetail() {
   };
 
   return (
-    <>
-      <ContentWrapper $isDetail={true}>
-        <Wrap>
-          <CategotyWrap $isMobile={isMobile}>
-            <CategoryTitle $isMobile={isMobile}>{category}</CategoryTitle>
-          </CategotyWrap>
+      <>
+        <ContentWrapper $isDetail={true}>
+          <Wrap>
+            <CategotyWrap $isMobile={isMobile}>
+              <CategoryTitle $isMobile={isMobile}>{category}</CategoryTitle>
+            </CategotyWrap>
 
-          <PostWrap>
-            <Postheader $isMobile={isMobile}>
-              <PostProfileBox
-                name={post.memberInfo.nickname}
-                job={post.memberInfo.memberJob}
-                email={post.memberInfo.email}
-                imgUrl={post.memberInfo.image_url}
-              />
-              <PostheaderRignt $isMobile={isMobile}>
-                <div>{formattedDate}</div>
-                <Modify onClick={() => setModalVisible(true)}>
-                  <FontAwesomeIcon icon={faEllipsisVertical} />
-                </Modify>
-                <ModalComponent
-                  isVisible={modalVisible}
-                  onClose={handleModalClose}
-                  onEdit={handleEdit}
-                  onDelete={handleDelete}
+            <PostWrap>
+              <Postheader $isMobile={isMobile}>
+                <PostProfileBox
+                    name={post.memberInfo.nickname}
+                    job={post.memberInfo.memberJob}
+                    email={post.memberInfo.email}
+                    imgUrl={post.memberInfo.imageUrl}
                 />
-              </PostheaderRignt>
-            </Postheader>
-            {category === "프로젝트 자랑 게시판" ? (
-              <div>
-                <Slide imgUrls={post.imgUrl} />
-              </div>
-            ) : null}
+                <PostheaderRignt $isMobile={isMobile}>
+                  <div>{formattedDate}</div>
+                  {isMe && (
+                      <>
+                        <Modify onClick={() => setModalVisible(true)}>
+                          <FontAwesomeIcon icon={faEllipsisVertical} />
+                        </Modify>
+                        <ModalComponent
+                            isVisible={modalVisible}
+                            onClose={handleModalClose}
+                            onEdit={handleEdit}
+                            onDelete={handleDelete}
+                        />
+                      </>
+                  )}
+                </PostheaderRignt>
+              </Postheader>
+              {category === "프로젝트 게시판" && post.imageUrls?.length > 0 && (
+                  <div style={{ marginBottom: '20px' }}>
+                    <Slide imgUrls={post.imageUrls} />
+                  </div>
+              )}
+              <Title $isMobile={isMobile}>{post.title}</Title>
+              <CKEditor
+                  editor={DecoupledEditor}
+                  config={editorConfig}
+                  data={post.content}
+                  disabled={true}
+              />
 
-            <Title $isMobile={isMobile}>{post.title}</Title>
-            <CKEditor
-              editor={DecoupledEditor}
-              config={editorConfig}
-              data={post.content}
-              disabled={true}
-            />
-          </PostWrap>
-          <PostFooter $isMobile={isMobile}>
-            <div>
-              {post.hashtags.map((hashtag, index) => (
-                <span key={index}>{hashtag}</span>
-              ))}
-            </div>
-            <Interaction
-              count={{
-                viewCount: post.countInfo.viewCount,
-                likeCount: post.countInfo.likeCount,
-                commentCount: post.countInfo.commentCount,
-              }}
-            />
-          </PostFooter>
-          <Comments />
-        </Wrap>
-      </ContentWrapper>
-    </>
+            </PostWrap>
+            <PostFooter $isMobile={isMobile}>
+              <div>
+                {post.hashtags &&
+                    post.hashtags.map((hashtag, index) => (
+                        <span key={index}>{hashtag}</span>
+                    ))}
+              </div>
+              <Interaction
+                  count={{
+                    viewCount: post.countInfo.viewCount,
+                    likeCount: post.countInfo.likeCount,
+                    commentCount: post.countInfo.commentCount,
+                  }}
+              />
+            </PostFooter>
+            <Comments />
+          </Wrap>
+        </ContentWrapper>
+      </>
   );
 }
 

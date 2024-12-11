@@ -1,11 +1,12 @@
 import {
   PostContainer,
   PostTitle,
-} from "../NoticePostCard/NoticePostCard.style";
-import { InteractionItem } from "../../../Common/Interactions";
-import eyeIcon from "../../../../assets/images/eye.png";
+} from "./NoticePostCard.style";
+
+import {Interaction} from "../../../Common/Interactions";
 import { useNavigate } from "react-router-dom";
 import { InnerContainer, PostCardContainer } from "../PostCard.style";
+import React from "react";
 
 function NoticePostCard({ id, title, date, count }) {
   const navigate = useNavigate();
@@ -21,7 +22,13 @@ function NoticePostCard({ id, title, date, count }) {
         <PostTitle>{title}</PostTitle>
         <PostContainer>{date}</PostContainer>
         <PostContainer>
-          <InteractionItem icon={eyeIcon} count={count.viewCount} />
+          <Interaction
+              count={{
+                viewCount: count.viewCount,
+                likeCount: count.likeCount,
+                commentCount: count.commentCount,
+              }}
+          />
         </PostContainer>
       </InnerContainer>
     </PostCardContainer>

@@ -17,7 +17,7 @@ import { SidebarLi, SidebarLink } from "../../../Layout/Sidebar/Sidebar.style";
 import { useSelector } from "react-redux";
 import { fetchCategoryItems } from "../../../services/api/postApi";
 import { fetchUserInfo } from "../../../services/api/api";
-import useUserInfo from "../../../hooks/useUserInfo";
+//import useUserInfo from "../../../hooks/useUserInfo";
 
 const NavBarSideModal = ({
   isOpen,
