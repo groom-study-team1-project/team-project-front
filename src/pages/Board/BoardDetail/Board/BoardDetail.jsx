@@ -10,7 +10,11 @@ import { fetchPostDetail, deletepost } from "../../../../services/api/postApi";
 import { fetchProfileInfo } from "../../../../services/api/authApi";
 import { PostProfileBox } from "../../../../components/Card/PostCard/PostProfile";
 import { Interaction } from "../../../../components/Common/Interactions";
-import Comments from "../Comment/Comment";
+
+import { deletepost } from "../../../../services/api/postApi";
+import Comments from "../../../../components/Common/Comment/Comment";
+
+
 import ModalComponent from "../../../../components/Modal/EditDeleteModal/EditDeleteModal"; // 모달 컴포넌트 추가
 import { useSelector } from "react-redux";
 import {

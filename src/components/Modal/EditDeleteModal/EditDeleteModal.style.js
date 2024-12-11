@@ -25,7 +25,7 @@ export const Modal = styled.div`
   padding: 10px;
   position: absolute;
   top: 20px;
-
+  z-index: 9999;
   div {
     cursor: pointer;
   }

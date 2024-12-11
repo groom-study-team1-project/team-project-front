@@ -9,15 +9,18 @@ import {
 } from "./NavBarSideModal.style";
 import { Button, BorderButton } from "../../../Layout/Navbar/Navbar.style";
 import { RiLogoutBoxRLine } from "react-icons/ri";
-import { LuUserSquare2 } from "react-icons/lu";
+import { IoIosLogOut } from "react-icons/io";
 import darkmodeIcon from "../../../assets/images/darkmode.png";
 import lightmodeIcon from "../../../assets/images/lightmode.png";
 import profileIcon from "../../../assets/images/profileIcon.png";
 import { SidebarLi, SidebarLink } from "../../../Layout/Sidebar/Sidebar.style";
 import { useSelector } from "react-redux";
 import { fetchCategoryItems } from "../../../services/api/postApi";
+
+import useUserInfo from "../../../hooks/useUserInfo";
+
 import { fetchUserInfo } from "../../../services/api/api";
-//import useUserInfo from "../../../hooks/useUserInfo";
+
 
 const NavBarSideModal = ({
   isOpen,
@@ -25,6 +28,7 @@ const NavBarSideModal = ({
   handleMenuClick,
   handleDarkMode,
   handleDropDown,
+  handleMyProfile,
   navigateNewPost,
   navigateMyPage,
   onLogout,
@@ -32,12 +36,10 @@ const NavBarSideModal = ({
   onSignUp,
 }) => {
   const [categories, setCategories] = useState([]);
-  const [userInfo, setUserInfo] = useState([]);
+  const { userInfo, userError } = useUserInfo();
   const isDarkMode = useSelector((state) => state.theme.isDarkMode);
   const selectedItem = useSelector((state) => state.menu?.selectedItem || null);
   const isLoggedIn = useSelector((state) => state.user.isLoggedIn);
-
-  let memberId = 1;
 
   // 카테고리 데이터 불러오기
   useEffect(() => {
@@ -52,31 +54,6 @@ const NavBarSideModal = ({
 
     loadCategories();
   }, []);
-
-  useEffect(() => {
-    let isMounted = true;
-
-    const loadProfile = async () => {
-      if (!memberId) return;
-
-      try {
-        const data = await fetchUserInfo(memberId);
-        if (isMounted) {
-          setUserInfo(data);
-        }
-      } catch (error) {
-        if (isMounted) {
-          console.error("유저 정보 불러오기 실패: ", error);
-        }
-      }
-    };
-
-    loadProfile();
-
-    return () => {
-      isMounted = false;
-    };
-  }, [memberId]);
 
   if (!isOpen) return null;
 
@@ -93,10 +70,15 @@ const NavBarSideModal = ({
           {isLoggedIn ? (
             <>
               <BorderButton onClick={navigateNewPost}>새 글 작성</BorderButton>
-              <UserImg
-                src={ userInfo?.imageUrl || profileIcon }
-                alt="프로필"
-              />
+              <Button onClick= {() => {
+                handleMyProfile();
+                handleDropDown();
+              }}>
+                <UserImg
+                    src={ userInfo?.imageUrl || profileIcon }
+                    alt="프로필"
+                />
+              </Button>
             </>
           ) : (
             <>
@@ -168,7 +150,7 @@ const NavBarSideModal = ({
               <SidebarLink className="link">
                 <span>로그 아웃</span>
                 <span>
-                  <LuUserSquare2 />
+                  <IoIosLogOut />
                 </span>
               </SidebarLink>
             </SidebarLi>
