@@ -1,6 +1,5 @@
 import React, { useState, useCallback, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-//import { InteractionItem } from "../Interactions";
 import outlineHeart from "../../../assets/images/heart.png";
 import fullHeart from "../../../assets/images/fullheart.png";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -9,7 +8,8 @@ import axiosInstance from "../../../services/axiosConfig";
 import {
     Bold, CommentInput, CommentInputWrap, CommentRight,
     CommentsWrap, Comment, CommentText, CommentWrap, CommentButton, CommetHr,
-    CommnetModalIcon, IconWrap, InputImg, TimeAndLike, LikedButton, ReplyButton, EditCommentWrap
+    CommnetModalIcon, IconWrap, InputImg, TimeAndLike, LikedButton, ReplyButton,
+    EditCommentWrap, CommentInputForm
 } from "../Comment/Comment.style";
 import {ProfileImage} from "../../Card/PostCard/PostProfile";
 import {Modify} from "../../../pages/Board/BoardDetail/Board/BoardDetail.style";
@@ -130,7 +130,7 @@ const Comments = ()  => {
                         newSet.delete(commentId);
                         return newSet;
                     });
-                    return fetchComments();
+                    return fetchComments(userInfo, null);
                 })
                 .catch((error) => {
                     console.error("좋아요를 취소하지 못하였습니다 : ", error);
@@ -282,7 +282,7 @@ const Comments = ()  => {
                     </CommentWrap>
                 ))}
                 <hr />
-                <form onSubmit={handleSubmit}>
+                <CommentInputForm onSubmit={handleSubmit}>
                     <CommentInputWrap>
                         <CommentInput
                             value={newComment}
@@ -291,7 +291,7 @@ const Comments = ()  => {
                         />
                         <InputImg src={commentsubmit} alt="댓글 제출" onClick={handleSubmit} />
                     </CommentInputWrap>
-                </form>
+                </CommentInputForm>
             </CommentsWrap>
         </div>
     );

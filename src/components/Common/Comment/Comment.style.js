@@ -11,7 +11,7 @@ export const CommetHr = styled.hr`
 
 export const CommentWrap = styled.div`
     width: 100%;
-    min-height: 65px;
+    min-height: 70px;
     height: auto;
     display: flex;
     justify-content: start;
@@ -105,6 +105,7 @@ export const ReplyButton = styled.button`
   padding: 8px 0px 0px 0px;
   background: none;
   border: none;
+  cursor: pointer;  
 `
 
 export const EditCommentWrap = styled.div`
@@ -119,4 +120,9 @@ export const CommentButton = styled.button`
   color: white;
   font-weight: bold;
   float: right;  
+`
+
+export const CommentInputForm = styled.form`
+  margin: 0px 0px 0px 0px;
+  width: 100%;  
 `
