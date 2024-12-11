@@ -28,9 +28,6 @@ const Comments = ()  => {
     const [isLoading, setIsLoading] = useState(false);
     const [editCommentId, setEditCommentId] = useState(null);
     const [editCommentContent, setEditCommentContent] = useState("");
-    //const [isEdit, setIsEdit] = useState(false);
-    //const [editContent, setEditContent] = useState("");
-    //const [heart, setHeart] = useState(false);
 
     const [likedComment, setLikedComment] = useState(new Set());
     const [openReply, setOpenReply] = useState(new Set());
@@ -174,7 +171,7 @@ const Comments = ()  => {
     }
 
     const handleEditSubmit = (commentId) => {
-        axiosInstance.post(`/api/comments/edit/`, {
+        axiosInstance.post(`/api/comments/edit`, {
             commentId: commentId,
             content: editCommentContent.trim()
         })

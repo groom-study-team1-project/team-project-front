@@ -5,7 +5,7 @@ export const CommentsWrap = styled.div`
 `;
 
 export const CommetHr = styled.hr`
-    width: 15%;
+    width: 10%;
     float: left;
 `;
 
@@ -14,7 +14,7 @@ export const CommentWrap = styled.div`
     min-height: 65px;
     height: auto;
     display: flex;
-    justify-content: space-between;
+    justify-content: start;
     align-items: center;
     padding: 5px 12px 5px 12px;
     border-radius: 10px;
@@ -25,9 +25,12 @@ export const CommentWrap = styled.div`
 export const Comment = styled.div`
     display: flex;
     align-items: center;
+    width: 85%;
+    margin-right: 1rem;
 `;
 
 export const CommentText = styled.div`
+    width: 100%;
     margin-left: 10px;
     font-size: 13px;
 `;
@@ -55,7 +58,7 @@ export const CommentInput = styled.input`
     width: 100%;
     border: 1px solid #bbb;
     border-radius: 8px;
-    padding: 10px 12px;
+    padding: 10px 5px;
     font-size: 16px;
 `;
 
@@ -93,7 +96,7 @@ export const LikedButton = styled.button`
   background: none;
   img {
       object-fit: contain;
-      width : 50%;
+      width : 30%;
       padding-top: 5px;
   } 
 `;
@@ -104,13 +107,16 @@ export const ReplyButton = styled.button`
   border: none;
 `
 
+export const EditCommentWrap = styled.div`
+  width: 100%;  
+`
+
 export const CommentButton = styled.button`
+  margin: 5px 2px 5px 5px;
+  border-radius: 30px;  
   border: none;
   background: black;
   color: white;
   font-weight: bold;
-`
-
-export const EditCommentWrap = styled.div`
-
+  float: right;  
 `

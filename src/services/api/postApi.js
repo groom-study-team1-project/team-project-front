@@ -143,7 +143,7 @@ export async function fetchCategoryItems() {
     const response = await axiosInstance.get("/open/categories");
     if (response.status === 200 || response.data.status.code === 9999) {
       const categoryIconMap = {
-        자유게시판: <MdCreditCard />,
+        "자유게시판": <MdCreditCard />,
         "프로젝트 자랑 게시판": <IoDocumentsOutline />,
         "질문 게시판": <GrUserSettings />,
         "공지 게시판": <BsPatchQuestion />,
