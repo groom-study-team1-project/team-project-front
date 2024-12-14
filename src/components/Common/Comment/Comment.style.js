@@ -1,77 +1,136 @@
 import styled from "styled-components";
 
 export const CommentsWrap = styled.div`
-    display: flex;
-    flex-direction: column;
     margin-top: 25px;
+    padding: 0 0px;
+    justify-content: space-between;
 `;
+
+export const CommentTitle = styled.div`
+    color: black;
+    font-family: Sans-Serif;
+    span:first-child {
+        font-weight: bold;
+        font-size: 24px;
+        margin-right: 8px;
+    }
+    span:last-child {
+        font-size: 14px;
+    }
+`
 
 export const CommetHr = styled.hr`
     width: 100%;
-`;
+    height: 2px;
+    background-color: darkgray;
+    border: none;
+    `;
 
 export const CommentWrap = styled.div`
-    width: 100%;
+    width: 98%;
     min-height: 70px;
     height: auto;
     display: flex;
-    justify-content: space-between;
     align-items: center;
     padding: 5px 12px 5px 12px;
-    border-radius: 10px;
     margin-bottom: 16px;
-    background: white;
+    background: none;
+    &:hover {
+        border-radius: 10px;
+        box-shadow: 0px 1px 10px rgba(0, 0, 0, 0.1);
+    }
 `;
 
 export const Comment = styled.div`
     display: flex;
-    flex-direction: row;
-    align-items: center;
-    width: 80%;
+    width: 90%;
     margin-right: 1rem;
 `;
 
 export const CommentText = styled.div`
-    width: 100%;
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    align-items: start;
+    width: 90%;
     margin-left: 10px;
     font-size: 13px;
 `;
 
 export const CommentRight = styled.div`
     display: flex;
-    justify-content: flex-end;
+    width: 10%;
+    flex-direction: row;
+    align-items: flex-start;
 `;
 
 export const TimeAndLike = styled.div`
     display: flex;
     flex-direction: column;
     align-items: flex-end;
+    width: 100%;
     div {
-        font-size: 12px;
+        font-size: 9px;
+    }
+`;
+
+export const CommentModalIcon = styled.div`
+    justify-content: flex-start;
+    position: relative;
+`;
+
+export const LikedButton = styled.button`
+    border: none;
+    background: none;
+    width: 50%;
+    height: auto;
+    align-items: end;
+    justify-content: start;
+    img {
+        object-fit: contain;
+        width : 100%;
+        padding-top: 5px;
+    }
+`;
+
+export const IconWrap = styled.div`
+    display: flex;
+    align-items: center;
+    margin-top: 10px;
+    justify-content: flex-end;
+    max-width: 100%;
+    span {
+        margin-top: 3px;
     }
 `;
 
 export const CommentInputWrap = styled.div`
     position: relative;
     width: 100%;
-    margin-top: 16px;
 `;
 
 export const CommentInput = styled.input`
     width: 100%;
-    border: 1px solid #bbb;
-    border-radius: 8px;
+    height: 20%;
     padding: 10px 5px;
     font-size: 16px;
+    border-radius: 8px;
+    background: none;
+    &:focus {
+        box-shadow: 0px 1px 10px rgba(0, 0, 0, 0.1);
+        border: none;
+        outline: none;
+    }
 `;
 
 export const InputImg = styled.img`
     position: absolute;
-    width: 17px;
-    top: 10px;
-    right: 0px;
+    width: 15px;
+    top: 50%;
+    right: 2px;
     cursor: pointer;
 `;
+
 export const Bold = styled.div`
     font-weight: 900;
     margin-bottom: 5px;
@@ -81,28 +140,6 @@ export const Bold = styled.div`
     p {
         color: #797979;
         font-weight: 200;
-    }
-`;
-
-export const IconWrap = styled.div`
-    margin-top: 10px;
-    margin-left: auto;
-`;
-
-export const CommnetModalIcon = styled.div`
-    margin-left: 10px;
-    position: relative;
-`;
-
-export const LikedButton = styled.button`
-    border: none;
-    background: none;
-    width: 10%;
-    align-items: end;
-    img {
-        object-fit: cover;
-        width : 100%;
-        padding-top: 5px;
     }
 `;
 

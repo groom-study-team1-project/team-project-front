@@ -6,9 +6,9 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEllipsisVertical } from "@fortawesome/free-solid-svg-icons";
 import axiosInstance from "../../../services/axiosConfig";
 import {
-    Bold, CommentInput, CommentInputWrap, CommentRight,
+    CommentTitle, Bold, CommentInput, CommentInputWrap, CommentRight,
     CommentsWrap, Comment, CommentText, CommentWrap, CommentButton, CommetHr,
-    CommnetModalIcon, IconWrap, InputImg, TimeAndLike, LikedButton, ReplyButton,
+    CommentModalIcon, IconWrap, InputImg, TimeAndLike, LikedButton, ReplyButton,
     EditCommentWrap, CommentInputForm
 } from "../Comment/Comment.style";
 import {ProfileImage} from "../../Card/PostCard/PostProfile";
@@ -28,7 +28,6 @@ const Comments = ()  => {
     const [isLoading, setIsLoading] = useState(false);
     const [editCommentId, setEditCommentId] = useState(null);
     const [editCommentContent, setEditCommentContent] = useState("");
-
     const [likedComment, setLikedComment] = useState(new Set());
     const [openReply, setOpenReply] = useState(new Set());
 
@@ -119,6 +118,12 @@ const Comments = ()  => {
 
         const years = Math.floor(months / 12);
         return `${years}year ago`;
+    }
+
+    const handleModalClick = (event, commentId) => {
+        event.stopPropagation(); // 이벤트 버블링 방지
+        console.log(commentId);
+        setModalIndex(prevIndex => prevIndex === commentId ? null : commentId);
     }
 
     const handleLike = (commentId, userInfo) => {
@@ -213,10 +218,10 @@ const Comments = ()  => {
     return (
         <div>
             <CommentsWrap>
-                <div>
-                    <span style={{ fontSize: "24px", paddingRight: "0.5rem" }}>댓글</span>
+                <CommentTitle>
+                    <span>댓글</span>
                     <span>{commentsData.length}</span>
-                </div>
+                </CommentTitle>
 
                 <CommetHr />
                 {commentsData?.map((commentData, index) => (
@@ -253,15 +258,16 @@ const Comments = ()  => {
                                 <div>{getTime(commentData.createdAt)}</div>
                                 <IconWrap>
                                     <LikedButton onClick={() => handleLike(commentData.id)}>
-                                        <img src={likedComment.has(commentData.id) ? fullHeart : outlineHeart} alt="좋아요"/>
+                                        <img src={likedComment.has(commentData.id) ? fullHeart : outlineHeart}
+                                             alt="좋아요"/>
                                     </LikedButton>
                                     <span>{commentData.likeCount}</span>
                                 </IconWrap>
                             </TimeAndLike>
 
                             {commentData.author && (
-                                <CommnetModalIcon>
-                                    <Modify onClick={() => setModalIndex(commentData.id)}>
+                                <CommentModalIcon>
+                                    <Modify onClick={(e) => handleModalClick(e, commentData.id)}>
                                         <FontAwesomeIcon icon={faEllipsisVertical} />
                                     </Modify>
                                     {modalIndex === commentData.id && (
@@ -278,7 +284,7 @@ const Comments = ()  => {
                                             }}
                                         />
                                     )}
-                                </CommnetModalIcon>
+                                </CommentModalIcon>
                             )}
                         </CommentRight>
                     </CommentWrap>
@@ -289,7 +295,7 @@ const Comments = ()  => {
                         <CommentInput
                             value={newComment}
                             onChange={onChange}
-                            placeholder="댓글 작성"
+                            placeholder="comment your opinion..."
                         />
                         <InputImg src={commentsubmit} alt="댓글 제출" onClick={handleSubmit} />
                     </CommentInputWrap>
