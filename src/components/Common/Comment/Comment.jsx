@@ -9,7 +9,7 @@ import {
     CommentTitle, Bold, CommentInput, CommentInputWrap, CommentRight,
     CommentsWrap, Comment, CommentText, CommentWrap, CommentButton, CommetHr,
     CommentModalIcon, IconWrap, InputImg, TimeAndLike, LikedButton, ReplyButton,
-    EditCommentWrap, CommentInputForm
+    EditCommentWrap, CommentInputForm, CommentButtonGroup
 } from "../Comment/Comment.style";
 import {ProfileImage} from "../../Card/PostCard/PostProfile";
 import {Modify} from "../../../pages/Board/BoardDetail/Board/BoardDetail.style";
@@ -177,6 +177,7 @@ const Comments = ()  => {
     const handleEdit = (commentId, content) => {
         setEditCommentId(commentId);
         setEditCommentContent(content);
+        setModalIndex(null);
     }
 
     const handleEditSubmit = (commentId) => {
@@ -236,8 +237,10 @@ const Comments = ()  => {
                                             value = {editCommentContent}
                                             onChange={(e) => setEditCommentContent(e.target.value)}
                                         />
-                                        <CommentButton onClick={() => handleEditSubmit(commentData.id, commentData.content)}>수정</CommentButton>
-                                        <CommentButton onClick={handleEditCancel}>취소</CommentButton>
+                                        <CommentButtonGroup>
+                                            <CommentButton onClick={() => handleEditSubmit(commentData.id, commentData.content)}>수정</CommentButton>
+                                            <CommentButton onClick={handleEditCancel}>취소</CommentButton>
+                                        </CommentButtonGroup>
                                     </EditCommentWrap>
                                 ) : (
                                     <>

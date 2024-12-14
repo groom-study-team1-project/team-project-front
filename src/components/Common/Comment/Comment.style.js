@@ -31,7 +31,7 @@ export const CommentWrap = styled.div`
     min-height: 70px;
     height: auto;
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     padding: 5px 12px 5px 12px;
     margin-bottom: 16px;
     background: none;
@@ -43,7 +43,7 @@ export const CommentWrap = styled.div`
 
 export const Comment = styled.div`
     display: flex;
-    width: 90%;
+    flex: 1;
     margin-right: 1rem;
 `;
 
@@ -125,16 +125,29 @@ export const ReplyButton = styled.button`
 
 export const EditCommentWrap = styled.div`
     width: 100%;
+    display: flex;
+    flex-direction: column;
+`
+
+export const CommentButtonGroup = styled.div`
+    display: flex;
+    justify-content: flex-start;
+    gap: 5px;
+    width: 100%;
 `
 
 export const CommentButton = styled.button`
     padding: 5px 5px 5px 5px;
-    border-radius: 30px;
+    margin-top: 5px;
+    border-radius: 5px;
     border: none;
     background: black;
     color: white;
     font-weight: bold;
     float: right;
+    &:hover {
+        background: gray;
+    }   
 `
 
 export const CommentInputForm = styled.form`
@@ -147,6 +160,7 @@ export const CommentInputWrap = styled.div`
     flex-direction: row;
     position: relative;
     width: 100%;
+    align-items: stretch;
 `;
 
 export const CommentInput = styled.input`
