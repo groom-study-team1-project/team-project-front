@@ -104,33 +104,6 @@ export const IconWrap = styled.div`
     }
 `;
 
-export const CommentInputWrap = styled.div`
-    position: relative;
-    width: 100%;
-`;
-
-export const CommentInput = styled.input`
-    width: 100%;
-    height: 20%;
-    padding: 10px 5px;
-    font-size: 16px;
-    border-radius: 8px;
-    background: none;
-    &:focus {
-        box-shadow: 0px 1px 10px rgba(0, 0, 0, 0.1);
-        border: none;
-        outline: none;
-    }
-`;
-
-export const InputImg = styled.img`
-    position: absolute;
-    width: 15px;
-    top: 50%;
-    right: 2px;
-    cursor: pointer;
-`;
-
 export const Bold = styled.div`
     font-weight: 900;
     margin-bottom: 5px;
@@ -155,7 +128,7 @@ export const EditCommentWrap = styled.div`
 `
 
 export const CommentButton = styled.button`
-    margin: 5px 2px 5px 5px;
+    padding: 5px 5px 5px 5px;
     border-radius: 30px;
     border: none;
     background: black;
@@ -165,6 +138,39 @@ export const CommentButton = styled.button`
 `
 
 export const CommentInputForm = styled.form`
-    margin: 0px 0px 0px 0px;
+    margin-bottom: 30px;
     width: 100%;
 `
+
+export const CommentInputWrap = styled.div`
+    display: flex;
+    flex-direction: row;
+    position: relative;
+    width: 100%;
+`;
+
+export const CommentInput = styled.input`
+    width: 100%;
+    height: 20%;
+    padding: 10px 30px 10px 10px;
+    font-size: 16px;
+    border-radius: 8px;
+    background: none;
+    &:focus {
+        box-shadow: 0px 1px 10px rgba(0, 0, 0, 0.1);
+        border: none;
+        outline: none;
+    }
+`;
+
+export const InputImg = styled.img`
+    position: absolute;
+    object-fit: contain;
+    border: none;
+    background: none;
+    width: 15px;
+    cursor: pointer;
+    right: 10px;        
+    top: 50%;           
+    transform: translateY(-50%);
+`;
