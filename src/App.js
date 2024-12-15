@@ -1,6 +1,5 @@
 import React, { useEffect } from "react";
 import Router from "./routes/Router";
-import GlobalStyle from "./assets/styles/GlobalStyle";
 import ScreenSizeListener from "./hooks/useScreenResize";
 import { useNavigate } from "react-router-dom";
 import { setupAxiosInterceptors } from "./services/axiosConfig";
@@ -20,7 +19,6 @@ function App() {
   return (
     <>
       <ScreenSizeListener />
-      <GlobalStyle />
       <Router />
     </>
   );

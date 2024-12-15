@@ -9,6 +9,8 @@ import {
 } from "./BoardLayout.style";
 import Sidebar from "../Sidebar/Sidebar";
 import Navbar from "../Navbar/Navbar";
+import GlobalStyle from "../../assets/styles/GlobalStyle";
+
 import PopularHashCard from "../../components/Card/PopularCard/PopularHashCard/PopularHashCard";
 import PopularPostCard from "../../components/Card/PopularCard/PopularPostCard/PopularPostCard";
 import { useSelector } from "react-redux";
@@ -18,29 +20,32 @@ function BoardLayout({ isMyPage = false }) {
     (state) => state.screenSize
   );
   return (
-    <Container>
-      {isDesktop && (
-        <SidebarWrapper>
-          <Sidebar />
-        </SidebarWrapper>
-      )}
-      <MainContentWrapper>
-        <Navbar />
-        <Content>
-          <Outlet />
-          {!isMyPage && !isMobile ? (
-            <RightSidebarWrapper>
-              <PopularCardWrapper>
-                <PopularPostCard />
-              </PopularCardWrapper>
-              <PopularCardWrapper>
-                <PopularHashCard />
-              </PopularCardWrapper>
-            </RightSidebarWrapper>
-          ) : null}
-        </Content>
-      </MainContentWrapper>
-    </Container>
+    <>
+      <GlobalStyle />
+      <Container>
+        {isDesktop && (
+          <SidebarWrapper>
+            <Sidebar />
+          </SidebarWrapper>
+        )}
+        <MainContentWrapper>
+          <Navbar />
+          <Content>
+            <Outlet />
+            {!isMyPage && !isMobile ? (
+              <RightSidebarWrapper>
+                <PopularCardWrapper>
+                  <PopularPostCard />
+                </PopularCardWrapper>
+                <PopularCardWrapper>
+                  <PopularHashCard />
+                </PopularCardWrapper>
+              </RightSidebarWrapper>
+            ) : null}
+          </Content>
+        </MainContentWrapper>
+      </Container>
+    </>
   );
 }
 
