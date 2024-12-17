@@ -43,7 +43,14 @@ jobs:
       run: ssh -i ~/.ssh/id_rsa ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} "echo Connection Successful"
 
     - name: Clean Target Directory on EC2
-      run: ssh -i ~/.ssh/id_rsa ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} "rm -rf ${{ secrets.TARGET_DIR }}/*"
+      run: |
+        ssh -i ~/.ssh/id_rsa ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} "\
+          if [ -d '${{ secrets.TARGET_DIR }}' ]; then \
+            sudo rm -rf ${{ secrets.TARGET_DIR }}/*; \
+          else \
+            echo 'Target directory does not exist, skipping clean-up.'; \
+          fi"
+
       
     - name: Create Target Directory on EC2
       run: ssh -i ~/.ssh/id_rsa ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} "mkdir -p /home/${{ secrets.EC2_USER }}/temp_build"
