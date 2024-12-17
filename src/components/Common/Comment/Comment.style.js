@@ -87,26 +87,26 @@ export const Bold = styled.div`
     font-weight: 200;
   }
 `;
-
-export const IconWrap = styled.div`
-  margin-top: 10px;
-`;
-
 export const CommnetModalIcon = styled.div`
   margin-left: 10px;
   position: relative;
 `;
 
-export const LikedButton = styled.button`
+export const IconWrap = styled.div`
+  margin-top: 10px;
+  align-items: center;
+`;
+
+export const LikedButton = styled.span`
   border: none;
   background: none;
   width: 10%;
   align-items: end;
-  img {
-    object-fit: cover;
-    width: 100%;
-    padding-top: 5px;
-  }
+  margin-right: 5px;
+`;
+
+export const LikeImg = styled.img`
+  width: ${(props) => (props.$like ? "10%" : "")};
 `;
 
 export const ReplyButton = styled.button`

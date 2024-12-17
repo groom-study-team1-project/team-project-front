@@ -1,9 +1,11 @@
 import React, { useState, useCallback, useEffect } from "react";
 import { useParams } from "react-router-dom";
-import outlineHeart from "../../../assets/images/heart.png";
-import fullHeart from "../../../assets/images/fullheart.png";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faEllipsisVertical } from "@fortawesome/free-solid-svg-icons";
+import {
+  faEllipsisVertical,
+  faHeart as solidHeart,
+} from "@fortawesome/free-solid-svg-icons";
+import { faHeart as regularHeart } from "@fortawesome/free-regular-svg-icons";
 import axiosInstance from "../../../services/axiosConfig";
 import {
   Bold,
@@ -324,14 +326,15 @@ const Comments = () => {
                 </TimeAndModal>
                 <IconWrap>
                   <LikedButton onClick={() => handleLike(commentData.id)}>
-                    <img
-                      src={
-                        likedComment.has(commentData.id)
-                          ? fullHeart
-                          : outlineHeart
-                      }
-                      alt="좋아요"
-                    />
+                    {likedComment.has(commentData.id) ? (
+                      <FontAwesomeIcon
+                        icon={solidHeart}
+                        style={{ color: "#ff1900" }}
+                        size="2xl"
+                      />
+                    ) : (
+                      <FontAwesomeIcon icon={regularHeart} size="2xl" />
+                    )}
                   </LikedButton>
                   <span>{commentData.likeCount}</span>
                 </IconWrap>
