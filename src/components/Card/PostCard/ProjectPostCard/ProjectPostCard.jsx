@@ -5,6 +5,7 @@ import {
   ContentBox,
   ProjectInnerContainer,
   PostCardContainer,
+  PostTitle,
 } from "../PostCard.style";
 import { PostProfileBox } from "../PostProfile";
 import { CustomPostActions, CustomThumbnail } from "./ProjectPostCard.style";
@@ -50,15 +51,11 @@ function ProjectPostCard({
   const processContent = (htmlContent) => {
     const parser = new DOMParser();
     const doc = parser.parseFromString(htmlContent, "text/html");
-    const imgElements = doc.querySelectorAll("img");
-
-    imgElements.forEach((img) => {
-      const imgSrc = img.getAttribute("src");
-      if (imgSrc) {
-        img.replaceWith(`[` + imgSrc + `]`);
-      }
+    const textContent = doc.querySelectorAll("p");
+    textContent.forEach((text) => {
+      text.getAttribute("");
+      text.replaceWith(text);
     });
-
     return doc.body.textContent || "";
   };
 
@@ -102,7 +99,8 @@ function ProjectPostCard({
           </CustomPostActions>
           <Divider />
           <ContentBox>
-            <p>{truncateText(title, 30)}</p> {/* 제목 글자수 제한 */}
+            <PostTitle>{truncateText(title, 12)}</PostTitle>{" "}
+            {/* 제목 글자수 제한 */}
             <p>{truncateText(processContent(content), 100)}</p>{" "}
             {/* 내용 글자수 제한 */}
           </ContentBox>
