@@ -3,14 +3,17 @@ import styled from "styled-components";
 export const ContentWrapper = styled.div`
   height: 100%;
   width: 100%;
+  max-height: 100%; /* 부모 요소에 맞게 높이 제한 */
+  overflow-y: auto; /* 내부 스크롤 가능 */
   margin-right: 50px;
   ${(props) =>
-    props.$isDetail &&
-    `
-     display: flex;
-  justify-content: center;
+      props.$isDetail &&
+      `
+    display: flex;
+    justify-content: center;
   `}
 `;
+
 
 export const BoardTitle = styled.div`
   width: ${(props) => (props.$projectPage ? `350px` : `264px`)};
