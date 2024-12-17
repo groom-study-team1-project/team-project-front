@@ -1,4 +1,4 @@
-import styled, { css } from "styled-components";
+import styled from "styled-components";
 
 export const Container = styled.div`
   display: flex;
@@ -24,17 +24,20 @@ export const MainContentWrapper = styled.div`
 `;
 
 export const Content = styled.div`
-  display: flex;
-  padding: 80px 80px 0 80px;
-  height: 100vh;
+    display: flex;
+    padding: 80px 80px 0 80px;
+    height: 100vh;
+    overflow: hidden; /* 자식 요소가 벗어나지 않도록 설정 */
 `;
 
+
 export const RightSidebarWrapper = styled.div`
-  position: sticky;
-  display: flex;
-  flex-direction: column;
-  margin-top: 176px;
+    position: sticky;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start; /* 자식 요소를 위쪽으로 정렬 */
 `;
+
 
 export const PopularCardWrapper = styled.div`
   margin-bottom: 40px;

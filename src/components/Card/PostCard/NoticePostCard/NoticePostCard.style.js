@@ -4,7 +4,7 @@ export const PostContainer = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 96px;
+  width: 200px;
 `;
 
 export const PostTitle = styled.div`
