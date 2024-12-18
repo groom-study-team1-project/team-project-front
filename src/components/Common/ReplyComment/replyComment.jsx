@@ -91,17 +91,17 @@ const ReplyComment = ({ commentId, getReplyTime }) => {
                             <ReplyContent>
                                 <Nickname>{reply.memberNickname}</Nickname>
                                 <ReplyText>{reply.content}</ReplyText>
-                                <ReplyRight>
-                                    <small>{getReplyTime(reply.createdAt)}</small>
-                                    <ReplySubmitButton>
-                                        <InputImg
-                                            src={likedReply.has(reply.id) ? fullHeart : outlineHeart}
-                                            alt="좋아요"
-                                        />
-                                        <ReplyLike>{reply.likeCount}</ReplyLike>
-                                    </ReplySubmitButton>
-                                </ReplyRight>
                             </ReplyContent>
+                            <ReplyRight>
+                                <small>{getReplyTime(reply.createdAt)}</small>
+                                <ReplySubmitButton>
+                                    <InputImg
+                                        src={likedReply.has(reply.id) ? fullHeart : outlineHeart}
+                                        alt="좋아요"
+                                    />
+                                    <ReplyLike>{reply.likeCount}</ReplyLike>
+                                </ReplySubmitButton>
+                            </ReplyRight>
                         </Reply>
                 ))}
             </RepliesWrap>
