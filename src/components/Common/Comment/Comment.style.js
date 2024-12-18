@@ -1,190 +1,136 @@
 import styled from "styled-components";
 
 export const CommentsWrap = styled.div`
-    margin-top: 25px;
-    padding: 0 0px;
-    justify-content: space-between;
+  display: flex;
+  flex-direction: column;
+  margin-top: 25px;
 `;
 
-export const CommentTitle = styled.div`
-    color: black;
-    font-family: Sans-Serif;
-    span:first-child {
-        font-weight: bold;
-        font-size: 24px;
-        margin-right: 8px;
-    }
-    span:last-child {
-        font-size: 14px;
-    }
-`
-
 export const CommetHr = styled.hr`
-    width: 100%;
-    height: 2px;
-    background-color: darkgray;
-    border: none;
-    `;
+  width: 100%;
+`;
 
 export const CommentWrap = styled.div`
-    width: 98%;
-    min-height: 70px;
-    height: auto;
-    display: flex;
-    align-items: flex-start;
-    padding: 5px 12px 5px 12px;
-    margin-bottom: 16px;
-    background: none;
-    &:hover {
-        border-radius: 10px;
-        box-shadow: 0px 1px 10px rgba(0, 0, 0, 0.1);
-    }
+  width: 100%;
+  min-height: 70px;
+  height: auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 5px 12px 5px 12px;
+  border-radius: 10px;
+  margin-bottom: 16px;
+  background: white;
 `;
 
 export const Comment = styled.div`
-    display: flex;
-    flex: 1;
-    margin-right: 1rem;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  width: 80%;
+  margin-right: 1rem;
 `;
 
 export const CommentText = styled.div`
-    display: flex;
-    flex: 1;
-    flex-direction: column;
-    align-items: start;
-    width: 90%;
-    margin-left: 10px;
-    font-size: 13px;
+  width: 100%;
+  margin-left: 10px;
+  font-size: 13px;
 `;
 
 export const CommentRight = styled.div`
-    display: flex;
-    width: 10%;
-    flex-direction: row;
-    align-items: flex-start;
+  display: flex;
+  justify-content: flex-end;
 `;
 
 export const TimeAndLike = styled.div`
-    display: flex;
-    flex-direction: column;
-    align-items: flex-end;
-    width: 100%;
-    div {
-        font-size: 9px;
-    }
-`;
-
-export const CommentModalIcon = styled.div`
-    justify-content: flex-start;
-    position: relative;
-`;
-
-export const LikedButton = styled.button`
-    border: none;
-    background: none;
-    width: 50%;
-    height: auto;
-    align-items: end;
-    justify-content: start;
-    img {
-        object-fit: contain;
-        width : 100%;
-        padding-top: 5px;
-    }
-`;
-
-export const IconWrap = styled.div`
-    display: flex;
-    align-items: center;
-    margin-top: 10px;
-    justify-content: flex-end;
-    max-width: 100%;
-    span {
-        margin-top: 3px;
-    }
-`;
-
-export const Bold = styled.div`
-    font-weight: 900;
-    margin-bottom: 5px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  div {
     font-size: 12px;
-    color: black;
-
-    p {
-        color: #797979;
-        font-weight: 200;
-    }
+  }
 `;
 
-export const ReplyButton = styled.button`
-    padding: 8px 0px 0px 0px;
-    background: none;
-    border: none;
-    cursor: pointer;
-`
-
-export const EditCommentWrap = styled.div`
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-`
-
-export const CommentButtonGroup = styled.div`
-    display: flex;
-    justify-content: flex-start;
-    gap: 5px;
-    width: 100%;
-`
-
-export const CommentButton = styled.button`
-    padding: 5px 5px 5px 5px;
-    margin-top: 5px;
-    border-radius: 5px;
-    border: none;
-    background: black;
-    color: white;
-    font-weight: bold;
-    float: right;
-    &:hover {
-        background: gray;
-    }   
-`
-
-export const CommentInputForm = styled.form`
-    margin-bottom: 30px;
-    width: 100%;
-`
+export const TimeAndModal = styled.div`
+  display: flex;
+`;
 
 export const CommentInputWrap = styled.div`
-    display: flex;
-    flex-direction: row;
-    position: relative;
-    width: 100%;
-    align-items: stretch;
+  position: relative;
+  width: 100%;
+  margin-top: 16px;
 `;
 
 export const CommentInput = styled.input`
-    width: 100%;
-    height: 20%;
-    padding: 10px 30px 10px 10px;
-    font-size: 16px;
-    border-radius: 8px;
-    background: none;
-    &:focus {
-        box-shadow: 0px 1px 10px rgba(0, 0, 0, 0.1);
-        border: none;
-        outline: none;
-    }
+  width: 100%;
+  border: 1px solid #bbb;
+  border-radius: 8px;
+  padding: 10px 5px;
+  font-size: 16px;
 `;
 
 export const InputImg = styled.img`
-    position: absolute;
-    object-fit: contain;
-    border: none;
-    background: none;
-    width: 15px;
-    cursor: pointer;
-    right: 10px;        
-    top: 50%;           
-    transform: translateY(-50%);
+  position: absolute;
+  width: 17px;
+  top: 10px;
+  right: 0px;
+  cursor: pointer;
+`;
+export const Bold = styled.div`
+  font-weight: 900;
+  margin-bottom: 5px;
+  font-size: 12px;
+  color: black;
+
+  p {
+    color: #797979;
+    font-weight: 200;
+  }
+`;
+export const CommnetModalIcon = styled.div`
+  margin-left: 10px;
+  position: relative;
+`;
+
+export const IconWrap = styled.div`
+  margin-top: 10px;
+  align-items: center;
+`;
+
+export const LikedButton = styled.span`
+  border: none;
+  background: none;
+  width: 10%;
+  align-items: end;
+  margin-right: 5px;
+`;
+
+export const LikeImg = styled.img`
+  width: ${(props) => (props.$like ? "10%" : "")};
+`;
+
+export const ReplyButton = styled.button`
+  padding: 8px 0px 0px 0px;
+  background: none;
+  border: none;
+  cursor: pointer;
+`;
+
+export const EditCommentWrap = styled.div`
+  width: 100%;
+`;
+
+export const CommentButton = styled.button`
+  margin: 5px 2px 5px 5px;
+  border-radius: 30px;
+  border: none;
+  background: black;
+  color: white;
+  font-weight: bold;
+  float: right;
+`;
+
+export const CommentInputForm = styled.form`
+  margin: 0px 0px 0px 0px;
+  width: 100%;
 `;

@@ -1,26 +1,43 @@
-import React, { useState, useCallback, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
-import outlineHeart from "../../../assets/images/heart.png";
-import fullHeart from "../../../assets/images/fullheart.png";
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEllipsisVertical } from "@fortawesome/free-solid-svg-icons";
+import React, { useState, useCallback, useEffect } from "react";
+import { useParams } from "react-router-dom";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+    faEllipsisVertical,
+    faHeart as solidHeart,
+} from "@fortawesome/free-solid-svg-icons";
+import { faHeart as regularHeart } from "@fortawesome/free-regular-svg-icons";
 import axiosInstance from "../../../services/axiosConfig";
 import {
-    CommentTitle, Bold, CommentInput, CommentInputWrap, CommentRight,
-    CommentsWrap, Comment, CommentText, CommentWrap, CommentButton, CommetHr,
-    CommentModalIcon, IconWrap, InputImg, TimeAndLike, LikedButton, ReplyButton,
-    EditCommentWrap, CommentInputForm, CommentButtonGroup
+    Bold,
+    CommentInput,
+    CommentInputWrap,
+    CommentRight,
+    CommentsWrap,
+    Comment,
+    CommentText,
+    CommentWrap,
+    CommentButton,
+    CommetHr,
+    CommnetModalIcon,
+    IconWrap,
+    InputImg,
+    TimeAndLike,
+    LikedButton,
+    ReplyButton,
+    EditCommentWrap,
+    CommentInputForm,
+    TimeAndModal,
 } from "../Comment/Comment.style";
-import {ProfileImage} from "../../Card/PostCard/PostProfile";
-import {Modify} from "../../../pages/Board/BoardDetail/Board/BoardDetail.style";
+import { ProfileImage } from "../../Card/PostCard/PostProfile";
+import { Modify } from "../../../pages/Board/BoardDetail/Board/BoardDetail.style";
 import ModalComponent from "../../Modal/EditDeleteModal/EditDeleteModal";
 import commentsubmit from "../../../assets/images/commentsubmit.png";
 import ReplyComment from "../ReplyComment/replyComment";
 import useUserInfo from "../../../hooks/useUserInfo";
 
-const Comments = ()  => {
+const Comments = () => {
     const { userInfo, isUserInfoLoading } = useUserInfo();
-    const { postId} = useParams();
+    const { postId } = useParams();
     const [commentsData, setCommentsData] = useState([]);
     const [newComment, setNewComment] = useState("");
     const [modalIndex, setModalIndex] = useState(null);
@@ -28,45 +45,53 @@ const Comments = ()  => {
     const [isLoading, setIsLoading] = useState(false);
     const [editCommentId, setEditCommentId] = useState(null);
     const [editCommentContent, setEditCommentContent] = useState("");
+
     const [likedComment, setLikedComment] = useState(new Set());
     const [openReply, setOpenReply] = useState(new Set());
 
-    const fetchComments = useCallback((userInfo, lastCommentId) => {
+    const fetchComments = useCallback(
+        (userInfo, lastCommentId) => {
+            setIsLoading(true);
 
-        setIsLoading(true);
+            const memberId = userInfo?.id;
+            const baseEndpoint = `/comments/${postId}`;
+            const queryParams = new URLSearchParams();
 
-        const memberId = userInfo?.id
-        const baseEndpoint = `/comments/${postId}`;
-        const queryParams = new URLSearchParams();
+            if (memberId) queryParams.append("memberId", memberId);
+            if (lastCommentId) queryParams.append("lastCommentId", lastCommentId);
 
-        if (memberId) queryParams.append("memberId", memberId);
-        if (lastCommentId) queryParams.append("lastCommentId", lastCommentId);
+            const endPoint = queryParams.toString()
+                ? `${baseEndpoint}?${queryParams.toString()}`
+                : baseEndpoint;
+            console.log("최종 : ", endPoint);
+            axiosInstance
+                .get(endPoint)
+                .then((response) => {
+                    const commentInfo = response.data.result;
 
-        const endPoint = queryParams.toString() ? `${baseEndpoint}?${queryParams.toString()}` : baseEndpoint;
-        console.log("최종 : ", endPoint);
-        axiosInstance.get(endPoint)
-            .then((response) => {
-                const commentInfo = response.data.result;
+                    setCommentsData((prev) =>
+                        lastCommentId ? [...prev, ...commentInfo] : commentInfo
+                    );
 
-                setCommentsData(prev => lastCommentId ? [...prev, ...commentInfo] : commentInfo);
-
-                const likedComment = new Set(
-                    commentInfo
-                        .filter(comment => comment.likedMe)
-                        .map(comment => comment.id)
-                );
-                setLikedComment(prev => new Set([...prev, ...likedComment]));
-                setReplyError(false);
-            })
-            .catch((error) => {
-                setReplyError(error.message);
-                console.error("댓글을 불러오는데 실패했습니다: ", error);
-            })
-            .finally(() => {
-                setIsLoading(false);
-                console.log("댓글 불러오기 성공");
-            });
-    }, [postId]);
+                    const likedComment = new Set(
+                        commentInfo
+                            .filter((comment) => comment.likedMe)
+                            .map((comment) => comment.id)
+                    );
+                    setLikedComment((prev) => new Set([...prev, ...likedComment]));
+                    setReplyError(false);
+                })
+                .catch((error) => {
+                    setReplyError(error.message);
+                    console.error("댓글을 불러오는데 실패했습니다: ", error);
+                })
+                .finally(() => {
+                    setIsLoading(false);
+                    console.log("댓글 불러오기 성공");
+                });
+        },
+        [postId]
+    );
 
     useEffect(() => {
         if (!isUserInfoLoading) {
@@ -80,10 +105,11 @@ const Comments = ()  => {
 
         const commentData = {
             postId: parseInt(postId),
-            content: newComment.trim()
+            content: newComment.trim(),
         };
 
-        axiosInstance.post(`/api/comments/write`, commentData)
+        axiosInstance
+            .post(`/api/comments/write`, commentData)
             .then(() => {
                 setNewComment("");
                 fetchComments(userInfo, null);
@@ -118,21 +144,16 @@ const Comments = ()  => {
 
         const years = Math.floor(months / 12);
         return `${years}year ago`;
-    }
-
-    const handleModalClick = (event, commentId) => {
-        event.stopPropagation(); // 이벤트 버블링 방지
-        console.log(commentId);
-        setModalIndex(prevIndex => prevIndex === commentId ? null : commentId);
-    }
+    };
 
     const handleLike = (commentId, userInfo) => {
         if (likedComment.has(commentId)) {
-            axiosInstance.delete(`/api/comments/unlike`, {
-                targetId: commentId
-            })
+            axiosInstance
+                .delete(`/api/comments/unlike`, {
+                    targetId: commentId,
+                })
                 .then((response) => {
-                    setLikedComment(prev => {
+                    setLikedComment((prev) => {
                         const newSet = new Set(prev);
                         newSet.delete(commentId);
                         return newSet;
@@ -143,11 +164,12 @@ const Comments = ()  => {
                     console.error("좋아요를 취소하지 못하였습니다 : ", error);
                 });
         } else {
-            axiosInstance.post(`/api/comments/like`, {
-                targetId: commentId
-            })
+            axiosInstance
+                .post(`/api/comments/like`, {
+                    targetId: commentId,
+                })
                 .then(() => {
-                    setLikedComment(prev => new Set([...prev, commentId]));
+                    setLikedComment((prev) => new Set([...prev, commentId]));
                     return fetchComments(userInfo, null);
                 })
                 .catch((error) => {
@@ -161,48 +183,51 @@ const Comments = ()  => {
     };
 
     const handleDelete = (commentId) => {
-        axiosInstance.delete(`/api/comments/remove`, {
-            data: { commentId: commentId }
-        })
+        axiosInstance
+            .delete(`/api/comments/remove`, {
+                data: { commentId: commentId },
+            })
             .then(() => {
                 fetchComments(userInfo, null);
                 setModalIndex(null);
             })
-            .catch(error => {
-                console.log('Request Config : ', error.config);
-                console.log('Error: ', error.response?.data);
+            .catch((error) => {
+                console.log("Request Config : ", error.config);
+                console.log("Error: ", error.response?.data);
             });
     };
 
     const handleEdit = (commentId, content) => {
         setEditCommentId(commentId);
         setEditCommentContent(content);
-        setModalIndex(null);
-    }
+    };
 
     const handleEditSubmit = (commentId) => {
-        axiosInstance.post(`/api/comments/edit`, {
-            commentId: commentId,
-            content: editCommentContent.trim()
-        })
+        axiosInstance
+            .post(`/api/comments/edit`, {
+                commentId: commentId,
+                content: editCommentContent.trim(),
+            })
             .then(() => {
                 setEditCommentId(null);
                 setEditCommentContent("");
                 fetchComments(userInfo, null);
                 setModalIndex(null);
             })
-            .catch(error => { console.error("댓글 수정을 하지 못하였습니다 : ", error); });
+            .catch((error) => {
+                console.error("댓글 수정을 하지 못하였습니다 : ", error);
+            });
     };
 
     const handleEditCancel = () => {
         setEditCommentId(null);
         setEditCommentContent("");
-    }
+    };
 
     const handleModalClose = () => setModalIndex(null);
 
     const handleReplyOpen = (commentId) => {
-        setOpenReply(prev => {
+        setOpenReply((prev) => {
             const newSet = new Set(prev);
             if (newSet.has(commentId)) {
                 newSet.delete(commentId);
@@ -219,10 +244,10 @@ const Comments = ()  => {
     return (
         <div>
             <CommentsWrap>
-                <CommentTitle>
-                    <span>댓글</span>
+                <div>
+                    <span style={{ fontSize: "24px", paddingRight: "0.5rem" }}>댓글</span>
                     <span>{commentsData.length}</span>
-                </CommentTitle>
+                </div>
 
                 <CommetHr />
                 {commentsData?.map((commentData, index) => (
@@ -234,18 +259,28 @@ const Comments = ()  => {
                                 {editCommentId === commentData.id ? (
                                     <EditCommentWrap>
                                         <CommentInput
-                                            value = {editCommentContent}
+                                            value={editCommentContent}
                                             onChange={(e) => setEditCommentContent(e.target.value)}
                                         />
-                                        <CommentButtonGroup>
-                                            <CommentButton onClick={() => handleEditSubmit(commentData.id, commentData.content)}>수정</CommentButton>
-                                            <CommentButton onClick={handleEditCancel}>취소</CommentButton>
-                                        </CommentButtonGroup>
+                                        <CommentButton
+                                            onClick={() =>
+                                                handleEditSubmit(commentData.id, commentData.content)
+                                            }
+                                        >
+                                            수정
+                                        </CommentButton>
+                                        <CommentButton onClick={handleEditCancel}>
+                                            취소
+                                        </CommentButton>
                                     </EditCommentWrap>
                                 ) : (
                                     <>
                                         <p>{commentData.content}</p>
-                                        <ReplyButton onClick={() => handleReplyOpen(commentData.id)}>답글</ReplyButton>
+                                        <ReplyButton
+                                            onClick={() => handleReplyOpen(commentData.id)}
+                                        >
+                                            답글
+                                        </ReplyButton>
                                     </>
                                 )}
                                 {openReply.has(commentData.id) && (
@@ -258,37 +293,52 @@ const Comments = ()  => {
                         </Comment>
                         <CommentRight>
                             <TimeAndLike>
-                                <div>{getTime(commentData.createdAt)}</div>
+                                <TimeAndModal>
+                                    <div>{getTime(commentData.createdAt)}</div>
+                                    {commentData.author && (
+                                        <CommnetModalIcon>
+                                            <Modify onClick={() => setModalIndex(commentData.id)}>
+                                                <FontAwesomeIcon icon={faEllipsisVertical} />
+                                            </Modify>
+                                            {modalIndex === commentData.id && (
+                                                <ModalComponent
+                                                    isVisible={true}
+                                                    onClose={() => handleModalClose(commentData.id)}
+                                                    onEdit={() => {
+                                                        console.log(
+                                                            "수정 대상 게시글 : ",
+                                                            commentData.id,
+                                                            commentData.content
+                                                        );
+                                                        handleEdit(commentData.id, commentData.content);
+                                                    }}
+                                                    onDelete={() => {
+                                                        console.log(
+                                                            "삭제할 게시글 아이디 : ",
+                                                            commentData.id
+                                                        );
+                                                        handleDelete(commentData.id);
+                                                    }}
+                                                />
+                                            )}
+                                        </CommnetModalIcon>
+                                    )}
+                                </TimeAndModal>
                                 <IconWrap>
                                     <LikedButton onClick={() => handleLike(commentData.id)}>
-                                        <img src={likedComment.has(commentData.id) ? fullHeart : outlineHeart}
-                                             alt="좋아요"/>
+                                        {likedComment.has(commentData.id) ? (
+                                            <FontAwesomeIcon
+                                                icon={solidHeart}
+                                                style={{ color: "#ff1900" }}
+                                                size="2xl"
+                                            />
+                                        ) : (
+                                            <FontAwesomeIcon icon={regularHeart} size="2xl" />
+                                        )}
                                     </LikedButton>
                                     <span>{commentData.likeCount}</span>
                                 </IconWrap>
                             </TimeAndLike>
-
-                            {commentData.author && (
-                                <CommentModalIcon>
-                                    <Modify onClick={(e) => handleModalClick(e, commentData.id)}>
-                                        <FontAwesomeIcon icon={faEllipsisVertical} />
-                                    </Modify>
-                                    {modalIndex === commentData.id && (
-                                        <ModalComponent
-                                            isVisible={true}
-                                            onClose={() => handleModalClose(commentData.id)}
-                                            onEdit={() => {
-                                                console.log("수정 대상 게시글 : ", commentData.id, commentData.content)
-                                                handleEdit(commentData.id, commentData.content);
-                                            }}
-                                            onDelete={() => {
-                                                console.log("삭제할 게시글 아이디 : ", commentData.id)
-                                                handleDelete(commentData.id)
-                                            }}
-                                        />
-                                    )}
-                                </CommentModalIcon>
-                            )}
                         </CommentRight>
                     </CommentWrap>
                 ))}
@@ -298,9 +348,13 @@ const Comments = ()  => {
                         <CommentInput
                             value={newComment}
                             onChange={onChange}
-                            placeholder="comment your opinion..."
+                            placeholder="댓글 작성"
                         />
-                        <InputImg src={commentsubmit} alt="댓글 제출" onClick={handleSubmit} />
+                        <InputImg
+                            src={commentsubmit}
+                            alt="댓글 제출"
+                            onClick={handleSubmit}
+                        />
                     </CommentInputWrap>
                 </CommentInputForm>
             </CommentsWrap>
