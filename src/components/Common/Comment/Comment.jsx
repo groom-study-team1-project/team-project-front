@@ -63,6 +63,7 @@ const Comments = () => {
             const endPoint = queryParams.toString()
                 ? `${baseEndpoint}?${queryParams.toString()}`
                 : baseEndpoint;
+
             console.log("최종 : ", endPoint);
             axiosInstance
                 .get(endPoint)
@@ -286,7 +287,7 @@ const Comments = () => {
                                 {openReply.has(commentData.id) && (
                                     <ReplyComment
                                         commentId={commentData.id}
-                                        replyAdded={fetchComments}
+                                        getReplyTime={getTime}
                                     />
                                 )}
                             </CommentText>
