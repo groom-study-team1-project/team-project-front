@@ -53,6 +53,7 @@ export const TimeAndLike = styled.div`
 
 export const TimeAndModal = styled.div`
   display: flex;
+  flex-direction: row;
 `;
 
 export const CommentInputWrap = styled.div`
@@ -76,6 +77,7 @@ export const InputImg = styled.img`
   right: 0px;
   cursor: pointer;
 `;
+
 export const Bold = styled.div`
   font-weight: 900;
   margin-bottom: 5px;
@@ -88,12 +90,11 @@ export const Bold = styled.div`
   }
 `;
 export const CommnetModalIcon = styled.div`
-  margin-left: 10px;
   position: relative;
 `;
 
 export const IconWrap = styled.div`
-  margin-top: 10px;
+  margin-top: 5px;
   align-items: center;
 `;
 

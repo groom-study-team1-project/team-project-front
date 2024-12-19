@@ -129,22 +129,22 @@ const Comments = () => {
         if (differTime < 60) return "now";
 
         const minutes = Math.floor(differTime / 60);
-        if (minutes < 60) return `${minutes}minute ago`;
+        if (minutes < 60) return `${minutes}분 전`;
 
         const hours = Math.floor(differTime / (60 * 60));
-        if (hours < 24) return `${hours}hour ago`;
+        if (hours < 24) return `${hours}시간 전`;
 
         const days = Math.floor(differTime / (60 * 60 * 24));
-        if (days < 7) return `${days}day ago`;
+        if (days < 7) return `${days}일 전`;
 
         const weeks = Math.floor(days / 7);
-        if (days < 30) return `${weeks}week ago`;
+        if (days < 30) return `${weeks}주 전`;
 
         const months = Math.floor(days / 30);
-        if (months < 12) return `${months}week ago`;
+        if (months < 12) return `${months}달 전`;
 
         const years = Math.floor(months / 12);
-        return `${years}year ago`;
+        return `${years}년 전`;
     };
 
     const handleLike = (commentId, userInfo) => {
@@ -288,6 +288,8 @@ const Comments = () => {
                                     <ReplyComment
                                         commentId={commentData.id}
                                         getReplyTime={getTime}
+                                        handleEdit={handleEdit}
+                                        handleEditCancel={handleEditCancel}
                                     />
                                 )}
                             </CommentText>

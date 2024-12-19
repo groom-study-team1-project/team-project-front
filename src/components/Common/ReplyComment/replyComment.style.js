@@ -6,7 +6,7 @@ export const RepliesWrap = styled.div`
 
 export const Reply = styled.div`
     display: flex;
-    background: blue;
+    background: none;
     align-items: center;
     margin-bottom: 5px;
     padding-left: 10px;
@@ -27,35 +27,7 @@ export const ReplyText = styled.span`
     font-size: 12px;
 `;
 
-export const ReplyRight = styled.div`
-    float: right;
-    display: flex;
-    width: 15%;
-    flex-direction: column;
-    align-items: end;
-    justify-content: flex-start;
-    small {
-        padding-bottom: 10px;
-        font-size: 10px;
-    }
-`;
-
-export const ReplyLike = styled.span`
-    
+export const ReplyTimeText = styled.span`
+    font-size: 9px;
+    white-space: nowrap;
 `
-
-export const InputImg = styled.img`
-
-`;
-
-export const ReplySubmitButton = styled.button`
-    max-width: 50px;
-`;
-
-export const ReplyInputWrap = styled.div`
-
-`;
-
-export const ReplyInput = styled.input`
-
-`;
