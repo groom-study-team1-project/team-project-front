@@ -27,6 +27,8 @@ import {
     EditCommentWrap,
     CommentInputForm,
     TimeAndModal,
+    CommentBox,
+    ReplyList
 } from "../Comment/Comment.style";
 import { ProfileImage } from "../../Card/PostCard/PostProfile";
 import { Modify } from "../../../pages/Board/BoardDetail/Board/BoardDetail.style";
@@ -253,96 +255,100 @@ const Comments = () => {
                 <CommetHr />
                 {commentsData?.map((commentData, index) => (
                     <CommentWrap key={commentData.id}>
-                        <Comment>
-                            <ProfileImage src={commentData.memberImageUrl}></ProfileImage>
-                            <CommentText>
-                                <Bold>{commentData.memberNickname}</Bold>
-                                {editCommentId === commentData.id ? (
-                                    <EditCommentWrap>
-                                        <CommentInput
-                                            value={editCommentContent}
-                                            onChange={(e) => setEditCommentContent(e.target.value)}
-                                        />
-                                        <CommentButton
-                                            onClick={() =>
-                                                handleEditSubmit(commentData.id, commentData.content)
-                                            }
-                                        >
-                                            수정
-                                        </CommentButton>
-                                        <CommentButton onClick={handleEditCancel}>
-                                            취소
-                                        </CommentButton>
-                                    </EditCommentWrap>
-                                ) : (
-                                    <>
-                                        <p>{commentData.content}</p>
-                                        <ReplyButton
-                                            onClick={() => handleReplyOpen(commentData.id)}
-                                        >
-                                            답글
-                                        </ReplyButton>
-                                    </>
-                                )}
-                                {openReply.has(commentData.id) && (
-                                    <ReplyComment
-                                        commentId={commentData.id}
-                                        getReplyTime={getTime}
-                                        handleEdit={handleEdit}
-                                        handleEditCancel={handleEditCancel}
-                                    />
-                                )}
-                            </CommentText>
-                        </Comment>
-                        <CommentRight>
-                            <TimeAndLike>
-                                <TimeAndModal>
-                                    <div>{getTime(commentData.createdAt)}</div>
-                                    {commentData.author && (
-                                        <CommnetModalIcon>
-                                            <Modify onClick={() => setModalIndex(commentData.id)}>
-                                                <FontAwesomeIcon icon={faEllipsisVertical} />
-                                            </Modify>
-                                            {modalIndex === commentData.id && (
-                                                <ModalComponent
-                                                    isVisible={true}
-                                                    onClose={() => handleModalClose(commentData.id)}
-                                                    onEdit={() => {
-                                                        console.log(
-                                                            "수정 대상 게시글 : ",
-                                                            commentData.id,
-                                                            commentData.content
-                                                        );
-                                                        handleEdit(commentData.id, commentData.content);
-                                                    }}
-                                                    onDelete={() => {
-                                                        console.log(
-                                                            "삭제할 게시글 아이디 : ",
-                                                            commentData.id
-                                                        );
-                                                        handleDelete(commentData.id);
-                                                    }}
-                                                />
-                                            )}
-                                        </CommnetModalIcon>
-                                    )}
-                                </TimeAndModal>
-                                <IconWrap>
-                                    <LikedButton onClick={() => handleLike(commentData.id)}>
-                                        {likedComment.has(commentData.id) ? (
-                                            <FontAwesomeIcon
-                                                icon={solidHeart}
-                                                style={{ color: "#ff1900" }}
-                                                size="2xl"
+                        <CommentBox>
+                            <Comment>
+                                <ProfileImage src={commentData.memberImageUrl}></ProfileImage>
+                                <CommentText>
+                                    <Bold>{commentData.memberNickname}</Bold>
+                                    {editCommentId === commentData.id ? (
+                                        <EditCommentWrap>
+                                            <CommentInput
+                                                value={editCommentContent}
+                                                onChange={(e) => setEditCommentContent(e.target.value)}
                                             />
-                                        ) : (
-                                            <FontAwesomeIcon icon={regularHeart} size="2xl" />
+                                            <CommentButton
+                                                onClick={() =>
+                                                    handleEditSubmit(commentData.id, commentData.content)
+                                                }
+                                            >
+                                                수정
+                                            </CommentButton>
+                                            <CommentButton onClick={handleEditCancel}>
+                                                취소
+                                            </CommentButton>
+                                        </EditCommentWrap>
+                                    ) : (
+                                        <>
+                                            <p>{commentData.content}</p>
+                                            <ReplyButton
+                                                onClick={() => handleReplyOpen(commentData.id)}
+                                            >
+                                                답글
+                                            </ReplyButton>
+                                        </>
+                                    )}
+                                </CommentText>
+                            </Comment>
+                            <CommentRight>
+                                <TimeAndLike>
+                                    <TimeAndModal>
+                                        <div>{getTime(commentData.createdAt)}</div>
+                                        {commentData.author && (
+                                            <CommnetModalIcon>
+                                                <Modify onClick={() => setModalIndex(commentData.id)}>
+                                                    <FontAwesomeIcon icon={faEllipsisVertical} />
+                                                </Modify>
+                                                {modalIndex === commentData.id && (
+                                                    <ModalComponent
+                                                        isVisible={true}
+                                                        onClose={() => handleModalClose(commentData.id)}
+                                                        onEdit={() => {
+                                                            console.log(
+                                                                "수정 대상 게시글 : ",
+                                                                commentData.id,
+                                                                commentData.content
+                                                            );
+                                                            handleEdit(commentData.id, commentData.content);
+                                                        }}
+                                                        onDelete={() => {
+                                                            console.log(
+                                                                "삭제할 게시글 아이디 : ",
+                                                                commentData.id
+                                                            );
+                                                            handleDelete(commentData.id);
+                                                        }}
+                                                    />
+                                                )}
+                                            </CommnetModalIcon>
                                         )}
-                                    </LikedButton>
-                                    <span>{commentData.likeCount}</span>
-                                </IconWrap>
-                            </TimeAndLike>
-                        </CommentRight>
+                                    </TimeAndModal>
+                                    <IconWrap>
+                                        <LikedButton onClick={() => handleLike(commentData.id)}>
+                                            {likedComment.has(commentData.id) ? (
+                                                <FontAwesomeIcon
+                                                    icon={solidHeart}
+                                                    style={{ color: "#ff1900" }}
+                                                    size="2xl"
+                                                />
+                                            ) : (
+                                                <FontAwesomeIcon icon={regularHeart} size="2xl" />
+                                            )}
+                                        </LikedButton>
+                                        <span>{commentData.likeCount}</span>
+                                    </IconWrap>
+                                </TimeAndLike>
+                            </CommentRight>
+                        </CommentBox>
+                        <ReplyList>
+                            {openReply.has(commentData.id) && (
+                                <ReplyComment
+                                    commentId={commentData.id}
+                                    getReplyTime={getTime}
+                                    handleEdit={handleEdit}
+                                    handleEditCancel={handleEditCancel}
+                                />
+                            )}
+                        </ReplyList>
                     </CommentWrap>
                 ))}
                 <hr />

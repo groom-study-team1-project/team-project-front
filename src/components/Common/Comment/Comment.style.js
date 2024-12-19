@@ -15,20 +15,29 @@ export const CommentWrap = styled.div`
   min-height: 70px;
   height: auto;
   display: flex;
+  flex-direction: column;  
   justify-content: space-between;
   align-items: center;
-  padding: 5px 12px 5px 12px;
+  padding: 0 2% 0 2%;  
   border-radius: 10px;
-  margin-bottom: 16px;
-  background: white;
+  margin-bottom: 2%;
+  background: white;  
 `;
+
+export const CommentBox = styled.div`
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    width: 100%;
+    margin-top: 2%;
+`
 
 export const Comment = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
   width: 80%;
-  margin-right: 1rem;
+  margin-right: 1rem;  
 `;
 
 export const CommentText = styled.div`
@@ -54,12 +63,12 @@ export const TimeAndLike = styled.div`
 export const TimeAndModal = styled.div`
   display: flex;
   flex-direction: row;
+  padding-bottom: 20%;  
 `;
 
 export const CommentInputWrap = styled.div`
   position: relative;
   width: 100%;
-  margin-top: 16px;
 `;
 
 export const CommentInput = styled.input`
@@ -132,6 +141,12 @@ export const CommentButton = styled.button`
 `;
 
 export const CommentInputForm = styled.form`
-  margin: 0px 0px 0px 0px;
-  width: 100%;
+  width: 99%;  
+  margin-bottom: 2%;  
 `;
+
+export const ReplyList = styled.div`
+  width: 100%;
+  margin-top: 2%;  
+  padding-left: 2%;  
+`
