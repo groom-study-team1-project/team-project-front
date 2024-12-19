@@ -147,6 +147,5 @@ export const CommentInputForm = styled.form`
 
 export const ReplyList = styled.div`
   width: 100%;
-  margin-top: 2%;  
-  padding-left: 2%;  
+  margin-top: 2%;    
 `

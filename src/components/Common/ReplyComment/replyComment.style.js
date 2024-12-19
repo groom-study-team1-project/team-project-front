@@ -8,7 +8,7 @@ export const Reply = styled.div`
     display: flex;
     background: none;
     align-items: center;
-    margin-bottom: 5px;
+    margin-bottom: 2%;
     padding-left: 10px;
 `;
 
