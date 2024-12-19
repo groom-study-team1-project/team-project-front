@@ -16,8 +16,8 @@ export const ErrMsg = styled.div`
   font-size: 12px;
   color: red;
 
-  ${({ isVibrating }) =>
-    isVibrating &&
+  ${({ $isVibrating }) =>
+    $isVibrating &&
     css`
       animation: ${vibration} 0.1s ease 5;
     `}

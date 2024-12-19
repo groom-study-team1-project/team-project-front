@@ -74,7 +74,7 @@ export default function LoginModal({ closeModal, changeModal }) {
             }}
           />
         </div>
-        {errVisible && <ErrMsg isVibrating={errVisible}>{errMsg}</ErrMsg>}
+        {errVisible && <ErrMsg $isVibrating={errVisible}>{errMsg}</ErrMsg>}
         <BtnBox>
           <Btn type="submit" id="loginBtn">
             로그인
