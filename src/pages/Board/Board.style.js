@@ -28,9 +28,9 @@ export const BoardTitle = styled.div`
   border: 1px solid rgba(255, 255, 255, 0.5);
   box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.1);
   background: linear-gradient(
-    to bottom,
-    rgba(255, 255, 255, 0.9),
-    rgba(255, 255, 255, 0.5)
+      to bottom,
+      rgba(255, 255, 255, 0.9),
+      rgba(255, 255, 255, 0.5)
   );
 `;
 
