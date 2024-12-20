@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import EmailInputForm from "../VerifyCodeModal/EmailInputForm/EmailInputForm";
 import VerificationCodeInputForm from "../VerifyCodeModal/VerificationCodeInputForm/VerificationCodeInputForm";
 import UserDetailsInputForm from "./UserDetailsInputForm/UserDetailsInputForm";
+import GlobalStyle from "../../../assets/styles/GlobalStyle";
 
 export default function SignUpModal({ changeModal }) {
   const [email, setEmail] = useState("");
@@ -22,6 +23,7 @@ export default function SignUpModal({ changeModal }) {
 
   return (
     <>
+      <GlobalStyle />
       {SignupSteps[step] === "email" ? (
         <EmailInputForm
           handleNext={handleNext}
