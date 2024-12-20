@@ -34,6 +34,14 @@ function UserDetailsInputForm({ email, handlePrev, changeModal }) {
         errors.password = "비밀번호는 8글자 이상 16글자 이하이어야 합니다.";
       }
 
+      if (
+        !/^(?=.*[A-Za-z])(?=.*\d)(?=.*[!@#$%^&*()_\-+=~`{}\[\]:;"'<>,.?/\\|]).+$/.test(
+          password
+        )
+      ) {
+        errors.password = "비밀번호는 영문, 숫자, 특수문자를 포함해야 합니다.";
+      }
+
       if (password !== confirmPassword) {
         errors.confirmPassword = "비밀번호가 일치하지 않습니다.";
       }
@@ -76,7 +84,6 @@ function UserDetailsInputForm({ email, handlePrev, changeModal }) {
 
     try {
       const isDuplicated = await checkDuplicatedNickname(value);
-      console.log("중복 검사 결과:", isDuplicated);
 
       if (isDuplicated) {
         setErrors((prev) => ({
@@ -197,6 +204,7 @@ function UserDetailsInputForm({ email, handlePrev, changeModal }) {
             value={nickname}
             onChange={(e) => setNickname(e.target.value)}
             onBlur={(e) => handleNicknameBlur(e.target.value)}
+            placeholder={"닉네임은 2글자부터 20글자까지 가능합니다."}
           />
           {errors.nickname && <ErrorMsg>{errors.nickname}</ErrorMsg>}
         </div>
@@ -208,6 +216,9 @@ function UserDetailsInputForm({ email, handlePrev, changeModal }) {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             hasError={errors.password}
+            placeholder={
+              "8글자부터 16글자 영어 소문자,특수문자,숫자를 조합해주세요"
+            }
           />
           {errors.password && <ErrorMsg>{errors.password}</ErrorMsg>}
         </div>
@@ -229,6 +240,7 @@ function UserDetailsInputForm({ email, handlePrev, changeModal }) {
             value={phoneNumber}
             onChange={(e) => setPhoneNumber(e.target.value)}
             hasError={errors.phoneNumber}
+            placeholder={"010-1234-1234"}
           />
           {errors.phoneNumber && <ErrorMsg>{errors.phoneNumber}</ErrorMsg>}
         </div>

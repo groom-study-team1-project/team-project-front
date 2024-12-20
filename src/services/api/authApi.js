@@ -27,8 +27,13 @@ export const signUp = async (body) => {
       );
     }
   } catch (error) {
-    console.log("회원가입 실패:", error);
-    throw error;
+    console.log(error);
+    if (error.response) {
+      console.log("Error Response Data:", error.response.data); // 에러 응답 데이터 출력
+      return error.response.data;
+    } else {
+      console.error("Unexpected Error:", error);
+    }
   }
 };
 
