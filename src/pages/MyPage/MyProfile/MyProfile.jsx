@@ -32,7 +32,7 @@ function MyProfile() {
     if (!isLoggedIn) {
       return;
     }
-
+    console.log(payload);
     // 프로필 데이터를 가져오는 함수
     const getProfileData = async () => {
       try {
@@ -52,14 +52,10 @@ function MyProfile() {
     };
 
     getProfileData();
-  }, [isLoggedIn, memberId, payload]);
+  }, [isLoggedIn, memberId, payload, fetchProfileInfo]);
 
   if (!isLoggedIn) {
     return <div>로그인이 필요합니다.</div>;
-  }
-
-  if (error) {
-    return <div>프로필 정보를 불러오는데 실패했습니다.</div>;
   }
 
   if (!profileData && isLoggedIn) {

@@ -8,9 +8,9 @@ export const MyPosts = ({ postCount }) => {
   const [projectBoard, setProjectBoard] = useState([]);
   const [questionBoard, setQuestionBoard] = useState([]);
   const [lastPostId, setLastPostId] = useState({
-    freeBoard: 26,
-    projectBoard: 5,
-    questionBoard: 5,
+    freeBoard: "",
+    projectBoard: "",
+    questionBoard: "",
   });
   const catergoryId = {
     freeBoard: 1,
