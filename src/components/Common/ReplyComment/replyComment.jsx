@@ -81,7 +81,7 @@ const ReplyComment = ({ commentId, getReplyTime }) => {
         }
     };
 
-    const handleDelete = () => {
+    /*const handleDelete = () => {
         axiosInstance.delete(`/api/comments/remove`)
             .then(() => {
                 fetchReplyComments(userInfo, null);
@@ -91,35 +91,15 @@ const ReplyComment = ({ commentId, getReplyTime }) => {
                 console.error("답글 삭제에 실패했습니다:", error);
             }
         );
-    };
+    };*/
 
-    const handleLike = async (userInfo, commentId) => {
-        const baseLikeEndPoint = `/api/comments`
-
-        if(!likedReply.has(commentId)) {
-            try {
-                await axiosInstance.post(`${baseLikeEndPoint}/like`, {
-                    targetId: commentId
-                });
-                setLikedReply(prev => new Set([...prev, commentId]));
-                fetchReplyComments(userInfo, null);
-            } catch (error) {
-                console.error("좋아요를 누를 수 없습니다 : ", error);
-            }
-        } else {
-            try {
-                await axiosInstance.post(`${baseLikeEndPoint}/unlike`, {
-                    targetId: commentId
-                });
-                setLikedReply(prev => {
-                    const newSet = new Set(prev);
-                    newSet.delete(commentId);
-                    return newSet;
-                });
-                fetchReplyComments(userInfo, null);
-            } catch (error) {
-                console.error("좋아요 취소를 하지 못하였습니다 : ", error);
-            }
+    const handleDelete = (commentId) => {
+        try {
+            axiosInstance.delete(`/api/comments/remove`, commentId);
+            fetchReplyComments(userInfo, null);
+            setModalIndex(null);
+        } catch (error) {
+            console.error("답글 삭제를 실패하였습니다 : ", error);
         }
     }
 
@@ -152,6 +132,36 @@ const ReplyComment = ({ commentId, getReplyTime }) => {
     const editReplyCancel = () => {
         setEditReplyId(null);
         setEditReplyContent("");
+    }
+
+    const handleLike = async (userInfo, commentId) => {
+        const baseLikeEndPoint = `/api/comments`
+
+        if(!likedReply.has(commentId)) {
+            try {
+                await axiosInstance.post(`${baseLikeEndPoint}/like`, {
+                    targetId: commentId
+                });
+                setLikedReply(prev => new Set([...prev, commentId]));
+                fetchReplyComments(userInfo, null);
+            } catch (error) {
+                console.error("좋아요를 누를 수 없습니다 : ", error);
+            }
+        } else {
+            try {
+                await axiosInstance.post(`${baseLikeEndPoint}/unlike`, {
+                    targetId: commentId
+                });
+                setLikedReply(prev => {
+                    const newSet = new Set(prev);
+                    newSet.delete(commentId);
+                    return newSet;
+                });
+                fetchReplyComments(userInfo, null);
+            } catch (error) {
+                console.error("좋아요 취소를 하지 못하였습니다 : ", error);
+            }
+        }
     }
 
     const onChange = (e) => setNewReply(e.target.value);
