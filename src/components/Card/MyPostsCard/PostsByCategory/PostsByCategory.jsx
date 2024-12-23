@@ -21,7 +21,6 @@ const PostsByCategory = ({
 }) => {
   const [hidden, setHidden] = useState(true);
   const navigate = useNavigate();
-
   const onClickhandler = () => {
     setHidden(!hidden);
   };
@@ -29,7 +28,6 @@ const PostsByCategory = ({
   const handleNavigation = (id) => {
     navigate(`/board/detail/${id}`);
   };
-
   return (
     <div>
       <Myboard
@@ -44,7 +42,7 @@ const PostsByCategory = ({
           </span>
         </div>
       </Myboard>
-      {!hidden
+      {!hidden && contents
         ? contents.map((content) => (
             <BoardContentsWrap
               key={content.id}
@@ -56,7 +54,13 @@ const PostsByCategory = ({
                 memberId={content.memberId}
               />
               <BoardContent>{content.title}</BoardContent>
-              <Interaction count={content.count} />
+              <Interaction
+                count={{
+                  viewCount: content.viewCount,
+                  likeCount: content.likeCount,
+                  commentCount: content.commentCount,
+                }}
+              />
             </BoardContentsWrap>
           ))
         : null}

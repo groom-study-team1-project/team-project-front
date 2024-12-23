@@ -72,7 +72,7 @@ const EditProfile = () => {
       }
     };
     fetchData();
-  }, [memberId]);
+  }, [memberId, payload]);
 
   const navigate = useNavigate();
   const [isModalOpen, setIsModalOpen] = useState(false);

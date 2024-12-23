@@ -8,9 +8,9 @@ export const MyPosts = ({ postCount }) => {
   const [projectBoard, setProjectBoard] = useState([]);
   const [questionBoard, setQuestionBoard] = useState([]);
   const [lastPostId, setLastPostId] = useState({
-    freeBoard: 26,
-    projectBoard: 5,
-    questionBoard: 5,
+    freeBoard: 100,
+    projectBoard: 100,
+    questionBoard: 100,
   });
   const catergoryId = {
     freeBoard: 1,
@@ -20,15 +20,21 @@ export const MyPosts = ({ postCount }) => {
 
   useEffect(() => {
     postInfo(catergoryId.freeBoard, lastPostId.freeBoard)
-      .then((data) => setFreeBoard(data))
+      .then((data) => {
+        setFreeBoard(data);
+      })
       .catch((err) => console.log(err));
 
     postInfo(catergoryId.projectBoard, lastPostId.projectBoard)
-      .then((data) => setProjectBoard(data))
+      .then((data) => {
+        setProjectBoard(data);
+      })
       .catch((err) => console.log(err));
 
     postInfo(catergoryId.questionBoard, lastPostId.questionBoard)
-      .then((data) => setQuestionBoard(data))
+      .then((data) => {
+        setQuestionBoard(data);
+      })
       .catch((err) => console.log(err));
   }, [lastPostId]);
 
