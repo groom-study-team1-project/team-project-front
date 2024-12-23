@@ -91,6 +91,7 @@ const Comments = () => {
                 .finally(() => {
                     setIsLoading(false);
                     console.log("댓글 불러오기 성공");
+                    console.log("데이터 : ", commentsData);
                 });
         },
         [postId]
@@ -344,8 +345,6 @@ const Comments = () => {
                                 <ReplyComment
                                     commentId={commentData.id}
                                     getReplyTime={getTime}
-                                    handleEdit={handleEdit}
-                                    handleEditCancel={handleEditCancel}
                                 />
                             )}
                         </ReplyList>

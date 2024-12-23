@@ -2,11 +2,11 @@ import React, {useCallback, useEffect, useState} from "react";
 import axiosInstance from "../../../services/axiosConfig";
 import commentSubmit from "../../../assets/images/commentsubmit.png";
 import {
-    RepliesWrap, Reply, Nickname, ReplyContent, ReplyText, ReplyTimeText
+    RepliesWrap, Reply, Nickname, ReplyContent, ReplyText, ReplyTimeText, EditReplyWrap, EditReplyInput
 } from "./replyComment.style";
 import {
     CommentButton, CommentInput, CommentInputForm, CommentInputWrap,
-    InputImg, CommnetModalIcon, EditCommentWrap, TimeAndModal,
+    InputImg, CommnetModalIcon, TimeAndModal,
     TimeAndLike, IconWrap, LikedButton, CommentRight
 } from "../Comment/Comment.style";
 import { ProfileImage } from "../../Card/PostCard/PostProfile";
@@ -20,15 +20,14 @@ import { faHeart as regularHeart } from "@fortawesome/free-regular-svg-icons";
 import {Modify} from "../../../pages/Board/BoardDetail/Board/BoardDetail.style";
 import ModalComponent from "../../Modal/EditDeleteModal/EditDeleteModal";
 
-const ReplyComment = ({ commentId, getReplyTime, handleEdit, handleEditCancel }) => {
+const ReplyComment = ({ commentId, getReplyTime }) => {
     const userInfo = useUserInfo();
     const [repliesData, setRepliesData] = useState([]);
-    const [replyContent, setReplyContent] = useState("");
-    const [newReply, setNewReply] = useState("");
-    const [editReplyId, setEditReplyId] = useState(null);
-    const [editReplyContent, setEditReplyContent] = useState("");
-    const [likedReply, setLikedReply] = useState(new Set());
-    const [modalIndex, setModalIndex] = useState(null);
+    const [newReply, setNewReply] = useState(""); // 답글 입력
+    const [editReplyId, setEditReplyId] = useState(null); // 답글 편집 아이디
+    const [editReplyContent, setEditReplyContent] = useState(""); // 답글 편집 내용
+    const [likedReply, setLikedReply] = useState(new Set()); // 답글 좋아요
+    const [modalIndex, setModalIndex] = useState(null); // 수정, 삭제 모달
 
     const fetchReplyComments = useCallback(async (userInfo, lastCommentId) => {
 
@@ -62,20 +61,20 @@ const ReplyComment = ({ commentId, getReplyTime, handleEdit, handleEditCancel })
 
     useEffect(() => {
         fetchReplyComments(userInfo, null);
-    }, [fetchReplyComments]);
+    }, [userInfo, fetchReplyComments]);
 
     const handleSubmitReply = async (e) => {
         e.preventDefault();
-        if (!replyContent.trim()) return;
+        if (!newReply.trim()) return;
 
         const replyData = {
             commentId : commentId,
-            content: replyContent.trim()
+            content: newReply.trim()
         };
 
         try {
             await axiosInstance.post(`/api/comments/write/reply`, replyData);
-            setReplyContent("");
+            setNewReply("");
             fetchReplyComments(userInfo, null);
         } catch (error) {
             console.error("답글 작성을 실패하였습니다 : ", error);
@@ -124,13 +123,11 @@ const ReplyComment = ({ commentId, getReplyTime, handleEdit, handleEditCancel })
         }
     }
 
-    const editReplySubmit = async (e) => {
-        e.preventDefault();
-        if (!newReply.trim()) return;
+    const editReplySubmit = async () => {
 
         const editReplyData = {
             commentId: commentId,
-            content: newReply.trim()
+            content: editReplyContent.trim()
         };
 
         try {
@@ -147,6 +144,18 @@ const ReplyComment = ({ commentId, getReplyTime, handleEdit, handleEditCancel })
         }
     };
 
+    const handleReplyEdit = (commentId, content) => {
+        setEditReplyId(commentId);
+        setEditReplyContent(content);
+    }
+
+    const editReplyCancel = () => {
+        setEditReplyId(null);
+        setEditReplyContent("");
+    }
+
+    const onChange = (e) => setNewReply(e.target.value);
+
     const handleModalClose = () => setModalIndex(null);
 
     return (
@@ -156,9 +165,33 @@ const ReplyComment = ({ commentId, getReplyTime, handleEdit, handleEditCancel })
                         <Reply key={reply.id}>
                             <ProfileImage src={reply.memberImageUrl} />
                             <ReplyContent>
-                                <Nickname>{reply.memberNickname}</Nickname>
-                                <ReplyText>{reply.content}</ReplyText>
+                                {editReplyId === reply.id ? (
+                                    <>
+                                        <EditReplyWrap>
+                                            <EditReplyInput
+                                                value={editReplyContent}
+                                                onChange = {(e) => setEditReplyContent(e.target.value)}
+                                            />
+                                            <CommentButton
+                                                onClick={() => editReplySubmit(reply.id, reply.content)}
+                                            >
+                                                수정
+                                            </CommentButton>
+                                            <CommentButton
+                                                onClick = {editReplyCancel}
+                                            >
+                                                취소
+                                            </CommentButton>
+                                        </EditReplyWrap>
+                                    </>
+                                ) : (
+                                    <>
+                                        <Nickname>{reply.memberNickname}</Nickname>
+                                        <ReplyText>{reply.content}</ReplyText>
+                                    </>
+                                )}
                             </ReplyContent>
+
                             <CommentRight>
                                 <TimeAndLike>
                                     <TimeAndModal>
@@ -178,7 +211,7 @@ const ReplyComment = ({ commentId, getReplyTime, handleEdit, handleEditCancel })
                                                                 reply.id,
                                                                 reply.content
                                                             );
-                                                            handleEdit(reply.id, reply.content);
+                                                            handleReplyEdit(reply.id, reply.content);
                                                         }}
                                                         onDelete={() => {
                                                             console.log(
@@ -208,24 +241,6 @@ const ReplyComment = ({ commentId, getReplyTime, handleEdit, handleEditCancel })
                                     </IconWrap>
                                 </TimeAndLike>
                             </CommentRight>
-                            {editReplyId === reply.id && (
-                                <EditCommentWrap>
-                                    <CommentInput
-                                        value={editReplyContent}
-                                        onChange={(e) => setNewReply(e.target.value)}
-                                    />
-                                    <CommentButton
-                                        onClick={() =>
-                                            editReplySubmit(reply.id, reply.content)
-                                        }
-                                    >
-                                        수정
-                                    </CommentButton>
-                                    <CommentButton onClick={handleEditCancel}>
-                                        취소
-                                    </CommentButton>
-                                </EditCommentWrap>
-                            )}
                         </Reply>
                 ))}
             </RepliesWrap>
@@ -233,8 +248,8 @@ const ReplyComment = ({ commentId, getReplyTime, handleEdit, handleEditCancel })
             <CommentInputForm onSubmit={handleSubmitReply}>
                 <CommentInputWrap>
                     <CommentInput
-                        value={replyContent}
-                        onChange={(e) => setReplyContent(e.target.value)}
+                        value={newReply}
+                        onChange={onChange}
                         placeholder="답글 작성"
                     />
                     <InputImg
