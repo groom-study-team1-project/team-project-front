@@ -110,11 +110,11 @@ const ReplyComment = ({ commentId, getReplyTime }) => {
         }
     }
 
-    const editReplySubmit = async () => {
+    const editReplySubmit = async (commentId, content) => {
 
         const editReplyData = {
             commentId: commentId,
-            content: editReplyContent.trim()
+            content: content.trim()
         };
 
         try {
