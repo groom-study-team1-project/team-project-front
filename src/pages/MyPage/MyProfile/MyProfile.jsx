@@ -32,7 +32,6 @@ function MyProfile() {
     if (!isLoggedIn) {
       return;
     }
-    console.log(payload);
     // 프로필 데이터를 가져오는 함수
     const getProfileData = async () => {
       try {
