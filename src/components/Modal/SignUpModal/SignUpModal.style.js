@@ -10,5 +10,4 @@ export const ErrorMsg = styled.div`
   font-weight: bold;
   font-size: 12px;
   margin-top: 8px;
-  margin-bottom: 16px;
 `;

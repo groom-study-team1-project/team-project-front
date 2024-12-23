@@ -83,7 +83,6 @@ export const fetchProfileInfo = async (body) => {
     const { isMe, memberId } = body;
 
     const response = await axiosInstance.get(`/api/members/me/${memberId}`);
-    console.log(response);
     if (response.data.status.code === 1002) {
       if (isMe === response.data.result.id) {
         return { isMe: true, data: response.data }; // 응답 데이터 반환
@@ -157,6 +156,7 @@ export const postInfo = async (categoryId, lastPostId) => {
         lastPostId: lastPostId,
       },
     });
+    console.log(response.data.result);
     if (response.data.status.code === 1009) {
       return response.data.result;
     } else {

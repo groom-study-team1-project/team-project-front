@@ -4,7 +4,7 @@ import VerificationCodeInputForm from "../VerifyCodeModal/VerificationCodeInputF
 import UserDetailsInputForm from "./UserDetailsInputForm/UserDetailsInputForm";
 import GlobalStyle from "../../../assets/styles/GlobalStyle";
 
-export default function SignUpModal({ changeModal }) {
+export default function SignUpModal({ changeModal, closeModal }) {
   const [email, setEmail] = useState("");
   const [step, setIndexStep] = useState(0);
   const SignupSteps = ["email", "verificationCode", "detail"];
@@ -39,7 +39,7 @@ export default function SignUpModal({ changeModal }) {
       ) : (
         <UserDetailsInputForm
           email={email}
-          handlePrev={handlePrev}
+          closeModal={closeModal}
           changeModal={changeModal}
         />
       )}

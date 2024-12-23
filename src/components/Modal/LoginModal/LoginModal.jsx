@@ -20,14 +20,12 @@ export default function LoginModal({ closeModal, changeModal }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [errMsg, setErrmsg] = useState("");
-  const [errVisible, setErrvisible] = useState(false);
   const dispatch = useDispatch();
 
   async function handleLogin(e) {
     e.preventDefault();
     try {
       let body = { email, password };
-      setErrvisible(true);
       const response = await login(body);
       console.log(response);
       if (response?.status?.code === 1001) {
@@ -77,7 +75,7 @@ export default function LoginModal({ closeModal, changeModal }) {
               }}
             />
           </div>
-          {errVisible && <ErrMsg $isVibrating={errVisible}>{errMsg}</ErrMsg>}
+          {errMsg && <ErrMsg>{errMsg}</ErrMsg>}
           <BtnBox>
             <Btn type="submit" id="loginBtn">
               로그인

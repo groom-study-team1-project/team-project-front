@@ -8,7 +8,7 @@ import {
   Form,
   ModalTitle,
 } from "../../Modal.style";
-import { ErrorMsg, ProfileImgDiv } from "../SignUpModal.style";
+import { ProfileImgDiv } from "../SignUpModal.style";
 import {
   checkDuplicatedNickname,
   signUp,
@@ -17,8 +17,8 @@ import {
 import profileIcon from "../../../../assets/images/profileImg.png";
 import cameraIcon from "../../../../assets/images/camera.png";
 import { ProfileImg } from "./UserDetailsInputForm.style";
-
-function UserDetailsInputForm({ email, handlePrev, changeModal }) {
+import { ErrMsg } from "../../../../assets/styles/ErrMsg.style";
+function UserDetailsInputForm({ email, closeModal, changeModal }) {
   const [previewImage, setPreviewImage] = useState(null);
   const [profileImg, setProfileImg] = useState(null);
   const [nickname, setNickname] = useState("");
@@ -47,7 +47,7 @@ function UserDetailsInputForm({ email, handlePrev, changeModal }) {
       }
 
       if (!/^\d{3}-\d{4}-\d{4}$/.test(phoneNumber)) {
-        errors.phoneNumber = "전화번호 형식을 맞춰주세요. 예: 010-0000-0000";
+        errors.phoneNumber = "전화번호 형식을 맞춰주세요. 예: 010-1234-1234";
       }
 
       setErrors(errors);
@@ -206,7 +206,7 @@ function UserDetailsInputForm({ email, handlePrev, changeModal }) {
             onBlur={(e) => handleNicknameBlur(e.target.value)}
             placeholder={"닉네임은 2글자부터 20글자까지 가능합니다."}
           />
-          {errors.nickname && <ErrorMsg>{errors.nickname}</ErrorMsg>}
+          {errors.nickname && <ErrMsg>{errors.nickname}</ErrMsg>}
         </div>
 
         <div>
@@ -220,7 +220,7 @@ function UserDetailsInputForm({ email, handlePrev, changeModal }) {
               "8글자부터 16글자 영어 소문자,특수문자,숫자를 조합해주세요"
             }
           />
-          {errors.password && <ErrorMsg>{errors.password}</ErrorMsg>}
+          {errors.password && <ErrMsg>{errors.password}</ErrMsg>}
         </div>
         <div>
           <FormInputField
@@ -229,9 +229,7 @@ function UserDetailsInputForm({ email, handlePrev, changeModal }) {
             value={confirmPassword}
             onChange={(e) => setConfirmPassword(e.target.value)}
           />
-          {errors.confirmPassword && (
-            <ErrorMsg>{errors.confirmPassword}</ErrorMsg>
-          )}
+          {errors.confirmPassword && <ErrMsg>{errors.confirmPassword}</ErrMsg>}
         </div>
         <div>
           <FormInputField
@@ -242,12 +240,12 @@ function UserDetailsInputForm({ email, handlePrev, changeModal }) {
             hasError={errors.phoneNumber}
             placeholder={"010-1234-1234"}
           />
-          {errors.phoneNumber && <ErrorMsg>{errors.phoneNumber}</ErrorMsg>}
+          {errors.phoneNumber && <ErrMsg>{errors.phoneNumber}</ErrMsg>}
         </div>
 
         <Divider />
         <BtnBox>
-          <Btn onClick={handlePrev}>이전</Btn>
+          <Btn onClick={closeModal}>취소</Btn>
           <Btn type="submit">계정 생성하기</Btn>
         </BtnBox>
       </Form>
