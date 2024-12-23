@@ -93,9 +93,16 @@ const ReplyComment = ({ commentId, getReplyTime }) => {
         );
     };*/
 
-    const handleDelete = (commentId) => {
+    const handleDelete = async (commentId) => {
+
+        const commentData = {
+            commentId : commentId
+        }
+
         try {
-            axiosInstance.delete(`/api/comments/remove`, commentId);
+            await axiosInstance.delete(`/api/comments/remove`, {
+                data: commentData
+            });
             fetchReplyComments(userInfo, null);
             setModalIndex(null);
         } catch (error) {
@@ -183,7 +190,7 @@ const ReplyComment = ({ commentId, getReplyTime }) => {
                                                 onChange = {(e) => setEditReplyContent(e.target.value)}
                                             />
                                             <CommentButton
-                                                onClick={() => editReplySubmit(reply.id, reply.content)}
+                                                onClick={() => editReplySubmit(reply.id, editReplyContent)}
                                             >
                                                 수정
                                             </CommentButton>
