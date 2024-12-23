@@ -1,7 +1,7 @@
 import axiosInstance from "../axiosConfig";
 export const login = async (body) => {
   try {
-    const response = await axiosInstance.post("/members/login", body);
+    const response = await axiosInstance.post("/open/members/login", body);
     console.log(response);
     return response.data;
   } catch (error) {
@@ -17,7 +17,7 @@ export const login = async (body) => {
 
 export const signUp = async (body) => {
   try {
-    const response = await axiosInstance.post("/members/sign-up", body);
+    const response = await axiosInstance.post("/open/members/sign-up", body);
     console.log(response);
     if (response.data.status.code === 1000) {
       return response;
