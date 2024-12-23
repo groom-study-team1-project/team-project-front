@@ -31,7 +31,7 @@ const ReplyComment = ({ commentId, getReplyTime }) => {
 
     const fetchReplyComments = useCallback(async (userInfo, lastCommentId) => {
 
-        const baseReplyEndPoint = `/comments/replies/${commentId}`;
+        const baseReplyEndPoint = `/open/comments/replies/${commentId}`;
         const queryParams = new URLSearchParams();
         const memberId = userInfo?.id;
 
@@ -61,7 +61,7 @@ const ReplyComment = ({ commentId, getReplyTime }) => {
 
     useEffect(() => {
         fetchReplyComments(userInfo, null);
-    }, [userInfo, fetchReplyComments]);
+    }, [fetchReplyComments]);
 
     const handleSubmitReply = async (e) => {
         e.preventDefault();

@@ -56,7 +56,7 @@ const Comments = () => {
             setIsLoading(true);
 
             const memberId = userInfo?.id;
-            const baseEndpoint = `/comments/${postId}`;
+            const baseEndpoint = `/open/comments/${postId}`;
             const queryParams = new URLSearchParams();
 
             if (memberId) queryParams.append("memberId", memberId);
