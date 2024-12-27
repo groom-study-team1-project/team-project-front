@@ -4,10 +4,10 @@ import PasswordChange from "../../../components/Modal/PasswordChange/PasswordCha
 import {
   editProfile,
   checkDuplicatedNickname,
-  uploadProfileImage,
   fetchProfileInfo,
   reToken,
 } from "../../../services/api/authApi";
+import { imageUpload } from "../../../services/api/imageApi";
 import { useNavigate, useParams } from "react-router-dom";
 import useJwt from "../../../hooks/useJwt";
 import { useSelector, useDispatch } from "react-redux";
@@ -42,7 +42,7 @@ const EditProfile = () => {
     blogUrl: "",
     job: "",
   });
-
+  const [fileKey, setFilekey] = useState("");
   const payload = useJwt(
     useSelector((state) => state.user.userInfo.accessToken)
   );
@@ -56,7 +56,6 @@ const EditProfile = () => {
         };
         const { data } = await fetchProfileInfo(body);
         const response = data.result;
-        console.log(response);
         setForm({
           ...form,
           nickname: response.nickname || "",
@@ -86,11 +85,10 @@ const EditProfile = () => {
       return;
     }
     try {
-      const formData = new FormData();
-      formData.append("imageFile", file);
-      const response = await uploadProfileImage(formData);
-      if (response?.data?.result?.imageUrl) {
-        setForm({ ...form, imageUrl: response.data.result.imageUrl });
+      const response = await imageUpload("PROFILE", file);
+      if (response?.fileKey) {
+        setForm({ ...form, imageUrl: response.accessImage });
+        setFilekey(response.fileKey);
       } else {
         console.error("Invalid response format:", response);
         alert("이미지 업로드 실패: 서버 응답 오류");
@@ -133,15 +131,21 @@ const EditProfile = () => {
     }
   };
 
+  const filterForm = () => {
+    const { imageUrl, ...filterForm } = form;
+    const updateForm = {
+      ...filterForm,
+      imageKey: fileKey,
+    };
+    return updateForm;
+  };
+
   const handleonSubmit = async (e) => {
     e.preventDefault();
-    const body = form;
+    const body = filterForm();
     try {
       await editProfile(body);
       const response = await reToken();
-      const newAccessToken = response.result.accessToken;
-      const decodedPayload = JSON.parse(atob(newAccessToken.split(".")[1]));
-      console.log(decodedPayload);
       dispatch(
         updateToken({
           accessToken: response.result.accessToken,
