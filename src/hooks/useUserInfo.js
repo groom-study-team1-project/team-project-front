@@ -6,48 +6,48 @@ import axiosInstance from "../services/axiosConfig";
 const useUserInfo = () => {
     const [userInfo, setUserInfo] = useState(null);
     const [userError, setUserError] = useState(null);
-    const [isUserInfoLoading, setIsUserInfoLoading] = useState(true);
+    const [isUserLoading, setIsUserLoading] = useState(false);
 
     const accessToken = useSelector((state) => state.user.userInfo.accessToken);
     const isLoggedIn = useSelector((state) => state.user.isLoggedIn);
     const payload = useJwt(accessToken);
 
-    useEffect(() => {
+    useEffect( () => {
 
-        setIsUserInfoLoading(true);
+        const fetchUserInfo = async () => {
+            if (!isLoggedIn || !payload?.memberId) {
+                setUserInfo(null);
+                return;
+            }
 
-        if (!isLoggedIn || !payload?.memberId) {
-            setUserInfo(null);
-            setIsUserInfoLoading(false);
-            return;
-        }
+            setIsUserLoading(false);
+            setUserError(null);
 
-        setUserError(null);
-        const memberId = payload.memberId;
+            const memberId = payload.memberId;
 
-        axiosInstance.get(`/api/members/me/${memberId}`)
-            .then((response) => {
+            try {
+                const response = await axiosInstance.get(`/api/members/me/${memberId}`);
                 const userData = response.data.result;
-                if (userData && userData.id) {
+
+                if (userData && userData.memberId) {
                     setUserInfo(userData);
                 }
-                else {
-                    console.error("유효한 유저 정보를 가져오지 못했습니다.");
-                    setUserInfo(null);
-                }
-            })
-            .catch(error => {
+
+            } catch (error) {
                 setUserError(error.message);
-                console.error("유저 정보 불러오기 실패 : ", error);
+                console.error("유저 정보를 불러오지 못했습니다. : ", error);
                 setUserInfo(null);
-            })
-            .finally(() => {
-                console.log("유저 정보 불러오기 성공");
-                setIsUserInfoLoading(false);
-            })
+            } finally {
+                setIsUserLoading(false);
+                console.log("유저 정보를 성공적으로 가져왔습니다.");
+            }
+        }
+
+        fetchUserInfo();
+
     }, [isLoggedIn, payload?.memberId]);
 
-    return { userInfo, isUserInfoLoading };
+    return { userInfo, isUserLoading, userError };
 };
 
 export default useUserInfo;
