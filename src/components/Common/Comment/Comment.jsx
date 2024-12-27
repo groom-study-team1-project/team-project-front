@@ -38,12 +38,12 @@ import ReplyComment from "../ReplyComment/replyComment";
 import useUserInfo from "../../../hooks/useUserInfo";
 
 const Comments = () => {
-    const { userInfo, isUserInfoLoading } = useUserInfo();
+    const { userInfo, isUserInfoLoading, userError } = useUserInfo();
     const { postId } = useParams();
     const [commentsData, setCommentsData] = useState([]);
     const [newComment, setNewComment] = useState("");
     const [modalIndex, setModalIndex] = useState(null);
-    const [replyError, setReplyError] = useState(false);
+    const [commentError, setCommentError] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
     const [editCommentId, setEditCommentId] = useState(null);
     const [editCommentContent, setEditCommentContent] = useState("");
@@ -51,8 +51,47 @@ const Comments = () => {
     const [likedComment, setLikedComment] = useState(new Set());
     const [openReply, setOpenReply] = useState(new Set());
 
-    const fetchComments = useCallback(
-        (userInfo, lastCommentId) => {
+    const fetchComment = useCallback(
+        async (userInfo, lastCommentId) => {
+            setIsLoading(true);
+
+            const memberId = userInfo?.id;
+            const baseEndpoint = `/open/comments/${postId}`;
+            const queryParams = new URLSearchParams();
+
+            if (memberId) queryParams.append("memberId", memberId);
+            if (lastCommentId) queryParams.append("lastCommentId", lastCommentId);
+
+            const endpoint = queryParams.toString() ?
+                `${baseEndpoint}?${queryParams.toString()}`
+                : baseEndpoint;
+
+            try {
+                const response = await axiosInstance.get(endpoint);
+                const commentInfo = response.data.result;
+
+                setCommentsData((prev) =>
+                    lastCommentId? [...prev, ...commentInfo] : commentInfo
+                );
+
+                const likeComment = new Set(
+                    commentInfo.filter((comment) => comment.likedMe).map((comment) => comment.id)
+                );
+
+                setLikedComment((prev) => new Set([...prev, ...likeComment]));
+                setCommentError(false);
+            } catch (error) {
+                setCommentError(error.message);
+                console.error("댓글을 불러올 수 없습니다 : ", error);
+            } finally {
+                setIsLoading(false);
+                console.log("댓글을 불러오는데 성공하였습니다.");
+            }
+        }, [postId]
+    );
+
+    /*const fetchComments = useCallback(
+        async (userInfo, lastCommentId) => {
             setIsLoading(true);
 
             const memberId = userInfo?.id;
@@ -67,7 +106,7 @@ const Comments = () => {
                 : baseEndpoint;
 
             console.log("최종 : ", endPoint);
-            axiosInstance
+            await axiosInstance
                 .get(endPoint)
                 .then((response) => {
                     const commentInfo = response.data.result;
@@ -82,10 +121,10 @@ const Comments = () => {
                             .map((comment) => comment.id)
                     );
                     setLikedComment((prev) => new Set([...prev, ...likedComment]));
-                    setReplyError(false);
+                    setCommentError(false);
                 })
                 .catch((error) => {
-                    setReplyError(error.message);
+                    setCommentError(error.message);
                     console.error("댓글을 불러오는데 실패했습니다: ", error);
                 })
                 .finally(() => {
@@ -95,13 +134,13 @@ const Comments = () => {
                 });
         },
         [postId]
-    );
+    );*/
 
     useEffect(() => {
         if (!isUserInfoLoading) {
-            fetchComments(userInfo, null);
+            fetchComment(userInfo, null);
         }
-    }, [userInfo, isUserInfoLoading, fetchComments]);
+    }, [userInfo, isUserInfoLoading, fetchComment]);
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -116,7 +155,7 @@ const Comments = () => {
             .post(`/api/comments/write`, commentData)
             .then(() => {
                 setNewComment("");
-                fetchComments(userInfo, null);
+                fetchComment(userInfo, null);
             })
             .catch((error) => {
                 console.error("댓글 작성을 하지 못하였습니다: ", error);
@@ -162,7 +201,7 @@ const Comments = () => {
                         newSet.delete(commentId);
                         return newSet;
                     });
-                    return fetchComments(userInfo, null);
+                    return fetchComment(userInfo, null);
                 })
                 .catch((error) => {
                     console.error("좋아요를 취소하지 못하였습니다 : ", error);
@@ -174,7 +213,7 @@ const Comments = () => {
                 })
                 .then(() => {
                     setLikedComment((prev) => new Set([...prev, commentId]));
-                    return fetchComments(userInfo, null);
+                    return fetchComment(userInfo, null);
                 })
                 .catch((error) => {
                     console.error("좋아요를 반영하지 못하였습니다 : ", error);
@@ -192,7 +231,7 @@ const Comments = () => {
                 data: { commentId: commentId },
             })
             .then(() => {
-                fetchComments(userInfo, null);
+                fetchComment(userInfo, null);
                 setModalIndex(null);
             })
             .catch((error) => {
@@ -215,7 +254,7 @@ const Comments = () => {
             .then(() => {
                 setEditCommentId(null);
                 setEditCommentContent("");
-                fetchComments(userInfo, null);
+                fetchComment(userInfo, null);
                 setModalIndex(null);
             })
             .catch((error) => {
@@ -243,7 +282,7 @@ const Comments = () => {
     };
 
     if (isLoading) return <div>Loading...</div>;
-    if (replyError) return <div>Error: {replyError}</div>;
+    if (commentError) return <div>Error: {commentError}</div>;
 
     return (
         <div>
