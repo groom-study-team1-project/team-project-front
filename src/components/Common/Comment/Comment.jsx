@@ -150,10 +150,10 @@ const Comments = () => {
         return `${years}년 전`;
     };
 
-    const handleLike = (commentId, userInfo) => {
+    const handleLike = async (commentId, userInfo) => {
         if (likedComment.has(commentId)) {
-            axiosInstance
-                .delete(`/api/comments/unlike`, {
+            await axiosInstance
+                .post(`/api/comments/unlike`, {
                     targetId: commentId,
                 })
                 .then((response) => {
@@ -168,7 +168,7 @@ const Comments = () => {
                     console.error("좋아요를 취소하지 못하였습니다 : ", error);
                 });
         } else {
-            axiosInstance
+            await axiosInstance
                 .post(`/api/comments/like`, {
                     targetId: commentId,
                 })
@@ -345,6 +345,7 @@ const Comments = () => {
                                 <ReplyComment
                                     commentId={commentData.id}
                                     getReplyTime={getTime}
+                                    handleLike={handleLike}
                                 />
                             )}
                         </ReplyList>
