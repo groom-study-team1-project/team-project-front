@@ -105,7 +105,7 @@ export const fetchProfileInfo = async (body) => {
 
 export const reToken = async () => {
   try {
-    const response = await axiosInstance.patch("/tokens/re-issue");
+    const response = await axiosInstance.patch("/open/tokens/re-issue");
     console.log(response);
     if ((response.data.status.code = 8000)) {
       return response.data;
