@@ -69,7 +69,7 @@ const Comments = () => {
             try {
                 const response = await axiosInstance.get(endpoint);
                 const commentInfo = response.data.result;
-
+                console.log(commentInfo)
                 setCommentsData((prev) =>
                     lastCommentId? [...prev, ...commentInfo] : commentInfo
                 );
@@ -80,61 +80,16 @@ const Comments = () => {
 
                 setLikedComment((prev) => new Set([...prev, ...likeComment]));
                 setCommentError(false);
+                console.log("댓글을 불러오는데 성공하였습니다.");
+
             } catch (error) {
                 setCommentError(error.message);
                 console.error("댓글을 불러올 수 없습니다 : ", error);
             } finally {
                 setIsLoading(false);
-                console.log("댓글을 불러오는데 성공하였습니다.");
             }
         }, [postId]
     );
-
-    /*const fetchComments = useCallback(
-        async (userInfo, lastCommentId) => {
-            setIsLoading(true);
-
-            const memberId = userInfo?.id;
-            const baseEndpoint = `/open/comments/${postId}`;
-            const queryParams = new URLSearchParams();
-
-            if (memberId) queryParams.append("memberId", memberId);
-            if (lastCommentId) queryParams.append("lastCommentId", lastCommentId);
-
-            const endPoint = queryParams.toString()
-                ? `${baseEndpoint}?${queryParams.toString()}`
-                : baseEndpoint;
-
-            console.log("최종 : ", endPoint);
-            await axiosInstance
-                .get(endPoint)
-                .then((response) => {
-                    const commentInfo = response.data.result;
-
-                    setCommentsData((prev) =>
-                        lastCommentId ? [...prev, ...commentInfo] : commentInfo
-                    );
-
-                    const likedComment = new Set(
-                        commentInfo
-                            .filter((comment) => comment.likedMe)
-                            .map((comment) => comment.id)
-                    );
-                    setLikedComment((prev) => new Set([...prev, ...likedComment]));
-                    setCommentError(false);
-                })
-                .catch((error) => {
-                    setCommentError(error.message);
-                    console.error("댓글을 불러오는데 실패했습니다: ", error);
-                })
-                .finally(() => {
-                    setIsLoading(false);
-                    console.log("댓글 불러오기 성공");
-                    console.log("데이터 : ", commentsData);
-                });
-        },
-        [postId]
-    );*/
 
     useEffect(() => {
         if (!isUserInfoLoading) {
@@ -142,7 +97,7 @@ const Comments = () => {
         }
     }, [userInfo, isUserInfoLoading, fetchComment]);
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
         if (!newComment.trim()) return;
 
@@ -151,15 +106,15 @@ const Comments = () => {
             content: newComment.trim(),
         };
 
-        axiosInstance
-            .post(`/api/comments/write`, commentData)
-            .then(() => {
-                setNewComment("");
-                fetchComment(userInfo, null);
-            })
-            .catch((error) => {
-                console.error("댓글 작성을 하지 못하였습니다: ", error);
-            });
+        try {
+            await axiosInstance.post(`/api/comments/write`, commentData);
+            setNewComment("");
+            fetchComment(userInfo, null);
+        } catch (error) {
+            console.error("댓글 작성을 하지 못하였습니다 : ", error);
+        } finally {
+            console.log("댓글 전송 작업을 종료하였습니다.");
+        }
     };
 
     const getTime = (createdTime) => {
@@ -226,18 +181,17 @@ const Comments = () => {
     };
 
     const handleDelete = (commentId) => {
-        axiosInstance
-            .delete(`/api/comments/remove`, {
-                data: { commentId: commentId },
-            })
-            .then(() => {
-                fetchComment(userInfo, null);
-                setModalIndex(null);
-            })
-            .catch((error) => {
-                console.log("Request Config : ", error.config);
-                console.log("Error: ", error.response?.data);
+        try {
+            axiosInstance.delete(`/api/comments/remove`, {
+                data : { commentId : commentId },
             });
+            fetchComment(userInfo, null);
+            setModalIndex(null);
+        } catch (error) {
+            console.error("댓글 삭제를 하지 못하였습니다 : ", error);
+        } finally {
+            console.log("댓글 삭제 작업이 끝났습니다.");
+        }
     };
 
     const handleEdit = (commentId, content) => {
@@ -333,7 +287,7 @@ const Comments = () => {
                                 <TimeAndLike>
                                     <TimeAndModal>
                                         <div>{getTime(commentData.createdAt)}</div>
-                                        {commentData.author && (
+                                        {!commentData.author && (
                                             <CommnetModalIcon>
                                                 <Modify onClick={() => setModalIndex(commentData.id)}>
                                                     <FontAwesomeIcon icon={faEllipsisVertical} />
