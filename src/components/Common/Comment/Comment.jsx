@@ -180,9 +180,9 @@ const Comments = () => {
         setNewComment(e.target.value);
     };
 
-    const handleDelete = (commentId) => {
+    const handleDelete = async (commentId) => {
         try {
-            axiosInstance.delete(`/api/comments/remove`, {
+            await axiosInstance.delete(`/api/comments/remove`, {
                 data : { commentId : commentId },
             });
             fetchComment(userInfo, null);
@@ -199,21 +199,22 @@ const Comments = () => {
         setEditCommentContent(content);
     };
 
-    const handleEditSubmit = (commentId) => {
-        axiosInstance
-            .post(`/api/comments/edit`, {
-                commentId: commentId,
-                content: editCommentContent.trim(),
-            })
-            .then(() => {
-                setEditCommentId(null);
-                setEditCommentContent("");
-                fetchComment(userInfo, null);
-                setModalIndex(null);
-            })
-            .catch((error) => {
-                console.error("댓글 수정을 하지 못하였습니다 : ", error);
+    const handleEditSubmit = async (commentId) => {
+
+        try {
+            await axiosInstance.post(`/api/comments/edit`, {
+                commentId : commentId,
+                content : editCommentContent.trim()
             });
+            setEditCommentId(null);
+            setEditCommentContent("");
+            fetchComment(userInfo, null);
+            setModalIndex(null);
+        } catch (error) {
+            console.error("댓글 수정을 하지 못하였습니다. : ", error);
+        } finally {
+            console.log("댓글 수정 작업 종료");
+        }
     };
 
     const handleEditCancel = () => {
