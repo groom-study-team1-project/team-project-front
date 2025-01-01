@@ -28,7 +28,8 @@ import {
     CommentInputForm,
     TimeAndModal,
     CommentBox,
-    ReplyList
+    ReplyList,
+    SomeMoreCommentButton
 } from "../Comment/Comment.style";
 import { ProfileImage } from "../../Card/PostCard/PostProfile";
 import { Modify } from "../../../pages/Board/BoardDetail/Board/BoardDetail.style";
@@ -69,7 +70,7 @@ const Comments = () => {
             try {
                 const response = await axiosInstance.get(endpoint);
                 const commentInfo = response.data.result;
-                console.log(commentInfo)
+                console.log("댓글 정보 : ", commentInfo);
                 setCommentsData((prev) =>
                     lastCommentId? [...prev, ...commentInfo] : commentInfo
                 );
@@ -288,7 +289,7 @@ const Comments = () => {
                                 <TimeAndLike>
                                     <TimeAndModal>
                                         <div>{getTime(commentData.createdAt)}</div>
-                                        {!commentData.author && (
+                                        {commentData.author && (
                                             <CommnetModalIcon>
                                                 <Modify onClick={() => setModalIndex(commentData.id)}>
                                                     <FontAwesomeIcon icon={faEllipsisVertical} />
@@ -318,7 +319,7 @@ const Comments = () => {
                                         )}
                                     </TimeAndModal>
                                     <IconWrap>
-                                        <LikedButton onClick={() => handleLike(commentData.id)}>
+                                        <LikedButton onClick={() => handleLike(commentData.id, userInfo)}>
                                             {likedComment.has(commentData.id) ? (
                                                 <FontAwesomeIcon
                                                     icon={solidHeart}
@@ -345,6 +346,9 @@ const Comments = () => {
                         </ReplyList>
                     </CommentWrap>
                 ))}
+                <SomeMoreCommentButton>
+                    더보기
+                </SomeMoreCommentButton>
                 <hr />
                 <CommentInputForm onSubmit={handleSubmit}>
                     <CommentInputWrap>

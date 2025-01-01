@@ -148,4 +148,15 @@ export const CommentInputForm = styled.form`
 export const ReplyList = styled.div`
   width: 100%;
   margin-top: 2%;    
-`
+`;
+
+export const SomeMoreCommentButton = styled.button`
+    background-color: white;
+    border: none;
+    padding: 0.5rem 0.5rem 0.5rem 0.5rem;
+    flex: 1;
+    &: hover {
+        background-color: #7d7d7d;
+        font-weight: bold;
+    }
+`;
