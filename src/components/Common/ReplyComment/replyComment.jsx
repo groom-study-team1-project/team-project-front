@@ -36,7 +36,7 @@ const ReplyComment = ({ commentId, getReplyTime, handleLike }) => {
         const memberId = userInfo?.id;
 
         if (memberId) queryParams.append("memberId", memberId);
-        //if (lastCommentId) queryParams.append("lastCommentId", lastCommentId);
+        if (lastCommentId) queryParams.append("lastCommentId", lastCommentId);
 
         const replyEndPoint = queryParams.toString() ?
             `${baseReplyEndPoint}?${queryParams.toString()}` : baseReplyEndPoint;
@@ -92,18 +92,6 @@ const ReplyComment = ({ commentId, getReplyTime, handleLike }) => {
             console.error("답글 작성을 실패하였습니다 : ", error);
         }
     };
-
-    /*const handleDelete = () => {
-        axiosInstance.delete(`/api/comments/remove`)
-            .then(() => {
-                fetchReplyComments(userInfo, null);
-                setModalIndex(null);
-            })
-            .catch(error => {
-                console.error("답글 삭제에 실패했습니다:", error);
-            }
-        );
-    };*/
 
     const handleDelete = async (commentId) => {
 

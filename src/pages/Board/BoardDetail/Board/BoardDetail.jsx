@@ -181,7 +181,7 @@ function BoardDetail() {
               }}
             />
           </PostFooter>
-          <Comments />
+          <Comments commentCount={post.countInfo.commentCount}/>
         </Wrap>
       </ContentWrapper>
     </>

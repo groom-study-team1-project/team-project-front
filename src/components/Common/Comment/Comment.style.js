@@ -155,8 +155,9 @@ export const SomeMoreCommentButton = styled.button`
     border: none;
     padding: 0.5rem 0.5rem 0.5rem 0.5rem;
     flex: 1;
+
     &: hover {
-        background-color: #7d7d7d;
+        background-color: #afafaf;
         font-weight: bold;
     }
 `;

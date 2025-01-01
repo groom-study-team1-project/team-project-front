@@ -38,7 +38,7 @@ import commentsubmit from "../../../assets/images/commentsubmit.png";
 import ReplyComment from "../ReplyComment/replyComment";
 import useUserInfo from "../../../hooks/useUserInfo";
 
-const Comments = () => {
+const Comments = ({ commentCount }) => {
     const { userInfo, isUserInfoLoading, userError } = useUserInfo();
     const { postId } = useParams();
     const [commentsData, setCommentsData] = useState([]);
@@ -48,9 +48,10 @@ const Comments = () => {
     const [isLoading, setIsLoading] = useState(false);
     const [editCommentId, setEditCommentId] = useState(null);
     const [editCommentContent, setEditCommentContent] = useState("");
-
     const [likedComment, setLikedComment] = useState(new Set());
     const [openReply, setOpenReply] = useState(new Set());
+    const [isEndComment, setIsEndComment] = useState(false);
+    const [totalComment, setTotalComment] = useState(0);
 
     const fetchComment = useCallback(
         async (userInfo, lastCommentId) => {
@@ -70,10 +71,27 @@ const Comments = () => {
             try {
                 const response = await axiosInstance.get(endpoint);
                 const commentInfo = response.data.result;
+                const totalCommentCount = commentCount;
                 console.log("댓글 정보 : ", commentInfo);
-                setCommentsData((prev) =>
-                    lastCommentId? [...prev, ...commentInfo] : commentInfo
-                );
+
+                setTotalComment(totalCommentCount);
+
+                if (commentInfo && commentInfo.length > 0) {
+                    setCommentsData((prev) =>
+                        lastCommentId? [...prev, ...commentInfo] : commentInfo
+                    );
+
+                    if (lastCommentId) {
+                        const newCommentCount = [...commentsData, ...commentInfo].length;
+                        if (newCommentCount >= totalComment) {
+                            setIsEndComment(true);
+                        } else {
+                            if (commentInfo.length >= totalComment) {
+                                setIsEndComment(true);
+                            }
+                        }
+                    }
+                }
 
                 const likeComment = new Set(
                     commentInfo.filter((comment) => comment.likedMe).map((comment) => comment.id)
@@ -346,9 +364,18 @@ const Comments = () => {
                         </ReplyList>
                     </CommentWrap>
                 ))}
-                <SomeMoreCommentButton>
-                    더보기
-                </SomeMoreCommentButton>
+                {!isEndComment ? (
+                    <SomeMoreCommentButton onClick={() => {
+                        const lastCommentId = commentsData[commentsData.length-1].id;
+                        if (lastCommentId) {
+                            fetchComment(userInfo, lastCommentId);
+                        }
+                    }}>
+                        더보기
+                    </SomeMoreCommentButton>
+                ) : (
+                    <div>모든 댓글을 불러왔습니다.</div>
+                )}
                 <hr />
                 <CommentInputForm onSubmit={handleSubmit}>
                     <CommentInputWrap>
