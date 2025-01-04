@@ -38,6 +38,8 @@ const WriteBoard = ({ postData, postId, imgList }) => {
     hashtags: [],
     imageUrls: [],
     thumbnail: "",
+    imageKeys: [],
+    thumbnailImageKey: "", // 썸네일 이미지 키 추가
   });
   const [selectedCategory, setSelectedCategory] = useState(1);
   const [imgUrls, setImgUrls] = useState([]);
@@ -52,6 +54,8 @@ const WriteBoard = ({ postData, postId, imgList }) => {
         hashtags: postData.hashtags || [],
         imageUrls: postData.imageUrls || [],
         thumbnail: postData.thumbnail || "",
+        imageKeys: postData.imageKeys || [],
+        thumbnailImageKey: postData.thumbnailImageKey || "",
       });
       setSelectedCategory(postData.categoryId);
       if (postData.imageUrls?.length) {
@@ -79,10 +83,13 @@ const WriteBoard = ({ postData, postId, imgList }) => {
   const onSubmit = async (e) => {
     e.preventDefault();
     try {
-      // 상태 확인
-      console.log("Form State before Submit:", form);
-
-      const { title, content, hashtags, imageUrls, thumbnail } = form;
+      const {
+        title,
+        content,
+        hashtags,
+        imageKeys,
+        thumbnailImageKey,
+      } = form;
 
       const processedHashtags = hashtags
           .filter((item) => item.startsWith("#"))
@@ -90,8 +97,14 @@ const WriteBoard = ({ postData, postId, imgList }) => {
 
       const categoryId = Number(selectedCategory);
 
+      // imageKeys가 없을 경우 빈 배열로 초기화
+      const finalImageKeys = imageKeys && imageKeys.length > 0 ? imageKeys : [];
+
+      // 유효성 검사: 썸네일 키는 이미지 키가 없는 경우에는 비워도 허용
       if (!title.trim() || !content.trim() || !categoryId) {
-        throw new Error("제목, 내용, 카테고리는 필수 입력 항목입니다.");
+        throw new Error(
+            "제목, 내용, 카테고리는 필수 입력 항목입니다."
+        );
       }
 
       const body = {
@@ -99,8 +112,8 @@ const WriteBoard = ({ postData, postId, imgList }) => {
         content: content.trim(),
         hashtags: processedHashtags,
         categoryId,
-        imageUrls: [...imageUrls],
-        thumbnail,
+        thumbnailImageKey: thumbnailImageKey || "posts/thumbnail.png", // 썸네일 키가 없을 경우 빈 문자열
+        imageKeys: finalImageKeys, // 초기화된 이미지 키
       };
 
       console.log("Request Body before API call:", body);
@@ -119,35 +132,83 @@ const WriteBoard = ({ postData, postId, imgList }) => {
     }
   };
 
+
   const getDataFromCKEditor = (event, editor) => {
     const data = editor.getData();
-    let thumbnailUrl = "";
-
-    // Use DOMParser to safely parse and extract the image src
     const parser = new DOMParser();
     const doc = parser.parseFromString(data, "text/html");
-    const imgElement = doc.querySelector("img");
+    const imgElements = doc.querySelectorAll("img");
 
-    if (imgElement) {
-      thumbnailUrl = imgElement.getAttribute("src");
+    let thumbnailUrl = "";
+    let thumbnailFileKey = "";
+
+    if (imgElements.length > 0) {
+      const firstImg = imgElements[0];
+      thumbnailUrl = firstImg.getAttribute("src");
+
+      // URL과 키를 매칭
+      const matchedImage = form.imageUrls.find((url, index) => {
+        if (url === thumbnailUrl) {
+          thumbnailFileKey = form.imageKeys[index];
+          return true;
+        }
+        return false;
+      });
+
+      if (!matchedImage) {
+        console.warn("Thumbnail image not found in uploaded images.");
+      }
     }
 
-    setValue({
-      ...form,
+    setValue((prev) => ({
+      ...prev,
       content: data,
-      thumbnail: thumbnailUrl,
-    });
+      thumbnailImageKey: prev.thumbnailImageKey || "", // 기존 썸네일 키 유지
+    }));
+
+    console.log("CKEditor updated. Thumbnail imageKey:", form.thumbnailImageKey);
   };
+
+  console.log("Request Body before API call:", {
+    title: form.title,
+    content: form.content,
+    hashtags: form.hashtags,
+    categoryId: Number(selectedCategory),
+    thumbnailImageKey: form.thumbnailImageKey,
+    imageKeys: form.imageKeys,
+  });
+
+
 
   function uploadPlugin(editor) {
     editor.plugins.get("FileRepository").createUploadAdapter = (loader) => {
-      return uploadAdapter(loader, (uploadedUrl) => {
-        setValue((prev) => ({
-          ...prev,
-        }));
+      return uploadAdapter(loader, (uploadedUrl, fileKey) => {
+        const currentContent = editor.getData();
+        const newImageHtml = `<img src="${uploadedUrl}" alt="uploaded image" />`;
+        const updatedContent = `${currentContent}<p>${newImageHtml}</p>`;
+        editor.setData(updatedContent);
+
+        setValue((prev) => {
+          const updatedImageUrls = [...(prev.imageUrls || []), uploadedUrl];
+          const updatedImageKeys = [...(prev.imageKeys || []), fileKey];
+          const thumbnailKey = prev.thumbnailImageKey || updatedImageKeys[0] || ""; // 기존 썸네일 키 유지
+
+          return {
+            ...prev,
+            imageUrls: updatedImageUrls,
+            imageKeys: updatedImageKeys,
+            thumbnailImageKey: thumbnailKey,
+          };
+        });
+
+        console.log("Updated imageUrls:", form.imageUrls);
+        console.log("Updated imageKeys:", form.imageKeys);
+        console.log("Thumbnail imageKey:", form.thumbnailImageKey);
       });
     };
   }
+
+
 
   return (
       <>
@@ -213,12 +274,16 @@ const WriteBoard = ({ postData, postId, imgList }) => {
                 data={form.content}
                 onReady={(editor) => {
                   const toolbarElement = editor.ui.view.toolbar.element;
-                  if (toolbarContainerRef.current.firstChild !== toolbarElement) {
+                  if (
+                      toolbarContainerRef.current.firstChild !== toolbarElement
+                  ) {
                     toolbarContainerRef.current.innerHTML = "";
                     toolbarContainerRef.current.appendChild(toolbarElement);
                   }
                   const editableElement = editor.ui.view.editable.element;
-                  if (!editorContainerRef.current.contains(editableElement)) {
+                  if (
+                      !editorContainerRef.current.contains(editableElement)
+                  ) {
                     editorContainerRef.current.appendChild(editableElement);
                   }
                 }}
