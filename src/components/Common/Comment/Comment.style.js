@@ -1,27 +1,72 @@
 import styled from "styled-components";
 
 export const CommentsWrap = styled.div`
-  display: flex;
-  flex-direction: column;
-  margin-top: 25px;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    margin-top: 25px;
+    margin-left: 1rem;
+    background-color: white;
+    opacity: 0.7;
+    border-radius: 5px;
+    box-shadow: 0 2px 8px 0 rgba(0, 0, 0, 0.2), 0 4px 20px 0 rgba(0, 0, 0, 0.2);
+    justify-content: center;
 `;
 
-export const CommetHr = styled.hr`
+export const CommentTitle = styled.div`
+    padding: 1rem 1rem 0.5rem 1rem;
+    span:first-child {
+        color: rgba(132, 84, 255, 0.73);
+    }
+`;
+
+export const CommentInputForm = styled.form`
+  width: 95%;
+  padding: 1rem 1rem 1rem 1rem;  
+  margin-bottom: 0.5%;          
+  background-color: white;  
+`;
+
+export const CommentInputWrap = styled.div`
+  position: relative;
   width: 100%;
+`;
+
+export const CommentInput = styled.input`
+    width: 100%;
+    background: aliceblue;
+    opacity: 1;
+    border: 1px solid #bbb;
+    border-radius: 8px;
+    padding: 1rem 0.5rem 1rem 0.5rem;
+    font-size: 16px;
+`;
+
+export const InputImg = styled.img`
+  padding-top: 0.2rem;
+  position: absolute;
+  width: 20px;
+  top: 10px;
+  right: 0px;
+  cursor: pointer;
+`;
+
+export const CommentHr = styled.hr`
+    width: 98%;
+    border: 1px solid gray;
 `;
 
 export const CommentWrap = styled.div`
-  width: 100%;
+  width: 95%;
   min-height: 70px;
-  height: auto;
+  height: auto;  
   display: flex;
   flex-direction: column;  
   justify-content: space-between;
   align-items: center;
   padding: 0 2% 0 2%;  
   border-radius: 10px;
-  margin-bottom: 2%;
-  background: white;  
+  margin-bottom: 2%;  
 `;
 
 export const CommentBox = styled.div`
@@ -37,13 +82,13 @@ export const Comment = styled.div`
   flex-direction: row;
   align-items: center;
   width: 80%;
-  margin-right: 1rem;  
+  margin-right: 1rem;
 `;
 
 export const CommentText = styled.div`
   width: 100%;
   margin-left: 10px;
-  font-size: 13px;
+  font-size: 14px;
 `;
 
 export const CommentRight = styled.div`
@@ -64,27 +109,6 @@ export const TimeAndModal = styled.div`
   display: flex;
   flex-direction: row;
   padding-bottom: 20%;  
-`;
-
-export const CommentInputWrap = styled.div`
-  position: relative;
-  width: 100%;
-`;
-
-export const CommentInput = styled.input`
-  width: 100%;
-  border: 1px solid #bbb;
-  border-radius: 8px;
-  padding: 10px 5px;
-  font-size: 16px;
-`;
-
-export const InputImg = styled.img`
-  position: absolute;
-  width: 17px;
-  top: 10px;
-  right: 0px;
-  cursor: pointer;
 `;
 
 export const Bold = styled.div`
@@ -115,12 +139,8 @@ export const LikedButton = styled.span`
   margin-right: 5px;
 `;
 
-export const LikeImg = styled.img`
-  width: ${(props) => (props.$like ? "10%" : "")};
-`;
-
 export const ReplyButton = styled.button`
-  padding: 8px 0px 0px 0px;
+  padding: 0.5rem 0.5rem 0.5rem 0rem;
   background: none;
   border: none;
   cursor: pointer;
@@ -138,11 +158,6 @@ export const CommentButton = styled.button`
   color: white;
   font-weight: bold;
   float: right;
-`;
-
-export const CommentInputForm = styled.form`
-  width: 99%;  
-  margin-bottom: 2%;  
 `;
 
 export const ReplyList = styled.div`

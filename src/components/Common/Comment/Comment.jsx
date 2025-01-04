@@ -8,16 +8,17 @@ import {
 import { faHeart as regularHeart } from "@fortawesome/free-regular-svg-icons";
 import axiosInstance from "../../../services/axiosConfig";
 import {
+    CommentsWrap,
+    CommentTitle,
     Bold,
     CommentInput,
     CommentInputWrap,
+    CommentHr,
     CommentRight,
-    CommentsWrap,
     Comment,
     CommentText,
     CommentWrap,
     CommentButton,
-    CommetHr,
     CommnetModalIcon,
     IconWrap,
     InputImg,
@@ -261,12 +262,25 @@ const Comments = ({ commentCount }) => {
     return (
         <div>
             <CommentsWrap>
-                <div>
+                <CommentTitle>
                     <span style={{ fontSize: "24px", paddingRight: "0.5rem" }}>댓글</span>
                     <span>{commentsData.length}</span>
-                </div>
-
-                <CommetHr />
+                </CommentTitle>
+                <CommentInputForm onSubmit={handleSubmit}>
+                    <CommentInputWrap>
+                        <CommentInput
+                            value={newComment}
+                            onChange={onChange}
+                            placeholder="댓글 작성"
+                        />
+                        <InputImg
+                            src={commentsubmit}
+                            alt="댓글 제출"
+                            onClick={handleSubmit}
+                        />
+                    </CommentInputWrap>
+                </CommentInputForm>
+                <CommentHr />
                 {commentsData?.map((commentData, index) => (
                     <CommentWrap key={commentData.id}>
                         <CommentBox>
@@ -376,21 +390,6 @@ const Comments = ({ commentCount }) => {
                 ) : (
                     <div>모든 댓글을 불러왔습니다.</div>
                 )}
-                <hr />
-                <CommentInputForm onSubmit={handleSubmit}>
-                    <CommentInputWrap>
-                        <CommentInput
-                            value={newComment}
-                            onChange={onChange}
-                            placeholder="댓글 작성"
-                        />
-                        <InputImg
-                            src={commentsubmit}
-                            alt="댓글 제출"
-                            onClick={handleSubmit}
-                        />
-                    </CommentInputWrap>
-                </CommentInputForm>
             </CommentsWrap>
         </div>
     );
