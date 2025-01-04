@@ -56,10 +56,11 @@ const Comments = ({ commentCount }) => {
 
     const fetchComment = useCallback(
         async (userInfo, lastCommentId) => {
+
             setIsLoading(true);
 
-            const memberId = userInfo?.id;
             const baseEndpoint = `/open/comments/${postId}`;
+            const memberId = userInfo?.id;
             const queryParams = new URLSearchParams();
 
             if (memberId) queryParams.append("memberId", memberId);
@@ -68,6 +69,8 @@ const Comments = ({ commentCount }) => {
             const endpoint = queryParams.toString() ?
                 `${baseEndpoint}?${queryParams.toString()}`
                 : baseEndpoint;
+
+            console.log(endpoint);
 
             try {
                 const response = await axiosInstance.get(endpoint);
@@ -112,7 +115,7 @@ const Comments = ({ commentCount }) => {
     );
 
     useEffect(() => {
-        if (!isUserInfoLoading) {
+        if (!isUserInfoLoading && userInfo) {
             fetchComment(userInfo, null);
         }
     }, [userInfo, isUserInfoLoading, fetchComment]);

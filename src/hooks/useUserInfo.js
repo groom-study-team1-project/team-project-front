@@ -6,7 +6,7 @@ import axiosInstance from "../services/axiosConfig";
 const useUserInfo = () => {
     const [userInfo, setUserInfo] = useState(null);
     const [userError, setUserError] = useState(null);
-    const [isUserLoading, setIsUserLoading] = useState(false);
+    const [isUserLoading, setIsUserLoading] = useState(true);
 
     const accessToken = useSelector((state) => state.user.userInfo.accessToken);
     const isLoggedIn = useSelector((state) => state.user.isLoggedIn);
@@ -17,10 +17,11 @@ const useUserInfo = () => {
         const fetchUserInfo = async () => {
             if (!isLoggedIn || !payload?.memberId) {
                 setUserInfo(null);
+                setIsUserLoading(false);
                 return;
             }
 
-            setIsUserLoading(false);
+            setIsUserLoading(true);
             setUserError(null);
 
             const memberId = payload.memberId;
@@ -29,7 +30,7 @@ const useUserInfo = () => {
                 const response = await axiosInstance.get(`/api/members/me/${memberId}`);
                 const userData = response.data.result;
 
-                if (userData && userData.memberId) {
+                if (userData) {
                     setUserInfo(userData);
                 }
 
