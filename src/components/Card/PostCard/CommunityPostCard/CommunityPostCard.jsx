@@ -1,4 +1,3 @@
-import React, { useEffect, useState } from "react";
 import { Interaction } from "../../../Common/Interactions";
 import {
   ContentBox,
@@ -65,9 +64,9 @@ function CommunityPostCard({
               />
             ) : (
               <img
-                src="https://via.placeholder.com/150?text=None"
-                alt="Default Thumbnail"
-                style={{ maxWidth: "100%", height: "100%", objectFit: "cover" }}
+                  src="https://deepdiver-community-files-dev.s3.ap-northeast-2.amazonaws.com/posts/thumbnail.png"
+                  alt="Default Thumbnail"
+                  style={{ maxWidth: "100%", height: "100%", objectFit: "cover" }}
               />
             )}
           </CustomThumbnail>

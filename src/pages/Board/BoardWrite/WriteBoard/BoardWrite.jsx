@@ -11,7 +11,6 @@ import {
 import backBtn from "../../../../assets/images/back-removebg-preview.png";
 import Navbar from "../../../../Layout/Navbar/Navbar";
 import ImageUploadCard from "../../../../components/Card/imgUploadCard/imageUploadCard";
-import ProjectuploadAdapter from "../../../../components/Card/imgUploadCard/imageUploadCard";
 import {
   BackImg,
   Categoryselect,
@@ -132,7 +131,6 @@ const WriteBoard = ({ postData, postId, imgList }) => {
     }
   };
 
-
   const getDataFromCKEditor = (event, editor) => {
     const data = editor.getData();
     const parser = new DOMParser();
@@ -165,20 +163,7 @@ const WriteBoard = ({ postData, postId, imgList }) => {
       content: data,
       thumbnailImageKey: prev.thumbnailImageKey || "", // 기존 썸네일 키 유지
     }));
-
-    console.log("CKEditor updated. Thumbnail imageKey:", form.thumbnailImageKey);
   };
-
-  console.log("Request Body before API call:", {
-    title: form.title,
-    content: form.content,
-    hashtags: form.hashtags,
-    categoryId: Number(selectedCategory),
-    thumbnailImageKey: form.thumbnailImageKey,
-    imageKeys: form.imageKeys,
-  });
-
-
 
   function uploadPlugin(editor) {
     editor.plugins.get("FileRepository").createUploadAdapter = (loader) => {
@@ -200,10 +185,6 @@ const WriteBoard = ({ postData, postId, imgList }) => {
             thumbnailImageKey: thumbnailKey,
           };
         });
-
-        console.log("Updated imageUrls:", form.imageUrls);
-        console.log("Updated imageKeys:", form.imageKeys);
-        console.log("Thumbnail imageKey:", form.thumbnailImageKey);
       });
     };
   }

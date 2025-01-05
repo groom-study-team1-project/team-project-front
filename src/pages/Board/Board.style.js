@@ -55,14 +55,25 @@ export const SearchSortWrapper = styled.div`
 export const PostCardWrapper = styled.div`
   display: grid;
   max-height: 830px;
-
-  grid-template-columns: repeat(minmax(300px, 1fr));
+  grid-template-columns: ${(props) => (props.$projectPage ? `repeat(4, 1fr)` : `repeat(2, 1fr)`)};
   gap: 40px;
   overflow-y: auto;
 `;
+
 
 export const EndMessage = styled.div`
   text-align: center;
   padding: 20px;
   width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  grid-column: ${(props) => (props.$projectPage ? "span 4" : "span 2")}; /* 네 칸 또는 두 칸의 가운데에 위치 */
+`;
+
+export const SpinnerWrapper = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  grid-column: ${(props) => (props.$projectPage ? "span 4" : "span 2")}; /* 네 칸 또는 두 칸의 가운데에 위치 */
 `;
