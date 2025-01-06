@@ -134,7 +134,7 @@ function BoardDetail() {
                 name={post.memberInfo.nickname}
                 job={post.memberInfo.memberJob}
                 email={post.memberInfo.email}
-                imgUrl={post.memberInfo.imageUrl}
+                imgUrl={"https://deepdiver-community-files-dev.s3.ap-northeast-2.amazonaws.com/" + post.memberInfo.imageUrl}
               />
               <PostheaderRignt $isMobile={isMobile}>
                 <div>{formattedDate}</div>

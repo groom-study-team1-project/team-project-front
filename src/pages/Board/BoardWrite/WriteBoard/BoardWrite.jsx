@@ -11,7 +11,6 @@ import {
 import backBtn from "../../../../assets/images/back-removebg-preview.png";
 import Navbar from "../../../../Layout/Navbar/Navbar";
 import ImageUploadCard from "../../../../components/Card/imgUploadCard/imageUploadCard";
-import ProjectuploadAdapter from "../../../../components/Card/imgUploadCard/imageUploadCard";
 import {
   BackImg,
   Categoryselect,
@@ -38,6 +37,8 @@ const WriteBoard = ({ postData, postId, imgList }) => {
     hashtags: [],
     imageUrls: [],
     thumbnail: "",
+    imageKeys: [],
+    thumbnailImageKey: "",
   });
   const [selectedCategory, setSelectedCategory] = useState(1);
   const [imgUrls, setImgUrls] = useState([]);
@@ -52,10 +53,36 @@ const WriteBoard = ({ postData, postId, imgList }) => {
         hashtags: postData.hashtags || [],
         imageUrls: postData.imageUrls || [],
         thumbnail: postData.thumbnail || "",
+        imageKeys: postData.imageKeys || [],
+        thumbnailImageKey: postData.thumbnailImageKey || "",
       });
       setSelectedCategory(postData.categoryId);
       if (postData.imageUrls?.length) {
         setImgUrls(postData.imageUrls);
+      }
+
+      if (postData.content) {
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(postData.content, "text/html");
+        const imgElements = doc.querySelectorAll("img");
+        const imgLinks = Array.from(imgElements)
+            .map((img) => img.src)
+            .filter((src) => src);
+
+        const imageKeys = imgLinks.map((url) =>
+            url.replace(
+                "https://deepdiver-community-files-dev.s3.ap-northeast-2.amazonaws.com/",
+                ""
+            )
+        );
+        const thumbnailImageKey = imageKeys[0] || "";
+
+        setValue((prev) => ({
+          ...prev,
+          imageUrls: imgLinks,
+          imageKeys: imageKeys,
+          thumbnailImageKey: thumbnailImageKey,
+        }));
       }
     }
   }, [postData]);
@@ -76,19 +103,44 @@ const WriteBoard = ({ postData, postId, imgList }) => {
     setValue({ ...form, title: e.target.value });
   };
 
+  const syncImagesWithContent = (content) => {
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(content, "text/html");
+    const imgElements = doc.querySelectorAll("img");
+    const imgLinks = Array.from(imgElements)
+        .map((img) => img.src)
+        .filter((src) => src);
+
+    const imageKeys = imgLinks.map((url) =>
+        url.replace(
+            "https://deepdiver-community-files-dev.s3.ap-northeast-2.amazonaws.com/",
+            ""
+        )
+    );
+    const thumbnailImageKey = imageKeys[0] || "";
+
+    setValue((prev) => ({
+      ...prev,
+      content: content,
+      imageUrls: imgLinks,
+      imageKeys: imageKeys,
+      thumbnailImageKey: thumbnailImageKey,
+    }));
+  };
+
   const onSubmit = async (e) => {
     e.preventDefault();
     try {
-      // 상태 확인
-      console.log("Form State before Submit:", form);
-
-      const { title, content, hashtags, imageUrls, thumbnail } = form;
+      const { title, content, hashtags, imageKeys, thumbnailImageKey } = form;
 
       const processedHashtags = hashtags
           .filter((item) => item.startsWith("#"))
           .map((item) => item.replace("#", ""));
 
       const categoryId = Number(selectedCategory);
+
+      const finalImageKeys =
+          imageKeys && imageKeys.length > 0 ? imageKeys : [];
 
       if (!title.trim() || !content.trim() || !categoryId) {
         throw new Error("제목, 내용, 카테고리는 필수 입력 항목입니다.");
@@ -99,13 +151,10 @@ const WriteBoard = ({ postData, postId, imgList }) => {
         content: content.trim(),
         hashtags: processedHashtags,
         categoryId,
-        imageUrls: [...imageUrls],
-        thumbnail,
+        thumbnailImageKey: thumbnailImageKey || "posts/thumbnail.png",
+        imageKeys: finalImageKeys,
       };
 
-      console.log("Request Body before API call:", body);
-
-      // API 호출
       if (postData) {
         await fetchPostChange(body, postId);
       } else {
@@ -121,29 +170,24 @@ const WriteBoard = ({ postData, postId, imgList }) => {
 
   const getDataFromCKEditor = (event, editor) => {
     const data = editor.getData();
-    let thumbnailUrl = "";
-
-    // Use DOMParser to safely parse and extract the image src
-    const parser = new DOMParser();
-    const doc = parser.parseFromString(data, "text/html");
-    const imgElement = doc.querySelector("img");
-
-    if (imgElement) {
-      thumbnailUrl = imgElement.getAttribute("src");
-    }
-
-    setValue({
-      ...form,
-      content: data,
-      thumbnail: thumbnailUrl,
-    });
+    syncImagesWithContent(data);
   };
 
   function uploadPlugin(editor) {
     editor.plugins.get("FileRepository").createUploadAdapter = (loader) => {
-      return uploadAdapter(loader, (uploadedUrl) => {
+      return uploadAdapter(loader, (uploadedUrl, fileKey) => {
+        const currentContent = editor.getData();
+        const newImageHtml = `<img src="${uploadedUrl}" alt="uploaded image" />`;
+        const updatedContent = `${currentContent}<p>${newImageHtml}</p>`;
+        editor.setData(updatedContent);
+
         setValue((prev) => ({
           ...prev,
+          content: updatedContent,
+          imageUrls: [...(prev.imageUrls || []), uploadedUrl],
+          imageKeys: [...(prev.imageKeys || []), fileKey],
+          thumbnailImageKey:
+              prev.thumbnailImageKey || updatedContent[0] || "",
         }));
       });
     };
