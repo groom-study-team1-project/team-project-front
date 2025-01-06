@@ -2,8 +2,9 @@ import React, { useState } from "react";
 import EmailInputForm from "../VerifyCodeModal/EmailInputForm/EmailInputForm";
 import VerificationCodeInputForm from "../VerifyCodeModal/VerificationCodeInputForm/VerificationCodeInputForm";
 import UserDetailsInputForm from "./UserDetailsInputForm/UserDetailsInputForm";
+import GlobalStyle from "../../../assets/styles/GlobalStyle";
 
-export default function SignUpModal({ changeModal }) {
+export default function SignUpModal({ changeModal, closeModal }) {
   const [email, setEmail] = useState("");
   const [step, setIndexStep] = useState(0);
   const SignupSteps = ["email", "verificationCode", "detail"];
@@ -22,6 +23,7 @@ export default function SignUpModal({ changeModal }) {
 
   return (
     <>
+      <GlobalStyle />
       {SignupSteps[step] === "email" ? (
         <EmailInputForm
           handleNext={handleNext}
@@ -37,7 +39,7 @@ export default function SignUpModal({ changeModal }) {
       ) : (
         <UserDetailsInputForm
           email={email}
-          handlePrev={handlePrev}
+          closeModal={closeModal}
           changeModal={changeModal}
         />
       )}
