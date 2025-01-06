@@ -38,7 +38,7 @@ const WriteBoard = ({ postData, postId, imgList }) => {
     imageUrls: [],
     thumbnail: "",
     imageKeys: [],
-    thumbnailImageKey: "", // 썸네일 이미지 키 추가
+    thumbnailImageKey: "",
   });
   const [selectedCategory, setSelectedCategory] = useState(1);
   const [imgUrls, setImgUrls] = useState([]);
@@ -60,6 +60,30 @@ const WriteBoard = ({ postData, postId, imgList }) => {
       if (postData.imageUrls?.length) {
         setImgUrls(postData.imageUrls);
       }
+
+      if (postData.content) {
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(postData.content, "text/html");
+        const imgElements = doc.querySelectorAll("img");
+        const imgLinks = Array.from(imgElements)
+            .map((img) => img.src)
+            .filter((src) => src);
+
+        const imageKeys = imgLinks.map((url) =>
+            url.replace(
+                "https://deepdiver-community-files-dev.s3.ap-northeast-2.amazonaws.com/",
+                ""
+            )
+        );
+        const thumbnailImageKey = imageKeys[0] || "";
+
+        setValue((prev) => ({
+          ...prev,
+          imageUrls: imgLinks,
+          imageKeys: imageKeys,
+          thumbnailImageKey: thumbnailImageKey,
+        }));
+      }
     }
   }, [postData]);
 
@@ -79,16 +103,35 @@ const WriteBoard = ({ postData, postId, imgList }) => {
     setValue({ ...form, title: e.target.value });
   };
 
+  const syncImagesWithContent = (content) => {
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(content, "text/html");
+    const imgElements = doc.querySelectorAll("img");
+    const imgLinks = Array.from(imgElements)
+        .map((img) => img.src)
+        .filter((src) => src);
+
+    const imageKeys = imgLinks.map((url) =>
+        url.replace(
+            "https://deepdiver-community-files-dev.s3.ap-northeast-2.amazonaws.com/",
+            ""
+        )
+    );
+    const thumbnailImageKey = imageKeys[0] || "";
+
+    setValue((prev) => ({
+      ...prev,
+      content: content,
+      imageUrls: imgLinks,
+      imageKeys: imageKeys,
+      thumbnailImageKey: thumbnailImageKey,
+    }));
+  };
+
   const onSubmit = async (e) => {
     e.preventDefault();
     try {
-      const {
-        title,
-        content,
-        hashtags,
-        imageKeys,
-        thumbnailImageKey,
-      } = form;
+      const { title, content, hashtags, imageKeys, thumbnailImageKey } = form;
 
       const processedHashtags = hashtags
           .filter((item) => item.startsWith("#"))
@@ -96,14 +139,11 @@ const WriteBoard = ({ postData, postId, imgList }) => {
 
       const categoryId = Number(selectedCategory);
 
-      // imageKeys가 없을 경우 빈 배열로 초기화
-      const finalImageKeys = imageKeys && imageKeys.length > 0 ? imageKeys : [];
+      const finalImageKeys =
+          imageKeys && imageKeys.length > 0 ? imageKeys : [];
 
-      // 유효성 검사: 썸네일 키는 이미지 키가 없는 경우에는 비워도 허용
       if (!title.trim() || !content.trim() || !categoryId) {
-        throw new Error(
-            "제목, 내용, 카테고리는 필수 입력 항목입니다."
-        );
+        throw new Error("제목, 내용, 카테고리는 필수 입력 항목입니다.");
       }
 
       const body = {
@@ -111,13 +151,10 @@ const WriteBoard = ({ postData, postId, imgList }) => {
         content: content.trim(),
         hashtags: processedHashtags,
         categoryId,
-        thumbnailImageKey: thumbnailImageKey || "posts/thumbnail.png", // 썸네일 키가 없을 경우 빈 문자열
-        imageKeys: finalImageKeys, // 초기화된 이미지 키
+        thumbnailImageKey: thumbnailImageKey || "posts/thumbnail.png",
+        imageKeys: finalImageKeys,
       };
 
-      console.log("Request Body before API call:", body);
-
-      // API 호출
       if (postData) {
         await fetchPostChange(body, postId);
       } else {
@@ -133,36 +170,7 @@ const WriteBoard = ({ postData, postId, imgList }) => {
 
   const getDataFromCKEditor = (event, editor) => {
     const data = editor.getData();
-    const parser = new DOMParser();
-    const doc = parser.parseFromString(data, "text/html");
-    const imgElements = doc.querySelectorAll("img");
-
-    let thumbnailUrl = "";
-    let thumbnailFileKey = "";
-
-    if (imgElements.length > 0) {
-      const firstImg = imgElements[0];
-      thumbnailUrl = firstImg.getAttribute("src");
-
-      // URL과 키를 매칭
-      const matchedImage = form.imageUrls.find((url, index) => {
-        if (url === thumbnailUrl) {
-          thumbnailFileKey = form.imageKeys[index];
-          return true;
-        }
-        return false;
-      });
-
-      if (!matchedImage) {
-        console.warn("Thumbnail image not found in uploaded images.");
-      }
-    }
-
-    setValue((prev) => ({
-      ...prev,
-      content: data,
-      thumbnailImageKey: prev.thumbnailImageKey || "", // 기존 썸네일 키 유지
-    }));
+    syncImagesWithContent(data);
   };
 
   function uploadPlugin(editor) {
@@ -173,23 +181,17 @@ const WriteBoard = ({ postData, postId, imgList }) => {
         const updatedContent = `${currentContent}<p>${newImageHtml}</p>`;
         editor.setData(updatedContent);
 
-        setValue((prev) => {
-          const updatedImageUrls = [...(prev.imageUrls || []), uploadedUrl];
-          const updatedImageKeys = [...(prev.imageKeys || []), fileKey];
-          const thumbnailKey = prev.thumbnailImageKey || updatedImageKeys[0] || ""; // 기존 썸네일 키 유지
-
-          return {
-            ...prev,
-            imageUrls: updatedImageUrls,
-            imageKeys: updatedImageKeys,
-            thumbnailImageKey: thumbnailKey,
-          };
-        });
+        setValue((prev) => ({
+          ...prev,
+          content: updatedContent,
+          imageUrls: [...(prev.imageUrls || []), uploadedUrl],
+          imageKeys: [...(prev.imageKeys || []), fileKey],
+          thumbnailImageKey:
+              prev.thumbnailImageKey || updatedContent[0] || "",
+        }));
       });
     };
   }
-
-
 
   return (
       <>
@@ -255,16 +257,12 @@ const WriteBoard = ({ postData, postId, imgList }) => {
                 data={form.content}
                 onReady={(editor) => {
                   const toolbarElement = editor.ui.view.toolbar.element;
-                  if (
-                      toolbarContainerRef.current.firstChild !== toolbarElement
-                  ) {
+                  if (toolbarContainerRef.current.firstChild !== toolbarElement) {
                     toolbarContainerRef.current.innerHTML = "";
                     toolbarContainerRef.current.appendChild(toolbarElement);
                   }
                   const editableElement = editor.ui.view.editable.element;
-                  if (
-                      !editorContainerRef.current.contains(editableElement)
-                  ) {
+                  if (!editorContainerRef.current.contains(editableElement)) {
                     editorContainerRef.current.appendChild(editableElement);
                   }
                 }}

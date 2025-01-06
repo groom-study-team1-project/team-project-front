@@ -9,9 +9,11 @@ import {
 import Search from "../../../components/Common/Search/Search";
 import { fetchPostItems } from "../../../services/api/postApi";
 import { BarLoading } from "../../../components/Common/LodingSpinner";
+import PopularPostSlider from "../../../components/Common/PopularPost/PopularPostSlider";
 
 function ProjectBoard() {
   const [postItems, setPostItems] = useState([]);
+  const [popularPosts, setPopularPosts] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [lastPostId, setLastPostId] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -21,6 +23,34 @@ function ProjectBoard() {
 
   const categoryId = 2;
   const limit = 10;
+
+  // 인기 게시글 가져오기
+  const fetchPopularPosts = useCallback(async () => {
+    try {
+      let allPosts = [];
+      let lastId = null;
+      let more = true;
+
+      while (more) {
+        const { posts } = await fetchPostItems(categoryId, lastId);
+        allPosts = [...allPosts, ...posts];
+
+        if (posts.length < limit) {
+          more = false;
+        } else {
+          lastId = posts[posts.length - 1].postId;
+        }
+      }
+
+      const filteredPopularPosts = allPosts
+          .sort((a, b) => b.countInfo.commentCount - a.countInfo.commentCount)
+          .slice(0, 5); // Limit to 5 posts
+
+      setPopularPosts(filteredPopularPosts);
+    } catch (error) {
+      console.error("인기 게시글 가져오기 오류:", error);
+    }
+  }, [categoryId, limit]);
 
   const fetchData = useCallback(() => {
     if (loading || !hasMore || isThrottleActive.current) return;
@@ -68,6 +98,10 @@ function ProjectBoard() {
     return () => listElement?.removeEventListener("scroll", handleScroll);
   }, [handleScroll, fetchData, lastPostId]);
 
+  useEffect(() => {
+    fetchPopularPosts();
+  }, [fetchPopularPosts]);
+
   const filteredPosts = postItems.filter((postItem) =>
       !searchTerm.trim() ||
       postItem.title.toLowerCase().includes(searchTerm.toLowerCase())
@@ -78,6 +112,7 @@ function ProjectBoard() {
   return (
       <ContentWrapper>
         <Search onSearch={handleSearch} placeholder="프로젝트 검색" />
+        <PopularPostSlider posts={popularPosts} />
         <PostCardWrapper ref={listRef} style={{ overflowY: "auto" }} $projectPage={true}>
           {filteredPosts.map((postItem) => (
               <ProjectPostCard

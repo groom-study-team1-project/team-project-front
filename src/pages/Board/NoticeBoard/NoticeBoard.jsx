@@ -4,10 +4,12 @@ import { ContentWrapper, PostCardWrapper, EndMessage, SpinnerWrapper } from "../
 import Search from "../../../components/Common/Search/Search";
 import { fetchPostItems } from "../../../services/api/postApi";
 import { BarLoading } from "../../../components/Common/LodingSpinner";
+import PopularPostSlider from "../../../components/Common/PopularPost/PopularPostSlider";
 
 function NoticeBoard() {
   // 게시글, 검색어, 로딩 상태 등을 관리하는 상태 변수
   const [postItems, setPostItems] = useState([]);
+  const [popularPosts, setPopularPosts] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [lastPostId, setLastPostId] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -17,6 +19,34 @@ function NoticeBoard() {
 
   const categoryId = 4; // 게시글을 가져올 카테고리 ID
   const limit = 10; // 한 번에 가져올 게시글 개수 제한
+
+  // 인기 게시글 가져오기
+  const fetchPopularPosts = useCallback(async () => {
+    try {
+      let allPosts = [];
+      let lastId = null;
+      let more = true;
+
+      while (more) {
+        const { posts } = await fetchPostItems(categoryId, lastId);
+        allPosts = [...allPosts, ...posts];
+
+        if (posts.length < limit) {
+          more = false;
+        } else {
+          lastId = posts[posts.length - 1].postId;
+        }
+      }
+
+      const filteredPopularPosts = allPosts
+          .sort((a, b) => b.countInfo.commentCount - a.countInfo.commentCount)
+          .slice(0, 5); // Limit to 5 posts
+
+      setPopularPosts(filteredPopularPosts);
+    } catch (error) {
+      console.error("인기 게시글 가져오기 오류:", error);
+    }
+  }, [categoryId, limit]);
 
   // API를 통해 데이터 가져오기
   const fetchData = useCallback(() => {
@@ -67,6 +97,10 @@ function NoticeBoard() {
     return () => listElement?.removeEventListener("scroll", handleScroll);
   }, [handleScroll, fetchData, lastPostId]);
 
+  useEffect(() => {
+    fetchPopularPosts();
+  }, [fetchPopularPosts]);
+
   // 검색어를 기준으로 게시글 필터링
   const filteredPosts = postItems.filter((postItem) =>
       !searchTerm.trim() || postItem.title.toLowerCase().includes(searchTerm.toLowerCase())
@@ -78,7 +112,8 @@ function NoticeBoard() {
   return (
       <ContentWrapper>
         <Search onSearch={handleSearch} placeholder="공지사항 검색" />
-        <PostCardWrapper ref={listRef} style={{ overflowY: "auto" }}>
+        <PopularPostSlider posts={popularPosts} />
+        <PostCardWrapper ref={listRef} style={{ overflowY: "auto" }} $noticePage={true}>
           {filteredPosts.map((postItem) => (
               <NoticePostCard
                   key={postItem.postId}
@@ -93,7 +128,7 @@ function NoticeBoard() {
                 <BarLoading />
               </SpinnerWrapper>
           )}
-          {!hasMore && <EndMessage>모든 게시글을 불러왔습니다.</EndMessage>} {/* 더 이상 게시글이 없을 때 메시지 표시 */}
+          {!hasMore && <EndMessage>모든 게시글을 불러왔습니다.</EndMessage>}
         </PostCardWrapper>
       </ContentWrapper>
   );

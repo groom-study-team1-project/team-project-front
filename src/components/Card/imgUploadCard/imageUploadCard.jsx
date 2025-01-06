@@ -1,9 +1,8 @@
-import React, { useRef, useState } from "react";
+import React, { useRef} from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {faAngleLeft, faAngleRight, faPhotoFilm, faXmark} from "@fortawesome/free-solid-svg-icons";
 import { useSelector } from "react-redux";
 import axiosInstance from "../../../services/axiosConfig";
-import Slider from "react-slick";
 import {
   ImgWrap,
   ImgPreviewWrap,
