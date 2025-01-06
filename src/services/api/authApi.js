@@ -1,4 +1,7 @@
 import axiosInstance from "../axiosConfig";
+import { useDispatch } from "react-redux";
+import { updateToken } from "../../store/user/userSlice";
+
 export const login = async (body) => {
   try {
     const response = await axiosInstance.post("/open/members/login", body);
@@ -103,28 +106,9 @@ export const fetchProfileInfo = async (body) => {
   }
 };
 
-export const reToken = async () => {
-  try {
-    const response = await axiosInstance.patch("/open/tokens/re-issue");
-    console.log(response);
-    if ((response.data.status.code = 8000)) {
-      return response.data;
-    } else {
-      throw new Error(
-        response.data.status.message || "Unexpected response from the server"
-      );
-    }
-  } catch (error) {
-    console.error("Error while re-issuing token:", error);
-    throw error;
-  }
-};
-
 export const editProfile = async (body) => {
   try {
-    console.log(body);
-    const response = await axiosInstance.put("/api/members/me", body);
-    console.log(response);
+    await axiosInstance.put("/api/members/me", body);
   } catch (error) {
     console.error("사용자 정보를 수정하는데 실패했습니다.", error);
     throw error;
@@ -156,7 +140,6 @@ export const postInfo = async (categoryId, lastPostId) => {
         lastPostId: lastPostId,
       },
     });
-    console.log(response.data.result);
     if (response.data.status.code === 1009) {
       return response.data.result;
     } else {

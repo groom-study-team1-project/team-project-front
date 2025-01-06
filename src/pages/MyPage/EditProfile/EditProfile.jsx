@@ -5,13 +5,11 @@ import {
   editProfile,
   checkDuplicatedNickname,
   fetchProfileInfo,
-  reToken,
 } from "../../../services/api/authApi";
 import { imageUpload } from "../../../services/api/imageApi";
 import { useNavigate, useParams } from "react-router-dom";
 import useJwt from "../../../hooks/useJwt";
-import { useSelector, useDispatch } from "react-redux";
-import { updateToken } from "../../../store/user/userSlice";
+import { useSelector } from "react-redux";
 import {
   PageNameWrap,
   PageName,
@@ -32,7 +30,6 @@ import {
 
 const EditProfile = () => {
   const { memberId } = useParams();
-  const dispatch = useDispatch();
   const [form, setForm] = useState({
     nickname: "",
     imageUrl: "",
@@ -145,13 +142,7 @@ const EditProfile = () => {
     const body = filterForm();
     try {
       await editProfile(body);
-      const response = await reToken();
-      dispatch(
-        updateToken({
-          accessToken: response.result.accessToken,
-          refreshToken: response.result.refreshToken,
-        })
-      );
+
       navigate(`/my-page/${memberId}`);
     } catch (error) {
       console.log(error);
@@ -187,13 +178,14 @@ const EditProfile = () => {
                   type="button"
                   $Color={"black"}
                   style={{ border: "1px solid #ACB6E5" }}
-                  onClick={() =>
+                  onClick={() => {
                     setForm({
                       ...form,
                       imageUrl:
                         "https://deepdiver-community-files-dev.s3.ap-northeast-2.amazonaws.com/profiles/002da67c_1730807352645.png",
-                    })
-                  }
+                    });
+                    setFilekey("profiles/002da67c_1730807352645.png");
+                  }}
                 >
                   사진 제거
                 </SubmitBtn>

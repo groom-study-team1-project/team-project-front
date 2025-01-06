@@ -1,50 +1,51 @@
-import { ProfileImage } from "../../PostCard/PostProfile";
 import styled from "styled-components";
 
 export const MyPost = styled.div`
-  margin: 24px;
+  width: 23%;
+  height: auto;
+  background: white;
   border-radius: 10px;
-  padding: 16px;
-  background: linear-gradient(
-    to bottom,
-    rgba(255, 255, 255, 0.6),
-    rgba(255, 255, 255, 0.5)
-  );
-
-  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1), 0 15px 30px rgba(0, 0, 0, 0.1),
-    0 20px 40px rgba(0, 0, 0, 0.15);
-  backdrop-filter: blur(20px);
-
-  &::before {
-    z-index: -1;
-    content: "";
-    position: absolute;
-    inset: 0;
-    border-radius: 10px;
-    border: 1px solid transparent;
-    background: linear-gradient(
-        10deg,
-        rgba(255, 255, 255, 0),
-        rgba(255, 255, 255, 1)
-      )
-      border-box;
-    -webkit-mask: linear-gradient(#fff 0 0) padding-box,
-      linear-gradient(#fff 0 0);
-    mask: linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0);
-    -webkit-mask-composite: destination-out;
-    mask-composite: exclude;
-  }
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  border: 1px solid black;
+  display: flex;
+  justify-content: center;
+  padding: 1%;
+  margin-right: 3%;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  flex-direction: column;
+  cursor: pointer;
 `;
 
-export const MyPostTitle = styled.div`
-  padding: 10px;
+export const MypostThumbnail = styled.img`
+  width: 60%;
+  height: auto;
+`;
 
-  .title {
-    font-size: 17px;
-  }
+export const MypostTitleWrap = styled.div`
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  margin-top: 5%;
+`;
 
-  .post-count {
-    font-size: 14px;
-    padding-left: 5px;
-  }
+export const MypostTitle = styled.div`
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: flex;
+  justify-content: start;
+  flex: 1;
+`;
+
+export const DateCountWrap = styled.div`
+  margin: 5% 0;
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+`;
+
+export const MypostDate = styled.div`
+  font-weight: bold;
 `;

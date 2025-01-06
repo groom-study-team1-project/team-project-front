@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   Container,
   MainContentWrapper,
@@ -19,6 +19,28 @@ function BoardLayout({ isMyPage = false }) {
   const { isMobile, isTablet, isDesktop } = useSelector(
     (state) => state.screenSize
   );
+
+  // State to track accessToken
+  const [accessToken, setAccessToken] = useState(
+    localStorage.getItem("accessToken")
+  );
+
+  useEffect(() => {
+    // Function to handle accessToken changes
+    const handleStorageChange = () => {
+      const token = localStorage.getItem("accessToken");
+      setAccessToken(token); // Update state if token changes
+    };
+
+    // Add event listener for storage changes
+    window.addEventListener("storage", handleStorageChange);
+
+    // Cleanup listener on component unmount
+    return () => {
+      window.removeEventListener("storage", handleStorageChange);
+    };
+  }, []);
+
   return (
     <>
       <GlobalStyle />
@@ -29,7 +51,8 @@ function BoardLayout({ isMyPage = false }) {
           </SidebarWrapper>
         )}
         <MainContentWrapper>
-          <Navbar />
+          <Navbar key={accessToken} />{" "}
+          {/* Re-render Navbar when accessToken changes */}
           <Content>
             <Outlet />
             {!isMyPage && !isMobile ? (
