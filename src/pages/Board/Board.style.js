@@ -54,11 +54,9 @@ export const SearchSortWrapper = styled.div`
 export const PostCardWrapper = styled.div`
   display: ${(props) => (props.$noticePage ? `block` : `grid`)};
   margin-bottom: ${(props) => (props.$noticePage ? `40px` : `0px`)};
-  max-height: 830px;
   grid-template-columns: ${(props) =>
       props.$projectPage ? `repeat(4, 1fr)` : `repeat(2, 1fr)`};
   gap: ${(props) => (props.$noticePage ? `0px` : `40px`)};
-  overflow-y: auto;
   position: relative;
   
   & > *:not(:last-child) {
