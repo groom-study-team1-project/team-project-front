@@ -13,12 +13,7 @@ const vibration = keyframes`
 `;
 
 export const ErrMsg = styled.div`
+  margin-top: 8px;
   font-size: 12px;
   color: red;
-
-  ${({ isVibrating }) =>
-    isVibrating &&
-    css`
-      animation: ${vibration} 0.1s ease 5;
-    `}
 `;

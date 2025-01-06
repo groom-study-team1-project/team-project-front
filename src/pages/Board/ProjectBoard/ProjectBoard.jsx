@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useRef, useState, useCallback } from "react";
 import ProjectPostCard from "../../../components/Card/PostCard/ProjectPostCard/ProjectPostCard";
 import {
   Title,
@@ -11,75 +11,53 @@ import Search from "../../../components/Common/Search/Search";
 import SortOptionButton from "../../../components/Common/SortOptionButton/SortOptionButton";
 import { ProjectPostCardWrapper } from "./ProjectBoard.style";
 import { fetchPostItems } from "../../../services/api/postApi";
-import { useDispatch } from "react-redux";
-import { setAllPostItems } from "../../../store/post/postSlice";
 import { BarLoading } from "../../../components/Common/LodingSpinner";
 
 function ProjectBoard() {
   const [postItems, setPostItems] = useState([]);
-  const [lastPostIdByCategory, setLastPostIdByCategory] = useState(Number.MAX_SAFE_INTEGER);
+  const [lastPostId, setLastPostId] = useState(null);
   const [loading, setLoading] = useState(false);
   const [hasMore, setHasMore] = useState(true);
-  const isThrottleActive = useRef(false);
   const listRef = useRef(null);
 
-  const dispatch = useDispatch();
   const categoryId = 2;
   const limit = 10;
 
-  const fetchData = async () => {
-    if (loading || !hasMore || isThrottleActive.current) return;
-    setLoading(true);
-    isThrottleActive.current = true;
+  const fetchData = useCallback(() => {
+    if (loading || !hasMore) return;
 
+    setLoading(true);
     setTimeout(async () => {
       try {
-        const { posts } = await fetchPostItems(
-            categoryId,
-            lastPostIdByCategory
-        );
-        const filteredPosts = posts.filter(
-            (post) => post.categoryId === categoryId
-        );
-        if (filteredPosts.length > 0) {
-          setPostItems((prevPosts) => [...prevPosts, ...filteredPosts]);
-          const newLastPostId = filteredPosts[filteredPosts.length - 1].postId;
-          setLastPostIdByCategory(newLastPostId);
-          dispatch(setAllPostItems([...postItems, ...filteredPosts]));
+        const { posts } = await fetchPostItems(categoryId, lastPostId, limit);
+        if (posts.length > 0) {
+          setPostItems((prev) => [...prev, ...posts]);
+          setLastPostId(posts[posts.length - 1].postId);
         }
-        if (filteredPosts.length < limit) {
-          setHasMore(false);
-        }
+        if (posts.length < limit) setHasMore(false);
       } catch (error) {
+        console.error("프로젝트 게시판 데이터 요청 오류:", error);
       } finally {
         setLoading(false);
-        isThrottleActive.current = false;
       }
     }, 1000);
-  };
+  }, [loading, hasMore, lastPostId]);
 
-  useEffect(() => {
-    fetchData();
-  }, [dispatch]);
-
-  const handleScroll = (e) => {
+  const handleScroll = useCallback((e) => {
     const { scrollTop, scrollHeight, clientHeight } = e.target;
     if (scrollHeight - scrollTop <= clientHeight + 100 && !loading && hasMore) {
       fetchData();
     }
-  };
+  }, [fetchData, loading, hasMore]);
 
   useEffect(() => {
     const listElement = listRef.current;
     if (listElement) {
       listElement.addEventListener("scroll", handleScroll);
+      if (lastPostId === null) fetchData();
     }
-    return () => {
-      if (listElement) {
-        listElement.removeEventListener("scroll", handleScroll);
-      }
-    };
-  }, [lastPostIdByCategory, loading, hasMore]);
+    return () => listElement && listElement.removeEventListener("scroll", handleScroll);
+  }, [handleScroll, fetchData, lastPostId]);
 
   return (
       <ContentWrapper>
@@ -90,10 +68,7 @@ function ProjectBoard() {
           <Search />
           <SortOptionButton />
         </SearchSortWrapper>
-        <ProjectPostCardWrapper
-            ref={listRef}
-            style={{ height: "750px", overflowY: "auto" }}
-        >
+        <ProjectPostCardWrapper ref={listRef} style={{ height: "750px", overflowY: "auto" }}>
           {postItems.map((postItem, index) => (
               <ProjectPostCard
                   key={`${postItem.postId}-${index}`}

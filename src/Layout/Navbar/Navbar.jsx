@@ -259,7 +259,7 @@ function Navbar({ isMainPage = false }) {
         {modalType === "login" ? (
           <LoginModal closeModal={closeModal} changeModal={changeModal} />
         ) : modalType === "signup" ? (
-          <SignUpModal changeModal={changeModal} />
+          <SignUpModal changeModal={changeModal} closeModal={closeModal} />
         ) : (
           <ChangeUserPw changeModal={changeModal} />
         )}

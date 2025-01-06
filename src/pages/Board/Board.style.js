@@ -3,14 +3,17 @@ import styled from "styled-components";
 export const ContentWrapper = styled.div`
   height: 100%;
   width: 100%;
+  max-height: 100%; /* 부모 요소에 맞게 높이 제한 */
+  overflow-y: auto; /* 내부 스크롤 가능 */
   margin-right: 50px;
   ${(props) =>
-    props.$isDetail &&
-    `
-     display: flex;
-  justify-content: center;
+      props.$isDetail &&
+      `
+    display: flex;
+    justify-content: center;
   `}
 `;
+
 
 export const BoardTitle = styled.div`
   width: ${(props) => (props.$projectPage ? `350px` : `264px`)};
@@ -25,9 +28,9 @@ export const BoardTitle = styled.div`
   border: 1px solid rgba(255, 255, 255, 0.5);
   box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.1);
   background: linear-gradient(
-    to bottom,
-    rgba(255, 255, 255, 0.9),
-    rgba(255, 255, 255, 0.5)
+      to bottom,
+      rgba(255, 255, 255, 0.9),
+      rgba(255, 255, 255, 0.5)
   );
 `;
 

@@ -8,6 +8,7 @@ import {
   Form,
   ModalTitle,
 } from "../Modal.style";
+import GlobalStyle from "../../../assets/styles/GlobalStyle";
 import { FormInputField } from "../FormInputField";
 import { FindUserBtns, FindUserBtn } from "./LoginModal.style";
 import { login } from "../../../services/api/authApi";
@@ -19,14 +20,12 @@ export default function LoginModal({ closeModal, changeModal }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [errMsg, setErrmsg] = useState("");
-  const [errVisible, setErrvisible] = useState(false);
   const dispatch = useDispatch();
 
   async function handleLogin(e) {
     e.preventDefault();
     try {
       let body = { email, password };
-      setErrvisible(true);
       const response = await login(body);
       console.log(response);
       if (response?.status?.code === 1001) {
@@ -52,45 +51,48 @@ export default function LoginModal({ closeModal, changeModal }) {
   };
 
   return (
-    <Container>
-      <ModalTitle>
-        <img src={logoImg} alt="로고 이미지" />
-      </ModalTitle>
-      <Form action="" method="post" onSubmit={handleLogin}>
-        <div className="input-container">
-          <FormInputField
-            label={"이메일"}
-            type={"email"}
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-          />
-          <FormInputField
-            label={"비밀번호"}
-            type={"password"}
-            value={password}
-            onChange={(e) => {
-              setPassword(e.target.value);
-              console.log(e.target.value);
-            }}
-          />
-        </div>
-        {errVisible && <ErrMsg isVibrating={errVisible}>{errMsg}</ErrMsg>}
-        <BtnBox>
-          <Btn type="submit" id="loginBtn">
-            로그인
-          </Btn>
-        </BtnBox>
-        <Divider />
-
-        <FindUserBtns>
-          <div>
-            <span>비밀번호를 잃어버리셨나요?</span>
-            <FindUserBtn onClick={handleChangeUserPw}>
-              비밀번호 변경
-            </FindUserBtn>
+    <>
+      <GlobalStyle />
+      <Container>
+        <ModalTitle>
+          <img src={logoImg} alt="로고 이미지" />
+        </ModalTitle>
+        <Form action="" method="post" onSubmit={handleLogin}>
+          <div className="input-container">
+            <FormInputField
+              label={"이메일"}
+              type={"email"}
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+            />
+            <FormInputField
+              label={"비밀번호"}
+              type={"password"}
+              value={password}
+              onChange={(e) => {
+                setPassword(e.target.value);
+                console.log(e.target.value);
+              }}
+            />
           </div>
-        </FindUserBtns>
-      </Form>
-    </Container>
+          {errMsg && <ErrMsg>{errMsg}</ErrMsg>}
+          <BtnBox>
+            <Btn type="submit" id="loginBtn">
+              로그인
+            </Btn>
+          </BtnBox>
+          <Divider />
+
+          <FindUserBtns>
+            <div>
+              <span>비밀번호를 잃어버리셨나요?</span>
+              <FindUserBtn onClick={handleChangeUserPw}>
+                비밀번호 변경
+              </FindUserBtn>
+            </div>
+          </FindUserBtns>
+        </Form>
+      </Container>
+    </>
   );
 }
