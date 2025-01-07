@@ -20,7 +20,7 @@ import { faHeart as regularHeart } from "@fortawesome/free-regular-svg-icons";
 import {Modify} from "../../../pages/Board/BoardDetail/Board/BoardDetail.style";
 import ModalComponent from "../../Modal/EditDeleteModal/EditDeleteModal";
 
-const ReplyComment = ({ commentId, getReplyTime, handleLike }) => {
+const ReplyComment = ({ commentId, getReplyTime }) => {
     const {userInfo, isUserLoading, userError } = useUserInfo();
     const [repliesData, setRepliesData] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
@@ -135,6 +135,38 @@ const ReplyComment = ({ commentId, getReplyTime, handleLike }) => {
         }
     };
 
+    const handleLike = async (commentId, userInfo) => {
+        if (likedReply.has(commentId)) {
+            await axiosInstance
+                .post(`/api/comments/unlike`, {
+                    targetId: commentId,
+                })
+                .then((response) => {
+                    setLikedReply((prev) => {
+                        const newSet = new Set(prev);
+                        newSet.delete(commentId);
+                        return newSet;
+                    });
+                    return fetchReplyComments(userInfo, null);
+                })
+                .catch((error) => {
+                    console.error("좋아요를 취소하지 못하였습니다 : ", error);
+                });
+        } else {
+            await axiosInstance
+                .post(`/api/comments/like`, {
+                    targetId: commentId,
+                })
+                .then(() => {
+                    setLikedReply((prev) => new Set([...prev, commentId]));
+                    return fetchReplyComments(userInfo, null);
+                })
+                .catch((error) => {
+                    console.error("좋아요를 반영하지 못하였습니다 : ", error);
+                });
+        }
+    };
+
     const handleReplyEdit = (commentId, content) => {
         setEditReplyId(commentId);
         setEditReplyContent(content);
@@ -219,10 +251,7 @@ const ReplyComment = ({ commentId, getReplyTime, handleLike }) => {
                                     )}
                                 </TimeAndModal>
                                 <IconWrap>
-                                    <LikedButton onClick={(e) => {
-                                        e.preventDefault();
-                                        handleLike(userInfo, reply?.id);
-                                    }}>
+                                    <LikedButton onClick={() => { handleLike(reply?.id, userInfo); }}>
                                         {likedReply.has(reply.id) ? (
                                             <FontAwesomeIcon
                                                 icon={solidHeart}

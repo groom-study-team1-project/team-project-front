@@ -375,7 +375,6 @@ const Comments = ({ commentCount }) => {
                                 <ReplyComment
                                     commentId={commentData.id}
                                     getReplyTime={getTime}
-                                    handleLike={handleLike}
                                 />
                             )}
                         </ReplyList>
