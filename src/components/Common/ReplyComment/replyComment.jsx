@@ -2,12 +2,28 @@ import React, {useCallback, useEffect, useState} from "react";
 import axiosInstance from "../../../services/axiosConfig";
 import commentSubmit from "../../../assets/images/commentsubmit.png";
 import {
-    RepliesWrap, Reply, Nickname, ReplyContent, ReplyText, ReplyTimeText, EditReplyWrap, EditReplyInput
+    RepliesWrap,
+    Reply,
+    Nickname,
+    ReplyContent,
+    ReplyText,
+    ReplyTimeText,
+    EditReplyWrap,
+    EditReplyInput,
+    ReplyInputForm,
+    ReplyInputWrap,
+    ReplyInput
 } from "./replyComment.style";
 import {
-    CommentButton, CommentInput, CommentInputForm, CommentInputWrap,
-    InputImg, CommnetModalIcon, TimeAndModal,
-    TimeAndLike, IconWrap, LikedButton, CommentRight
+    CommentButton,
+    InputImg,
+    CommnetModalIcon,
+    TimeAndModal,
+    TimeAndLike,
+    IconWrap,
+    LikedButton,
+    CommentRight,
+    SomeMoreCommentButton
 } from "../Comment/Comment.style";
 import { ProfileImage } from "../../Card/PostCard/PostProfile";
 import useUserInfo from "../../../hooks/useUserInfo";
@@ -29,6 +45,7 @@ const ReplyComment = ({ commentId, getReplyTime }) => {
     const [editReplyContent, setEditReplyContent] = useState(""); // 답글 편집 내용
     const [likedReply, setLikedReply] = useState(new Set()); // 답글 좋아요
     const [modalIndex, setModalIndex] = useState(null); // 수정, 삭제 모달
+    const [isEndReply, setIsEndReply] = useState(false);
 
     const fetchReplyComments = useCallback(async (userInfo, lastCommentId) => {
 
@@ -45,18 +62,28 @@ const ReplyComment = ({ commentId, getReplyTime }) => {
             `${baseReplyEndPoint}?${queryParams.toString()}` : baseReplyEndPoint;
 
         try {
-            console.log("likedReply : ", [...likedReply])
 
             const response = await axiosInstance.get(replyEndPoint);
             const repliesInfo = response.data.result;
 
-            repliesInfo.forEach(reply => {
-                console.log(`댓글 ID ${reply.id}의 likedMe:`, reply.likedMe);
-            });
+            console.log("답글 정보 : ", repliesInfo);
 
-            setRepliesData((prev) =>
-                lastCommentId ? [...prev, ...repliesInfo] : repliesInfo
-            );
+            if (repliesInfo && repliesInfo.length > 0) {
+                setRepliesData((prev) =>
+                    lastCommentId? [...prev, ...repliesInfo] : repliesInfo
+                );
+
+                if (lastCommentId) {
+                    const newCommentCount = [...repliesData, ...repliesInfo].length;
+                    if (newCommentCount >= 5) {
+                        setIsEndReply(true);
+                    } else {
+                        if (repliesInfo.length >= 5) {
+                            setIsEndReply(true);
+                        }
+                    }
+                }
+            }
 
             const likedComments = new Set(
                 repliesInfo.filter(reply => reply.likedMe).map(reply => reply.id)
@@ -268,11 +295,24 @@ const ReplyComment = ({ commentId, getReplyTime }) => {
                         </CommentRight>
                     </Reply>
                 ))}
+                {!isEndReply ? (
+                    <SomeMoreCommentButton onClick={() => {
+                        const lastCommentId = repliesData[repliesData.length-1].id;
+                        console.log("마지막 답글 Id : ", lastCommentId);
+                        if (lastCommentId) {
+                            fetchReplyComments(userInfo, lastCommentId);
+                        }
+                    }}>
+                        더보기
+                    </SomeMoreCommentButton>
+                ) : (
+                    <div style={{justifyContent : "center", width: "100%"}}>모든 댓글을 불러왔습니다.</div>
+                )}
             </RepliesWrap>
 
-            <CommentInputForm onSubmit={handleSubmitReply}>
-                <CommentInputWrap>
-                    <CommentInput
+            <ReplyInputForm onSubmit={handleSubmitReply}>
+                <ReplyInputWrap>
+                    <ReplyInput
                         value={newReply}
                         onChange={onChange}
                         placeholder="답글 작성"
@@ -282,8 +322,8 @@ const ReplyComment = ({ commentId, getReplyTime }) => {
                         alt="답글 제출"
                         onClick={handleSubmitReply}
                     />
-                </CommentInputWrap>
-            </CommentInputForm>
+                </ReplyInputWrap>
+            </ReplyInputForm>
         </div>
     );
 };

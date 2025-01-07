@@ -2,6 +2,7 @@ import styled from "styled-components";
 
 export const RepliesWrap = styled.div`
     margin-top: 2px;
+    margin-left: 1rem;
 `;
 
 export const Reply = styled.div`
@@ -42,4 +43,4 @@ export const EditReplyInput = styled.input`
     border-radius: 5px;
     border: 2px solid black;
     padding : 2% 2% 2% 2%;
-`
+`;
