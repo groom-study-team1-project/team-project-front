@@ -21,8 +21,9 @@ import {Modify} from "../../../pages/Board/BoardDetail/Board/BoardDetail.style";
 import ModalComponent from "../../Modal/EditDeleteModal/EditDeleteModal";
 
 const ReplyComment = ({ commentId, getReplyTime, handleLike }) => {
-    const userInfo = useUserInfo();
+    const {userInfo, isUserLoading, userError } = useUserInfo();
     const [repliesData, setRepliesData] = useState([]);
+    const [isLoading, setIsLoading] = useState(false);
     const [newReply, setNewReply] = useState(""); // 답글 입력
     const [editReplyId, setEditReplyId] = useState(null); // 답글 편집 아이디
     const [editReplyContent, setEditReplyContent] = useState(""); // 답글 편집 내용
@@ -30,6 +31,8 @@ const ReplyComment = ({ commentId, getReplyTime, handleLike }) => {
     const [modalIndex, setModalIndex] = useState(null); // 수정, 삭제 모달
 
     const fetchReplyComments = useCallback(async (userInfo, lastCommentId) => {
+
+        setIsLoading(true);
 
         const baseReplyEndPoint = `/open/comments/replies/${commentId}`;
         const queryParams = new URLSearchParams();
@@ -68,6 +71,7 @@ const ReplyComment = ({ commentId, getReplyTime, handleLike }) => {
             console.error("답글 불러오기 실패 : ", error);
         } finally {
             console.log("답글 불러오기 성공");
+            setIsLoading(false);
         }
     }, [commentId]);
 
@@ -145,6 +149,8 @@ const ReplyComment = ({ commentId, getReplyTime, handleLike }) => {
 
     const handleModalClose = () => setModalIndex(null);
 
+    if (isLoading) return <div>Loading...</div>;
+
     return (
         <div>
             <RepliesWrap>
@@ -183,7 +189,7 @@ const ReplyComment = ({ commentId, getReplyTime, handleLike }) => {
                             <TimeAndLike>
                                 <TimeAndModal>
                                     <ReplyTimeText>{getReplyTime(reply.createdAt)}</ReplyTimeText>
-                                    {!reply.author && (
+                                    {reply.author && (
                                         <CommnetModalIcon>
                                             <Modify onClick={() => setModalIndex(reply.id)}>
                                                 <FontAwesomeIcon icon={faEllipsisVertical} />
