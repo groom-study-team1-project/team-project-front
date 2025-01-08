@@ -12,18 +12,18 @@ import {
     EditReplyInput,
     ReplyInputForm,
     ReplyInputWrap,
-    ReplyInput
+    ReplyInput,
+    ReplySubmitButton,
+    SomeMoreReplyButton
 } from "./replyComment.style";
 import {
     CommentButton,
-    InputImg,
     CommnetModalIcon,
     TimeAndModal,
     TimeAndLike,
     IconWrap,
     LikedButton,
-    CommentRight,
-    SomeMoreCommentButton
+    CommentRight
 } from "../Comment/Comment.style";
 import { ProfileImage } from "../../Card/PostCard/PostProfile";
 import useUserInfo from "../../../hooks/useUserInfo";
@@ -248,7 +248,7 @@ const ReplyComment = ({ commentId, getReplyTime }) => {
                             <TimeAndLike>
                                 <TimeAndModal>
                                     <ReplyTimeText>{getReplyTime(reply.createdAt)}</ReplyTimeText>
-                                    {reply.author && (
+                                    {!reply.author && (
                                         <CommnetModalIcon>
                                             <Modify onClick={() => setModalIndex(reply.id)}>
                                                 <FontAwesomeIcon icon={faEllipsisVertical} />
@@ -296,7 +296,7 @@ const ReplyComment = ({ commentId, getReplyTime }) => {
                     </Reply>
                 ))}
                 {!isEndReply ? (
-                    <SomeMoreCommentButton onClick={() => {
+                    <SomeMoreReplyButton onClick={() => {
                         const lastCommentId = repliesData[repliesData.length-1].id;
                         console.log("마지막 답글 Id : ", lastCommentId);
                         if (lastCommentId) {
@@ -304,9 +304,9 @@ const ReplyComment = ({ commentId, getReplyTime }) => {
                         }
                     }}>
                         더보기
-                    </SomeMoreCommentButton>
+                    </SomeMoreReplyButton>
                 ) : (
-                    <div style={{justifyContent : "center", width: "100%"}}>모든 댓글을 불러왔습니다.</div>
+                    <div style={{alignItems : "center", width: "100%"}}> </div>
                 )}
             </RepliesWrap>
 
@@ -317,7 +317,7 @@ const ReplyComment = ({ commentId, getReplyTime }) => {
                         onChange={onChange}
                         placeholder="답글 작성"
                     />
-                    <InputImg
+                    <ReplySubmitButton
                         src={commentSubmit}
                         alt="답글 제출"
                         onClick={handleSubmitReply}

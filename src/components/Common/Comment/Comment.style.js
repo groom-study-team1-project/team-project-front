@@ -134,9 +134,10 @@ export const IconWrap = styled.div`
 export const LikedButton = styled.span`
   border: none;
   background: none;
-  width: 10%;
+  width: 15%;
   align-items: end;
-  margin-right: 5px;
+  margin-right: 3px;
+  white-space: nowrap;  
 `;
 
 export const ReplyButton = styled.button`
