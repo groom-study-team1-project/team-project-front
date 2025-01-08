@@ -3,14 +3,16 @@ import styled from "styled-components";
 export const ContentWrapper = styled.div`
   height: 100%;
   width: 100%;
-  margin-right: 50px;
+  max-height: 100%;
+  overflow-y: auto;
   ${(props) =>
-    props.$isDetail &&
-    `
-     display: flex;
-  justify-content: center;
+      props.$isDetail &&
+      `
+    display: flex;
+    justify-content: center;
   `}
 `;
+
 
 export const BoardTitle = styled.div`
   width: ${(props) => (props.$projectPage ? `350px` : `264px`)};
@@ -25,9 +27,9 @@ export const BoardTitle = styled.div`
   border: 1px solid rgba(255, 255, 255, 0.5);
   box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.1);
   background: linear-gradient(
-    to bottom,
-    rgba(255, 255, 255, 0.9),
-    rgba(255, 255, 255, 0.5)
+      to bottom,
+      rgba(255, 255, 255, 0.9),
+      rgba(255, 255, 255, 0.5)
   );
 `;
 
@@ -50,16 +52,42 @@ export const SearchSortWrapper = styled.div`
 `;
 
 export const PostCardWrapper = styled.div`
-  display: grid;
-  max-height: 830px;
-
-  grid-template-columns: repeat(minmax(300px, 1fr));
-  gap: 40px;
-  overflow-y: auto;
+  display: ${(props) => (props.$noticePage ? `block` : `grid`)};
+  margin-bottom: ${(props) => (props.$noticePage ? `40px` : `0px`)};
+  grid-template-columns: ${(props) =>
+      props.$projectPage ? `repeat(4, 1fr)` : `repeat(2, 1fr)`};
+  gap: ${(props) => (props.$noticePage ? `0px` : `40px`)};
+  position: relative;
+  
+  & > *:not(:last-child) {
+    margin-bottom: 20px;
+  }
 `;
 
 export const EndMessage = styled.div`
   text-align: center;
   padding: 20px;
   width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  grid-column: ${(props) =>
+      props.$projectPage
+          ? "span 4"
+          : props.$noticePage
+              ? "span 1"
+              : "span 2"};
 `;
+
+export const SpinnerWrapper = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  grid-column: ${(props) =>
+      props.$projectPage
+          ? "span 4"
+          : props.$noticePage
+              ? "span 1"
+              : "span 2"};
+`;
+

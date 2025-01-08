@@ -1,43 +1,60 @@
 import React, { useState } from "react";
 import {
-  SearchWrapper,
-  SearchBox,
-  InnerSearch,
+  SearchTagsContainer,
+  SearchContainer,
+  SearchInput,
+  SearchInputWrapper,
+  SearchButton,
+  SortDropdown,
+  TagsContainer,
+  Tag,
+  TagName,
   SearchIcon,
-  OptionIcon,
-  OptionContainer,
-  OptionToggle,
-  OptionList,
-  OptionItem,
+  PlaceholderIconWrapper,
 } from "./Search.style";
-import optionIcon from "../../../assets/images/option.png";
 import searchIcon from "../../../assets/images/search.png";
+import search_reverse_Icon from "../../../assets/images/search_reverse.png";
 
-function Search() {
+function Search({ placeholder = "검색어를 입력하세요", onSearch }) {
   const [searchTerm, setSearchTerm] = useState("");
-  const [filter, setFilter] = useState("title");
-  const [isChangeOption, setIsChangeOption] = useState(false);
 
-  const handleFilterChange = (e) => {
-    setFilter(e.target.value);
+  const handleSearch = () => {
+    if (onSearch) {
+      onSearch(searchTerm); // 검색어만 전달
+    }
   };
 
   return (
-    <SearchWrapper>
-      <SearchBox>
-        <InnerSearch
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-          placeholder="검색어를 입력하세요"
-        />
-        <SearchIcon src={searchIcon} />
-      </SearchBox>
-      {/* <SearchOption value={filter} onChange={handleFilterChange}>
-        <option value="title">제목</option>
-        <option value="author">작성자</option>
-        <option value="hashtag">해시태그</option>
-      </SearchOption> */}
-    </SearchWrapper>
+      <SearchTagsContainer>
+        <SearchContainer>
+          <SearchInputWrapper>
+            <PlaceholderIconWrapper>
+              <SearchIcon src={searchIcon} alt="검색 아이콘" />
+            </PlaceholderIconWrapper>
+            <SearchInput
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                placeholder={placeholder}
+            />
+          </SearchInputWrapper>
+          <SearchButton onClick={handleSearch}>
+            <SearchIcon src={search_reverse_Icon} />
+            검색
+          </SearchButton>
+          <SortDropdown>
+            <select>
+              <option value="최신순">최신순</option>
+              <option value="인기순">인기순</option>
+            </select>
+          </SortDropdown>
+        </SearchContainer>
+        <TagsContainer>
+          <TagName># 인기태그</TagName>
+          <Tag onClick={() => setSearchTerm("React")}>#React</Tag>
+          <Tag onClick={() => setSearchTerm("Spring")}>#Spring</Tag>
+          <Tag onClick={() => setSearchTerm("AWS")}>#AWS</Tag>
+        </TagsContainer>
+      </SearchTagsContainer>
   );
 }
 
