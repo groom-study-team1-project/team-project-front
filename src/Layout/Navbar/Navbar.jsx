@@ -28,8 +28,7 @@ import ProfileMenu from "./ProfileMenu";
 import { changeTheme } from "../../store/theme/themeSlice";
 import lightmodeIcon from "../../assets/images/lightmode.png";
 import NavBarSideModal from "../../components/Modal/NavBarSideModal/NavBarSideModal";
-
-Modal.setAppElement("#root");
+import useUserInfo from "../../hooks/useUserInfo";
 
 function Navbar({ isMainPage = false }) {
   const [menuItems, setMenuItems] = useState([]);
@@ -38,15 +37,13 @@ function Navbar({ isMainPage = false }) {
   const [menuOpen, setMenuOpen] = useState(false);
   const [dropDown, setDropDown] = useState(false);
   const [navModalOpen, setNavModalOpen] = useState(false);
+  const [profileImage, setProfileImage] = useState("");
+  const [memberId, setMemberid] = useState("");
   const isLoggedIn = useSelector((state) => state.user.isLoggedIn);
   const { isDesktop } = useSelector((state) => state.screenSize);
-  const accessToken = useSelector((state) => state.user.userInfo.accessToken);
-  const payload = useJwt(accessToken);
-  const memberId = payload.memberId;
-  const userInfo = {
-    imageUrl: payload.memberImageUrl,
-  };
+
   const isDarkMode = useSelector((state) => state.theme.isDarkMode);
+  const userInfo = useUserInfo();
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -56,12 +53,17 @@ function Navbar({ isMainPage = false }) {
       const fetchData = async () => {
         const response = await fetchCategoryItems();
         setMenuItems(response);
+
+        if (userInfo.userInfo) {
+          setMemberid(userInfo.userInfo.id);
+          setProfileImage(userInfo.userInfo.imageUrl);
+        }
       };
       fetchData();
     } catch (error) {
       console.log(error);
     }
-  }, [accessToken]);
+  }, [userInfo.userInfo]);
 
   const handleMenuClick = (id) => {
     dispatch(selectMenuItem(id));
@@ -200,7 +202,7 @@ function Navbar({ isMainPage = false }) {
             <div style={{ position: "relative", display: "inline-block" }}>
               <Button onClick={handleToggleMenu}>
                 <img
-                  src={userInfo.imageUrl}
+                  src={profileImage}
                   alt="프로필"
                   style={{
                     borderRadius: "20px",

@@ -6,7 +6,7 @@ import { setupAxiosInterceptors } from "./services/axiosConfig";
 import store from "./store/index";
 import { useDispatch } from "react-redux";
 import { userAuth } from "./store/user/userSlice";
-
+import { FontDefault } from "./assets/styles/Font.style";
 function App() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -18,6 +18,7 @@ function App() {
 
   return (
     <>
+      <FontDefault />
       <ScreenSizeListener />
       <Router />
     </>
