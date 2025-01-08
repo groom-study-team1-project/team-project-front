@@ -26,6 +26,7 @@ import {
     LikedButton,
     ReplyButton,
     EditCommentWrap,
+    EditCommentInput,
     CommentInputForm,
     TimeAndModal,
     CommentBox,
@@ -293,7 +294,7 @@ const Comments = ({ commentCount }) => {
                                     <Bold>{commentData.memberNickname}</Bold>
                                     {editCommentId === commentData.id ? (
                                         <EditCommentWrap>
-                                            <CommentInput
+                                            <EditCommentInput
                                                 value={editCommentContent}
                                                 onChange={(e) => setEditCommentContent(e.target.value)}
                                             />

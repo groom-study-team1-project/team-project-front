@@ -9,7 +9,6 @@ import {
     ReplyText,
     ReplyTimeText,
     EditReplyWrap,
-    EditReplyInput,
     ReplyInputForm,
     ReplyInputWrap,
     ReplyInput,
@@ -23,7 +22,8 @@ import {
     TimeAndLike,
     IconWrap,
     LikedButton,
-    CommentRight
+    CommentRight,
+    EditCommentInput
 } from "../Comment/Comment.style";
 import { ProfileImage } from "../../Card/PostCard/PostProfile";
 import useUserInfo from "../../../hooks/useUserInfo";
@@ -48,7 +48,6 @@ const ReplyComment = ({ commentId, getReplyTime }) => {
     const [isEndReply, setIsEndReply] = useState(false);
 
     const fetchReplyComments = useCallback(async (userInfo, lastCommentId) => {
-
         setIsLoading(true);
 
         const baseReplyEndPoint = `/open/comments/replies/${commentId}`;
@@ -89,11 +88,8 @@ const ReplyComment = ({ commentId, getReplyTime }) => {
                 repliesInfo.filter(reply => reply.likedMe).map(reply => reply.id)
             );
 
-            console.log("새로 생성된 likedReply 집합 : ", [...likedReply]);
-
             setLikedReply(likedComments);
 
-            console.log("상태 업데이트 후 likedReply:", [...likedReply]);
         } catch (error) {
             console.error("답글 불러오기 실패 : ", error);
         } finally {
@@ -220,7 +216,7 @@ const ReplyComment = ({ commentId, getReplyTime }) => {
                             {editReplyId === reply.id ? (
                                 <>
                                     <EditReplyWrap>
-                                        <EditReplyInput
+                                        <EditCommentInput
                                             value={editReplyContent}
                                             onChange = {(e) => setEditReplyContent(e.target.value)}
                                         />
@@ -248,7 +244,7 @@ const ReplyComment = ({ commentId, getReplyTime }) => {
                             <TimeAndLike>
                                 <TimeAndModal>
                                     <ReplyTimeText>{getReplyTime(reply.createdAt)}</ReplyTimeText>
-                                    {!reply.author && (
+                                    {reply.author && (
                                         <CommnetModalIcon>
                                             <Modify onClick={() => setModalIndex(reply.id)}>
                                                 <FontAwesomeIcon icon={faEllipsisVertical} />

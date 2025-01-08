@@ -151,14 +151,29 @@ export const EditCommentWrap = styled.div`
   width: 100%;
 `;
 
+export const EditCommentInput = styled.input`
+  border: none;
+  outline: none;
+  border-bottom: 2px solid black;
+  padding: 0.5rem 0.5rem 0.5rem 0.5rem;
+  margin-bottom: 0.5rem;  
+  width: 100%;  
+`;
+
 export const CommentButton = styled.button`
   margin: 5px 2px 5px 5px;
-  border-radius: 30px;
+  padding: 0.5rem 0.5rem 0.5rem 0.5rem;  
+  border-radius: 5px;
   border: none;
-  background: black;
-  color: white;
+  color: gray;
+  background: white;
   font-weight: bold;
   float: right;
+  cursor: pointer;
+  &: hover{
+      color: white;
+      background: black;
+  }  
 `;
 
 export const ReplyList = styled.div`
