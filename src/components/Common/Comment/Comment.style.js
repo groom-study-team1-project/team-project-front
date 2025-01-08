@@ -170,7 +170,7 @@ export const CommentButton = styled.button`
   font-weight: bold;
   float: right;
   cursor: pointer;
-  &: hover{
+  &:hover{
       color: white;
       background: black;
   }  
@@ -187,7 +187,7 @@ export const SomeMoreCommentButton = styled.button`
     padding: 0.5rem 0.5rem 0.5rem 0.5rem;
     flex: 1;
 
-    &: hover {
+    &:hover {
         background-color: #afafaf;
         font-weight: bold;
     }
