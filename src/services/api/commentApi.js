@@ -28,7 +28,10 @@ export const fetchComment = async (postId, memberId, lastCommentId) => {
 };
 
 export const createComment = async (postId, content) => {
-    const body = { postId, content };
+    const body = {
+        postId : postId,
+        content : content.trim()
+    };
 
     try {
         const result = await axiosInstance.post(`/api/comments/write`, body);
