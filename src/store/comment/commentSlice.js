@@ -1,5 +1,8 @@
 import {createAsyncThunk, createSlice} from "@reduxjs/toolkit";
 import axiosInstance from "../../services/axiosConfig";
+import { enableMapSet } from 'immer';
+
+enableMapSet();
 
 const initialState = {
     comments: [],
@@ -42,12 +45,12 @@ export const submitComment = createAsyncThunk(
     }
 );
 
-export const handleLike = createAsyncThunk(
+export const sendLike = createAsyncThunk(
     'comments/handleLike',
     async ({ commentId, isLiked }) => {
         const endPoint = isLiked ? `/api/comments/unlike` : `/api/comments/like`;
         await axiosInstance.post(endPoint, {
-            targetId: commentId,
+            targetsId: commentId,
         });
         return { commentId, isLiked };
     }
@@ -108,7 +111,7 @@ const commentSlice = createSlice({
                 }
 
                 const likeComments = new Set(
-                    action.payload.filter(comment => comment.likedMe).Map(comment => comment.id)
+                    action.payload.filter(comment => comment.likedMe).map(comment => comment.id)
                 );
                 state.likeComments = new Set([...state.likeComments, ...likeComments]);
 
@@ -120,10 +123,10 @@ const commentSlice = createSlice({
                 state.isLoading = false;
                 state.error = action.error.message;
             })
-            .addCase(fetchComment.fulfilled, (state, action) => {
+            .addCase(submitComment.fulfilled, (state, action) => {
                 state.totalComment += 1;
             })
-            .addCase(handleLike.fulfilled, (state, action) => {
+            .addCase(sendLike.fulfilled, (state, action) => {
                 const { commentId, isLike } = action.payload;
                 if (isLike) {
                     state.likeComments.delete(commentId);

@@ -1,5 +1,4 @@
 import axiosInstance from "../axiosConfig";
-import axios from "axios";
 
 export async function fetchPostItems(body) {
   //const result = await axiosInstance.get("/open/posts");
@@ -140,43 +139,6 @@ export async function fetchPopularHashItems() {
 
 export const createcomment = async (body) => {
   await console.log(body);
-};
-
-export const fetchcomment = async (postId) => {
-  return {
-    code: 1301,
-    message: "댓글 조회에 성공하였습니다.",
-    result: [
-      {
-        memberInfo: {
-          Id: 0,
-          nickname: "ALee",
-          imageUrl: "~~~",
-        },
-        commentInfo: {
-          content: "comment test",
-          recommedCount: 0,
-          createdAt: new Date().toLocaleDateString(),
-          updatedAt: "수정일자",
-          isModified: true,
-        },
-      },
-      {
-        memberInfo: {
-          Id: 1,
-          nickname: "MogensEgeskov",
-          imageUrl: "~~~",
-        },
-        commentInfo: {
-          content: "comment test1",
-          recommedCount: 2,
-          createdAt: new Date().toLocaleDateString(),
-          updatedAt: "수정일자",
-          isModified: false,
-        },
-      },
-    ],
-  };
 };
 
 export async function fetchUserInfo(memberId) {
