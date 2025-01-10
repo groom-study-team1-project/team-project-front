@@ -1,11 +1,10 @@
 import axiosInstance from "../axiosConfig";
 
-export const fetchComment = async (postId, memberId, lastCommentId) => {
+export const fetchComment = async (postId, lastCommentId) => {
     const baseEndpoint = `/open/comments/${postId}`;
     const queryParams = new URLSearchParams();
 
-    if (memberId) queryParams.append('member_id', memberId);
-    if (lastCommentId) queryParams.append('last_comment_id', lastCommentId);
+    if (lastCommentId) queryParams.append('lastCommentId', lastCommentId);
 
     const endpoint = queryParams.toString() ?
         `${baseEndpoint}?${queryParams.toString()}` : baseEndpoint;
@@ -96,11 +95,10 @@ export const likeComment = async (likeComments ,commentId) => {
     }
 };
 
-export const fetchReplyComment = async (commentId, memberId, lastCommentId) => {
+export const fetchReplyComment = async (commentId, lastCommentId) => {
     const baseEndpoint = `/open/comments/replies/${commentId}`;
     const queryParams = new URLSearchParams();
 
-    if (memberId) queryParams.append('memberId', memberId);
     if (lastCommentId) queryParams.append('lastCommentId', lastCommentId);
 
     const endpoint = queryParams.toString() ?
@@ -110,6 +108,8 @@ export const fetchReplyComment = async (commentId, memberId, lastCommentId) => {
         const response = await axiosInstance.get(endpoint);
         if (response.data.status.code === 9999) {
             return response.data.result;
+        } else {
+            throw new Error (response.data.status.message || "불러올 댓글이 없습니다");
         }
     } catch (error) {
         console.error("답글을 가져오지 못했습니다 : ", error);
