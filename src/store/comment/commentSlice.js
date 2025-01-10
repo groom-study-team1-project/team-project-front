@@ -1,5 +1,4 @@
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import axiosInstance from "../../services/axiosConfig";
+import { createSlice } from '@reduxjs/toolkit';
 import {
     fetchComment,
     createComment,
@@ -7,8 +6,8 @@ import {
     editComment,
     likeComment,
     fetchReplyComment,
-    createReplyComments
-} from "../../services/api/commentApi";
+    createReplyComment
+} from '../../services/api/commentApi';
 import { enableMapSet } from 'immer';
 enableMapSet();
 
@@ -21,67 +20,56 @@ const initialState = {
     isEndComment: false,
     editCommentId: null,
     editCommentContent: '',
-    commentCount: 0
+    commentCount: JSON.parse(localStorage.getItem('commentCount')) || 0
 };
 
 const commentSlice = createSlice({
-    name: "comment",
+    name: 'comments',
     initialState,
     reducers: {
-        initializeCommentCount: (state, action) => {
-            state.commentCount = action.payload;
+        setComments: (state, action) => {
+            state.comments = action.payload;
         },
-        getCommentList: (state, action) => {
-            state.isLoading = false;
-            state.comments = [...state.comments, ...action.payload.comments];
-            state.lastUpdate = Date.now();
-            state.error = null;
+        appendComments: (state, action) => {
+            state.comments = [...state.comments, ...action.payload];
         },
         addComment: (state, action) => {
             state.comments.unshift(action.payload);
-            state.totalComment += 1;
+            state.commentCount += 1;
+            localStorage.setItem('commentCount', JSON.stringify(state.commentCount));
         },
         removeComment: (state, action) => {
-            state.comments = state.comments.filter((comment) => comment.id !== action.payload);
-            state.total
+            state.comments = state.comments.filter(comment => comment.id !== action.payload);
+            state.commentCount -= 1;
+            localStorage.setItem('commentCount', JSON.stringify(state.commentCount));
         },
         updateComment: (state, action) => {
-            const index = state.comments.findIndex((comment) => comment.id === action.payload);
+            const index = state.comments.findIndex(comment => comment.id === action.payload.id);
             if (index !== -1) {
                 state.comments[index] = action.payload;
             }
             state.editCommentId = null;
-            state.editCommentContent = "";
-        },
-        appendComment: (state, action) => {
-            state.comments = [...state.comments, ...action.payload];
+            state.editCommentContent = '';
         },
         toggleLike: (state, action) => {
             const commentId = action.payload;
             const likeSet = new Set(state.likeComments);
 
             if (likeSet.has(commentId)) {
-                state.likeComments.delete(commentId);
+                likeSet.delete(commentId);
             } else {
-                state.likeComments.add(commentId);
+                likeSet.add(commentId);
             }
 
             state.likeComments = Array.from(likeSet);
             localStorage.setItem('likeComments', JSON.stringify(state.likeComments));
 
-            const comment = state.comments.find((c) => c.id === commentId);
+            const comment = state.comments.find(c => c.id === commentId);
             if (comment) {
                 comment.likeCount = likeSet.has(commentId) ?
                     comment.likeCount + 1 :
                     comment.likeCount - 1;
             }
-        },
-        getReplyList: (state, action) => {
-            state.comments = [...state.comments, ...action.payload];
-        },
-        addReplyComment: (state, action) => {
-            state.comments.unshift(action.payload);
-            state.commentCount += 1;
         },
         setEditComment: (state, action) => {
             state.editCommentId = action.payload.commentId;
@@ -89,7 +77,7 @@ const commentSlice = createSlice({
         },
         clearEditComment: (state) => {
             state.editCommentId = null;
-            state.editCommentContent = "";
+            state.editCommentContent = '';
         },
         toggleReply: (state, action) => {
             const commentId = action.payload;
@@ -100,6 +88,7 @@ const commentSlice = createSlice({
             } else {
                 replySet.add(commentId);
             }
+
             state.openReplies = Array.from(replySet);
             localStorage.setItem('openReplies', JSON.stringify(state.openReplies));
         },
@@ -108,6 +97,14 @@ const commentSlice = createSlice({
         },
         setError: (state, action) => {
             state.error = action.payload;
+            state.isLoading = false;
+        },
+        setEndComment: (state, action) => {
+            state.isEndComment = action.payload;
+        },
+        initializeCommentCount: (state, action) => {
+            state.commentCount = action.payload;
+            localStorage.setItem('commentCount', JSON.stringify(action.payload));
         }
     }
 });
@@ -117,11 +114,11 @@ export const fetchCommentList = (postId, lastCommentId) => async (dispatch) => {
     try {
         const result = await fetchComment(postId, lastCommentId);
         if (lastCommentId) {
-            dispatch(appendComments(result));
+            dispatch(appendComments(result.comments));
         } else {
-            dispatch(setComments(result));
+            dispatch(setComments(result.comments));
         }
-        dispatch(setEndComment(result.length < 20));
+        dispatch(setEndComment(result.comments.length < 5 && Math.min(result.comments.id) === lastCommentId));
     } catch (error) {
         dispatch(setError(error.message));
     } finally {
@@ -134,9 +131,12 @@ export const handleCreateComment = (postId, content) => async (dispatch) => {
         const result = await createComment(postId, content);
         if (result.status?.code === 9999) {
             dispatch(addComment(result.result));
+            return true;
         }
+        return false;
     } catch (error) {
         dispatch(setError(error.message));
+        return false;
     }
 };
 
@@ -145,9 +145,12 @@ export const handleDeleteComment = (commentId) => async (dispatch) => {
         const result = await deleteComment(commentId);
         if (result.status?.code === 9999) {
             dispatch(removeComment(commentId));
+            return true;
         }
+        return false;
     } catch (error) {
         dispatch(setError(error.message));
+        return false;
     }
 };
 
@@ -156,9 +159,13 @@ export const handleEditComment = (commentId, content) => async (dispatch) => {
         const result = await editComment(commentId, content);
         if (result.status?.code === 9999) {
             dispatch(updateComment(result.result));
+            dispatch(clearEditComment());
+            return true;
         }
+        return false;
     } catch (error) {
         dispatch(setError(error.message));
+        return false;
     }
 };
 
@@ -169,27 +176,60 @@ export const handleLikeComment = (commentId) => async (dispatch, getState) => {
         const result = await likeComment(likeSet, commentId);
         if (result.status?.code === 9999) {
             dispatch(toggleLike(commentId));
+            return true;
         }
+        return false;
     } catch (error) {
         dispatch(setError(error.message));
+        return false;
+    }
+};
+
+export const fetchReplyList = (commentId, lastCommentId) => async (dispatch) => {
+    dispatch(setLoading(true));
+    try {
+        const result = await fetchReplyComment(commentId, lastCommentId);
+        if (lastCommentId) {
+            dispatch(appendComments(result.comments));
+        } else {
+            dispatch(setComments(result.comments));
+        }
+        dispatch(setEndComment(result.comments.length < 5 && Math.min(result.comments.id) === lastCommentId));
+    } catch (error) {
+        dispatch(setError(error.message));
+    } finally {
+        dispatch(setLoading(false));
+    }
+};
+
+export const handleCreateReply = (commentId, content) => async (dispatch) => {
+    try {
+        const result = await createReplyComment(commentId, content);
+        if (result.status?.code === 9999) {
+            dispatch(addComment(result.result));
+            return true;
+        }
+        return false;
+    } catch (error) {
+        dispatch(setError(error.message));
+        return false;
     }
 };
 
 export const {
     setComments,
+    appendComments,
     addComment,
     removeComment,
     updateComment,
-    appendComments,
     toggleLike,
+    setEditComment,
+    clearEditComment,
     toggleReply,
     setLoading,
     setError,
-    initializeCommentCount,
     setEndComment,
-    setEditComment,
-    clearEditComment,
-    resetComments
+    initializeCommentCount
 } = commentSlice.actions;
 
 export default commentSlice.reducer;

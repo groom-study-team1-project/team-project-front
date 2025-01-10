@@ -116,7 +116,7 @@ export const fetchReplyComment = async (commentId, lastCommentId) => {
     }
 };
 
-export const createReplyComments = async (commentId, content) => {
+export const createReplyComment = async (commentId, content) => {
     const body = {
         commentId : commentId,
         content : content.trim()
