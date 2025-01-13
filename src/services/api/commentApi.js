@@ -27,61 +27,6 @@ export const fetchComment = async (postId, lastCommentId) => {
     }
 };
 
-export const dummyComment = (postId) => {
-    const response = {
-        status: {
-            code : 9999,
-            message : "응답 성공"
-        },
-        result: [
-            {
-                id : 1,
-                content: "댓글입니당@@",
-                likeCount: 12,
-                createdAt : new Date(),
-                memberId: 1,
-                memberNickname: "버미",
-                memberImageUrl: null,
-                replyCount: 2,
-                modified: true,
-                likedMe: true,
-                author: true
-            },
-            {
-                id : 2,
-                content: "댓글입니당!!",
-                likeCount: 12,
-                createdAt : new Date(),
-                memberId: 1,
-                memberNickname: "버미",
-                memberImageUrl: null,
-                replyCount: 2,
-                modified: true,
-                likedMe: true,
-                author: true
-            },
-            {
-                id : 3,
-                content: "댓글입니당%%",
-                likeCount: 12,
-                createdAt : new Date(),
-                memberId: 1,
-                memberNickname: "버미",
-                memberImageUrl: null,
-                replyCount: 2,
-                modified: true,
-                likedMe: true,
-                author: true
-            }
-        ]
-    }
-    return response.data;
-};
-
-export const dummyReply = (commentId) => {
-
-}
-
 export const createComment = async (postId, content) => {
     const body = {
         postId : postId,

@@ -49,7 +49,6 @@ import ModalComponent from "../../Modal/EditDeleteModal/EditDeleteModal";
 import commentsubmit from "../../../assets/images/commentsubmit.png";
 import ReplyComment from "../ReplyComment/replyComment";
 import useUserInfo from "../../../hooks/useUserInfo";
-import dummyComment from "../../../services/api/commentApi";
 
 const Comments = ({ commentCount }) => {
     const dispatch = useDispatch();
@@ -133,12 +132,6 @@ const Comments = ({ commentCount }) => {
     const handleReplyOpen = (commentId) => {
         dispatch(toggleReply(commentId));
     }
-
-    const tempComment = (postId) => {
-        dummyComment(postId)
-    }
-
-    tempComment(postId);
 
     if (isLoading) return <div>Loading...</div>;
     if (error) return <div>Error: {error}</div>;
@@ -236,7 +229,7 @@ const Comments = ({ commentCount }) => {
                                     </TimeAndModal>
                                     <IconWrap>
                                         <LikedButton onClick={() => handleLikeComment(commentData.id, userInfo)}>
-                                            {likeComments.has(commentData.id) ? (
+                                            {commentData.likedMe ? (
                                                 <FontAwesomeIcon
                                                     icon={solidHeart}
                                                     style={{ color: "#ff1900" }}

@@ -1,4 +1,13 @@
 import { createSlice } from '@reduxjs/toolkit';
+/*import {
+    fetchComment,
+    createComment,
+    deleteComment,
+    editComment,
+    likeComment,
+    fetchReplyComment,
+    createReplyComment
+} from '../../services/api/commentApi';*/
 import {
     fetchComment,
     createComment,
@@ -7,7 +16,7 @@ import {
     likeComment,
     fetchReplyComment,
     createReplyComment
-} from '../../services/api/commentApi';
+} from "../../services/api/mockCommentApi";
 import { enableMapSet } from 'immer';
 enableMapSet();
 
