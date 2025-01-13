@@ -73,7 +73,7 @@ function BoardDetail() {
         if (isLoggedIn) {
           const body = {
             isMe: payload.memberId,
-            memberId: postResponse.memberInfo.memberId,
+            memberId: postResponse.authorInformation.memberId,
           };
           const { isMe } = await fetchProfileInfo(body);
           setIsMe(isMe); // isMe 설정
@@ -129,10 +129,10 @@ function BoardDetail() {
           <PostWrap>
             <Postheader $isMobile={isMobile}>
               <PostProfileBox
-                name={post.memberInfo.nickname}
-                job={post.memberInfo.memberJob}
-                email={post.memberInfo.email}
-                imgUrl={"https://deepdiver-community-files-dev.s3.ap-northeast-2.amazonaws.com/" + post.memberInfo.imageUrl}
+                name={post.authorInformation.nickname}
+                job={post.authorInformation.memberJob}
+                email={post.authorInformation.email}
+                imgUrl={"https://deepdiver-community-files-dev.s3.ap-northeast-2.amazonaws.com/" + post.authorInformation.imageUrl}
               />
               <PostheaderRignt $isMobile={isMobile}>
                 <div>{formattedDate}</div>
@@ -173,13 +173,13 @@ function BoardDetail() {
             </div>
             <Interaction
               count={{
-                viewCount: post.countInfo.viewCount,
-                likeCount: post.countInfo.likeCount,
-                commentCount: post.countInfo.commentCount,
+                viewCount: post.viewCount,
+                likeCount: post.likeCount,
+                commentCount: post.commentCount,
               }}
             />
           </PostFooter>
-          <Comments commentCount={post.countInfo.commentCount}/>
+          <Comments commentCount={post.commentCount}/>
         </Wrap>
       </ContentWrapper>
     </>

@@ -27,7 +27,7 @@ const useUserInfo = () => {
             const memberId = payload.memberId;
 
             try {
-                const response = await axiosInstance.get(`/api/members/me/${memberId}`);
+                const response = await axiosInstance.get(`/open/members/me/${memberId}`);
                 const userData = response.data.result;
 
                 if (userData) {

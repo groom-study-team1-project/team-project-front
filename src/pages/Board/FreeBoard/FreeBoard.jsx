@@ -42,7 +42,7 @@ function FreeBoard() {
       }
 
       const filteredPopularPosts = allPosts
-          .sort((a, b) => b.countInfo.commentCount - a.countInfo.commentCount)
+          .sort((a, b) => b.commentCount - a.commentCount)
           .slice(0, 5); // Limit to 5 posts
 
       setPopularPosts(filteredPopularPosts);
@@ -110,10 +110,10 @@ function FreeBoard() {
                   id={postItem.postId}
                   title={postItem.title}
                   content={postItem.content}
-                  name={postItem.memberInfo.nickname}
-                  job={postItem.memberInfo.memberJob || "직업 정보 없음"}
-                  img={postItem.memberInfo.imageUrl}
-                  count={postItem.countInfo}
+                  name={postItem.authorInformation.nickname}
+                  job={postItem.authorInformation.memberJob || "직업 정보 없음"}
+                  img={postItem.authorInformation.imageUrl}
+                  count={postItem.viewCount}
                   thumbnail={postItem.thumbnail}
               />
           ))}

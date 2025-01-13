@@ -85,7 +85,7 @@ export const fetchProfileInfo = async (body) => {
   try {
     const { isMe, memberId } = body;
 
-    const response = await axiosInstance.get(`/api/members/me/${memberId}`);
+    const response = await axiosInstance.get(`/open/members/me/${memberId}`);
     if (response.data.status.code === 1002) {
       if (isMe === response.data.result.id) {
         return { isMe: true, data: response.data }; // 응답 데이터 반환

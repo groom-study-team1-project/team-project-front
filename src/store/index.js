@@ -13,7 +13,7 @@ const store = configureStore({
     menu: menuReducer,
     theme: themeReducer,
     post: postReducer,
-    comment: commentReducer,
+    comments: commentReducer,
     screenSize: screenSizeReducer,
   },
   devTools: process.env.NODE_ENV !== "production",
