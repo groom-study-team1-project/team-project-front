@@ -71,10 +71,6 @@ const commentSlice = createSlice({
                     comment.likeCount - 1;
             }
         },
-        setEditComment: (state, action) => {
-            state.editCommentId = action.payload.commentId;
-            state.editCommentContent = action.payload.content;
-        },
         clearEditComment: (state) => {
             state.editCommentId = null;
             state.editCommentContent = '';
@@ -154,7 +150,7 @@ export const handleDeleteComment = (commentId) => async (dispatch) => {
     }
 };
 
-export const handleEditComment = (commentId, content) => async (dispatch) => {
+export const submitEditComment = (commentId, content) => async (dispatch) => {
     try {
         const result = await editComment(commentId, content);
         if (result.status?.code === 9999) {
@@ -223,7 +219,6 @@ export const {
     removeComment,
     updateComment,
     toggleLike,
-    setEditComment,
     clearEditComment,
     toggleReply,
     setLoading,
