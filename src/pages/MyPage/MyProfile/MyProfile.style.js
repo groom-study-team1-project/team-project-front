@@ -18,8 +18,9 @@ export const Main = styled.div`
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
   display: flex;
 `;
+
 export const LeftContent = styled.div`
-  width: 20%;
+  width: 25%;
   height: 100%;
   display: flex;
   align-items: center;
@@ -37,7 +38,7 @@ export const UserInfoBox = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 1.5rem;
+  font-size: 1rem;
   a {
     text-decoration: none;
     color: inherit;
@@ -69,6 +70,7 @@ export const RightContentWrap = styled.div`
 
 export const RightContent = styled.div`
   margin: 1%;
+  height: 100%;
 `;
 
 export const Hr = styled.hr`
@@ -90,6 +92,7 @@ export const MypostTitle = styled.span`
 
 export const MyPostWrap = styled.div`
   display: flex;
+  height: 100%;
 `;
 
 export const CategoryLi = styled.div`
@@ -127,22 +130,23 @@ export const MyPostCardwrap = styled.div`
   display: flex;
   flex-wrap: wrap;
   align-items: ${({ $Nopost }) => ($Nopost ? "center" : "flex-start")};
-  justify-content: ${({ $Nopost }) => ($Nopost ? "center" : "flex-start")};
+  justify-content: ${({ $Nopost }) => ($Nopost ? "center" : "space-between")};
   margin-left: 5%;
-  gap: 10px;
+  gap: 3%;
   flex: 5;
+  overflow-y: auto;
+  height: 90%;
 `;
 
 export const EndPost = styled.p`
-  width: 83%;
-  display: flex;
-  justify-content: center;
-  margin-right: 15%;
+  width: 100%;
+  text-align: center;
   background: #b1cde9;
-  height: 10%;
-  align-items: center;
+  color: white;
   font-weight: bold;
   border-radius: 10px;
+  padding: 10px 0; /* 상하 패딩을 추가 */
+  margin-top: auto; /* 요소를 컨테이너 하단으로 밀어내기 */
 `;
 
 export const NopostWrap = styled.div`
@@ -161,5 +165,5 @@ export const NopostWrap = styled.div`
 
 export const Nopost = styled.img`
   width: 13vw;
-  height: 40vh;
+  height: 18vw;
 `;

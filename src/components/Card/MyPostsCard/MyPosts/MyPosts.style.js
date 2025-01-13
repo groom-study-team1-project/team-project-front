@@ -19,8 +19,9 @@ export const MyPost = styled.div`
 `;
 
 export const MypostThumbnail = styled.img`
-  width: 60%;
+  width: 95%;
   height: auto;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
 `;
 
 export const MypostTitleWrap = styled.div`
@@ -48,4 +49,17 @@ export const DateCountWrap = styled.div`
 
 export const MypostDate = styled.div`
   font-weight: bold;
+  font-size: 0.8rem;
+  white-space: nowrap;
+`;
+
+export const Hastags = styled.div`
+  display: flex;
+  justify-content: left;
+  width: 100%;
+  flex-wrap: wrap;
+  div {
+    margin-right: 3%;
+    font-size: 0.9rem;
+  }
 `;
