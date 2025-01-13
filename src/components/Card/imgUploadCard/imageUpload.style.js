@@ -4,6 +4,7 @@ import Slider from "react-slick";
 export const ImgWrap = styled.div`
   background: rgba(239, 239, 239, 0.5);
   margin-bottom: 16px;
+  border-radius: 10px;
   padding: 10px;
 `;
 

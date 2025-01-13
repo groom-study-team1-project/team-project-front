@@ -12,27 +12,24 @@ export const createPost = async (body) => {
       title: body.title?.trim(),
       content: body.content?.trim(),
       categoryId: body.categoryId,
-      hashtags: body.hashtags || [], // 해시태그 배열
-      thumbnailImageKey: body.thumbnailImageKey || "", // 썸네일 이미지 키
-      imageKeys: body.imageKeys || [], // 이미지 키 배열
+      hashtags: body.hashtags || [],
+      thumbnailImageUrl: body.thumbnailImageUrl || "posts/thumbnail.png",
+      imageKeys: body.imageKeys || [],
     };
-
-    console.log("Final Request Body in createPost:", requestBody);
 
     if (!requestBody.title || !requestBody.content || !requestBody.categoryId) {
       throw new Error("제목, 내용, 카테고리 ID는 필수 입력 항목입니다.");
     }
 
     const result = await axiosInstance.post("/api/posts/upload", requestBody);
-    console.log("게시글 생성 성공:", result.data);
     return result.data;
   } catch (error) {
     console.error(
         error.response
-            ? "서버 응답 에러: " + error.response.data
+            ? `Server response error: ${error.response.data}`
             : error.request
-                ? "응답 없음 에러: " + error.request
-                : "예상치 못한 에러: " + error.message
+                ? "No response error: " + error.request
+                : "Unexpected error: " + error.message
     );
     throw error;
   }
@@ -78,27 +75,25 @@ export const uploadAdapter = (loader, onImageUploaded) => {
 };
 
 // 게시글 목록 조회
-export async function fetchPostItems(categoryId, lastPostId) {
+export async function fetchPostItems(categoryId, lastPostId, postSortType = "RECENT", limit = 10) {
   try {
-    console.log("게시글 조회 요청 파라미터:", { categoryId, lastPostId });
-
     const response = await axiosInstance.get("/open/posts", {
-      params: { categoryId, lastPostId },
+      params: { categoryId, lastPostId, postSortType, limit },
     });
 
     if (
         response.data?.status?.code === 1203 &&
         Array.isArray(response.data.result)
     ) {
-      console.log("게시글 조회 성공:", response.data.result);
-      return { totalPostCount: response.data.result.length, posts: response.data.result };
+      console.log("Posts fetched successfully:", response.data.result);
+      return { posts: response.data.result };
     }
 
-    console.warn("응답 구조가 예상과 다르거나 결과가 비어있습니다.");
-    return { totalPostCount: 0, posts: [] };
+    console.warn("Unexpected response structure or empty results.");
+    return { posts: [] };
   } catch (error) {
-    console.error("게시글 조회 에러:", error);
-    return { totalPostCount: 0, posts: [] };
+    console.error("Error fetching posts:", error);
+    return { posts: [] };
   }
 }
 
@@ -110,13 +105,10 @@ export const fetchPostDetail = async (postId) => {
     if (response.data.status.code === 1203) {
       return response.data.result;
     } else {
-      throw new Error(
-          response.data.status.message ||
-          "게시글을 불러올 수 없거나 존재하지 않습니다."
-      );
+      throw new Error(response.data.status.message || "Failed to fetch post detail.");
     }
   } catch (error) {
-    console.error("게시글 상세 조회 에러:", error);
+    console.error("Error fetching post detail:", error);
     throw error;
   }
 };
@@ -124,39 +116,33 @@ export const fetchPostDetail = async (postId) => {
 // 게시글 수정
 export const fetchPostChange = async (body, postId) => {
   try {
-    console.log(body);
-    const result = await axiosInstance.post(
-        `/api/posts/edit/${postId}`,
-        body
-    );
-    console.log("게시글 수정 성공:", result.data);
+    const result = await axiosInstance.post(`/api/posts/edit/${postId}`, body);
     return result.data;
   } catch (error) {
     console.error(
         error.response
-            ? "서버 응답 에러: " + error.response.data
+            ? `Server response error: ${error.response.data}`
             : error.request
-                ? "응답 없음 에러: " + error.request
-                : "예상치 못한 에러: " + error.message
+                ? "No response error: " + error.request
+                : "Unexpected error: " + error.message
     );
     throw error;
   }
 };
 
-
 // 게시글 삭제
 export const deletepost = async (postId) => {
   try {
     const response = await axiosInstance.patch(`/api/posts/remove/${postId}`);
-    console.log("게시글 삭제 성공:", response.data);
+    console.log("Post deleted successfully:", response.data);
     return response.data;
   } catch (error) {
     console.error(
         error.response
-            ? "서버 응답 에러: " + error.response.data
+            ? `Server response error: ${error.response.data}`
             : error.request
-                ? "응답 없음 에러: " + error.request
-                : "예상치 못한 에러: " + error.message
+                ? "No response error: " + error.request
+                : "Unexpected error: " + error.message
     );
     throw error;
   }

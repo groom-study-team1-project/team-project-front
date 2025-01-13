@@ -1,6 +1,11 @@
 import React, { useEffect, useRef, useState, useCallback } from "react";
 import NoticePostCard from "../../../components/Card/PostCard/NoticePostCard/NoticePostCard";
-import { ContentWrapper, PostCardWrapper, EndMessage, SpinnerWrapper } from "../Board.style";
+import {
+  ContentWrapper,
+  PostCardWrapper,
+  EndMessage,
+  SpinnerWrapper,
+} from "../Board.style";
 import Search from "../../../components/Common/Search/Search";
 import { fetchPostItems } from "../../../services/api/postApi";
 import { BarLoading } from "../../../components/Common/LodingSpinner";
@@ -13,40 +18,24 @@ function NoticeBoard() {
   const [lastPostId, setLastPostId] = useState(null);
   const [loading, setLoading] = useState(false);
   const [hasMore, setHasMore] = useState(true);
+  const [postSortType, setPostSortType] = useState("LATEST");
   const observerRef = useRef(null);
 
   const categoryId = 4;
   const limit = 10;
 
-  // 인기 게시글 가져오기
   const fetchPopularPosts = useCallback(async () => {
     try {
-      let allPosts = [];
-      let lastId = null;
-      let more = true;
-
-      while (more) {
-        const { posts } = await fetchPostItems(categoryId, lastId);
-        allPosts = [...allPosts, ...posts];
-
-        if (posts.length < limit) {
-          more = false;
-        } else {
-          lastId = posts[posts.length - 1].postId;
-        }
-      }
-
-      const filteredPopularPosts = allPosts
-          .sort((a, b) => b.countInfo.commentCount - a.countInfo.commentCount)
-          .slice(0, 5);
-
+      const { posts } = await fetchPostItems(categoryId, null, "HOT", 50);
+      const filteredPopularPosts = posts
+          .sort((a, b) => b.commentCount - a.commentCount)
+          .slice(0, 5); // Limit to 5 posts
       setPopularPosts(filteredPopularPosts);
     } catch (error) {
-      console.error("인기 게시글 가져오기 오류:", error);
+      console.error("Error fetching popular posts:", error);
     }
-  }, [categoryId, limit]);
+  }, [categoryId]);
 
-  // 일반 게시글 가져오기
   const fetchData = useCallback(async () => {
     if (loading || !hasMore) return;
 
@@ -54,19 +43,18 @@ function NoticeBoard() {
 
     try {
       await new Promise((resolve) => setTimeout(resolve, 1000));
-
-      const { posts } = await fetchPostItems(categoryId, lastPostId);
+      const { posts } = await fetchPostItems(categoryId, lastPostId, postSortType, limit);
       if (posts.length > 0) {
         setPostItems((prevPosts) => [...prevPosts, ...posts]);
         setLastPostId(posts[posts.length - 1].postId);
       }
       if (posts.length < limit) setHasMore(false);
     } catch (error) {
-      console.error("공지사항 게시판 데이터 요청 오류:", error);
+      console.error("Error fetching posts:", error);
     } finally {
       setLoading(false);
     }
-  }, [loading, hasMore, lastPostId, categoryId]);
+  }, [loading, hasMore, lastPostId, categoryId, limit, postSortType]);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -87,13 +75,17 @@ function NoticeBoard() {
     fetchPopularPosts();
   }, [fetchPopularPosts]);
 
-  // 검색어를 기준으로 게시글 필터링
+  const handleSearch = (newSearchTerm, newPostSortType) => {
+    setSearchTerm(newSearchTerm || "");
+    setPostSortType(newPostSortType || "LATEST");
+    setPostItems([]);
+    setLastPostId(null);
+    setHasMore(true);
+  };
+
   const filteredPosts = postItems.filter((postItem) =>
       !searchTerm.trim() || postItem.title.toLowerCase().includes(searchTerm.toLowerCase())
   );
-
-  // 검색어 상태 업데이트
-  const handleSearch = (newSearchTerm) => setSearchTerm(newSearchTerm || "");
 
   return (
       <ContentWrapper>
@@ -106,7 +98,11 @@ function NoticeBoard() {
                   id={postItem.postId}
                   title={postItem.title}
                   date={new Date(postItem.createdAt).toLocaleString("ko-KR")}
-                  count={postItem.countInfo}
+                  count={{
+                    viewCount: postItem.viewCount,
+                    likeCount: postItem.likeCount,
+                    commentCount: postItem.commentCount,
+                  }}
               />
           ))}
           <div ref={observerRef} style={{ height: "1px" }} />

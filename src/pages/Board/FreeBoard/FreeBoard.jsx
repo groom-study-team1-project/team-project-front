@@ -18,40 +18,24 @@ function FreeBoard() {
   const [lastPostId, setLastPostId] = useState(null);
   const [loading, setLoading] = useState(false);
   const [hasMore, setHasMore] = useState(true);
+  const [postSortType, setPostSortType] = useState("LATEST");
   const observerRef = useRef(null);
 
   const categoryId = 1;
   const limit = 10;
 
-  // 초기 인기 게시글 가져오기
   const fetchPopularPosts = useCallback(async () => {
     try {
-      let allPosts = [];
-      let lastId = null;
-      let more = true;
-
-      while (more) {
-        const { posts } = await fetchPostItems(categoryId, lastId);
-        allPosts = [...allPosts, ...posts];
-
-        if (posts.length < limit) {
-          more = false;
-        } else {
-          lastId = posts[posts.length - 1].postId;
-        }
-      }
-
-      const filteredPopularPosts = allPosts
-          .sort((a, b) => b.countInfo.commentCount - a.countInfo.commentCount)
+      const { posts } = await fetchPostItems(categoryId, null, "HOT", 50);
+      const filteredPopularPosts = posts
+          .sort((a, b) => b.commentCount - a.commentCount)
           .slice(0, 5); // Limit to 5 posts
-
       setPopularPosts(filteredPopularPosts);
     } catch (error) {
-      console.error("인기 게시글 가져오기 오류:", error);
+      console.error("Error fetching popular posts:", error);
     }
-  }, [categoryId, limit]);
+  }, [categoryId]);
 
-  // 일반 게시글 가져오기
   const fetchData = useCallback(async () => {
     if (loading || !hasMore) return;
 
@@ -59,19 +43,18 @@ function FreeBoard() {
 
     try {
       await new Promise((resolve) => setTimeout(resolve, 1000));
-
-      const { posts } = await fetchPostItems(categoryId, lastPostId);
+      const { posts } = await fetchPostItems(categoryId, lastPostId, postSortType, limit);
       if (posts.length > 0) {
         setPostItems((prevPosts) => [...prevPosts, ...posts]);
         setLastPostId(posts[posts.length - 1].postId);
       }
       if (posts.length < limit) setHasMore(false);
     } catch (error) {
-      console.error("게시글 가져오기 오류:", error);
+      console.error("Error fetching posts:", error);
     } finally {
       setLoading(false);
     }
-  }, [loading, hasMore, lastPostId, categoryId]);
+  }, [loading, hasMore, lastPostId, categoryId, limit, postSortType]);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -92,12 +75,17 @@ function FreeBoard() {
     fetchPopularPosts();
   }, [fetchPopularPosts]);
 
-  // 검색 기능
+  const handleSearch = (newSearchTerm, newPostSortType) => {
+    setSearchTerm(newSearchTerm || "");
+    setPostSortType(newPostSortType || "LATEST");
+    setPostItems([]);
+    setLastPostId(null);
+    setHasMore(true);
+  };
+
   const filteredPosts = postItems.filter((postItem) =>
       !searchTerm.trim() || postItem.title.toLowerCase().includes(searchTerm.toLowerCase())
   );
-
-  const handleSearch = (newSearchTerm) => setSearchTerm(newSearchTerm || "");
 
   return (
       <ContentWrapper>
@@ -110,10 +98,14 @@ function FreeBoard() {
                   id={postItem.postId}
                   title={postItem.title}
                   content={postItem.content}
-                  name={postItem.memberInfo.nickname}
-                  job={postItem.memberInfo.memberJob || "직업 정보 없음"}
-                  img={postItem.memberInfo.imageUrl}
-                  count={postItem.countInfo}
+                  name={postItem.authorInformation.nickname}
+                  job={postItem.authorInformation.memberJob || "직업 정보 없음"}
+                  img={postItem.authorInformation.imageUrl}
+                  count={{
+                    viewCount: postItem.viewCount,
+                    likeCount: postItem.likeCount,
+                    commentCount: postItem.commentCount,
+                  }}
                   thumbnail={postItem.thumbnail}
               />
           ))}
