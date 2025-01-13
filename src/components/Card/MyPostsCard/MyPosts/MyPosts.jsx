@@ -1,80 +1,60 @@
 import React, { useEffect, useState } from "react";
-import { postInfo } from "../../../../services/api/authApi";
-import { MyPost, MyPostTitle } from "./MyPosts.style";
-import PostsByCategory from "../PostsByCategory/PostsByCategory";
+import {
+  MyPost,
+  MypostThumbnail,
+  MypostTitle,
+  MypostDate,
+  DateCountWrap,
+  MypostTitleWrap,
+} from "./MyPosts.style";
+import { Interaction } from "../../../Common/Interactions";
 
-export const MyPosts = ({ postCount }) => {
-  const [freeBoard, setFreeBoard] = useState([]);
-  const [projectBoard, setProjectBoard] = useState([]);
-  const [questionBoard, setQuestionBoard] = useState([]);
-  const [lastPostId, setLastPostId] = useState({
-    freeBoard: 100,
-    projectBoard: 100,
-    questionBoard: 100,
-  });
-  const catergoryId = {
-    freeBoard: 1,
-    projectBoard: 2,
-    questionBoard: 3,
-  };
+import { useNavigate } from "react-router-dom";
 
+export const MyPosts = ({ mypost }) => {
+  const navigate = useNavigate();
+
+  const [post, setPost] = useState("");
+  const [postDate, setPostdate] = useState("");
   useEffect(() => {
-    postInfo(catergoryId.freeBoard, lastPostId.freeBoard)
-      .then((data) => {
-        setFreeBoard(data);
-      })
-      .catch((err) => console.log(err));
-
-    postInfo(catergoryId.projectBoard, lastPostId.projectBoard)
-      .then((data) => {
-        setProjectBoard(data);
-      })
-      .catch((err) => console.log(err));
-
-    postInfo(catergoryId.questionBoard, lastPostId.questionBoard)
-      .then((data) => {
-        setQuestionBoard(data);
-      })
-      .catch((err) => console.log(err));
-  }, [lastPostId]);
-
-  const handleLoadMore = (boardType) => {
-    setLastPostId((prevLastPostId) => ({
-      ...prevLastPostId,
-      [boardType]: prevLastPostId[boardType] + 5,
-    }));
-  };
-
+    const formattedDate = new Date(
+      new Date(mypost.createdAt).getTime() + 9 * 60 * 60 * 1000
+    ).toLocaleString("ko-KR", {
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit",
+      hour12: false,
+    });
+    setPostdate(formattedDate);
+    setPost(mypost);
+  }, [mypost, post]);
+  if (post === null || "") {
+    return <div>게시글을 불러오지 못했습니다.</div>;
+  }
   return (
-    <MyPost>
-      <MyPostTitle>
-        <span className="title">내가 작성한 글</span>
-        <span className="post-count">{postCount}</span>
-      </MyPostTitle>
-      <PostsByCategory
-        id={catergoryId.freeBoard}
-        board={"자유 게시판"}
-        contents={freeBoard}
-        onLoadMore={() => handleLoadMore("freeBoard")}
-        lastPostId={lastPostId.freeBoard}
-        postCount={postCount.freeBoard}
-      />
-      <PostsByCategory
-        id={catergoryId.projectBoard}
-        board={"프로젝트 게시판"}
-        contents={projectBoard}
-        onLoadMore={() => handleLoadMore("projectBoard")}
-        lastPostId={lastPostId.projectBoard}
-        postCount={postCount.projectBoard}
-      />
-      <PostsByCategory
-        id={catergoryId.questionBoard}
-        board={"질문 게시판"}
-        contents={questionBoard}
-        onLoadMore={() => handleLoadMore("questionBoard")}
-        lastPostId={lastPostId.questionBoard}
-        postCount={postCount.questionBoard}
-      />
-    </MyPost>
+    <>
+      <MyPost
+        key={post.id}
+        onClick={() => {
+          navigate(`/board/detail/${post.id}`);
+        }}
+      >
+        <MypostThumbnail src={post.thumbnail} />
+        <MypostTitleWrap>
+          <MypostTitle>{post.title}</MypostTitle>
+          <div></div>
+        </MypostTitleWrap>
+        <DateCountWrap>
+          <MypostDate>{postDate}</MypostDate>
+          <Interaction
+            count={{
+              viewCount: post.viewCount,
+              likeCount: post.likeCount,
+              commentCount: post.commentCount,
+            }}
+          />
+        </DateCountWrap>
+      </MyPost>
+    </>
   );
 };
