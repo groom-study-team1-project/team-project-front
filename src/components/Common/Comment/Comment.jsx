@@ -56,6 +56,7 @@ const Comments = ({ commentCount }) => {
     const { postId } = useParams();
     const [newComment, setNewComment] = useState("");
     const [modalIndex, setModalIndex] = useState(null);
+    const [editContentId, setEditContentId] = useState(null);
     const [editContent, setEditContent] = useState("");
 
     const {
@@ -64,9 +65,7 @@ const Comments = ({ commentCount }) => {
         error,
         likeComments,
         openReplies,
-        isEndComment,
-        editCommentId,
-        editCommentContent
+        isEndComment
     } = useSelector(state => state.comments);
 
     useEffect(() => {
@@ -116,21 +115,35 @@ const Comments = ({ commentCount }) => {
     };
 
     const handleEditSubmit = async (commentId) => {
-        const success = await dispatch(submitEditComment(commentId, editContent));
+        if (!editContent.trim()) return;
+        const success = await dispatch(submitEditComment(commentId, editContent.trim()));
         if (success) {
-            setModalIndex(null);
             setEditContent("");
+            setEditContentId(null);
+            setModalIndex(null);
         }
     };
 
     const handleEditCancel = () => {
-        dispatch(clearEditComment());
+        setEditContentId(null);
+        setEditContent("");
     };
 
     const handleModalClose = () => setModalIndex(null);
 
     const handleReplyOpen = (commentId) => {
         dispatch(toggleReply(commentId));
+    }
+
+    const handleMoreComment = (postId, lastCommentId) => {
+        if (lastCommentId) {
+            dispatch(fetchCommentList(postId, lastCommentId));
+            const minCommentId = Math.min(...comments.map(comment => comment.id));
+
+            if (lastCommentId === minCommentId) {
+                dispatch(setEndComment(true));
+            }
+        }
     }
 
     if (isLoading) return <div>Loading...</div>;
@@ -141,7 +154,7 @@ const Comments = ({ commentCount }) => {
             <CommentsWrap>
                 <CommentTitle>
                     <span style={{ fontSize: "24px", paddingRight: "0.5rem" }}>댓글</span>
-                    <span>{commentCount}</span>
+                    <span>{comments.length}</span>
                 </CommentTitle>
                 <CommentInputForm onSubmit={handleSubmit}>
                     <CommentInputWrap>
@@ -165,7 +178,7 @@ const Comments = ({ commentCount }) => {
                                 <ProfileImage src={commentData.memberImageUrl}></ProfileImage>
                                 <CommentText>
                                     <Bold>{commentData.memberNickname}</Bold>
-                                    {editCommentId === commentData.id ? (
+                                    {editContentId === commentData.id ? (
                                         <EditCommentWrap>
                                             <EditCommentInput
                                                 value={editContent}
@@ -173,7 +186,7 @@ const Comments = ({ commentCount }) => {
                                             />
                                             <CommentButton
                                                 onClick={() =>
-                                                    handleEditSubmit(commentData.id, commentData.content)
+                                                    handleEditSubmit(commentData.id)
                                                 }
                                             >
                                                 수정
@@ -213,14 +226,17 @@ const Comments = ({ commentCount }) => {
                                                                 commentData.id,
                                                                 commentData.content
                                                             );
-                                                            submitEditComment(commentData.id, commentData.content);
+                                                            setEditContentId(commentData.id);
+                                                            setEditContent(commentData.content);
+                                                            handleModalClose(commentData.id);
+                                                            setModalIndex(null);
                                                         }}
                                                         onDelete={() => {
                                                             console.log(
                                                                 "삭제할 게시글 아이디 : ",
                                                                 commentData.id
                                                             );
-                                                            handleDeleteComment(commentData.id);
+                                                            dispatch(handleDeleteComment(commentData.id));
                                                         }}
                                                     />
                                                 )}
@@ -228,7 +244,11 @@ const Comments = ({ commentCount }) => {
                                         )}
                                     </TimeAndModal>
                                     <IconWrap>
-                                        <LikedButton onClick={() => handleLikeComment(commentData.id, userInfo)}>
+                                        <LikedButton onClick={(e) => {
+                                            e.preventDefault();
+                                            console.log("commentDataid : ", commentData.id);
+                                            dispatch(handleLikeComment(commentData.id))
+                                        }}>
                                             {commentData.likedMe ? (
                                                 <FontAwesomeIcon
                                                     icon={solidHeart}
@@ -254,20 +274,10 @@ const Comments = ({ commentCount }) => {
                         </ReplyList>
                     </CommentWrap>
                 ))}
-                {!isEndComment ? (
+                {!isEndComment && comments.length > 5 && !isLoading ? (
                     <SomeMoreCommentButton onClick={() => {
-
                         const lastCommentId = comments[comments.length-1].id
-
-                        if (lastCommentId) {
-
-                            dispatch(fetchCommentList(postId, lastCommentId));
-                            const minCommentId = Math.min(...comments.map(comment => comment.id));
-
-                            if (lastCommentId === minCommentId) {
-                                dispatch(setEndComment(true));
-                            }
-                        }
+                        handleMoreComment(postId, lastCommentId);
                     }}>
                         더보기
                     </SomeMoreCommentButton>

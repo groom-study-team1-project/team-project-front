@@ -1,4 +1,4 @@
-import { createSlice } from '@reduxjs/toolkit';
+import {createSlice} from '@reduxjs/toolkit';
 /*import {
     fetchComment,
     createComment,
@@ -9,15 +9,16 @@ import { createSlice } from '@reduxjs/toolkit';
     createReplyComment
 } from '../../services/api/commentApi';*/
 import {
-    fetchComment,
     createComment,
+    createReplyComment,
     deleteComment,
     editComment,
-    likeComment,
+    fetchComment,
     fetchReplyComment,
-    createReplyComment
+    likeComment
 } from "../../services/api/mockCommentApi";
-import { enableMapSet } from 'immer';
+import {enableMapSet} from 'immer';
+
 enableMapSet();
 
 const initialState = {
@@ -40,7 +41,10 @@ const commentSlice = createSlice({
             state.comments = action.payload;
         },
         appendComments: (state, action) => {
-            state.comments = [...state.comments, ...action.payload];
+            const newComments = action.payload.filter(newComment =>
+                !state.comments.some(existing => existing.id === newComment.id)
+            );
+            state.comments = [...state.comments, ...newComments];
         },
         addComment: (state, action) => {
             state.comments.unshift(action.payload);
@@ -48,41 +52,34 @@ const commentSlice = createSlice({
             localStorage.setItem('commentCount', JSON.stringify(state.commentCount));
         },
         removeComment: (state, action) => {
-            state.comments = state.comments.filter(comment => comment.id !== action.payload);
+            console.log('삭제할 댓글 ID:', action.payload);
+            console.log('현재 댓글들:', state.comments);
+            console.log('댓글 ID 타입:', typeof action.payload);
+            console.log('첫 번째 댓글의 ID 타입:', typeof state.comments[0]?.id);
+            state.comments = state.comments.filter(comment => Number(comment.id) !== action.payload);
             state.commentCount -= 1;
             localStorage.setItem('commentCount', JSON.stringify(state.commentCount));
         },
         updateComment: (state, action) => {
             const index = state.comments.findIndex(comment => comment.id === action.payload.id);
             if (index !== -1) {
-                state.comments[index] = action.payload;
+                state.comments[index] = {
+                    ...state.comments[index],
+                    content: action.payload.content,
+                    modified: true
+                };
             }
             state.editCommentId = null;
             state.editCommentContent = '';
         },
         toggleLike: (state, action) => {
-            const commentId = action.payload;
-            const likeSet = new Set(state.likeComments);
-
-            if (likeSet.has(commentId)) {
-                likeSet.delete(commentId);
-            } else {
-                likeSet.add(commentId);
-            }
-
-            state.likeComments = Array.from(likeSet);
-            localStorage.setItem('likeComments', JSON.stringify(state.likeComments));
-
-            const comment = state.comments.find(c => c.id === commentId);
-            if (comment) {
-                comment.likeCount = likeSet.has(commentId) ?
-                    comment.likeCount + 1 :
-                    comment.likeCount - 1;
-            }
-        },
-        clearEditComment: (state) => {
-            state.editCommentId = null;
-            state.editCommentContent = '';
+                console.log("action : ", action.payload);
+                const { commentId, updatedComment } = action.payload;
+                const comment = state.comments.find(c => c.id === commentId);
+                if (comment) {
+                    comment.likedMe = updatedComment.likedMe;
+                    comment.likeCount = updatedComment.likeCount;
+                }
         },
         toggleReply: (state, action) => {
             const commentId = action.payload;
@@ -123,7 +120,7 @@ export const fetchCommentList = (postId, lastCommentId) => async (dispatch) => {
         } else {
             dispatch(setComments(result.comments));
         }
-        dispatch(setEndComment(result.comments.length < 5 && Math.min(result.comments.id) === lastCommentId));
+        dispatch(setEndComment(result.comments.length < 5));
     } catch (error) {
         dispatch(setError(error.message));
     } finally {
@@ -164,7 +161,6 @@ export const submitEditComment = (commentId, content) => async (dispatch) => {
         const result = await editComment(commentId, content);
         if (result.status?.code === 9999) {
             dispatch(updateComment(result.result));
-            dispatch(clearEditComment());
             return true;
         }
         return false;
@@ -174,13 +170,13 @@ export const submitEditComment = (commentId, content) => async (dispatch) => {
     }
 };
 
-export const handleLikeComment = (commentId) => async (dispatch, getState) => {
-    const { likeComments } = getState().comments;
+export const handleLikeComment = (commentId) => async (dispatch) => {
     try {
-        const likeSet = new Set(likeComments);
-        const result = await likeComment(likeSet, commentId);
+        const result= await likeComment(commentId);
         if (result.status?.code === 9999) {
-            dispatch(toggleLike(commentId));
+            dispatch(toggleLike({
+                commentId, updatedComment : result.result
+            }));
             return true;
         }
         return false;
@@ -228,7 +224,6 @@ export const {
     removeComment,
     updateComment,
     toggleLike,
-    clearEditComment,
     toggleReply,
     setLoading,
     setError,
