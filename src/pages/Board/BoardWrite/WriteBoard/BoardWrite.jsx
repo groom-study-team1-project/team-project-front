@@ -8,11 +8,9 @@ import {
   fetchPostChange,
   uploadAdapter,
 } from "../../../../services/api/postApi";
-import backBtn from "../../../../assets/images/back-removebg-preview.png";
 import Navbar from "../../../../Layout/Navbar/Navbar";
 import ImageUploadCard from "../../../../components/Card/imgUploadCard/imageUploadCard";
 import {
-  BackImg,
   Categoryselect,
   Hashtag,
   SubmitBtn,
@@ -20,9 +18,11 @@ import {
   Titleinput,
   TitleWrap,
   Wrap,
+  SmallWrite,
   Write,
   WriteWrap,
   Toolbar,
+  EditorWrap
 } from "./BoardWrite.style";
 import { useSelector } from "react-redux";
 import "./App.css";
@@ -202,17 +202,11 @@ const WriteBoard = ({ postData, postId, imgList }) => {
         )}
         <Wrap>
           <WriteWrap>
-            <BackImg
-                $isMobile={isMobile}
-                src={backBtn}
-                alt="뒤로 가기"
-                onClick={() => navigate(-1)}
-            />
-            <Write $isMobile={isMobile}>글 쓰기</Write>
+            <SmallWrite>자유게시판</SmallWrite>
+            <Write $isMobile={isMobile}>글 작성</Write>
           </WriteWrap>
           <form onSubmit={onSubmit}>
             <TitleWrap $isMobile={isMobile}>
-            <span>
               <Titleinput
                   type="text"
                   placeholder="제목을 입력하세요"
@@ -220,8 +214,6 @@ const WriteBoard = ({ postData, postId, imgList }) => {
                   value={form.title}
                   $isMobile={isMobile}
               />
-            </span>
-              <span>
               <Categoryselect
                   onChange={handleCategoryChange}
                   value={selectedCategory}
@@ -232,7 +224,6 @@ const WriteBoard = ({ postData, postId, imgList }) => {
                 <option value={3}>질문 게시판</option>
                 <option value={4}>공지 게시판</option>
               </Categoryselect>
-            </span>
             </TitleWrap>
             {Number(selectedCategory) === 2 && (
                 <ImageUploadCard
@@ -242,32 +233,31 @@ const WriteBoard = ({ postData, postId, imgList }) => {
                     setForm={setValue}
                 />
             )}
-            <div ref={editorContainerRef}>
+            <EditorWrap ref={editorContainerRef}>
               <Toolbar
-                  style={{ marginBottom: "30px" }}
                   ref={toolbarContainerRef}
               ></Toolbar>
-            </div>
-            <CKEditor
-                editor={DecoupledEditor}
-                config={{
-                  ...editorConfig,
-                  extraPlugins: [uploadPlugin],
-                }}
-                data={form.content}
-                onReady={(editor) => {
-                  const toolbarElement = editor.ui.view.toolbar.element;
-                  if (toolbarContainerRef.current.firstChild !== toolbarElement) {
-                    toolbarContainerRef.current.innerHTML = "";
-                    toolbarContainerRef.current.appendChild(toolbarElement);
-                  }
-                  const editableElement = editor.ui.view.editable.element;
-                  if (!editorContainerRef.current.contains(editableElement)) {
-                    editorContainerRef.current.appendChild(editableElement);
-                  }
-                }}
-                onBlur={getDataFromCKEditor}
-            />
+              <CKEditor
+                  editor={DecoupledEditor}
+                  config={{
+                    ...editorConfig,
+                    extraPlugins: [uploadPlugin],
+                  }}
+                  data={form.content}
+                  onReady={(editor) => {
+                    const toolbarElement = editor.ui.view.toolbar.element;
+                    if (toolbarContainerRef.current.firstChild !== toolbarElement) {
+                      toolbarContainerRef.current.innerHTML = "";
+                      toolbarContainerRef.current.appendChild(toolbarElement);
+                    }
+                    const editableElement = editor.ui.view.editable.element;
+                    if (!editorContainerRef.current.contains(editableElement)) {
+                      editorContainerRef.current.appendChild(editableElement);
+                    }
+                  }}
+                  onBlur={getDataFromCKEditor}
+              />
+            </EditorWrap>
             <Hashtag
                 type="text"
                 placeholder="#태그입력"
@@ -278,19 +268,19 @@ const WriteBoard = ({ postData, postId, imgList }) => {
             />
             <SubmitBtnWrap $isMobile={isMobile}>
               <SubmitBtn
-                  $borderColor="#929292"
-                  $bgColor="transparent"
-                  $isMobile={isMobile}
-              >
-                임시저장
-              </SubmitBtn>
-              <SubmitBtn
                   $borderColor="#B1CDE9"
                   $bgColor="#B1CDE9"
                   type="submit"
                   $isMobile={isMobile}
               >
                 확인
+              </SubmitBtn>
+              <SubmitBtn
+                  $borderColor="#929292"
+                  $bgColor="transparent"
+                  $isMobile={isMobile}
+              >
+                취소
               </SubmitBtn>
             </SubmitBtnWrap>
           </form>

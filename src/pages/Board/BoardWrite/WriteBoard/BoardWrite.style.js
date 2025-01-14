@@ -19,7 +19,9 @@ export const Wrap = styled.div`
 
 export const WriteWrap = styled.div`
   display: flex;
-  align-items: center;
+  flex-direction: column;
+  align-items: start;
+  font-weight: bold;
   margin-top: 111px;
   margin-bottom: 41px;
 `;
@@ -38,6 +40,11 @@ export const BackImg = styled.img`
   cursor: pointer;
 `;
 
+export const SmallWrite = styled.div`
+    font-size: 1rem;
+    padding-left: 0.2rem;
+`;
+
 export const Write = styled.div`
   ${(props) =>
     props.$isMobile
@@ -52,57 +59,69 @@ export const Write = styled.div`
 
 export const TitleWrap = styled.div`
   display: flex;
+  width: 100%;
   ${(props) =>
     props.$isMobile
       ? `
-    flex-direction: column;
-    margin-bottom: 10px;
-    justify-content: none;
- 
-`
-      : `
-    justify-content: space-between;
-`}
+        flex-direction: column;
+        margin-bottom: 10px;
+        justify-content: none;
+        ` 
+      : ``
+  }
 `;
 
 export const Titleinput = styled.input`
+  flex: 10;
   height: 43px;
-  border-radius: 10px;
+  border-radius: 5px;
   border: none;
+  margin-right: 1rem;
   margin-bottom: 32px;
-  padding: 0px;
+  padding-left: 1rem;
   width: ${(props) => (props.$isMobile ? "100%" : "30vw")};
 `;
 
 export const Categoryselect = styled.select`
+  width: 30%;
   height: 43px;
   border: none;
-  border-radius: 10px;
+  border-radius: 5px;
   background: white;
   color: black;
   ${(props) =>
     props.$isMobile
       ? `
-     width: 100%;
-    margin-top: -20px;
- 
-`
-      : ``}
+          width: 100%;
+          margin-top: -20px;
+      `
+      : ``
+  }
+`;
+
+export const EditorWrap = styled.div`
+    background: white;
+    border-radius: 5px;
+`;
+
+export const Toolbar = styled.div`
+  margin-bottom: 0px;
+  border-bottom: 1px solid gray;
 `;
 
 export const Hashtag = styled.input`
   border: none;
-  background: none;
-  border: 1px solid black;
+  background: white;
   border-radius: 5px;
+  padding: 0.5rem 0.5rem 0.5rem 0.5rem;
   ${(props) =>
     props.$isMobile
       ? `
-    width: 50%;
-    margin-bottom: 20px;
- 
-`
-      : ``}
+        width: 50%;
+        margin-bottom: 20px;
+      `
+      : ``
+  }
 `;
 
 export const SubmitBtnWrap = styled.div`
@@ -126,8 +145,4 @@ export const SubmitBtn = styled.button`
       : `
   width: 132px;
     `}
-`;
-
-export const Toolbar = styled.div`
-  margin-bottom: 30px;
 `;
