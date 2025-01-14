@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState, useCallback } from "react";
+import React, { useRef, useState, useEffect, useCallback } from "react";
 import CommunityPostCard from "../../../components/Card/PostCard/CommunityPostCard/CommunityPostCard";
 import {
   ContentWrapper,
@@ -18,8 +18,7 @@ function FreeBoard() {
   const [lastPostId, setLastPostId] = useState(null);
   const [loading, setLoading] = useState(false);
   const [hasMore, setHasMore] = useState(true);
-  const isThrottleActive = useRef(false);
-  const listRef = useRef(null);
+  const observerRef = useRef(null);
 
   const categoryId = 1;
   const limit = 10;
@@ -53,59 +52,41 @@ function FreeBoard() {
   }, [categoryId, limit]);
 
   // 일반 게시글 가져오기
-  const fetchData = useCallback(() => {
-    if (loading || !hasMore || isThrottleActive.current) return;
+  const fetchData = useCallback(async () => {
+    if (loading || !hasMore) return;
 
     setLoading(true);
-    isThrottleActive.current = true;
 
-    setTimeout(async () => {
-      try {
-        const { posts } = await fetchPostItems(categoryId, lastPostId);
-        if (posts.length > 0) {
-          setPostItems((prevPosts) => [...prevPosts, ...posts]);
-          setLastPostId(posts[posts.length - 1].postId);
-        }
+    try {
+      await new Promise((resolve) => setTimeout(resolve, 1000));
 
-        if (posts.length < limit) setHasMore(false);
-      } catch (error) {
-        console.error("게시글 가져오기 오류:", error);
-      } finally {
-        setLoading(false);
-        isThrottleActive.current = false;
+      const { posts } = await fetchPostItems(categoryId, lastPostId);
+      if (posts.length > 0) {
+        setPostItems((prevPosts) => [...prevPosts, ...posts]);
+        setLastPostId(posts[posts.length - 1].postId);
       }
-    }, 1000);
+      if (posts.length < limit) setHasMore(false);
+    } catch (error) {
+      console.error("게시글 가져오기 오류:", error);
+    } finally {
+      setLoading(false);
+    }
   }, [loading, hasMore, lastPostId, categoryId]);
 
-  // 무한 스크롤
-  const handleScroll = useCallback(
-    (e) => {
-      const { scrollTop, scrollHeight, clientHeight } = e.target;
-
-      if (lastPostId === null) {
-        fetchData();
-        return;
-      }
-
-      if (
-        scrollHeight - scrollTop <= clientHeight + 100 &&
-        !loading &&
-        hasMore
-      ) {
-        fetchData();
-      }
-    },
-    [fetchData, loading, hasMore, lastPostId]
-  );
-
   useEffect(() => {
-    const listElement = listRef.current;
-    if (listElement) {
-      listElement.addEventListener("scroll", handleScroll);
-      if (lastPostId === null) fetchData();
-    }
-    return () => listElement?.removeEventListener("scroll", handleScroll);
-  }, [handleScroll, fetchData, lastPostId]);
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting && hasMore && !loading) {
+          fetchData();
+        }
+      },
+      { threshold: 1.0 }
+    );
+
+    if (observerRef.current) observer.observe(observerRef.current);
+
+    return () => observer.disconnect();
+  }, [fetchData, hasMore, loading]);
 
   useEffect(() => {
     fetchPopularPosts();
@@ -123,10 +104,8 @@ function FreeBoard() {
   return (
     <ContentWrapper>
       <Search onSearch={handleSearch} placeholder="게시글 검색" />
-
       <PopularPostSlider posts={popularPosts} />
-
-      <PostCardWrapper ref={listRef} style={{ overflowY: "auto" }}>
+      <PostCardWrapper>
         {filteredPosts.map((postItem) => (
           <CommunityPostCard
             key={postItem.postId}
@@ -140,13 +119,14 @@ function FreeBoard() {
             thumbnail={postItem.thumbnail}
           />
         ))}
-        {loading && (
-          <SpinnerWrapper>
-            <BarLoading />
-          </SpinnerWrapper>
-        )}
-        {!hasMore && <EndMessage>모든 게시글을 불러왔습니다.</EndMessage>}
+        <div ref={observerRef} style={{ height: "1px" }} />
       </PostCardWrapper>
+      {loading && (
+        <SpinnerWrapper>
+          <BarLoading />
+        </SpinnerWrapper>
+      )}
+      {!hasMore && <EndMessage>모든 게시글을 불러왔습니다.</EndMessage>}
     </ContentWrapper>
   );
 }

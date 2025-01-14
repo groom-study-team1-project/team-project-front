@@ -17,15 +17,17 @@ export const ProfileImage = styled.img`
 const ProfileInfo = styled.div`
   display: flex;
   flex-direction: column;
+  justify-content: start;
 `;
 
-const ProfileInfoName = styled.p`
-  font-size: ${({ $isBig }) => ($isBig ? "48px" : "14px")};
-  text-wrap: nowrap;
+const ProfileInfoName = styled.div`
+  font-size: ${({ $isBig }) => ($isBig ? "24px" : "14px")};
 `;
 
-const ProfileInfoJob = styled.p`
-  font-size: ${({ $isBig }) => ($isBig ? "24px" : "13px")};
+const ProfileInfoJob = styled.div`
+  font-size: ${({ $isBig }) => ($isBig ? "16px" : "13px")};
+  margin-top: 5%;
+  margin-left: 5%;
 `;
 
 const ProfileBox = ({ name, job, size, isBig, onClick, imgUrl }) => (
@@ -59,11 +61,5 @@ export const PostProfileBox = ({ name, job, memberId, imgUrl }) => {
 };
 
 export const BigProfileBox = ({ nickName, job, src }) => (
-  <ProfileBox
-    name={nickName}
-    job={job}
-    size="200px"
-    isBig={true}
-    imgUrl={src}
-  />
+  <ProfileBox name={nickName} job={job} size="90px" isBig={true} imgUrl={src} />
 );

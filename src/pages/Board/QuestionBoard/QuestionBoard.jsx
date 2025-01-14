@@ -19,8 +19,7 @@ function QuestionBoard() {
   const [lastPostId, setLastPostId] = useState(null);
   const [loading, setLoading] = useState(false);
   const [hasMore, setHasMore] = useState(true);
-  const isThrottleActive = useRef(false);
-  const listRef = useRef(null);
+  const observerRef = useRef(null);
 
   const categoryId = 3; // 게시글을 가져올 카테고리 ID
   const limit = 10; // 한 번에 가져올 게시글 개수 제한
@@ -45,7 +44,7 @@ function QuestionBoard() {
 
       const filteredPopularPosts = allPosts
           .sort((a, b) => b.countInfo.commentCount - a.countInfo.commentCount)
-          .slice(0, 5); // Limit to 5 posts
+          .slice(0, 5);
 
       setPopularPosts(filteredPopularPosts);
     } catch (error) {
@@ -53,54 +52,42 @@ function QuestionBoard() {
     }
   }, [categoryId, limit]);
 
-  // API를 통해 데이터 가져오기
-  const fetchData = useCallback(() => {
-    if (loading || !hasMore || isThrottleActive.current) return;
+  // 일반 게시글 가져오기
+  const fetchData = useCallback(async () => {
+    if (loading || !hasMore) return;
 
     setLoading(true);
-    isThrottleActive.current = true;
 
-    setTimeout(async () => {
-      try {
-        const { posts } = await fetchPostItems(categoryId, lastPostId, limit);
-        if (posts.length > 0) {
-          setPostItems((prevPosts) => [...prevPosts, ...posts]);
-          setLastPostId(posts[posts.length - 1].postId);
-        }
-        if (posts.length < limit) setHasMore(false);
-      } catch (error) {
-        console.error("질문 게시판 데이터 요청 오류:", error);
-      } finally {
-        setLoading(false);
-        isThrottleActive.current = false;
+    try {
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+
+      const { posts } = await fetchPostItems(categoryId, lastPostId);
+      if (posts.length > 0) {
+        setPostItems((prevPosts) => [...prevPosts, ...posts]);
+        setLastPostId(posts[posts.length - 1].postId);
       }
-    }, 1000);
+      if (posts.length < limit) setHasMore(false);
+    } catch (error) {
+      console.error("질문 게시판 데이터 요청 오류:", error);
+    } finally {
+      setLoading(false);
+    }
   }, [loading, hasMore, lastPostId, categoryId]);
 
-  // 무한 스크롤 처리 로직
-  const handleScroll = useCallback(
-      (e) => {
-        const { scrollTop, scrollHeight, clientHeight } = e.target;
-        if (lastPostId === null) {
-          fetchData();
-          return;
-        }
-        if (scrollHeight - scrollTop <= clientHeight + 100 && !loading && hasMore) {
-          fetchData();
-        }
-      },
-      [fetchData, loading, hasMore, lastPostId]
-  );
-
-  // 스크롤 이벤트 리스너 추가 및 제거
   useEffect(() => {
-    const listElement = listRef.current;
-    if (listElement) {
-      listElement.addEventListener("scroll", handleScroll);
-      if (lastPostId === null) fetchData();
-    }
-    return () => listElement?.removeEventListener("scroll", handleScroll);
-  }, [handleScroll, fetchData, lastPostId]);
+    const observer = new IntersectionObserver(
+        (entries) => {
+          if (entries[0].isIntersecting && hasMore && !loading) {
+            fetchData();
+          }
+        },
+        { threshold: 1.0 }
+    );
+
+    if (observerRef.current) observer.observe(observerRef.current);
+
+    return () => observer.disconnect();
+  }, [fetchData, hasMore, loading]);
 
   useEffect(() => {
     fetchPopularPosts();
@@ -118,7 +105,7 @@ function QuestionBoard() {
       <ContentWrapper>
         <Search onSearch={handleSearch} placeholder="질문 검색" />
         <PopularPostSlider posts={popularPosts} />
-        <PostCardWrapper ref={listRef} style={{ overflowY: "auto" }}>
+        <PostCardWrapper>
           {filteredPosts.map((postItem) => (
               <CommunityPostCard
                   key={postItem.postId}
@@ -132,13 +119,14 @@ function QuestionBoard() {
                   thumbnail={postItem.thumbnail}
               />
           ))}
-          {loading && (
-              <SpinnerWrapper>
-                <BarLoading />
-              </SpinnerWrapper>
-          )}
-          {!hasMore && <EndMessage>모든 게시글을 불러왔습니다.</EndMessage>}
+          <div ref={observerRef} style={{ height: "1px" }} />
         </PostCardWrapper>
+        {loading && (
+            <SpinnerWrapper>
+              <BarLoading />
+            </SpinnerWrapper>
+        )}
+        {!hasMore && <EndMessage>모든 게시글을 불러왔습니다.</EndMessage>}
       </ContentWrapper>
   );
 }
