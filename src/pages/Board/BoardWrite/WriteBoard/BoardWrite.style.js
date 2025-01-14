@@ -18,9 +18,14 @@ export const Wrap = styled.div`
 
 export const WriteWrap = styled.div`
   display: flex;
-  align-items: center;
+    flex-direction: column;
   margin-top: 111px;
   margin-bottom: 41px;
+`;
+
+export const Category = styled.div`
+    font-size: 30px;
+    margin-bottom: 10px;
 `;
 
 export const Write = styled.div`
@@ -28,9 +33,7 @@ export const Write = styled.div`
     props.$isMobile
       ? `
     font-size: 30px;
- 
-`
-      : `
+` : `
   font-size: 40px;
 `}
 `;
@@ -43,9 +46,7 @@ export const TitleWrap = styled.div`
     flex-direction: column;
     margin-bottom: 10px;
     justify-content: none;
- 
-`
-      : `
+` : `
     justify-content: space-between;
 `}
 `;
@@ -56,7 +57,11 @@ export const Titleinput = styled.input`
     border: 1px solid #B2ACAC;
   margin-bottom: 32px;
   padding-left: 10px;
-  width: ${(props) => (props.$isMobile ? "100%" : "30vw")};
+  width: 30vw;
+    ${(props) => 
+            props.$isMobile ? `
+     width: 100%;
+` : ``}
 `;
 
 export const Categoryselect = styled.select`
@@ -67,13 +72,10 @@ export const Categoryselect = styled.select`
     padding-left: 10px;
   color: black;
   ${(props) =>
-    props.$isMobile
-      ? `
+    props.$isMobile ? `
      width: 100%;
     margin-top: -20px;
- 
-`
-      : ``}
+` : ``}
 `;
 
 export const Hashtag = styled.input`
@@ -86,13 +88,19 @@ export const Hashtag = styled.input`
       ? `
     width: 50%;
     margin-bottom: 20px;
-`
+`   
       : ``}
 `;
 
 export const SubmitBtnWrap = styled.div`
   float: right;
-  width: ${(props) => props.$isMobile && "100%"};
+    ${(props) =>
+            props.$isMobile
+                    ? `
+    width: 100%;
+    align-items: center;
+  `
+                    : ""}
 `;
 
 export const Toolbar = styled.div`
@@ -109,8 +117,8 @@ export const CancelBtn = styled.button`
   color: black;
   ${(props) =>
     props.$isMobile
-        ? `width: 50%;
-         margin: 0px;
+        ? `width: 40%;
+         margin-right: 10px;
          display: inline;`
         : `
          width: 132px;
@@ -127,8 +135,9 @@ export const ConfirmBtn = styled.button`
   color: black;
   ${(props) =>
     props.$isMobile
-        ? `width: 50%;
+        ? `width: 40%;
          margin: 0px;
+         margin-left: 10px;
          display: inline;`
         : `
          width: 132px;

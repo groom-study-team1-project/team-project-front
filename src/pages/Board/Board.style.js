@@ -5,8 +5,8 @@ export const ContentWrapper = styled.div`
   width: 100%;
   max-height: 100%;
   overflow-y: auto;
-  padding: 10px; /* 추가된 스타일 */
-  box-sizing: border-box; /* padding 포함하여 크기 계산 */
+  padding: ${(props) => (props.$isMobile ? "2px" : props.$isTablet ? "5px" : "10px")};
+  box-sizing: border-box;
   ${(props) =>
       props.$isDetail &&
       `
@@ -15,20 +15,27 @@ export const ContentWrapper = styled.div`
   `}
 `;
 
-export const ScrollContainer = styled.div`
-  width: 100%;
-  height: 100%;
-  position: relative; /* 스크롤 감지용 컨테이너 */
-`;
-
 export const PostCardWrapper = styled.div`
   display: ${(props) => (props.$noticePage ? `block` : `grid`)};
   margin-bottom: ${(props) => (props.$noticePage ? `40px` : `0px`)};
   grid-template-columns: ${(props) =>
-      props.$projectPage ? `repeat(4, 1fr)` : `repeat(2, 1fr)`};
-  gap: ${(props) => (props.$noticePage ? `0px` : `40px`)};
+      props.$isMobile
+          ? `repeat(1, 1fr)`
+          : props.$isTablet
+              ? `repeat(2, 1fr)`
+              : props.$projectPage
+                  ? `repeat(4, 1fr)`
+                  : `repeat(2, 1fr)`};
+  gap: ${(props) =>
+      props.$isMobile
+          ? `10px`
+          : props.$isTablet
+              ? `20px`
+              : props.$noticePage
+                  ? `0px`
+                  : `40px`};
   position: relative;
-  
+
   & > *:not(:last-child) {
     margin-bottom: 20px;
   }
@@ -42,11 +49,15 @@ export const EndMessage = styled.div`
   justify-content: center;
   align-items: center;
   grid-column: ${(props) =>
-      props.$projectPage
-          ? "span 4"
-          : props.$noticePage
-              ? "span 1"
-              : "span 2"};
+      props.$isMobile
+          ? "span 1"
+          : props.$isTablet
+              ? "span 2"
+              : props.$projectPage
+                  ? "span 4"
+                  : props.$noticePage
+                      ? "span 1"
+                      : "span 2"};
 `;
 
 export const SpinnerWrapper = styled.div`
@@ -54,10 +65,13 @@ export const SpinnerWrapper = styled.div`
   justify-content: center;
   align-items: center;
   grid-column: ${(props) =>
-      props.$projectPage
-          ? "span 4"
-          : props.$noticePage
-              ? "span 1"
-              : "span 2"};
+      props.$isMobile
+          ? "span 1"
+          : props.$isTablet
+              ? "span 2"
+              : props.$projectPage
+                  ? "span 4"
+                  : props.$noticePage
+                      ? "span 1"
+                      : "span 2"};
 `;
-

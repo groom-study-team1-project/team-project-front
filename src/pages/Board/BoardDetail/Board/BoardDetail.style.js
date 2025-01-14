@@ -66,6 +66,7 @@ export const PostFooter = styled.div`
     align-items: center;
     justify-content: space-between;
     margin-top: 16px;
+    margin-bottom: 10px;
     width: ${(props) => (props.$isMobile ? `115%;` : `103%;`)};
 `;
 

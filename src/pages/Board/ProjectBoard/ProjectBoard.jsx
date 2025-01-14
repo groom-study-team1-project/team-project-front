@@ -10,6 +10,7 @@ import Search from "../../../components/Common/Search/Search";
 import { fetchPostItems } from "../../../services/api/postApi";
 import { BarLoading } from "../../../components/Common/LodingSpinner";
 import PopularPostSlider from "../../../components/Common/PopularPost/PopularPostSlider";
+import {useSelector} from "react-redux";
 
 function ProjectBoard() {
   const [postItems, setPostItems] = useState([]);
@@ -23,6 +24,8 @@ function ProjectBoard() {
 
   const categoryId = 2;
   const limit = 10;
+
+  const { isMobile, isTablet } = useSelector((state) => state.screenSize);
 
   const fetchPopularPosts = useCallback(async () => {
     try {
@@ -88,10 +91,10 @@ function ProjectBoard() {
   );
 
   return (
-      <ContentWrapper>
+      <ContentWrapper $isMobile={isMobile} $isTablet={isTablet}>
         <Search onSearch={handleSearch} placeholder="프로젝트 검색" />
         <PopularPostSlider posts={popularPosts} />
-        <PostCardWrapper $projectPage={true}>
+        <PostCardWrapper $isMobile={isMobile} $isTablet={isTablet} $projectPage={true}>
           {filteredPosts.map((postItem) => (
               <ProjectPostCard
                   key={postItem.postId}

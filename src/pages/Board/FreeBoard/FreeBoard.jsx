@@ -1,4 +1,5 @@
 import React, { useRef, useState, useEffect, useCallback } from "react";
+import { useSelector } from "react-redux"; // Redux 상태 사용
 import CommunityPostCard from "../../../components/Card/PostCard/CommunityPostCard/CommunityPostCard";
 import {
   ContentWrapper,
@@ -24,12 +25,14 @@ function FreeBoard() {
   const categoryId = 1;
   const limit = 10;
 
+  const { isMobile, isTablet } = useSelector((state) => state.screenSize);
+
   const fetchPopularPosts = useCallback(async () => {
     try {
       const { posts } = await fetchPostItems(categoryId, null, "HOT", 50);
       const filteredPopularPosts = posts
           .sort((a, b) => b.commentCount - a.commentCount)
-          .slice(0, 5); // Limit to 5 posts
+          .slice(0, 5);
       setPopularPosts(filteredPopularPosts);
     } catch (error) {
       console.error("Error fetching popular posts:", error);
@@ -88,10 +91,10 @@ function FreeBoard() {
   );
 
   return (
-      <ContentWrapper>
+      <ContentWrapper $isMobile={isMobile} $isTablet={isTablet}>
         <Search onSearch={handleSearch} placeholder="게시글 검색" />
         <PopularPostSlider posts={popularPosts} />
-        <PostCardWrapper>
+        <PostCardWrapper $isMobile={isMobile} $isTablet={isTablet}>
           {filteredPosts.map((postItem) => (
               <CommunityPostCard
                   key={postItem.postId}

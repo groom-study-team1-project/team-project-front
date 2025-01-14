@@ -10,6 +10,7 @@ import Search from "../../../components/Common/Search/Search";
 import { fetchPostItems } from "../../../services/api/postApi";
 import { BarLoading } from "../../../components/Common/LodingSpinner";
 import PopularPostSlider from "../../../components/Common/PopularPost/PopularPostSlider";
+import {useSelector} from "react-redux";
 
 function QuestionBoard() {
   const [postItems, setPostItems] = useState([]);
@@ -23,6 +24,8 @@ function QuestionBoard() {
 
   const categoryId = 1;
   const limit = 10;
+
+  const { isMobile, isTablet } = useSelector((state) => state.screenSize);
 
   const fetchPopularPosts = useCallback(async () => {
     try {
@@ -88,10 +91,10 @@ function QuestionBoard() {
   );
 
   return (
-      <ContentWrapper>
+      <ContentWrapper $isMobile={isMobile} $isTablet={isTablet}>
         <Search onSearch={handleSearch} placeholder="질문 검색" />
         <PopularPostSlider posts={popularPosts} />
-        <PostCardWrapper>
+        <PostCardWrapper $isMobile={isMobile} $isTablet={isTablet}>
           {filteredPosts.map((postItem) => (
               <CommunityPostCard
                   key={postItem.postId}

@@ -1,6 +1,7 @@
 import React from "react";
 import Slider from "react-slick";
 import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import {
@@ -22,6 +23,8 @@ const PopularPostSlider = ({ posts }) => {
     const sliderRef = React.useRef(null);
     const navigate = useNavigate();
 
+    const screenSize = useSelector((state) => state.screenSize);
+
     const handlePrevClick = () => sliderRef.current.slickPrev();
     const handleNextClick = () => sliderRef.current.slickNext();
 
@@ -41,7 +44,6 @@ const PopularPostSlider = ({ posts }) => {
         arrows: false,
     };
 
-
     const defaultThumbnail = "https://via.placeholder.com/300x150?text=Popular+Post";
 
     const processContent = (htmlContent) => {
@@ -55,7 +57,7 @@ const PopularPostSlider = ({ posts }) => {
     };
 
     return (
-        <SliderContainer>
+        <SliderContainer isMobile={screenSize.isMobile}>
             <CustomArrowWrapper>
                 <Arrow className="prev" onClick={handlePrevClick}>
                     <ArrowImage src={PrevArrowImage} alt="Previous" />
@@ -66,13 +68,14 @@ const PopularPostSlider = ({ posts }) => {
             </CustomArrowWrapper>
             <Slider ref={sliderRef} {...sliderSettings}>
                 {posts.map((post) => (
-                    <SlideItem key={post.postId}>
+                    <SlideItem key={post.postId} isMobile={screenSize.isMobile}>
                         <SlideImage
                             src={post.thumbnail || defaultThumbnail}
                             alt={post.title}
                             onClick={() => handleNavigateToPost(post.postId)}
+                            isMobile={screenSize.isMobile}
                         />
-                        <SlideContent onClick={() => handleNavigateToPost(post.postId)}>
+                        <SlideContent onClick={() => handleNavigateToPost(post.postId)} isMobile={screenSize.isMobile}>
                             <SlideTitle>{truncateText(post.title, 30)}</SlideTitle>
                             <SlideDescription>{truncateText(processContent(post.content), 100)}</SlideDescription>
                         </SlideContent>

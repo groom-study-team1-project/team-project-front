@@ -23,6 +23,7 @@ import {
   CancelBtn,
   ConfirmBtn,
     EditorWrapper,
+    Category,
 } from "./BoardWrite.style";
 import { useSelector } from "react-redux";
 import "./App.css";
@@ -43,6 +44,13 @@ const WriteBoard = ({ postData, postId, imgList }) => {
   const [imgUrls, setImgUrls] = useState([]);
   const toolbarContainerRef = useRef(null);
   const editorContainerRef = useRef(null);
+
+  const categoryNames = {
+    1: "자유 게시판",
+    2: "프로젝트 자랑 게시판",
+    3: "질문 게시판",
+    4: "공지 게시판",
+  };
 
   useEffect(() => {
     if (postData) {
@@ -159,7 +167,12 @@ const WriteBoard = ({ postData, postId, imgList }) => {
         {isMobile ? <Navbar $isMobile={isMobile} /> : <Navbar isMainPage={true} />}
         <Wrap>
           <WriteWrap>
-            <Write $isMobile={isMobile}>글 작성</Write>
+            <Category>
+              {categoryNames[selectedCategory]}
+            </Category>
+            <Write $isMobile={isMobile}>
+              글 작성
+            </Write>
           </WriteWrap>
           <form onSubmit={onSubmit}>
             <TitleWrap $isMobile={isMobile}>
@@ -176,7 +189,8 @@ const WriteBoard = ({ postData, postId, imgList }) => {
               <Categoryselect
                   onChange={handleCategoryChange}
                   value={selectedCategory}
-                  $isMobile={isMobile}>
+                  $isMobile={isMobile}
+              >
                 <option value={1}>자유 게시판</option>
                 <option value={2}>프로젝트 자랑 게시판</option>
                 <option value={3}>질문 게시판</option>
@@ -194,9 +208,7 @@ const WriteBoard = ({ postData, postId, imgList }) => {
             )}
             <div ref={editorContainerRef}>
               <EditorWrapper>
-                <Toolbar
-                    ref={toolbarContainerRef}
-                ></Toolbar>
+                <Toolbar ref={toolbarContainerRef}></Toolbar>
                 <CKEditor
                     editor={DecoupledEditor}
                     config={{
@@ -233,15 +245,10 @@ const WriteBoard = ({ postData, postId, imgList }) => {
                 $isMobile={isMobile}
             />
             <SubmitBtnWrap $isMobile={isMobile}>
-              <CancelBtn
-                  $isMobile={isMobile}
-                  type="button"
-                  onClick={() => navigate(-1)}>
+              <CancelBtn $isMobile={isMobile} type="button" onClick={() => navigate(-1)}>
                 취 소
               </CancelBtn>
-              <ConfirmBtn
-                  $isMobile={isMobile}
-                  type="submit">
+              <ConfirmBtn $isMobile={isMobile} type="submit">
                 확 인
               </ConfirmBtn>
             </SubmitBtnWrap>
