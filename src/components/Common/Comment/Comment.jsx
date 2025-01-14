@@ -39,9 +39,8 @@ import {
     handleDeleteComment,
     submitEditComment,
     handleLikeComment,
-    clearEditComment,
     toggleReply,
-    initializeCommentCount, setEndComment,
+    initializeCommentCount, setEndComment, handleReplyToggle,
 } from '../../../store/comment/commentSlice';
 import { ProfileImage } from "../../Card/PostCard/PostProfile";
 import { Modify } from "../../../pages/Board/BoardDetail/Board/BoardDetail.style";
@@ -63,7 +62,6 @@ const Comments = ({ commentCount }) => {
         comments,
         isLoading,
         error,
-        likeComments,
         openReplies,
         isEndComment
     } = useSelector(state => state.comments);
@@ -132,7 +130,7 @@ const Comments = ({ commentCount }) => {
     const handleModalClose = () => setModalIndex(null);
 
     const handleReplyOpen = (commentId) => {
-        dispatch(toggleReply(commentId));
+        dispatch(handleReplyToggle(commentId));
     }
 
     const handleMoreComment = (postId, lastCommentId) => {

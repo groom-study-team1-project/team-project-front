@@ -23,6 +23,7 @@ enableMapSet();
 
 const initialState = {
     comments: [],
+    replies: {},
     isLoading: false,
     error: null,
     likeComments: JSON.parse(localStorage.getItem('likeComments')) || [],
@@ -93,6 +94,14 @@ const commentSlice = createSlice({
 
             state.openReplies = Array.from(replySet);
             localStorage.setItem('openReplies', JSON.stringify(state.openReplies));
+        },
+        setReplies: (state, action) => {
+            const { commentId, replies } = action.payload;
+            state.replies[commentId] = replies;
+        },
+        appendReplies: (state, action) => {
+            const { commentId, replies } = action.payload;
+            state.replies[commentId] = [...(state.replies[commentId] || []), ...replies];
         },
         setLoading: (state, action) => {
             state.isLoading = action.payload;
@@ -186,28 +195,34 @@ export const handleLikeComment = (commentId) => async (dispatch) => {
     }
 };
 
-export const fetchReplyList = (commentId, lastCommentId) => async (dispatch) => {
-    dispatch(setLoading(true));
-    try {
-        const result = await fetchReplyComment(commentId, lastCommentId);
-        if (lastCommentId) {
-            dispatch(appendComments(result.comments));
-        } else {
-            dispatch(setComments(result.comments));
+export const handleReplyToggle = (commentId) => async (dispatch, getState) => {
+    const { openReplies, replies } = getState().comments;
+    const replySet = new Set(openReplies);
+    const isOpening = !replySet.has(commentId);
+
+    if (isOpening && !replies[commentId]) {
+        dispatch(setLoading(true));
+        try {
+            const result = await fetchReplyComment(commentId, null);
+            dispatch(setReplies({ commentId, replies: result.comments }));
+            dispatch(setEndComment(result.comments.length < 5));
+        } catch (error) {
+            dispatch(setError(error.message));
+            return false;
+        } finally {
+            dispatch(setLoading(false));
         }
-        dispatch(setEndComment(result.comments.length < 5 && Math.min(result.comments.id) === lastCommentId));
-    } catch (error) {
-        dispatch(setError(error.message));
-    } finally {
-        dispatch(setLoading(false));
     }
+
+    dispatch(toggleReply(commentId));
+    return true;
 };
 
 export const handleCreateReply = (commentId, content) => async (dispatch) => {
     try {
         const result = await createReplyComment(commentId, content);
         if (result.status?.code === 9999) {
-            dispatch(addComment(result.result));
+            dispatch(appendReplies(result.result));
             return true;
         }
         return false;
@@ -228,7 +243,9 @@ export const {
     setLoading,
     setError,
     setEndComment,
-    initializeCommentCount
+    initializeCommentCount,
+    appendReplies,
+    setReplies
 } = commentSlice.actions;
 
 export default commentSlice.reducer;

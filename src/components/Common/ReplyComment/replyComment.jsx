@@ -1,5 +1,4 @@
 import React, {useCallback, useEffect, useState} from "react";
-import axiosInstance from "../../../services/axiosConfig";
 import commentSubmit from "../../../assets/images/commentsubmit.png";
 import {
     RepliesWrap,
@@ -32,167 +31,55 @@ import {
     faEllipsisVertical,
     faHeart as solidHeart,
 } from "@fortawesome/free-solid-svg-icons";
+import {
+    handleCreateReply,
+    handleDeleteComment,
+    submitEditComment,
+    handleLikeComment, setEndComment, fetchCommentList, initializeCommentCount
+} from '../../../store/comment/commentSlice';
 import { faHeart as regularHeart } from "@fortawesome/free-regular-svg-icons";
 import {Modify} from "../../../pages/Board/BoardDetail/Board/BoardDetail.style";
 import ModalComponent from "../../Modal/EditDeleteModal/EditDeleteModal";
+import {useDispatch, useSelector} from "react-redux";
+import {fetchReplyComment} from "../../../services/api/mockCommentApi";
 
 const ReplyComment = ({ commentId, getReplyTime }) => {
-    const {userInfo, isUserLoading, userError } = useUserInfo();
-    const [repliesData, setRepliesData] = useState([]);
-    const [isLoading, setIsLoading] = useState(false);
-    const [newReply, setNewReply] = useState(""); // 답글 입력
-    const [editReplyId, setEditReplyId] = useState(null); // 답글 편집 아이디
-    const [editReplyContent, setEditReplyContent] = useState(""); // 답글 편집 내용
-    const [likedReply, setLikedReply] = useState(new Set()); // 답글 좋아요
-    const [modalIndex, setModalIndex] = useState(null); // 수정, 삭제 모달
-    const [isEndReply, setIsEndReply] = useState(false);
+    const dispatch = useDispatch();
+    const { userInfo, isUserInfoLoading } = useUserInfo();
+    const [modalIndex, setModalIndex] = useState(null);
+    const [editReplyId, setEditReplyId] = useState(null);
+    const [editReplyContent, setEditReplyContent] = useState("");
+    const [newReply, setNewReply] = useState("");
+    const [replyReloaded, setReplyReloaded] = useState(false);
 
-    const fetchReplyComments = useCallback(async (userInfo, lastCommentId) => {
-        setIsLoading(true);
+    const replies = useSelector(state => state.comments.replies[commentId] || []);
+    const isLoading = useSelector(state => state.comments.isLoading);
+    const error = useSelector(state => state.comments.error);
+    const isEndComment = useSelector(state => state.comments.isEndComment);
 
-        const baseReplyEndPoint = `/open/comments/replies/${commentId}`;
-        const queryParams = new URLSearchParams();
-        const memberId = userInfo?.id;
-
-        if (memberId) queryParams.append("memberId", memberId);
-        if (lastCommentId) queryParams.append("lastCommentId", lastCommentId);
-
-        const replyEndPoint = queryParams.toString() ?
-            `${baseReplyEndPoint}?${queryParams.toString()}` : baseReplyEndPoint;
-
-        try {
-
-            const response = await axiosInstance.get(replyEndPoint);
-            const repliesInfo = response.data.result;
-
-            console.log("답글 정보 : ", repliesInfo);
-
-            if (repliesInfo && repliesInfo.length > 0) {
-                setRepliesData((prev) =>
-                    lastCommentId? [...prev, ...repliesInfo] : repliesInfo
-                );
-
-                if (lastCommentId) {
-                    const newCommentCount = [...repliesData, ...repliesInfo].length;
-                    if (newCommentCount >= 5) {
-                        setIsEndReply(true);
-                    } else {
-                        if (repliesInfo.length >= 5) {
-                            setIsEndReply(true);
-                        }
-                    }
-                }
-            }
-
-            const likedComments = new Set(
-                repliesInfo.filter(reply => reply.likedMe).map(reply => reply.id)
-            );
-
-            setLikedReply(likedComments);
-
-        } catch (error) {
-            console.error("답글 불러오기 실패 : ", error);
-        } finally {
-            console.log("답글 불러오기 성공");
-            setIsLoading(false);
+    /*useEffect(() => {
+        if (!isUserInfoLoading && userInfo) {
+            dispatch(fetchCommentList(commentId));
+            dispatch(initializeCommentCount(commentCount));
         }
-    }, [commentId]);
-
-    useEffect(() => {
-        fetchReplyComments(userInfo, null);
-    }, [fetchReplyComments]);
+    }, [dispatch, userInfo, isUserInfoLoading, postId, commentCount]);*/
 
     const handleSubmitReply = async (e) => {
         e.preventDefault();
         if (!newReply.trim()) return;
 
-        const replyData = {
-            commentId : commentId,
-            content: newReply.trim()
-        };
-
-        try {
-            await axiosInstance.post(`/api/comments/write/reply`, replyData);
-            setNewReply("");
-            fetchReplyComments(userInfo, null);
-        } catch (error) {
-            console.error("답글 작성을 실패하였습니다 : ", error);
-        }
-    };
-
-    const handleDelete = async (commentId) => {
-
-        const commentData = {
-            commentId : commentId
-        }
-
-        try {
-            await axiosInstance.delete(`/api/comments/remove`, {
-                data: commentData
-            });
-            fetchReplyComments(userInfo, null);
-            setModalIndex(null);
-        } catch (error) {
-            console.error("답글 삭제를 실패하였습니다 : ", error);
-        }
+        const writeReply = await dispatch(handleCreateReply(commentId, newReply.trim()));
+        if (writeReply) setNewReply("");
     }
 
-    const editReplySubmit = async (commentId, content) => {
-
-        const editReplyData = {
-            commentId: commentId,
-            content: content.trim()
-        };
-
-        try {
-
-            await axiosInstance.post(`/api/comments/edit`, editReplyData);
-
-            setEditReplyId(null);
+    const handleEditReply = async (commentId) => {
+        if (!editReplyContent.trim()) return;
+        const success = await dispatch(submitEditComment(commentId, editReplyContent.trim()));
+        if (success) {
             setEditReplyContent("");
-            fetchReplyComments(userInfo, null);
+            setEditReplyId(null);
             setModalIndex(null);
-
-        } catch (error) {
-            console.error("답글 수정을 하지 못하였습니다 : ", error);
         }
-    };
-
-    const handleLike = async (commentId, userInfo) => {
-        if (likedReply.has(commentId)) {
-            await axiosInstance
-                .post(`/api/comments/unlike`, {
-                    targetId: commentId,
-                })
-                .then((response) => {
-                    setLikedReply((prev) => {
-                        const newSet = new Set(prev);
-                        newSet.delete(commentId);
-                        return newSet;
-                    });
-                    return fetchReplyComments(userInfo, null);
-                })
-                .catch((error) => {
-                    console.error("좋아요를 취소하지 못하였습니다 : ", error);
-                });
-        } else {
-            await axiosInstance
-                .post(`/api/comments/like`, {
-                    targetId: commentId,
-                })
-                .then(() => {
-                    setLikedReply((prev) => new Set([...prev, commentId]));
-                    return fetchReplyComments(userInfo, null);
-                })
-                .catch((error) => {
-                    console.error("좋아요를 반영하지 못하였습니다 : ", error);
-                });
-        }
-    };
-
-    const handleReplyEdit = (commentId, content) => {
-        setEditReplyId(commentId);
-        setEditReplyContent(content);
     }
 
     const editReplyCancel = () => {
@@ -204,12 +91,25 @@ const ReplyComment = ({ commentId, getReplyTime }) => {
 
     const handleModalClose = () => setModalIndex(null);
 
+        const handleMoreReply = async (commentId, lastCommentId) => {
+            /* 댓글 컴포넌트에서 토글과 동시에 조회가 되도록 하여 답글 부분에서 더보기를 실행할 경우에는
+            따로 답글조회 함수를 새로 생성해서 이용해야 되는거야?
+            dispatch(fetchReplyList(commentId, lastCommentId));
+            */
+            await fetchReplyComment(commentId, lastCommentId);
+            const minReplyId = Math.min(...replies.map(comment => comment.id));
+
+            if (lastCommentId === minReplyId) {
+                dispatch(setEndComment(true));
+            }
+        };
+
     if (isLoading) return <div>Loading...</div>;
 
     return (
         <div>
             <RepliesWrap>
-                {repliesData.map((reply, index) => (
+                {replies.map((reply, index) => (
                     <Reply key={reply.id}>
                         <ProfileImage src={reply.memberImageUrl} />
                         <ReplyContent>
@@ -221,7 +121,7 @@ const ReplyComment = ({ commentId, getReplyTime }) => {
                                             onChange = {(e) => setEditReplyContent(e.target.value)}
                                         />
                                         <CommentButton
-                                            onClick={() => editReplySubmit(reply.id, editReplyContent)}
+                                            onClick={() => handleEditReply(reply.id, editReplyContent)}
                                         >
                                             수정
                                         </CommentButton>
@@ -259,14 +159,14 @@ const ReplyComment = ({ commentId, getReplyTime }) => {
                                                             reply.id,
                                                             reply.content
                                                         );
-                                                        handleReplyEdit(reply.id, reply.content);
+                                                        handleEditReply(reply.id, reply.content);
                                                     }}
                                                     onDelete={() => {
                                                         console.log(
                                                             "삭제할 게시글 아이디 : ",
                                                             reply.id
                                                         );
-                                                        handleDelete(reply.id);
+                                                        dispatch(handleDeleteComment(reply.id));
                                                     }}
                                                 />
                                             )}
@@ -274,8 +174,8 @@ const ReplyComment = ({ commentId, getReplyTime }) => {
                                     )}
                                 </TimeAndModal>
                                 <IconWrap>
-                                    <LikedButton onClick={() => { handleLike(reply?.id, userInfo); }}>
-                                        {likedReply.has(reply.id) ? (
+                                    <LikedButton onClick={() => { handleLikeComment(reply?.id, userInfo); }}>
+                                        {reply.likedMe ? (
                                             <FontAwesomeIcon
                                                 icon={solidHeart}
                                                 style={{ color: "#ff1900" }}
@@ -291,13 +191,10 @@ const ReplyComment = ({ commentId, getReplyTime }) => {
                         </CommentRight>
                     </Reply>
                 ))}
-                {!isEndReply ? (
+                {!isEndComment && replies.length > 5 && !isLoading ? (
                     <SomeMoreReplyButton onClick={() => {
-                        const lastCommentId = repliesData[repliesData.length-1].id;
-                        console.log("마지막 답글 Id : ", lastCommentId);
-                        if (lastCommentId) {
-                            fetchReplyComments(userInfo, lastCommentId);
-                        }
+                        const lastCommentId = replies[replies.length - 1].id;
+                        handleMoreReply(commentId, lastCommentId);
                     }}>
                         더보기
                     </SomeMoreReplyButton>
