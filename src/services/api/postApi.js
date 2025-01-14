@@ -3,19 +3,18 @@ import { MdCreditCard } from "react-icons/md";
 import { IoDocumentsOutline } from "react-icons/io5";
 import { GrUserSettings } from "react-icons/gr";
 import { BsPatchQuestion } from "react-icons/bs";
+import { imageUpload } from "./imageApi";
 
 // 새 게시글 생성
 export const createPost = async (body) => {
   try {
-    const imageUrls = body.imageUrls || [];
-
     const requestBody = {
       title: body.title?.trim(),
       content: body.content?.trim(),
       categoryId: body.categoryId,
-      hashtags: body.hashtags || [],
-      thumbnail: body.thumbnail || "",
-      imageUrls, // 추가된 이미지 URL 배열
+      hashtags: body.hashtags || [], // 해시태그 배열
+      thumbnailImageKey: body.thumbnailImageKey || "", // 썸네일 이미지 키
+      imageKeys: body.imageKeys || [], // 이미지 키 배열
     };
 
     console.log("Final Request Body in createPost:", requestBody);
@@ -29,62 +28,51 @@ export const createPost = async (body) => {
     return result.data;
   } catch (error) {
     console.error(
-      error.response
-        ? "서버 응답 에러: " + error.response.data
-        : error.request
-        ? "응답 없음 에러: " + error.request
-        : "예상치 못한 에러: " + error.message
+        error.response
+            ? "서버 응답 에러: " + error.response.data
+            : error.request
+                ? "응답 없음 에러: " + error.request
+                : "예상치 못한 에러: " + error.message
     );
     throw error;
   }
 };
 
+// 게시글 이미지 업로드 어댑터
 export const uploadAdapter = (loader, onImageUploaded) => {
   const uploadImage = async (file) => {
     if (!file) {
-      console.error("업로드할 파일이 없습니다.");
-      throw new Error("파일이 존재하지 않습니다.");
+      throw new Error("업로드할 파일이 없습니다.");
     }
 
-    const formData = new FormData();
-    formData.append("imageFile", file);
-
-    const response = await axiosInstance.post(
-      "/api/posts/upload/image",
-      formData,
-      {
-        headers: {
-          "Content-Type": "multipart/form-data",
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-      }
-    );
-
-    if (response.data?.status?.code === 1204) {
-      return response.data.result.imageUrl; // 성공 시 이미지 URL 반환
+    // S3에 이미지 업로드 (imageUpload 함수 활용)
+    const response = await imageUpload("POST", file);
+    if (response.accessImage && response.fileKey) {
+      return response; // 업로드된 이미지 URL 및 fileKey 반환
     }
 
-    throw new Error(response.data?.status?.message || "이미지 업로드 실패");
+    throw new Error("이미지 업로드 실패");
   };
 
   return {
     upload: () => {
       return loader.file
-        .then(uploadImage) // 파일 업로드 처리
-        .then((imageUrl) => {
-          console.log("이미지 업로드 성공:", imageUrl);
+          .then(uploadImage) // 파일 업로드 처리
+          .then((response) => {
+            const { accessImage, fileKey } = response;
+            console.log("이미지 업로드 성공:", accessImage);
 
-          // 업로드된 이미지 URL 후처리를 위한 콜백 호출
-          if (onImageUploaded) {
-            onImageUploaded(imageUrl);
-          }
+            // 업로드된 이미지 URL과 fileKey 후처리를 위한 콜백 호출
+            if (onImageUploaded) {
+              onImageUploaded(accessImage, fileKey);
+            }
 
-          return { default: imageUrl }; // 에디터에 반환
-        })
-        .catch((error) => {
-          console.error("이미지 업로드 에러:", error.message);
-          throw error;
-        });
+            return { default: accessImage }; // 에디터에 반환
+          })
+          .catch((error) => {
+            console.error("이미지 업로드 에러:", error.message);
+            throw error;
+          });
     },
   };
 };
@@ -99,12 +87,11 @@ export async function fetchPostItems(categoryId, lastPostId) {
     });
 
     if (
-      response.data?.status?.code === 1203 &&
-      Array.isArray(response.data.result)
+        response.data?.status?.code === 1203 &&
+        Array.isArray(response.data.result)
     ) {
-      const posts = response.data.result;
-      console.log("게시글 조회 성공:", posts);
-      return { totalPostCount: posts.length, posts };
+      console.log("게시글 조회 성공:", response.data.result);
+      return { totalPostCount: response.data.result.length, posts: response.data.result };
     }
 
     console.warn("응답 구조가 예상과 다르거나 결과가 비어있습니다.");
@@ -115,6 +102,7 @@ export async function fetchPostItems(categoryId, lastPostId) {
   }
 }
 
+
 // 게시글 상세 조회
 export const fetchPostDetail = async (postId) => {
   try {
@@ -123,7 +111,7 @@ export const fetchPostDetail = async (postId) => {
       return response.data.result;
     } else {
       throw new Error(
-        response.data.status.message ||
+          response.data.status.message ||
           "게시글을 불러올 수 없거나 존재하지 않습니다."
       );
     }
@@ -138,22 +126,23 @@ export const fetchPostChange = async (body, postId) => {
   try {
     console.log(body);
     const result = await axiosInstance.post(
-      `/api/posts/update/${postId}`,
-      body
+        `/api/posts/edit/${postId}`,
+        body
     );
     console.log("게시글 수정 성공:", result.data);
     return result.data;
   } catch (error) {
     console.error(
-      error.response
-        ? "서버 응답 에러: " + error.response.data
-        : error.request
-        ? "응답 없음 에러: " + error.request
-        : "예상치 못한 에러: " + error.message
+        error.response
+            ? "서버 응답 에러: " + error.response.data
+            : error.request
+                ? "응답 없음 에러: " + error.request
+                : "예상치 못한 에러: " + error.message
     );
     throw error;
   }
 };
+
 
 // 게시글 삭제
 export const deletepost = async (postId) => {
@@ -163,11 +152,11 @@ export const deletepost = async (postId) => {
     return response.data;
   } catch (error) {
     console.error(
-      error.response
-        ? "서버 응답 에러: " + error.response.data
-        : error.request
-        ? "응답 없음 에러: " + error.request
-        : "예상치 못한 에러: " + error.message
+        error.response
+            ? "서버 응답 에러: " + error.response.data
+            : error.request
+                ? "응답 없음 에러: " + error.request
+                : "예상치 못한 에러: " + error.message
     );
     throw error;
   }

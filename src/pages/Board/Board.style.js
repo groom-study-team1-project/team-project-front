@@ -3,9 +3,8 @@ import styled from "styled-components";
 export const ContentWrapper = styled.div`
   height: 100%;
   width: 100%;
-  max-height: 100%; /* 부모 요소에 맞게 높이 제한 */
-  overflow-y: auto; /* 내부 스크롤 가능 */
-  margin-right: 50px;
+  max-height: 100%;
+  overflow-y: auto;
   ${(props) =>
       props.$isDetail &&
       `
@@ -53,16 +52,42 @@ export const SearchSortWrapper = styled.div`
 `;
 
 export const PostCardWrapper = styled.div`
-  display: grid;
-  max-height: 830px;
-
-  grid-template-columns: repeat(minmax(300px, 1fr));
-  gap: 40px;
-  overflow-y: auto;
+  display: ${(props) => (props.$noticePage ? `block` : `grid`)};
+  margin-bottom: ${(props) => (props.$noticePage ? `40px` : `0px`)};
+  grid-template-columns: ${(props) =>
+      props.$projectPage ? `repeat(4, 1fr)` : `repeat(2, 1fr)`};
+  gap: ${(props) => (props.$noticePage ? `0px` : `40px`)};
+  position: relative;
+  
+  & > *:not(:last-child) {
+    margin-bottom: 20px;
+  }
 `;
 
 export const EndMessage = styled.div`
   text-align: center;
   padding: 20px;
   width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  grid-column: ${(props) =>
+      props.$projectPage
+          ? "span 4"
+          : props.$noticePage
+              ? "span 1"
+              : "span 2"};
 `;
+
+export const SpinnerWrapper = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  grid-column: ${(props) =>
+      props.$projectPage
+          ? "span 4"
+          : props.$noticePage
+              ? "span 1"
+              : "span 2"};
+`;
+

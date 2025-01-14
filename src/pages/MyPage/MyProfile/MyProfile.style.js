@@ -1,96 +1,169 @@
 import styled from "styled-components";
 
 export const Wrap = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
   width: 100%;
-  padding: 48px 24px;
+  height: 80%;
+  background: rgba(255, 255, 255, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 10px;
 `;
 
 export const Main = styled.div`
-  max-width: 1380px;
-  width: 100%;
-  background: linear-gradient(
-    180deg,
-    rgba(255, 255, 255, 0.6) 50%,
-    rgba(255, 255, 255, 0.5) 100%
-  );
-  border-radius: 20px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-  padding: 8px;
-`;
-
-export const ProfileWrap = styled.div`
-  width: 100%;
-  max-width: 1450px;
-  margin-left: 0px;
-  margin-bottom: 70px;
-`;
-
-export const ProfileTitle = styled.div`
-  padding: 10px;
-  border-radius: 16px;
-  width: 200px;
-  text-align: center;
-  font-size: 20px;
-  background: linear-gradient(
-    180deg,
-    rgba(255, 255, 255, 0.5) 0%,
-    rgba(255, 255, 255, 1) 50%,
-    rgba(255, 255, 255, 0.5) 100%
-  );
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-
-  h1 {
-    background: linear-gradient(180deg, #0b0611 0%, #47286f 53%, #42469c 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-    color: transparent;
-    font-size: 24px;
-    font-weight: 800;
-  }
-`;
-
-export const ProfileHeader = styled.div`
+  width: 95%;
+  height: 95%;
+  border-radius: 10px;
+  background: rgba(247, 251, 255, 0.6);
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
   display: flex;
-  justify-content: space-between;
-  padding: 20px;
+`;
+
+export const LeftContent = styled.div`
+  width: 25%;
+  height: 100%;
+  display: flex;
   align-items: center;
-  margin: 24px;
+  flex-direction: column;
+  margin-top: 3%;
+`;
+
+export const UserInfoBox = styled.div`
+  width: 80%;
+  height: 10%;
+  margin-top: 10%;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  background: rgba(255, 255, 255, 1);
+  border-radius: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1rem;
+  a {
+    text-decoration: none;
+    color: inherit;
+  }
 `;
 
 export const ProfileSetting = styled.button`
   border-radius: 10px;
   width: 136px;
   height: 40px;
-  background-color: #7682ff;
+  background-color: #b1cde9;
   color: white;
   border: none;
   cursor: pointer;
+  margin-top: 10%;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
 `;
 
-export const Userintroduce = styled.div`
-  padding: 32px;
-  padding-bottom: 5%;
-  border-top: 1px solid rgba(0, 0, 0, 0.1);
-  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
-  margin: 24px;
-`;
-
-export const Label = styled.label`
+export const RightContentWrap = styled.div`
+  width: 100%;
+  height: 100%; /* 부모 높이를 기준으로 설정 */
+  background: white;
+  border-radius: 10px;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  overflow: hidden; /* 자식이 범위를 벗어나지 않도록 설정 */
   display: flex;
+  flex-direction: column;
+`;
+
+export const RightContent = styled.div`
+  margin: 1%;
+  height: 100%;
+`;
+
+export const Hr = styled.hr`
+  border: none;
+  height: 1px;
+  background: linear-gradient(
+    to right,
+    rgba(0, 0, 0, 0),
+    rgba(0, 0, 0, 0.3),
+    rgba(0, 0, 0, 0)
+  );
+  margin-top: 1%;
+`;
+
+export const MypostTitle = styled.span`
+  font-size: 2rem;
+  margin-right: 1%;
+`;
+
+export const MyPostWrap = styled.div`
+  display: flex;
+  height: 100%;
+`;
+
+export const CategoryLi = styled.div`
+  flex: 1;
+`;
+
+export const CategoryList = styled.li`
+  display: flex;
+  justify-content: space-between;
   align-items: center;
-  margin-top: 2%;
+  border: 1px solid black;
+
+  padding: 4%;
+  border-radius: 8px;
+  margin-top: 10%;
+  cursor: pointer;
 `;
 
-export const LabelTitle = styled.div`
-  font-size: 1.5rem;
+export const CategoryTitle = styled.div`
+  font-size: 1.3rem;
+  margin-bottom: 10%;
 `;
 
-export const Url = styled.a`
+export const CategoryCount = styled.div`
+  font-size: 0.8rem;
   margin-left: 1%;
-  text-decoration: none;
-  color: black;
+  max-height: ${({ $isOpen }) => ($isOpen ? "50px" : "0")};
+  opacity: ${({ $isOpen }) => ($isOpen ? "1" : "0")};
+  overflow: hidden;
+  transition: max-height 0.3s ease-out, opacity 0.3s ease-out;
+  margin-top: ${({ $isOpen }) => ($isOpen ? "10px" : "0")};
+`;
+
+export const MyPostCardwrap = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  align-items: ${({ $Nopost }) => ($Nopost ? "center" : "flex-start")};
+  justify-content: ${({ $Nopost }) => ($Nopost ? "center" : "space-between")};
+  margin-left: 5%;
+  gap: 3%;
+  flex: 5;
+  overflow-y: auto;
+  height: 90%;
+`;
+
+export const EndPost = styled.p`
+  width: 100%;
+  text-align: center;
+  background: #b1cde9;
+  color: white;
+  font-weight: bold;
+  border-radius: 10px;
+  padding: 10px 0; /* 상하 패딩을 추가 */
+  margin-top: auto; /* 요소를 컨테이너 하단으로 밀어내기 */
+`;
+
+export const NopostWrap = styled.div`
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+
+  div {
+    margin-top: 3%;
+    font-size: clamp(1rem, 2vw, 1.5rem);
+    cursor: pointer;
+  }
+`;
+
+export const Nopost = styled.img`
+  width: 13vw;
+  height: 18vw;
 `;

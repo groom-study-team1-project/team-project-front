@@ -1,4 +1,5 @@
 import axiosInstance from "../axiosConfig";
+
 export const login = async (body) => {
   try {
     const response = await axiosInstance.post("/open/members/login", body);
@@ -57,7 +58,7 @@ export const uploadProfileImage = async (formData) => {
 
 export const checkDuplicatedNickname = async (nickname) => {
   try {
-    const response = await axiosInstance.get("/accounts/verify/nickname", {
+    const response = await axiosInstance.get("/open/accounts/verify/nickname", {
       params: { nickname: nickname },
     });
     console.log(response);
@@ -82,7 +83,7 @@ export const fetchProfileInfo = async (body) => {
   try {
     const { isMe, memberId } = body;
 
-    const response = await axiosInstance.get(`/api/members/me/${memberId}`);
+    const response = await axiosInstance.get(`/open/members/me/${memberId}`);
     if (response.data.status.code === 1002) {
       if (isMe === response.data.result.id) {
         return { isMe: true, data: response.data }; // 응답 데이터 반환
@@ -103,28 +104,11 @@ export const fetchProfileInfo = async (body) => {
   }
 };
 
-export const reToken = async () => {
-  try {
-    const response = await axiosInstance.patch("/open/tokens/re-issue");
-    console.log(response);
-    if ((response.data.status.code = 8000)) {
-      return response.data;
-    } else {
-      throw new Error(
-        response.data.status.message || "Unexpected response from the server"
-      );
-    }
-  } catch (error) {
-    console.error("Error while re-issuing token:", error);
-    throw error;
-  }
-};
-
 export const editProfile = async (body) => {
   try {
     console.log(body);
-    const response = await axiosInstance.put("/api/members/me", body);
-    console.log(response);
+    const result = await axiosInstance.put("/api/members/me", body);
+    console.log(result);
   } catch (error) {
     console.error("사용자 정보를 수정하는데 실패했습니다.", error);
     throw error;
@@ -133,7 +117,10 @@ export const editProfile = async (body) => {
 
 export const changeUserPw = async (body) => {
   try {
-    const response = await axiosInstance.post("/accounts/reset/password", body);
+    const response = await axiosInstance.post(
+      "/open/accounts/reset/password",
+      body
+    );
 
     if (response.data.status.code === 1008) {
       return response.data.status.message;
@@ -148,15 +135,21 @@ export const changeUserPw = async (body) => {
   }
 };
 
-export const postInfo = async (categoryId, lastPostId) => {
+export const postInfo = async (
+  categoryId,
+  lastPostIdByCategory,
+  limit,
+  memberId
+) => {
   try {
-    const response = await axiosInstance.get("/api/members/me/posts", {
+    const response = await axiosInstance.get(`/open/posts/me/${memberId}`, {
       params: {
         categoryId: categoryId,
-        lastPostId: lastPostId,
+        lastPostId: lastPostIdByCategory,
+        postSortType: "LATEST",
+        limit: limit,
       },
     });
-    console.log(response.data.result);
     if (response.data.status.code === 1009) {
       return response.data.result;
     } else {
@@ -171,7 +164,10 @@ export const postInfo = async (categoryId, lastPostId) => {
 // 인증 코드 검사
 export const verifyEmailCode = async (body) => {
   try {
-    const response = await axiosInstance.post("/accounts/verify/email", body);
+    const response = await axiosInstance.post(
+      "/open/accounts/verify/email",
+      body
+    );
 
     if (response.data.status.code === 1101) {
       return true;
@@ -188,7 +184,7 @@ export const verifyEmailCode = async (body) => {
 export const sendEmailVerificationCode = async (body) => {
   try {
     const response = await axiosInstance.post(
-      "/accounts/authenticate/email",
+      "/open/accounts/authenticate/email",
       body
     );
     console.log(response);
@@ -211,7 +207,7 @@ export const sendEmailVerificationCode = async (body) => {
 export const sendEmailVerificationCodePassword = async (body) => {
   try {
     const response = await axiosInstance.post(
-      "/accounts/authenticate/password",
+      "/open/accounts/authenticate/password",
       body
     );
     console.log(response);
