@@ -1,5 +1,5 @@
 import React, { useRef, useState, useEffect, useCallback } from "react";
-import { useSelector } from "react-redux"; // Redux 상태 사용
+import {useDispatch, useSelector} from "react-redux"; // Redux 상태 사용
 import CommunityPostCard from "../../../components/Card/PostCard/CommunityPostCard/CommunityPostCard";
 import {
   ContentWrapper,
@@ -11,6 +11,7 @@ import Search from "../../../components/Common/Search/Search";
 import { fetchPostItems } from "../../../services/api/postApi";
 import { BarLoading } from "../../../components/Common/LodingSpinner";
 import PopularPostSlider from "../../../components/Common/PopularPost/PopularPostSlider";
+import {setCategoryId} from "../../../store/category/categorySlice";
 
 function FreeBoard() {
   const [postItems, setPostItems] = useState([]);
@@ -26,6 +27,12 @@ function FreeBoard() {
   const limit = 10;
 
   const { isMobile, isTablet } = useSelector((state) => state.screenSize);
+
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(setCategoryId(categoryId));
+  }, [dispatch, categoryId]);
 
   const fetchPopularPosts = useCallback(async () => {
     try {

@@ -44,8 +44,6 @@ const PopularPostSlider = ({ posts }) => {
         arrows: false,
     };
 
-    const defaultThumbnail = "https://via.placeholder.com/300x150?text=Popular+Post";
-
     const processContent = (htmlContent) => {
         const parser = new DOMParser();
         const doc = parser.parseFromString(htmlContent, "text/html");
@@ -56,26 +54,34 @@ const PopularPostSlider = ({ posts }) => {
         return text.length > maxLength ? text.substring(0, maxLength) + "..." : text;
     };
 
+    const defaultThumbnailUrl = "https://deepdiver-community-files-dev.s3.ap-northeast-2.amazonaws.com/default-image/posts/thumbnail.png";
+
     return (
-        <SliderContainer isMobile={screenSize.isMobile}>
+        <SliderContainer $isMobile={screenSize.isMobile}>
             <CustomArrowWrapper>
                 <Arrow className="prev" onClick={handlePrevClick}>
-                    <ArrowImage src={PrevArrowImage} alt="Previous" />
+                    <ArrowImage src={PrevArrowImage} alt="Previous"/>
                 </Arrow>
                 <Arrow className="next" onClick={handleNextClick}>
-                    <ArrowImage src={NextArrowImage} alt="Next" />
+                    <ArrowImage src={NextArrowImage} alt="Next"/>
                 </Arrow>
             </CustomArrowWrapper>
             <Slider ref={sliderRef} {...sliderSettings}>
                 {posts.map((post) => (
-                    <SlideItem key={post.postId} isMobile={screenSize.isMobile}>
+                    <SlideItem key={post.postId} $isMobile={screenSize.isMobile}>
                         <SlideImage
-                            src={post.thumbnail || defaultThumbnail}
+                            src={
+                                post.thumbnail === "posts/thumbnail.png" || !post.thumbnail
+                                    ? defaultThumbnailUrl
+                                    : post.thumbnail
+                            }
                             alt={post.title}
                             onClick={() => handleNavigateToPost(post.postId)}
-                            isMobile={screenSize.isMobile}
+                            $isMobile={screenSize.isMobile}
                         />
-                        <SlideContent onClick={() => handleNavigateToPost(post.postId)} isMobile={screenSize.isMobile}>
+                        <SlideContent
+                            onClick={() => handleNavigateToPost(post.postId)}
+                            $isMobile={screenSize.isMobile}>
                             <SlideTitle>{truncateText(post.title, 30)}</SlideTitle>
                             <SlideDescription>{truncateText(processContent(post.content), 100)}</SlideDescription>
                         </SlideContent>

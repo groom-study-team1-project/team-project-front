@@ -31,6 +31,11 @@ import "ckeditor5/ckeditor5.css";
 
 const WriteBoard = ({ postData, postId, imgList }) => {
   const { isMobile } = useSelector((state) => state.screenSize);
+
+  const selectedCategoryId = useSelector((state) => state.category.selectedCategoryId);
+
+
+
   const navigate = useNavigate();
   const [form, setValue] = useState({
     title: "",
@@ -40,7 +45,7 @@ const WriteBoard = ({ postData, postId, imgList }) => {
     imageKeys: [],
     thumbnailImageUrl: "",
   });
-  const [selectedCategory, setSelectedCategory] = useState(1);
+  const [selectedCategory, setSelectedCategory] = useState(selectedCategoryId || 1);
   const [imgUrls, setImgUrls] = useState([]);
   const toolbarContainerRef = useRef(null);
   const editorContainerRef = useRef(null);
@@ -131,7 +136,15 @@ const WriteBoard = ({ postData, postId, imgList }) => {
         await createPost(body);
       }
 
-      navigate(-1);
+      // 카테고리 ID에 따라 게시판 페이지로 이동
+      const categoryPaths = {
+        1: "/board/free",
+        2: "/board/projects",
+        3: "/board/questions",
+        4: "/board/notices",
+      };
+
+      navigate(categoryPaths[categoryId] || "/");
     } catch (error) {
       console.error("Error on Submit:", error.message);
       alert(error.message || "게시글 저장 중 오류가 발생했습니다.");

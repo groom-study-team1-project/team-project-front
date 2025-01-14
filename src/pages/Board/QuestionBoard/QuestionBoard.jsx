@@ -10,7 +10,8 @@ import Search from "../../../components/Common/Search/Search";
 import { fetchPostItems } from "../../../services/api/postApi";
 import { BarLoading } from "../../../components/Common/LodingSpinner";
 import PopularPostSlider from "../../../components/Common/PopularPost/PopularPostSlider";
-import {useSelector} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
+import {setCategoryId} from "../../../store/category/categorySlice";
 
 function QuestionBoard() {
   const [postItems, setPostItems] = useState([]);
@@ -22,10 +23,16 @@ function QuestionBoard() {
   const [postSortType, setPostSortType] = useState("LATEST");
   const observerRef = useRef(null);
 
-  const categoryId = 1;
+  const categoryId = 3;
   const limit = 10;
 
   const { isMobile, isTablet } = useSelector((state) => state.screenSize);
+
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(setCategoryId(categoryId));
+  }, [dispatch, categoryId]);
 
   const fetchPopularPosts = useCallback(async () => {
     try {
