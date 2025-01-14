@@ -8,7 +8,6 @@ import {
 import Sidebar from "../Sidebar/Sidebar";
 import Navbar from "../Navbar/Navbar";
 import GlobalStyle from "../../assets/styles/GlobalStyle";
-
 import { useSelector } from "react-redux";
 import { Outlet } from "react-router-dom";
 
