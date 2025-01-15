@@ -3,10 +3,10 @@ import styled from "styled-components";
 export const SliderContainer = styled.div`
     display: block;
     width: 100%;
-    height: 400px;
+    height: ${({ $isMobile }) => ($isMobile ? "300px" : "400px")};
     margin: 0 auto 48px;
     position: relative;
-    border-radius: 10px;
+    border-radius: ${({ $isMobile }) => ($isMobile ? "8px" : "10px")};
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     background: linear-gradient(to right, #e5e5f7, #acb6e5);
 
@@ -46,35 +46,41 @@ export const SliderContainer = styled.div`
         flex: 1 0 auto;
         width: 100% !important;
     }
+
+    @media (max-width: 768px) {
+        height: 300px;
+        border-radius: 8px;
+    }
 `;
 
 export const SlideItem = styled.div`
     display: flex !important;
-    flex-direction: row;
+    flex-direction: ${({ $isMobile }) => ($isMobile ? "column" : "row")};
     align-items: center;
-    height: 400px;
+    height: ${({ $isMobile }) => ($isMobile ? "300px" : "400px")};
     justify-content: center;
     border-radius: 10px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     background: linear-gradient(to right, #e5e5f7, #acb6e5);
-    overflow: hidden;
 `;
 
 export const SlideImage = styled.img`
-    width: 70%;
-    height: 100%;
+    width: ${({ $isMobile }) => ($isMobile ? "100%" : "70%")};
+    height: ${({ $isMobile }) => ($isMobile ? "70%" : "100%")};
     object-fit: cover;
     object-position: center;
     border-radius: 10px;
 `;
 
 export const SlideContent = styled.div`
-    width: 30%;
-    height: auto;
+    width: ${({ $isMobile }) => ($isMobile ? "100%" : "30%")};
+    height: ${({ $isMobile }) => ($isMobile ? "30%" : "auto")};
     display: flex;
     flex-direction: column;
-    margin-left: 20px;
+    padding-left: ${({ $isMobile }) => ($isMobile ? "20px" : "20px")};
+    padding-top: ${({ $isMobile }) => ($isMobile ? "20px" : "0px")};
 `;
+
 
 export const SlideTitle = styled.h4`
     font-size: 20px;
