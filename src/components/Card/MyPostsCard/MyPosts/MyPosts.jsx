@@ -37,7 +37,7 @@ export const MyPosts = ({ mypost }) => {
       <MyPost
         key={post.id}
         onClick={() => {
-          //navigate(`/board/detail/${post.postId}`);
+          navigate(`/board/detail/${post.postId}`);
         }}
       >
         <MypostThumbnail src={post.thumbnail} />

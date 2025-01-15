@@ -23,6 +23,7 @@ import {
   SubmitBtn,
   ChecknickName,
   LabelTitle,
+  EditProfileForm,
 } from "./EditProfile.style";
 
 const EditProfile = ({ setProfileState }) => {
@@ -147,7 +148,7 @@ const EditProfile = ({ setProfileState }) => {
 
   return (
     <>
-      <form onSubmit={handleonSubmit}>
+      <EditProfileForm onSubmit={handleonSubmit}>
         <Container>
           <ProfileImageWraps>
             <ProfileImage $size={"5vw"} src={form.imageUrl} />
@@ -277,7 +278,12 @@ const EditProfile = ({ setProfileState }) => {
           <Label>
             <LabelTitle>비밀번호</LabelTitle>
             <NicknameContainer>
-              <SubmitBtn type="button" $bgColor={"#7682FF"} onClick={openModal}>
+              <SubmitBtn
+                type="button"
+                style={{ padding: "1%" }}
+                $bgColor={"red"}
+                onClick={openModal}
+              >
                 비밀번호 변경
               </SubmitBtn>
             </NicknameContainer>
@@ -299,7 +305,7 @@ const EditProfile = ({ setProfileState }) => {
             </SubmitBtn>
           </ButtonGroup>
         </ProfileFooter>
-      </form>
+      </EditProfileForm>
 
       {isModalOpen && <PasswordChange setIsModalOpen={setIsModalOpen} />}
     </>

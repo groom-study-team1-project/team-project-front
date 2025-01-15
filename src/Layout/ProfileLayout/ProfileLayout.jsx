@@ -48,60 +48,62 @@ function MyProfile() {
   }
 
   return (
-    <Wrap>
-      <Main>
-        <LeftContent>
-          <BigProfileBox
-            nickName={profileData.nickname}
-            job={profileData.job}
-            src={profileData.imageUrl}
-          />
-          <UserInfoBox>
-            {profileData.aboutMe === ""
-              ? "자기소개를 작성해주세요"
-              : profileData.aboutMe}
-          </UserInfoBox>
-          <UserInfoBox>
-            {profileData.githubUrl === "" ? (
-              "GitHub url을 추가하세요"
-            ) : (
-              <a href={profileData.githubUrl} target="_blank">
-                <FontAwesomeIcon icon={faGithub} size="2xl" />
-                &nbsp;&nbsp;<span>Github</span>
-              </a>
+    <>
+      <Wrap>
+        <Main>
+          <LeftContent>
+            <BigProfileBox
+              nickName={profileData.nickname}
+              job={profileData.job}
+              src={profileData.imageUrl}
+            />
+            <UserInfoBox>
+              {profileData.aboutMe === ""
+                ? "자기소개를 작성해주세요"
+                : profileData.aboutMe}
+            </UserInfoBox>
+            <UserInfoBox>
+              {profileData.githubUrl === "" ? (
+                "GitHub url을 추가하세요"
+              ) : (
+                <a href={profileData.githubUrl} target="_blank">
+                  <FontAwesomeIcon icon={faGithub} size="2xl" />
+                  &nbsp;&nbsp;<span>Github</span>
+                </a>
+              )}
+            </UserInfoBox>
+            <UserInfoBox>
+              {profileData.blogUrl === "" ? (
+                "Blog url을 추가하세요"
+              ) : (
+                <a href={profileData.blogUrl} target="_blank">
+                  <FontAwesomeIcon icon={faBlogger} size="2xl" />
+                  &nbsp;&nbsp;<span>Blog</span>
+                </a>
+              )}
+            </UserInfoBox>
+            {isMeData && (
+              <ProfileSetting
+                onClick={() => {
+                  setProfileState("editProfile");
+                }}
+              >
+                프로필 수정
+              </ProfileSetting>
             )}
-          </UserInfoBox>
-          <UserInfoBox>
-            {profileData.blogUrl === "" ? (
-              "Blog url을 추가하세요"
-            ) : (
-              <a href={profileData.blogUrl} target="_blank">
-                <FontAwesomeIcon icon={faBlogger} size="2xl" />
-                &nbsp;&nbsp;<span>Blog</span>
-              </a>
-            )}
-          </UserInfoBox>
-          {isMeData && (
-            <ProfileSetting
-              onClick={() => {
-                setProfileState("editProfile");
-              }}
-            >
-              프로필 수정
-            </ProfileSetting>
-          )}
-        </LeftContent>
-        <RightContentWrap>
-          <RightContent>
-            {profileState === "mypost" ? (
-              <MyPostsItems postCount={profileData.postCount} />
-            ) : (
-              <EditProfile setProfileState={setProfileState} />
-            )}
-          </RightContent>
-        </RightContentWrap>
-      </Main>
-    </Wrap>
+          </LeftContent>
+          <RightContentWrap>
+            <RightContent>
+              {profileState === "mypost" ? (
+                <MyPostsItems postCount={profileData.postCount} />
+              ) : (
+                <EditProfile setProfileState={setProfileState} />
+              )}
+            </RightContent>
+          </RightContentWrap>
+        </Main>
+      </Wrap>
+    </>
   );
 }
 

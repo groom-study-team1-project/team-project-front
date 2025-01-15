@@ -22,8 +22,8 @@ import {
   Toolbar,
   CancelBtn,
   ConfirmBtn,
-    EditorWrapper,
-    Category,
+  EditorWrapper,
+  Category,
 } from "./BoardWrite.style";
 import { useSelector } from "react-redux";
 import "./App.css";
@@ -32,9 +32,9 @@ import "ckeditor5/ckeditor5.css";
 const WriteBoard = ({ postData, postId, imgList }) => {
   const { isMobile } = useSelector((state) => state.screenSize);
 
-  const selectedCategoryId = useSelector((state) => state.category.selectedCategoryId);
-
-
+  const selectedCategoryId = useSelector(
+    (state) => state.category.selectedCategoryId
+  );
 
   const navigate = useNavigate();
   const [form, setValue] = useState({
@@ -45,7 +45,9 @@ const WriteBoard = ({ postData, postId, imgList }) => {
     imageKeys: [],
     thumbnailImageUrl: "",
   });
-  const [selectedCategory, setSelectedCategory] = useState(selectedCategoryId || 1);
+  const [selectedCategory, setSelectedCategory] = useState(
+    selectedCategoryId || 1
+  );
   const [imgUrls, setImgUrls] = useState([]);
   const toolbarContainerRef = useRef(null);
   const editorContainerRef = useRef(null);
@@ -80,8 +82,13 @@ const WriteBoard = ({ postData, postId, imgList }) => {
 
   const handleHashtagChange = (e) => {
     const hashtagStr = e.target.value;
-    const hashtagArray = hashtagStr.split(" ").filter((item) => item.startsWith("#"));
-    setValue({ ...form, hashtags: hashtagArray.map((tag) => tag.replace("#", "")) });
+    const hashtagArray = hashtagStr
+      .split(" ")
+      .filter((item) => item.startsWith("#"));
+    setValue({
+      ...form,
+      hashtags: hashtagArray.map((tag) => tag.replace("#", "")),
+    });
   };
 
   const handleTitleChange = (e) => {
@@ -92,13 +99,15 @@ const WriteBoard = ({ postData, postId, imgList }) => {
     const parser = new DOMParser();
     const doc = parser.parseFromString(content, "text/html");
     const imgElements = doc.querySelectorAll("img");
-    const imgLinks = Array.from(imgElements).map((img) => img.src).filter((src) => src);
+    const imgLinks = Array.from(imgElements)
+      .map((img) => img.src)
+      .filter((src) => src);
 
     const imageKeys = imgLinks.map((url) =>
-        url.replace(
-            "https://deepdiver-community-files-dev.s3.ap-northeast-2.amazonaws.com/",
-            ""
-        )
+      url.replace(
+        "https://deepdiver-community-files-dev.s3.ap-northeast-2.amazonaws.com/",
+        ""
+      )
     );
     const thumbnailImageUrl = imgLinks[0] || "";
 
@@ -126,7 +135,9 @@ const WriteBoard = ({ postData, postId, imgList }) => {
         content: content.trim(),
         hashtags,
         categoryId,
-        thumbnailImageUrl: thumbnailImageUrl || "posts/thumbnail.png",
+        thumbnailImageUrl:
+          thumbnailImageUrl ||
+          "https://deepdiver-community-files-dev.s3.ap-northeast-2.amazonaws.com/default-image/posts/thumbnail.png",
         imageKeys: imageKeys || [],
       };
 
@@ -176,33 +187,33 @@ const WriteBoard = ({ postData, postId, imgList }) => {
   }
 
   return (
-      <>
-        {isMobile ? <Navbar $isMobile={isMobile} /> : <Navbar isMainPage={true} />}
-        <Wrap>
-          <WriteWrap>
-            <Category>
-              {categoryNames[selectedCategory]}
-            </Category>
-            <Write $isMobile={isMobile}>
-              글 작성
-            </Write>
-          </WriteWrap>
-          <form onSubmit={onSubmit}>
-            <TitleWrap $isMobile={isMobile}>
+    <>
+      {isMobile ? (
+        <Navbar $isMobile={isMobile} />
+      ) : (
+        <Navbar isMainPage={true} />
+      )}
+      <Wrap>
+        <WriteWrap>
+          <Category>{categoryNames[selectedCategory]}</Category>
+          <Write $isMobile={isMobile}>글 작성</Write>
+        </WriteWrap>
+        <form onSubmit={onSubmit}>
+          <TitleWrap $isMobile={isMobile}>
             <span>
               <Titleinput
-                  type="text"
-                  placeholder="제목을 입력하세요"
-                  onChange={handleTitleChange}
-                  value={form.title}
-                  $isMobile={isMobile}
+                type="text"
+                placeholder="제목을 입력하세요"
+                onChange={handleTitleChange}
+                value={form.title}
+                $isMobile={isMobile}
               />
             </span>
-              <span>
+            <span>
               <Categoryselect
-                  onChange={handleCategoryChange}
-                  value={selectedCategory}
-                  $isMobile={isMobile}
+                onChange={handleCategoryChange}
+                value={selectedCategory}
+                $isMobile={isMobile}
               >
                 <option value={1}>자유 게시판</option>
                 <option value={2}>프로젝트 자랑 게시판</option>
@@ -210,64 +221,70 @@ const WriteBoard = ({ postData, postId, imgList }) => {
                 <option value={4}>공지 게시판</option>
               </Categoryselect>
             </span>
-            </TitleWrap>
-            {Number(selectedCategory) === 2 && (
-                <ImageUploadCard
-                    imgUrls={imgUrls}
-                    setImgUrls={setImgUrls}
-                    form={form}
-                    setForm={setValue}
-                />
-            )}
-            <div ref={editorContainerRef}>
-              <EditorWrapper>
-                <Toolbar ref={toolbarContainerRef}></Toolbar>
-                <CKEditor
-                    editor={DecoupledEditor}
-                    config={{
-                      ...editorConfig,
-                      extraPlugins: [uploadPlugin],
-                    }}
-                    data={form.content}
-                    onReady={(editor) => {
-                      const toolbarElement = editor.ui.view.toolbar.element;
-                      if (toolbarContainerRef.current.firstChild !== toolbarElement) {
-                        toolbarContainerRef.current.innerHTML = "";
-                        toolbarContainerRef.current.appendChild(toolbarElement);
-                      }
-                      const editableElement = editor.ui.view.editable.element;
-                      if (!editorContainerRef.current.contains(editableElement)) {
-                        editorContainerRef.current.appendChild(editableElement);
-                      }
-                    }}
-                    onBlur={getDataFromCKEditor}
-                />
-              </EditorWrapper>
-            </div>
-            <Hashtag
-                type="text"
-                placeholder="#태그입력"
-                name="hashtag"
-                onFocus={(e) => {
-                  if (!e.target.value.startsWith("#")) {
-                    e.target.value = "#";
+          </TitleWrap>
+          {Number(selectedCategory) === 2 && (
+            <ImageUploadCard
+              imgUrls={imgUrls}
+              setImgUrls={setImgUrls}
+              form={form}
+              setForm={setValue}
+            />
+          )}
+          <div ref={editorContainerRef}>
+            <EditorWrapper>
+              <Toolbar ref={toolbarContainerRef}></Toolbar>
+              <CKEditor
+                editor={DecoupledEditor}
+                config={{
+                  ...editorConfig,
+                  extraPlugins: [uploadPlugin],
+                }}
+                data={form.content}
+                onReady={(editor) => {
+                  const toolbarElement = editor.ui.view.toolbar.element;
+                  if (
+                    toolbarContainerRef.current.firstChild !== toolbarElement
+                  ) {
+                    toolbarContainerRef.current.innerHTML = "";
+                    toolbarContainerRef.current.appendChild(toolbarElement);
+                  }
+                  const editableElement = editor.ui.view.editable.element;
+                  if (!editorContainerRef.current.contains(editableElement)) {
+                    editorContainerRef.current.appendChild(editableElement);
                   }
                 }}
-                onChange={handleHashtagChange}
-                value={form.hashtags.map((tag) => `#${tag}`).join(" ")}
-                $isMobile={isMobile}
-            />
-            <SubmitBtnWrap $isMobile={isMobile}>
-              <CancelBtn $isMobile={isMobile} type="button" onClick={() => navigate(-1)}>
-                취 소
-              </CancelBtn>
-              <ConfirmBtn $isMobile={isMobile} type="submit">
-                확 인
-              </ConfirmBtn>
-            </SubmitBtnWrap>
-          </form>
-        </Wrap>
-      </>
+                onBlur={getDataFromCKEditor}
+              />
+            </EditorWrapper>
+          </div>
+          <Hashtag
+            type="text"
+            placeholder="#태그입력"
+            name="hashtag"
+            onFocus={(e) => {
+              if (!e.target.value.startsWith("#")) {
+                e.target.value = "#";
+              }
+            }}
+            onChange={handleHashtagChange}
+            value={form.hashtags.map((tag) => `#${tag}`).join(" ")}
+            $isMobile={isMobile}
+          />
+          <SubmitBtnWrap $isMobile={isMobile}>
+            <CancelBtn
+              $isMobile={isMobile}
+              type="button"
+              onClick={() => navigate(-1)}
+            >
+              취 소
+            </CancelBtn>
+            <ConfirmBtn $isMobile={isMobile} type="submit">
+              확 인
+            </ConfirmBtn>
+          </SubmitBtnWrap>
+        </form>
+      </Wrap>
+    </>
   );
 };
 

@@ -1,5 +1,12 @@
 import styled from "styled-components";
 
+export const EditProfileForm = styled.form`
+  border: 1px solid black;
+  overflow-y: auto;
+  height: 100%;
+  width: 100%;
+`;
+
 export const Container = styled.div`
   width: 100%;
   height: 100%;
@@ -85,6 +92,8 @@ export const ProfileFooter = styled.div`
   display: flex;
   justify-content: space-between;
   margin-top: 10px;
+  margin-right: 0%;
+  position: absolute;
 `;
 
 export const ButtonGroup = styled.div`
