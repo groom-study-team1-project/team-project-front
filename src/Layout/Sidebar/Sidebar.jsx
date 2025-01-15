@@ -14,17 +14,16 @@ import { fetchCategoryItems } from "../../services/api/postApi";
 import logoImg from "../../assets/images/DEEPDIVERS.png";
 import cardIcon from "../../assets/images/Card.png";
 import informaitonIcon from "../../assets/images/Help Badge.png";
-import userIcon from "../../assets/images/User.png";
 import questionIcon from "../../assets/images/User Settings.png";
 import fileIcon from "../../assets/images/File Multiple.png";
 import { useDispatch, useSelector } from "react-redux";
-import { selectMenuItem } from "../../store/category/menuSlice";
+import { selectMenuItem } from "../../store/menu/menuSlice";
 
 function Sidebar() {
   const [menuItems, setMenuItems] = useState([]);
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const selectedItem = useSelector((state) => state.menu?.selectedItem || null);
+  const selectedItemId = useSelector((state) => state.menu?.selectedItem || null);
 
   useEffect(() => {
     try {
@@ -39,7 +38,7 @@ function Sidebar() {
   }, []);
 
   const handleMenuClick = (item) => {
-    dispatch(selectMenuItem(item));
+    dispatch(selectMenuItem(item.id)); // Redux 상태에 ID만 저장
     handleNavigation(item.id);
   };
 
@@ -82,11 +81,12 @@ function Sidebar() {
                 }}
               >
                 <SidebarLink
-                  className="link"
-                  $isSelected={
-                    selectedItem !== null && selectedItem === item.id
-                  }
+                    className="link"
+                    $isSelected={
+                        selectedItemId !== null && selectedItemId === item.id
+                    }
                 >
+
                   <SidebarTitle>{item.title}</SidebarTitle>
                   {iconMapping[item.title]}
                 </SidebarLink>

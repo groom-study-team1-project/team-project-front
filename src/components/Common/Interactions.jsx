@@ -4,7 +4,7 @@ import heartIcon from "../../assets/images/heart.png";
 import commentIcon from "../../assets/images/comment.png";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowRight, faArrowLeft } from "@fortawesome/free-solid-svg-icons";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 const InteractionsWrapper = styled.div`
   display: flex;
