@@ -33,7 +33,7 @@ function BoardDetail() {
   const navigate = useNavigate();
   const { postId } = useParams();
   const payload = useJwt(
-      useSelector((state) => state.user.userInfo.accessToken)
+    useSelector((state) => state.user.userInfo.accessToken)
   );
 
   useEffect(() => {
@@ -75,75 +75,75 @@ function BoardDetail() {
   };
 
   return (
-      <>
-        <ContentWrapper $isDetail={true}>
-          <Wrap>
-            <PostWrap>
-              <Title $isMobile={isMobile}>{post.title}</Title>
-              <Postheader $isMobile={isMobile}>
-                <PostProfileBox
-                    name={post.authorInformation.nickname}
-                    job={post.authorInformation.memberJob}
-                    email={post.authorInformation.email}
-                    imgUrl={post.authorInformation.imageUrl}
-                />
-                <PostheaderRignt $isMobile={isMobile}>
-                  {isMe && (
-                      <>
-                        <Modify onClick={handleEdit}>수정</Modify>
-                        <Modify onClick={() => setConfirmModalVisible(true)}>
-                          삭제
-                        </Modify>
-                      </>
-                  )}
-                </PostheaderRignt>
-              </Postheader>
-              {post.categoryTitle === "프로젝트 게시판" &&
-                  post.imageUrls?.length > 0 && (
-                      <div style={{ marginBottom: "20px" }}>
-                        <Slide imgUrls={post.imageUrls} />
-                      </div>
-                  )}
-              <ContentWrap>
-                <CKEditor
-                    editor={DecoupledEditor}
-                    config={editorConfig}
-                    data={post.content}
-                    disabled={true}
-                />
-              </ContentWrap>
-            </PostWrap>
-            <PostFooter $isMobile={isMobile}>
-              <div>
-                {post.hashtags && post.hashtags.length > 0 ? (
-                    post.hashtags.map((hashtag, index) => (
-                        <span key={index}>{hashtag}</span>
-                    ))
-                ) : (
-                    <span>#</span>
-                )}
-              </div>
-              <Interaction
-                  count={{
-                    viewCount: post.viewCount,
-                    likeCount: post.likeCount,
-                    commentCount: post.commentCount,
-                  }}
+    <>
+      <ContentWrapper $isDetail={true}>
+        <Wrap>
+          <PostWrap>
+            <Title $isMobile={isMobile}>{post.title}</Title>
+            <Postheader $isMobile={isMobile}>
+              <PostProfileBox
+                name={post.authorInformation.nickname}
+                job={post.authorInformation.memberJob}
+                email={post.authorInformation.email}
+                imgUrl={post.authorInformation.imageUrl}
               />
-            </PostFooter>
-            <Comments />
-          </Wrap>
-        </ContentWrapper>
-        <ConfirmDeleteModal
-            isVisible={confirmModalVisible}
-            onClose={() => setConfirmModalVisible(false)}
-            onConfirm={handleDelete}
-            title="삭제하시겠습니까?"
-            description="이 작업은 되돌릴 수 없습니다."
-            confirmText="확인"
-            cancelText="취소"
-        />
-      </>
+              <PostheaderRignt $isMobile={isMobile}>
+                {isMe && (
+                  <>
+                    <Modify onClick={handleEdit}>수정</Modify>
+                    <Modify onClick={() => setConfirmModalVisible(true)}>
+                      삭제
+                    </Modify>
+                  </>
+                )}
+              </PostheaderRignt>
+            </Postheader>
+            {post.categoryTitle === "프로젝트 게시판" &&
+              post.imageUrls?.length > 0 && (
+                <div style={{ marginBottom: "20px" }}>
+                  <Slide imgUrls={post.imageUrls} />
+                </div>
+              )}
+            <ContentWrap>
+              <CKEditor
+                editor={DecoupledEditor}
+                config={editorConfig}
+                data={post.content}
+                disabled={true}
+              />
+            </ContentWrap>
+          </PostWrap>
+          <PostFooter $isMobile={isMobile}>
+            <div>
+              {post.hashtags && post.hashtags.length > 0 ? (
+                post.hashtags.map((hashtag, index) => (
+                  <span key={index}>{hashtag}</span>
+                ))
+              ) : (
+                <span>#</span>
+              )}
+            </div>
+            <Interaction
+              count={{
+                viewCount: post.viewCount,
+                likeCount: post.likeCount,
+                commentCount: post.commentCount,
+              }}
+            />
+          </PostFooter>
+          <Comments />
+        </Wrap>
+      </ContentWrapper>
+      <ConfirmDeleteModal
+        isVisible={confirmModalVisible}
+        onClose={() => setConfirmModalVisible(false)}
+        onConfirm={handleDelete}
+        title="삭제하시겠습니까?"
+        description="이 작업은 되돌릴 수 없습니다."
+        confirmText="확인"
+        cancelText="취소"
+      />
+    </>
   );
 }
 

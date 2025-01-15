@@ -1,5 +1,5 @@
 import React, { useRef, useState, useEffect, useCallback } from "react";
-import {useDispatch, useSelector} from "react-redux"; // Redux 상태 사용
+import { useDispatch, useSelector } from "react-redux"; // Redux 상태 사용
 import CommunityPostCard from "../../../components/Card/PostCard/CommunityPostCard/CommunityPostCard";
 import {
   ContentWrapper,
@@ -11,7 +11,7 @@ import Search from "../../../components/Common/Search/Search";
 import { fetchPostItems } from "../../../services/api/postApi";
 import { BarLoading } from "../../../components/Common/LodingSpinner";
 import PopularPostSlider from "../../../components/Common/PopularPost/PopularPostSlider";
-import {setCategoryId} from "../../../store/category/categorySlice";
+import { setCategoryId } from "../../../store/category/categorySlice";
 
 function FreeBoard() {
   const [postItems, setPostItems] = useState([]);
@@ -38,8 +38,8 @@ function FreeBoard() {
     try {
       const { posts } = await fetchPostItems(categoryId, null, "HOT", 50);
       const filteredPopularPosts = posts
-          .sort((a, b) => b.commentCount - a.commentCount)
-          .slice(0, 5);
+        .sort((a, b) => b.commentCount - a.commentCount)
+        .slice(0, 5);
       setPopularPosts(filteredPopularPosts);
     } catch (error) {
       console.error("Error fetching popular posts:", error);
@@ -53,7 +53,12 @@ function FreeBoard() {
 
     try {
       await new Promise((resolve) => setTimeout(resolve, 1000));
-      const { posts } = await fetchPostItems(categoryId, lastPostId, postSortType, limit);
+      const { posts } = await fetchPostItems(
+        categoryId,
+        lastPostId,
+        postSortType,
+        limit
+      );
       if (posts.length > 0) {
         setPostItems((prevPosts) => [...prevPosts, ...posts]);
         setLastPostId(posts[posts.length - 1].postId);
@@ -68,12 +73,12 @@ function FreeBoard() {
 
   useEffect(() => {
     const observer = new IntersectionObserver(
-        (entries) => {
-          if (entries[0].isIntersecting && hasMore && !loading) {
-            fetchData();
-          }
-        },
-        { threshold: 1.0 }
+      (entries) => {
+        if (entries[0].isIntersecting && hasMore && !loading) {
+          fetchData();
+        }
+      },
+      { threshold: 1.0 }
     );
 
     if (observerRef.current) observer.observe(observerRef.current);
@@ -93,41 +98,43 @@ function FreeBoard() {
     setHasMore(true);
   };
 
-  const filteredPosts = postItems.filter((postItem) =>
-      !searchTerm.trim() || postItem.title.toLowerCase().includes(searchTerm.toLowerCase())
+  const filteredPosts = postItems.filter(
+    (postItem) =>
+      !searchTerm.trim() ||
+      postItem.title.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   return (
-      <ContentWrapper $isMobile={isMobile} $isTablet={isTablet}>
-        <Search onSearch={handleSearch} placeholder="게시글 검색" />
-        <PopularPostSlider posts={popularPosts} />
-        <PostCardWrapper $isMobile={isMobile} $isTablet={isTablet}>
-          {filteredPosts.map((postItem) => (
-              <CommunityPostCard
-                  key={postItem.postId}
-                  id={postItem.postId}
-                  title={postItem.title}
-                  content={postItem.content}
-                  name={postItem.authorInformation.nickname}
-                  job={postItem.authorInformation.memberJob || "직업 정보 없음"}
-                  img={postItem.authorInformation.imageUrl}
-                  count={{
-                    viewCount: postItem.viewCount,
-                    likeCount: postItem.likeCount,
-                    commentCount: postItem.commentCount,
-                  }}
-                  thumbnail={postItem.thumbnail}
-              />
-          ))}
-          <div ref={observerRef} style={{ height: "1px" }} />
-        </PostCardWrapper>
-        {loading && (
-            <SpinnerWrapper>
-              <BarLoading />
-            </SpinnerWrapper>
-        )}
-        {!hasMore && <EndMessage>모든 게시글을 불러왔습니다.</EndMessage>}
-      </ContentWrapper>
+    <ContentWrapper $isMobile={isMobile} $isTablet={isTablet}>
+      <Search onSearch={handleSearch} placeholder="게시글 검색" />
+      <PopularPostSlider posts={popularPosts} />
+      <PostCardWrapper $isMobile={isMobile} $isTablet={isTablet}>
+        {filteredPosts.map((postItem) => (
+          <CommunityPostCard
+            key={postItem.postId}
+            id={postItem.postId}
+            title={postItem.title}
+            content={postItem.content}
+            name={postItem.authorInformation.nickname}
+            job={postItem.authorInformation.memberJob || "직업 정보 없음"}
+            img={postItem.authorInformation.imageUrl}
+            count={{
+              viewCount: postItem.viewCount,
+              likeCount: postItem.likeCount,
+              commentCount: postItem.commentCount,
+            }}
+            thumbnail={postItem.thumbnail}
+          />
+        ))}
+        <div ref={observerRef} style={{ height: "1px" }} />
+      </PostCardWrapper>
+      {loading && (
+        <SpinnerWrapper>
+          <BarLoading />
+        </SpinnerWrapper>
+      )}
+      {!hasMore && <EndMessage>모든 게시글을 불러왔습니다.</EndMessage>}
+    </ContentWrapper>
   );
 }
 
