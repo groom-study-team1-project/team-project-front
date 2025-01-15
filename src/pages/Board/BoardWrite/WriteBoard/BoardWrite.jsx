@@ -45,6 +45,13 @@ const WriteBoard = ({ postData, postId, imgList }) => {
   const toolbarContainerRef = useRef(null);
   const editorContainerRef = useRef(null);
 
+  const categoryMap = {
+    1: "자유 게시판",
+    2: "프로젝트 자랑 게시판",
+    3: "질문 게시판",
+    4: "공지 게시판"
+  }
+
   useEffect(() => {
     if (postData) {
       setValue({
@@ -202,7 +209,7 @@ const WriteBoard = ({ postData, postId, imgList }) => {
         )}
         <Wrap>
           <WriteWrap>
-            <SmallWrite>자유게시판</SmallWrite>
+            <SmallWrite>{categoryMap[selectedCategory]}</SmallWrite>
             <Write $isMobile={isMobile}>글 작성</Write>
           </WriteWrap>
           <form onSubmit={onSubmit}>
