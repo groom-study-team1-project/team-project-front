@@ -1,32 +1,44 @@
-import React, { useRef} from "react";
+import React, {useRef, useState} from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {faAngleLeft, faAngleRight, faPhotoFilm, faXmark} from "@fortawesome/free-solid-svg-icons";
 import { useSelector } from "react-redux";
 import axiosInstance from "../../../services/axiosConfig";
 import {
+  SlideWrap,
   ImgWrap,
+  SlideArrowWrap,
   ImgPreviewWrap,
   ImgPreview,
   ImgPreviewDelete,
-  ImgAddWrap,
-  ImgAdd,
-  CustomArrow,
-  CustomSlider,
+  ImgAdd
 } from "./imageUpload.style";
 
 const ImageUploadCard = ({ imgUrls, setImgUrls, form, setForm }) => {
   const { isMobile } = useSelector((state) => state.screenSize);
-  const fileInput = useRef(null);
+  const [images, setImages] = useState(Array(4).fill(null));
+  const fileInputs = useRef(Array(4).fill(null).map(() => React.createRef()));
+  const [currentSlide, setCurrentSlide] = useState(0);
+  const slideRef = useRef(null);
 
-  const handleClickImgadd = () => {
-    fileInput.current.click();
+  const handleClickImgAdd = (index) => {
+    fileInputs.current[index].current.click();
+  };
+
+  const handleScroll = (direction) => {
+    if (direction === 'left') {
+      slideRef.current.slickPrev();
+      setCurrentSlide(prev => Math.max(0, prev - 1));
+    } else {
+      slideRef.current.slickNext();
+      setCurrentSlide(prev => prev + 1);
+    }
   };
 
   const ProjectuploadAdapter = async (file) => {
     const formData = new FormData();
     formData.append("imageFile", file);
 
-    const response = await axiosInstance.post("/api/posts/upload/image", formData, {
+    const response = await axiosInstance.post("/api/posts/project/upload", formData, {
       headers: {
         "Content-Type": "multipart/form-data",
         Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -40,7 +52,7 @@ const ImageUploadCard = ({ imgUrls, setImgUrls, form, setForm }) => {
     throw new Error(response.data?.status?.message || "이미지 업로드 실패");
   };
 
-  const handleFileChange = async (e) => {
+  /*const handleFileChange = async (e) => {
     const files = Array.from(e.target.files);
 
     try {
@@ -56,6 +68,15 @@ const ImageUploadCard = ({ imgUrls, setImgUrls, form, setForm }) => {
     } catch (error) {
       console.error("이미지 업로드 실패:", error.message);
     }
+  };*/
+
+  const handleFileChange = (index) => (e)=> {
+    const file = e.target.files[0];
+    if (file) {
+        const newImages = [...images];
+        newImages[index] = file;
+        setImages(newImages);
+    }
   };
 
   const deletePreviewImg = (indexToDelete) => {
@@ -69,58 +90,38 @@ const ImageUploadCard = ({ imgUrls, setImgUrls, form, setForm }) => {
     }));
   };
 
-  const SlickButtonFix = ({ currentSlide, slideCount, children, ...props }) => (
-      <span {...props}>{children}</span>
-  );
-
-  const settings = {
-    dots: false,
-    infinite: false,
-    slidesToShow: isMobile ? 2 : 3,
-    slidesToScroll: 1,
-    variableWidth: true,
-    nextArrow: (
-        <SlickButtonFix>
-          <CustomArrow>
-            <FontAwesomeIcon icon={faAngleRight} />
-          </CustomArrow>
-        </SlickButtonFix>
-    ),
-    prevArrow: (
-        <SlickButtonFix>
-          <CustomArrow>
-            <FontAwesomeIcon icon={faAngleLeft} />
-          </CustomArrow>
-        </SlickButtonFix>
-    ),
-  };
-
   return (
-      <ImgWrap>
-        <CustomSlider {...settings}>
-          {imgUrls.map((url, index) => (
-              <ImgPreviewWrap key={index}>
-                <ImgPreview src={url} alt={`Preview ${index}`} $isMobile={isMobile} />
-                <ImgPreviewDelete onClick={() => deletePreviewImg(index)}>
-                  <FontAwesomeIcon icon={faXmark} />
-                </ImgPreviewDelete>
-              </ImgPreviewWrap>
+      <SlideWrap>
+        <SlideArrowWrap>
+          <FontAwesomeIcon icon={faAngleLeft}/>
+        </SlideArrowWrap>
+        <ImgWrap>
+          {[0, 1, 2, 3].map((index) => (
+              <ImgAdd index={index} onClick={() => handleClickImgAdd(index)} $isMobile={isMobile}>
+                {images[index] ? (
+                    <ImgPreviewWrap key={index}>
+                      <ImgPreview src={URL.createObjectURL(images[index])} alt={`Preview ${index}`} $isMobile={isMobile} />
+                      <ImgPreviewDelete onClick={() => deletePreviewImg(index)}>
+                        <FontAwesomeIcon icon={faXmark} />
+                      </ImgPreviewDelete>
+                    </ImgPreviewWrap>
+                ) : (
+                    <FontAwesomeIcon icon={faPhotoFilm} style={{ fontSize: "24px" }} />
+                )}
+                <input
+                    type="file"
+                    style={{ display: "none" }}
+                    accept="image/*"
+                    ref={fileInputs.current[index]}
+                    onChange={handleFileChange(index)}
+                />
+              </ImgAdd>
           ))}
-          <ImgAddWrap>
-            <ImgAdd onClick={handleClickImgadd} $isMobile={isMobile}>
-              <FontAwesomeIcon icon={faPhotoFilm} style={{ fontSize: "24px" }} />
-              <input
-                  type="file"
-                  style={{ display: "none" }}
-                  accept="image/*"
-                  ref={fileInput}
-                  multiple
-                  onChange={handleFileChange}
-              />
-            </ImgAdd>
-          </ImgAddWrap>
-        </CustomSlider>
-      </ImgWrap>
+        </ImgWrap>
+        <SlideArrowWrap>
+          <FontAwesomeIcon icon={faAngleRight}/>
+        </SlideArrowWrap>
+      </SlideWrap>
   );
 };
 
