@@ -2,7 +2,6 @@ import React, {useRef, useState} from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {faAngleLeft, faAngleRight, faPhotoFilm, faXmark} from "@fortawesome/free-solid-svg-icons";
 import { useSelector } from "react-redux";
-import axiosInstance from "../../../services/axiosConfig";
 import {
   SlideWrap,
   ImgWrap,
@@ -17,58 +16,34 @@ const ImageUploadCard = ({ imgUrls, setImgUrls, form, setForm }) => {
   const { isMobile } = useSelector((state) => state.screenSize);
   const [images, setImages] = useState(Array(4).fill(null));
   const fileInputs = useRef(Array(4).fill(null).map(() => React.createRef()));
-  const [currentSlide, setCurrentSlide] = useState(0);
   const slideRef = useRef(null);
+  const [showLeftArrow, setShowLeftArrow] = useState(false);
+  const [showRightArrow, setShowRightArrow] = useState(true);
 
   const handleClickImgAdd = (index) => {
     fileInputs.current[index].current.click();
   };
 
+  const updateArrow = (e) => {
+    const { scrollLeft, scrollWidth, clientWidth } = e.target;
+    console.log('scrollLeft:', scrollLeft);
+    console.log('scrollWidth:', scrollWidth);
+    console.log('clientWidth:', clientWidth);
+
+    setShowLeftArrow(scrollLeft > 0);
+    setShowRightArrow(scrollLeft < scrollWidth - clientWidth - 1);
+  };
+
   const handleScroll = (direction) => {
-    if (direction === 'left') {
-      slideRef.current.slickPrev();
-      setCurrentSlide(prev => Math.max(0, prev - 1));
-    } else {
-      slideRef.current.slickNext();
-      setCurrentSlide(prev => prev + 1);
-    }
-  };
+    if (!slideRef.current) return;
 
-  const ProjectuploadAdapter = async (file) => {
-    const formData = new FormData();
-    formData.append("imageFile", file);
+    const scrollAmount = isMobile ? 144 + 16 : 288 + 16; // 이미지 너비 + 간격
 
-    const response = await axiosInstance.post("/api/posts/project/upload", formData, {
-      headers: {
-        "Content-Type": "multipart/form-data",
-        Authorization: `Bearer ${localStorage.getItem("token")}`,
-      },
+    slideRef.current.scrollTo({
+      left: slideRef.current.scrollLeft + (direction === 'left' ? -scrollAmount : scrollAmount),
+      behavior: 'smooth'
     });
-
-    if (response.data?.status?.code === 1204) {
-      return response.data.result.imageUrl;
-    }
-
-    throw new Error(response.data?.status?.message || "이미지 업로드 실패");
   };
-
-  /*const handleFileChange = async (e) => {
-    const files = Array.from(e.target.files);
-
-    try {
-      const uploadedUrls = await Promise.all(
-          files.map(async (file) => await ProjectuploadAdapter(file))
-      );
-
-      setImgUrls((prevImgUrls) => [...prevImgUrls, ...uploadedUrls]);
-      setForm((prevForm) => ({
-        ...prevForm,
-        imageUrls: [...prevForm.imageUrls, ...uploadedUrls],
-      }));
-    } catch (error) {
-      console.error("이미지 업로드 실패:", error.message);
-    }
-  };*/
 
   const handleFileChange = (index) => (e)=> {
     const file = e.target.files[0];
@@ -92,10 +67,10 @@ const ImageUploadCard = ({ imgUrls, setImgUrls, form, setForm }) => {
 
   return (
       <SlideWrap>
-        <SlideArrowWrap>
+        <SlideArrowWrap onClick={() => handleScroll('left')} $disabled={showLeftArrow}>
           <FontAwesomeIcon icon={faAngleLeft}/>
         </SlideArrowWrap>
-        <ImgWrap>
+        <ImgWrap ref={slideRef} onScroll={updateArrow}>
           {[0, 1, 2, 3].map((index) => (
               <ImgAdd index={index} onClick={() => handleClickImgAdd(index)} $isMobile={isMobile}>
                 {images[index] ? (
@@ -118,7 +93,7 @@ const ImageUploadCard = ({ imgUrls, setImgUrls, form, setForm }) => {
               </ImgAdd>
           ))}
         </ImgWrap>
-        <SlideArrowWrap>
+        <SlideArrowWrap onClick={() => handleScroll('right')} $disabled={showRightArrow}>
           <FontAwesomeIcon icon={faAngleRight}/>
         </SlideArrowWrap>
       </SlideWrap>

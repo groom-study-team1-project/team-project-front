@@ -22,6 +22,10 @@ export const ImgWrap = styled.div`
   position: relative;
   overflow-x: auto;
   flex-shrink: 0;
+  
+  &::-webkit-scrollbar {
+    display: none;
+  }
 `;
 
 export const SlideArrowWrap = styled.div`
@@ -33,9 +37,11 @@ export const SlideArrowWrap = styled.div`
     border-radius: 100px;
     background: white;
     z-index: 1;
+    cursor: ${props => props.$disabled ? 'pointer' : 'default'};
+    opacity: ${props => props.$disabled ? '1' : '0.2'};
     &:hover {
-      opacity: 0.7;
-      zoom: 1.2;
+      opacity: ${props => props.$disabled? '0.7' : '0.2'};
+      zoom: ${props => props.$disabled ? '1.2' : '1'};
     }
 `;
 
