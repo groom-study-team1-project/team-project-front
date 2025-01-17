@@ -34,14 +34,14 @@ const WriteBoard = ({ postData, postId, imgList }) => {
   const [form, setValue] = useState({
     title: "",
     content: "",
+    thumbnailImageUrl : "",
+    categoryId: null,
     hashtags: [],
-    imageUrls: [],
-    thumbnail: "",
     imageKeys: [],
-    thumbnailImageKey: "",
   });
   const [selectedCategory, setSelectedCategory] = useState(1);
   const [imgUrls, setImgUrls] = useState([]);
+  const [slideImgKeys, setSlideImgKeys] = useState([]);
   const toolbarContainerRef = useRef(null);
   const editorContainerRef = useRef(null);
 
@@ -57,15 +57,16 @@ const WriteBoard = ({ postData, postId, imgList }) => {
       setValue({
         title: postData.title || "",
         content: postData.content || "",
+        thumbnailImageUrl : postData.thumbnailImageUrl || "",
+        categoryId: postData.categoryId || null,
         hashtags: postData.hashtags || [],
-        imageUrls: postData.imageUrls || [],
-        thumbnail: postData.thumbnail || "",
         imageKeys: postData.imageKeys || [],
-        thumbnailImageKey: postData.thumbnailImageKey || "",
       });
+
       setSelectedCategory(postData.categoryId);
-      if (postData.imageUrls?.length) {
-        setImgUrls(postData.imageUrls);
+
+      if (postData.imageKeys?.length) {
+        setImgUrls(postData.imageKeys);
       }
 
       if (postData.content) {
@@ -76,19 +77,18 @@ const WriteBoard = ({ postData, postId, imgList }) => {
             .map((img) => img.src)
             .filter((src) => src);
 
-        const imageKeys = imgLinks.map((url) =>
+        const imageKey = imgLinks.map((url) =>
             url.replace(
                 "https://deepdiver-community-files-dev.s3.ap-northeast-2.amazonaws.com/",
                 ""
             )
         );
-        const thumbnailImageKey = imageKeys[0] || "";
+        const thumbnailImageKey = imageKey[0] || "";
 
         setValue((prev) => ({
           ...prev,
-          imageUrls: imgLinks,
-          imageKeys: imageKeys,
-          thumbnailImageKey: thumbnailImageKey,
+          imageKeys: imageKey,
+          thumbnailImageUrl: thumbnailImageKey,
         }));
       }
     }
@@ -129,7 +129,6 @@ const WriteBoard = ({ postData, postId, imgList }) => {
     setValue((prev) => ({
       ...prev,
       content: content,
-      imageUrls: imgLinks,
       imageKeys: imageKeys,
       thumbnailImageKey: thumbnailImageKey,
     }));
@@ -138,7 +137,6 @@ const WriteBoard = ({ postData, postId, imgList }) => {
   const onSubmit = async (e) => {
     e.preventDefault();
     try {
-      const { title, content, hashtags, imageKeys, thumbnailImageKey } = form;
 
       const processedHashtags = hashtags
           .filter((item) => item.startsWith("#"))
@@ -160,6 +158,9 @@ const WriteBoard = ({ postData, postId, imgList }) => {
         categoryId,
         thumbnailImageKey: thumbnailImageKey || "posts/thumbnail.png",
         imageKeys: finalImageKeys,
+        ...(form.categoryId === 2 && {
+          slideImageKey: slideImg.map(img => img.imageKey)
+        })
       };
 
       if (postData) {
@@ -167,7 +168,6 @@ const WriteBoard = ({ postData, postId, imgList }) => {
       } else {
         await createPost(body);
       }
-
       navigate(-1);
     } catch (error) {
       console.error("Error on Submit:", error.message);
@@ -234,10 +234,8 @@ const WriteBoard = ({ postData, postId, imgList }) => {
             </TitleWrap>
             {Number(selectedCategory) === 2 && (
                 <ImageUploadCard
-                    imgUrls={imgUrls}
-                    setImgUrls={setImgUrls}
-                    form={form}
-                    setForm={setValue}
+                    slideImg={slideImgKeys}
+                    setSlideImg={setSlideImgKeys}
                 />
             )}
             <EditorWrap ref={editorContainerRef}>
@@ -280,7 +278,7 @@ const WriteBoard = ({ postData, postId, imgList }) => {
                   type="submit"
                   $isMobile={isMobile}
               >
-                확인
+                작성
               </SubmitBtn>
               <SubmitBtn
                   $borderColor="#929292"
