@@ -119,7 +119,8 @@ export const Hashtag = styled.input`
   background: white;
   border-radius: 5px;
   padding: 0.5rem 0.5rem 0.5rem 0.5rem;
-  margin-right: 1rem;  
+  margin-right: 1rem;
+  margin-bottom: 0.5rem;  
   ${(props) =>
     props.$isMobile
       ? `
@@ -133,6 +134,7 @@ export const Hashtag = styled.input`
 export const Hashtags = styled.div`
     padding: 0.3rem;
     margin-right: 0.5rem;
+    margin-bottom: 0.5rem;
     border: none;
     border-radius: 5px;
     background: white;
