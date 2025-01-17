@@ -11,10 +11,10 @@ export const createPost = async (body) => {
     const requestBody = {
       title: body.title?.trim(),
       content: body.content?.trim(),
+      thumbnailImageUrl: body.thumbnailImageKey || "",
       categoryId: body.categoryId,
-      hashtags: body.hashtags || [], // 해시태그 배열
-      thumbnailImageKey: body.thumbnailImageKey || "", // 썸네일 이미지 키
-      imageKeys: body.imageKeys || [], // 이미지 키 배열
+      hashtags: body.hashtags || [],
+      imageKeys: body.imageKeys || [],
     };
 
     console.log("Final Request Body in createPost:", requestBody);
@@ -203,9 +203,9 @@ export const createProjectPost = async (body) => {
     const requestBody = {
       title: body.title?.trim(),
       content: body.content?.trim(),
+      thumbnailImageUrl: body.thumbnailImageKey || "",
       categoryId: body.categoryId,
       hashtags: body.hashtags || [],
-      thumbnailImageKey: body.thumbnailImageKey || "",
       imageKeys: body.imageKeys || [],
       slideImageKeys: body.slideImageKeys || []
     };
@@ -214,19 +214,20 @@ export const createProjectPost = async (body) => {
       throw new Error("제목, 내용, 카테고리 ID는 필수 입력 항목입니다.");
     }
 
+    console.log(requestBody);
     const result = await axiosInstance.post("/api/posts/project/upload", requestBody);
     console.log("게시글 생성 성공:", result.data);
     return result.data;
 
   } catch (error) {
-  console.error(
-      error.response
-          ? "서버 응답 에러: " + error.response.data
-          : error.request
-              ? "응답 없음 에러: " + error.request
-              : "예상치 못한 에러: " + error.message
-  );
-  throw error;
+    console.error(
+        error.response
+            ? "서버 응답 에러: " + error.response.data
+            : error.request
+                ? "응답 없음 에러: " + error.request
+                : "예상치 못한 에러: " + error.message
+    );
+    throw error;
   }
 };
 
