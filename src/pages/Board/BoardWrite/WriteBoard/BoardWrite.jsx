@@ -4,7 +4,7 @@ import { CKEditor } from "@ckeditor/ckeditor5-react";
 import { DecoupledEditor } from "ckeditor5";
 import { editorConfig } from "./editor";
 import {
-  createPost,
+  createPost, createProjectPost,
   fetchPostChange,
   uploadAdapter,
 } from "../../../../services/api/postApi";
@@ -12,6 +12,7 @@ import Navbar from "../../../../Layout/Navbar/Navbar";
 import ImageUploadCard from "../../../../components/Card/imgUploadCard/imageUploadCard";
 import {
   Categoryselect,
+  HashtagWrap,
   Hashtag,
   SubmitBtn,
   SubmitBtnWrap,
@@ -22,7 +23,7 @@ import {
   Write,
   WriteWrap,
   Toolbar,
-  EditorWrap
+  EditorWrap, Hashtags
 } from "./BoardWrite.style";
 import { useSelector } from "react-redux";
 import "./App.css";
@@ -40,7 +41,6 @@ const WriteBoard = ({ postData, postId, imgList }) => {
     imageKeys: [],
   });
   const [selectedCategory, setSelectedCategory] = useState(1);
-  const [imgUrls, setImgUrls] = useState([]);
   const [slideImgKeys, setSlideImgKeys] = useState([]);
   const toolbarContainerRef = useRef(null);
   const editorContainerRef = useRef(null);
@@ -64,10 +64,6 @@ const WriteBoard = ({ postData, postId, imgList }) => {
       });
 
       setSelectedCategory(postData.categoryId);
-
-      if (postData.imageKeys?.length) {
-        setImgUrls(postData.imageKeys);
-      }
 
       if (postData.content) {
         const parser = new DOMParser();
@@ -99,11 +95,29 @@ const WriteBoard = ({ postData, postId, imgList }) => {
   };
 
   const handleHashtagChange = (e) => {
-    const hashtagStr = e.target.value;
-    const hashtagArray = hashtagStr
-        .split(" ")
-        .filter((item) => item.startsWith("#"));
-    setValue({ ...form, hashtags: hashtagArray });
+
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+
+      const hashtagStr = e.target.value.trim();
+      if (!hashtagStr) return;
+
+      const tag = hashtagStr.startsWith('#') ? hashtagStr : `#${hashtagStr}`;
+
+      setValue(prev => ({
+        ...prev,
+        hashtags: [...prev.hashtags, tag]
+      }));
+
+      e.target.value = "";
+    }
+  };
+
+  const removeHashtag = (indexToRemove) => {
+    setValue(prev => ({
+      ...prev,
+      hashtags: prev.hashtags.filter((_, index) => index !== indexToRemove)
+    }));
   };
 
   const handleTitleChange = (e) => {
@@ -141,6 +155,10 @@ const WriteBoard = ({ postData, postId, imgList }) => {
 
       const { hashtags, imageKeys, title, content, thumbnailImageKey } = form;
 
+      if (!title.trim() || !content.trim() || !categoryId) {
+        throw new Error("제목, 내용, 카테고리는 필수 입력 항목입니다.");
+      }
+
       const processedHashtags = hashtags
           .filter((item) => item.startsWith("#"))
           .map((item) => item.replace("#", ""));
@@ -148,25 +166,38 @@ const WriteBoard = ({ postData, postId, imgList }) => {
       const finalImageKeys =
           imageKeys && imageKeys.length > 0 ? imageKeys : [];
 
-      if (!title.trim() || !content.trim() || !categoryId) {
-        throw new Error("제목, 내용, 카테고리는 필수 입력 항목입니다.");
-      }
+      if (categoryId === 2) {
+        if (!slideImgKeys.length) {
+          console.error("프로젝트 게시판은 슬라이드 이미지 등록이 필수 입니다");
+        }
 
-      const body = {
-        title: title.trim(),
-        content: content.trim(),
-        hashtags: processedHashtags,
-        categoryId,
-        thumbnailImageKey: thumbnailImageKey || "posts/thumbnail.png",
-        imageKeys: finalImageKeys,
-      };
+        const projectBody = {
+          title: title.trim(),
+          content: content.trim(),
+          hashtags: processedHashtags,
+          categoryId,
+          thumbnailImageKey: thumbnailImageKey || "posts/thumbnail.png",
+          imageKeys: finalImageKeys,
+          slideImageKeys: slideImgKeys.map(img => img.fileKey),
+        };
 
-      if (postData) {
-        await fetchPostChange(body, postId);
+        await createProjectPost(projectBody);
       } else {
-        await createPost(body);
+
+        const body = {
+          title: title.trim(),
+          content: content.trim(),
+          hashtags: processedHashtags,
+          categoryId,
+          thumbnailImageKey: thumbnailImageKey || "posts/thumbnail.png",
+          imageKeys: finalImageKeys,
+        };
+
+        await createPost(body)
       }
+
       navigate(-1);
+
     } catch (error) {
       console.error("Error on Submit:", error.message);
       alert(error.message || "게시글 저장 중 오류가 발생했습니다.");
@@ -261,14 +292,24 @@ const WriteBoard = ({ postData, postId, imgList }) => {
                   onBlur={getDataFromCKEditor}
               />
             </EditorWrap>
-            <Hashtag
-                type="text"
-                placeholder="#태그입력"
-                name="hashtag"
-                onChange={handleHashtagChange}
-                value={form.hashtags.join(" ")}
-                $isMobile={isMobile}
-            />
+            <HashtagWrap>
+              <Hashtag
+                  type="text"
+                  placeholder="#태그입력"
+                  name="hashtag"
+                  onKeyDown={(e) => handleHashtagChange(e)}
+                  $isMobile={isMobile}
+              />
+              {form.hashtags.map((tag, index) => (
+                <Hashtags
+                  key={index}
+                  $isMobile={isMobile}
+                  onClick={() => removeHashtag(index)}
+                >
+                  {tag}
+                </Hashtags>
+              ))}
+            </HashtagWrap>
             <SubmitBtnWrap $isMobile={isMobile}>
               <SubmitBtn
                   $borderColor="#B1CDE9"
