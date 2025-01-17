@@ -1,8 +1,7 @@
-import React, { useRef} from "react";
+import React, { useRef } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {faAngleLeft, faAngleRight, faPhotoFilm, faXmark} from "@fortawesome/free-solid-svg-icons";
+import { faAngleLeft, faAngleRight, faPhotoFilm, faXmark } from "@fortawesome/free-solid-svg-icons";
 import { useSelector } from "react-redux";
-import axiosInstance from "../../../services/axiosConfig";
 import {
   ImgWrap,
   ImgPreviewWrap,
@@ -13,6 +12,7 @@ import {
   CustomArrow,
   CustomSlider,
 } from "./imageUpload.style";
+import { imageUpload } from "../../../services/api/imageApi";
 
 const ImageUploadCard = ({ imgUrls, setImgUrls, form, setForm }) => {
   const { isMobile } = useSelector((state) => state.screenSize);
@@ -22,41 +22,35 @@ const ImageUploadCard = ({ imgUrls, setImgUrls, form, setForm }) => {
     fileInput.current.click();
   };
 
-  const ProjectuploadAdapter = async (file) => {
-    const formData = new FormData();
-    formData.append("imageFile", file);
-
-    const response = await axiosInstance.post("/api/posts/upload/image", formData, {
-      headers: {
-        "Content-Type": "multipart/form-data",
-        Authorization: `Bearer ${localStorage.getItem("token")}`,
-      },
-    });
-
-    if (response.data?.status?.code === 1204) {
-      return response.data.result.imageUrl;
-    }
-
-    throw new Error(response.data?.status?.message || "이미지 업로드 실패");
-  };
-
   const handleFileChange = async (e) => {
     const files = Array.from(e.target.files);
 
     try {
-      const uploadedUrls = await Promise.all(
-          files.map(async (file) => await ProjectuploadAdapter(file))
+      const uploadedFiles = await Promise.all(
+          files.map(async (file) => {
+            const result = await imageUpload("POST", file);
+            return result;
+          })
       );
 
+      const uploadedUrls = uploadedFiles.map((file) => file.accessImage);
+      const uploadedKeys = uploadedFiles.map((file) => file.fileKey);
+
       setImgUrls((prevImgUrls) => [...prevImgUrls, ...uploadedUrls]);
-      setForm((prevForm) => ({
-        ...prevForm,
-        imageUrls: [...prevForm.imageUrls, ...uploadedUrls],
-      }));
+      setForm((prevForm) => {
+        const updatedImageUrls = [...prevForm.imageUrls, ...uploadedUrls];
+        return {
+          ...prevForm,
+          imageUrls: updatedImageUrls,
+          slideImageKeys: [...(prevForm.slideImageKeys || []), ...uploadedKeys],
+          thumbnailImageUrl: prevForm.thumbnailImageUrl || updatedImageUrls[0],
+        };
+      });
     } catch (error) {
-      console.error("이미지 업로드 실패:", error.message);
+      console.error("Image upload failed:", error.message);
     }
   };
+
 
   const deletePreviewImg = (indexToDelete) => {
     setImgUrls((prevImgUrls) =>
@@ -65,9 +59,15 @@ const ImageUploadCard = ({ imgUrls, setImgUrls, form, setForm }) => {
 
     setForm((prevForm) => ({
       ...prevForm,
-      imageUrls: prevForm.imageUrls.filter((_, index) => index !== indexToDelete),
+      imageUrls: (prevForm.imageUrls || []).filter(
+          (_, index) => index !== indexToDelete
+      ),
+      slideImageKeys: (prevForm.slideImageKeys || []).filter(
+          (_, index) => index !== indexToDelete
+      ),
     }));
   };
+
 
   const SlickButtonFix = ({ currentSlide, slideCount, children, ...props }) => (
       <span {...props}>{children}</span>

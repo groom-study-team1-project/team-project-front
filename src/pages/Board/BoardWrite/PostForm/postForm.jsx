@@ -1,25 +1,38 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
+import { useSelector } from "react-redux"; // Redux의 useSelector 훅
 import WriteBoard from "../WriteBoard/BoardWrite";
-import { fetchPostDetail } from "../../../../services/api/postApi";
+import { fetchPostDetail, fetchProjectPostDetail } from "../../../../services/api/postApi";
+
 const PostForm = () => {
   const { postId } = useParams(); // URL에서 postId 가져오기
   const [post, setPost] = useState(null);
 
+  // Redux에서 categoryId 가져오기
+  const categoryId = useSelector((state) => state.category.selectedCategoryId);
+
   useEffect(() => {
-    if (!postId) return; // postId가 없으면 요청하지 않음
+    if (!postId || !categoryId) return; // postId 또는 categoryId가 없으면 요청하지 않음
 
     const fetchData = async () => {
       try {
-        const postResponse = await fetchPostDetail(postId);
-        console.log(postResponse);
-        setPost(postResponse);
+        if (categoryId === 2) {
+          // categoryId가 2이면 프로젝트 게시판 데이터 호출
+          const projectPostResponse = await fetchProjectPostDetail(postId);
+          setPost(projectPostResponse);
+        } else {
+          // 일반 게시판 데이터 유지
+          const postResponse = await fetchPostDetail(postId);
+          setPost(postResponse);
+        }
       } catch (error) {
         console.error("데이터를 가져오는데 실패", error);
       }
     };
+
     fetchData();
-  }, [postId]);
+  }, [postId, categoryId]);
+
   const imgList = {
     imgUrl: [
       {
@@ -36,6 +49,7 @@ const PostForm = () => {
       },
     ],
   };
+
   if (postId) {
     if (post) {
       return <WriteBoard postData={post} imgList={imgList} postId={postId} />;
@@ -46,4 +60,5 @@ const PostForm = () => {
     return <WriteBoard />; // postId가 없을 경우 새 게시글 작성
   }
 };
+
 export default PostForm;

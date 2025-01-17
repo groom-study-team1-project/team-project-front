@@ -7,11 +7,11 @@ import {
   SpinnerWrapper,
 } from "../Board.style";
 import Search from "../../../components/Common/Search/Search";
-import { fetchPostItems } from "../../../services/api/postApi";
+import { fetchProjectPosts } from "../../../services/api/postApi";
 import { BarLoading } from "../../../components/Common/LodingSpinner";
 import PopularPostSlider from "../../../components/Common/PopularPost/PopularPostSlider";
-import {useDispatch, useSelector} from "react-redux";
-import {setCategoryId} from "../../../store/category/categorySlice";
+import { useDispatch, useSelector } from "react-redux";
+import { setCategoryId } from "../../../store/category/categorySlice";
 
 function ProjectBoard() {
   const [postItems, setPostItems] = useState([]);
@@ -36,9 +36,8 @@ function ProjectBoard() {
 
   const fetchPopularPosts = useCallback(async () => {
     try {
-      const { posts } = await fetchPostItems(categoryId, null, "HOT", 50);
+      const { posts } = await fetchProjectPosts(categoryId, null, "HOT", 50);
       const filteredPopularPosts = posts
-          .sort((a, b) => b.commentCount - a.commentCount)
           .slice(0, 5); // Limit to 5 posts
       setPopularPosts(filteredPopularPosts);
     } catch (error) {
@@ -52,8 +51,7 @@ function ProjectBoard() {
     setLoading(true);
 
     try {
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-      const { posts } = await fetchPostItems(categoryId, lastPostId, postSortType, limit);
+      const { posts } = await fetchProjectPosts(categoryId, lastPostId, postSortType, limit);
       if (posts.length > 0) {
         setPostItems((prevPosts) => [...prevPosts, ...posts]);
         setLastPostId(posts[posts.length - 1].postId);
@@ -111,7 +109,7 @@ function ProjectBoard() {
                   name={postItem.authorInformation.nickname}
                   job={postItem.authorInformation.memberJob || "직업 정보 없음"}
                   profileImg={postItem.authorInformation.imageUrl}
-                  postImgs={postItem.imageUrls || []}
+                  postImgs={postItem.slideImageUrls || []}
                   count={{
                     viewCount: postItem.viewCount,
                     likeCount: postItem.likeCount,

@@ -38,7 +38,6 @@ function QuestionBoard() {
     try {
       const { posts } = await fetchPostItems(categoryId, null, "HOT", 50);
       const filteredPopularPosts = posts
-          .sort((a, b) => b.commentCount - a.commentCount)
           .slice(0, 5); // Limit to 5 posts
       setPopularPosts(filteredPopularPosts);
     } catch (error) {
