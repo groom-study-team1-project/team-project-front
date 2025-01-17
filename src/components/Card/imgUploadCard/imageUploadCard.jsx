@@ -66,6 +66,7 @@ const ImageUploadCard = ({ slideImg, setSlideImg }) => {
       fileKey: fileKey,
     };
     setSlideImg(newSlideImage);
+    console.log("슬라이드 이미지 정보 : ", slideImg);
   }
 
   const handleFileChange = (index) => async (e)=> {
@@ -89,11 +90,14 @@ const ImageUploadCard = ({ slideImg, setSlideImg }) => {
         const newImages = [...images];
         newImages[index] = null;
         setImages(newImages);
+        console.log("미리보기 이미지 : ", setImages);
       }
     }
   };
 
-  const deletePreviewImg = (indexToDelete) => {
+  const deletePreviewImg = (indexToDelete, e) => {
+
+    e.stopPropagation();
 
     const newImages = [...images];
     newImages[indexToDelete] = null;
@@ -102,6 +106,7 @@ const ImageUploadCard = ({ slideImg, setSlideImg }) => {
     setSlideImg(prevSlideImg =>
       prevSlideImg.filter((_, index) => index !== indexToDelete)
     );
+
   };
 
   return (
@@ -115,7 +120,7 @@ const ImageUploadCard = ({ slideImg, setSlideImg }) => {
                 {images[index] ? (
                     <ImgPreviewWrap>
                       <ImgPreview src={images[index]} alt={`Preview ${index}`} $isMobile={isMobile} />
-                      <ImgPreviewDelete onClick={() => deletePreviewImg(index)}>
+                      <ImgPreviewDelete onClick={(e) => deletePreviewImg(index, e)}>
                         <FontAwesomeIcon icon={faXmark} />
                       </ImgPreviewDelete>
                     </ImgPreviewWrap>
