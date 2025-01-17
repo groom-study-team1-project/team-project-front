@@ -197,3 +197,55 @@ export const sortPostsByCriteria = async (category_id, sort, post_id) => {
     console.log(error);
   }
 };
+
+export const createProjectPost = async (body) => {
+  try {
+    const requestBody = {
+      title: body.title?.trim(),
+      content: body.content?.trim(),
+      categoryId: body.categoryId,
+      hashtags: body.hashtags || [],
+      thumbnailImageKey: body.thumbnailImageKey || "",
+      imageKeys: body.imageKeys || [],
+      slideImageKeys: body.slideImageKeys || []
+    };
+
+    if (!requestBody.title || !requestBody.content || !requestBody.categoryId) {
+      throw new Error("제목, 내용, 카테고리 ID는 필수 입력 항목입니다.");
+    }
+
+    const result = await axiosInstance.post("/api/posts/project/upload", requestBody);
+    console.log("게시글 생성 성공:", result.data);
+    return result.data;
+
+  } catch (error) {
+  console.error(
+      error.response
+          ? "서버 응답 에러: " + error.response.data
+          : error.request
+              ? "응답 없음 에러: " + error.request
+              : "예상치 못한 에러: " + error.message
+  );
+  throw error;
+  }
+};
+
+export const editProjectPost = async (body, projectId) => {
+  try {
+    const result = await axiosInstance.post(`api/posts/project/edit/${projectId}`, body);
+    console.log("응답성공 : ", result.data);
+    return result.data;
+  } catch (error) {
+    console.error("프로젝트 게시글 수정 실패 : ", error);
+  }
+};
+
+export const deleteProjectPost = async (projectId) => {
+  try {
+    const response = await axiosInstance.delete(`/api/posts/project/remove/${projectId}`);
+    console.log("프로젝트 게시글 삭제 성공 : ", response.data);
+    return response.data;
+  } catch (error) {
+    console.error("프로젝트 게시글 삭제 실패 : ", error);
+  }
+}

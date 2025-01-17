@@ -137,12 +137,13 @@ const WriteBoard = ({ postData, postId, imgList }) => {
   const onSubmit = async (e) => {
     e.preventDefault();
     try {
+      const categoryId = Number(selectedCategory);
+
+      const { hashtags, imageKeys, title, content, thumbnailImageKey } = form;
 
       const processedHashtags = hashtags
           .filter((item) => item.startsWith("#"))
           .map((item) => item.replace("#", ""));
-
-      const categoryId = Number(selectedCategory);
 
       const finalImageKeys =
           imageKeys && imageKeys.length > 0 ? imageKeys : [];
@@ -158,9 +159,6 @@ const WriteBoard = ({ postData, postId, imgList }) => {
         categoryId,
         thumbnailImageKey: thumbnailImageKey || "posts/thumbnail.png",
         imageKeys: finalImageKeys,
-        ...(form.categoryId === 2 && {
-          slideImageKey: slideImg.map(img => img.imageKey)
-        })
       };
 
       if (postData) {

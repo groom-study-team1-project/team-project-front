@@ -66,7 +66,6 @@ const ImageUploadCard = ({ slideImg, setSlideImg }) => {
       fileKey: fileKey,
     };
     setSlideImg(newSlideImage);
-    console.log("슬라이드 이미지 정보 : ", slideImg);
   }
 
   const handleFileChange = (index) => async (e)=> {
