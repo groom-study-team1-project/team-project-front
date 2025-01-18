@@ -30,7 +30,7 @@ export const SidebarLi = styled.li`
   cursor: pointer;
   border-bottom: 1px solid rgba(0, 0, 0, 0.1);
   list-style: none;
-    
+
   &:last-child {
     border-bottom: none;
   }

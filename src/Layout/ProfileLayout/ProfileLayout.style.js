@@ -39,6 +39,7 @@ export const UserInfoBox = styled.div`
   align-items: center;
   justify-content: center;
   font-size: 1rem;
+  padding: 3%;
   a {
     text-decoration: none;
     color: inherit;

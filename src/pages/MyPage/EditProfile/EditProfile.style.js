@@ -1,7 +1,6 @@
 import styled from "styled-components";
 
 export const EditProfileForm = styled.form`
-  border: 1px solid black;
   overflow-y: auto;
   height: 100%;
   width: 100%;

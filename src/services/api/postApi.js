@@ -25,11 +25,11 @@ export const createPost = async (body) => {
     return result.data;
   } catch (error) {
     console.error(
-        error.response
-            ? `서버 응답 에러: ${error.response.data}`
-            : error.request
-                ? `응답 없음 에러: ${error.request}`
-                : `예상치 못한 에러: ${error.message}`
+      error.response
+        ? `서버 응답 에러: ${error.response.data}`
+        : error.request
+        ? `응답 없음 에러: ${error.request}`
+        : `예상치 못한 에러: ${error.message}`
     );
     throw error;
   }
@@ -53,37 +53,41 @@ export const uploadAdapter = (loader, onImageUploaded) => {
   return {
     upload: () => {
       return loader.file
-          .then(uploadImage)
-          .then((response) => {
-            const { accessImage, fileKey } = response;
-            console.log("이미지 업로드 성공:", accessImage);
+        .then(uploadImage)
+        .then((response) => {
+          const { accessImage, fileKey } = response;
+          console.log("이미지 업로드 성공:", accessImage);
 
-            if (onImageUploaded) {
-              onImageUploaded(accessImage, fileKey);
-            }
+          if (onImageUploaded) {
+            onImageUploaded(accessImage, fileKey);
+          }
 
-            return { default: accessImage };
-          })
-          .catch((error) => {
-            console.error("이미지 업로드 에러:", error.message);
-            throw error;
-          });
+          return { default: accessImage };
+        })
+        .catch((error) => {
+          console.error("이미지 업로드 에러:", error.message);
+          throw error;
+        });
     },
   };
 };
 
 // 게시글 목록 조회
-export async function fetchPostItems(categoryId, lastPostId, postSortType = "RECENT", limit = 10) {
+export async function fetchPostItems(
+  categoryId,
+  lastPostId,
+  postSortType = "RECENT",
+  limit = 10
+) {
   try {
     const response = await axiosInstance.get("/open/posts", {
       params: { categoryId, lastPostId, postSortType, limit },
     });
 
     if (
-        response.data?.status?.code === 1203 &&
-        Array.isArray(response.data.result)
+      response.data?.status?.code === 1203 &&
+      Array.isArray(response.data.result)
     ) {
-      console.log("게시글 조회 성공:", response.data.result);
       return { posts: response.data.result };
     }
 
@@ -102,7 +106,9 @@ export const fetchPostDetail = async (postId) => {
     if (response.data.status.code === 1203) {
       return response.data.result;
     } else {
-      throw new Error(response.data.status.message || "게시글 상세 조회에 실패했습니다.");
+      throw new Error(
+        response.data.status.message || "게시글 상세 조회에 실패했습니다."
+      );
     }
   } catch (error) {
     console.error("게시글 상세 조회 중 오류 발생:", error);
@@ -117,11 +123,11 @@ export const fetchPostChange = async (body, postId) => {
     return result.data;
   } catch (error) {
     console.error(
-        error.response
-            ? `서버 응답 에러: ${error.response.data}`
-            : error.request
-                ? `응답 없음 에러: ${error.request}`
-                : `예상치 못한 에러: ${error.message}`
+      error.response
+        ? `서버 응답 에러: ${error.response.data}`
+        : error.request
+        ? `응답 없음 에러: ${error.request}`
+        : `예상치 못한 에러: ${error.message}`
     );
     throw error;
   }
@@ -135,11 +141,11 @@ export const deletepost = async (postId) => {
     return response.data;
   } catch (error) {
     console.error(
-        error.response
-            ? `서버 응답 에러: ${error.response.data}`
-            : error.request
-                ? `응답 없음 에러: ${error.request}`
-                : `예상치 못한 에러: ${error.message}`
+      error.response
+        ? `서버 응답 에러: ${error.response.data}`
+        : error.request
+        ? `응답 없음 에러: ${error.request}`
+        : `예상치 못한 에러: ${error.message}`
     );
     throw error;
   }
