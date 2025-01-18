@@ -18,7 +18,7 @@ import userIcon from "../../assets/images/User.png";
 import questionIcon from "../../assets/images/User Settings.png";
 import fileIcon from "../../assets/images/File Multiple.png";
 import { useDispatch, useSelector } from "react-redux";
-import { selectMenuItem } from "../../store/category/menuSlice";
+import { selectMenuItem } from "../../store/menu/menuSlice";
 
 function Sidebar() {
   const [menuItems, setMenuItems] = useState([]);

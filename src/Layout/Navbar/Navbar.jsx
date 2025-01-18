@@ -21,7 +21,7 @@ import ChangeUserPw from "../../components/Modal/ChangeUserPwModal/ChangeUserPw"
 import { fetchCategoryItems } from "../../services/api/postApi";
 import { userLogout } from "../../store/user/userSlice";
 import logoImg from "../../assets/images/DEEPDIVERS.png";
-import { selectMenuItem } from "../../store/category/menuSlice";
+import { selectMenuItem } from "../../store/menu/menuSlice";
 import darkmodeIcon from "../../assets/images/darkmode.png";
 import useJwt from "../../hooks/useJwt";
 import ProfileMenu from "./ProfileMenu";

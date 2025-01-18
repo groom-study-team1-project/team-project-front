@@ -31,7 +31,9 @@ import "ckeditor5/ckeditor5.css";
 
 const WriteBoard = ({ postData, postId, imgList }) => {
   const { isMobile } = useSelector((state) => state.screenSize);
-  const navigate = useNavigate();
+
+  const selectedCategoryId = useSelector((state) => state.category.selectedCategoryId);
+
   const [form, setValue] = useState({
     title: "",
     content: "",
@@ -40,8 +42,9 @@ const WriteBoard = ({ postData, postId, imgList }) => {
     hashtags: [],
     imageKeys: [],
   });
-  const [selectedCategory, setSelectedCategory] = useState(1);
+  const [selectedCategory, setSelectedCategory] = useState(1 || selectedCategoryId);
   const [slideImgKeys, setSlideImgKeys] = useState([]);
+  const navigate = useNavigate();
   const toolbarContainerRef = useRef(null);
   const editorContainerRef = useRef(null);
 
@@ -196,7 +199,14 @@ const WriteBoard = ({ postData, postId, imgList }) => {
         await createPost(body)
       }
 
-      navigate(-1);
+      const categoryPaths = {
+        1: "/board/free",
+        2: "/board/projects",
+        3: "/board/questions",
+        4: "/board/notices",
+      };
+
+      navigate(categoryPaths[categoryId] || "/");
 
     } catch (error) {
       console.error("Error on Submit:", error.message);
