@@ -17,13 +17,13 @@ const InteractionItemWrapper = styled.div`
 `;
 
 const Icon = styled.img`
-  width: 0.8vw;
+  width: 100%;
   height: 0.8vw;
   margin-right: 0.2vw;
 `;
 
 const IconText = styled.span`
-  font-size: 0.5vw;
+  font-size: 90%;
 `;
 
 const ArrowContainer = styled.div`

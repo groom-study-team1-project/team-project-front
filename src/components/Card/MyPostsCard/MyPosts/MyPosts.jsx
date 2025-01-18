@@ -10,7 +10,6 @@ import {
 } from "./MyPosts.style";
 import { Interaction } from "../../../Common/Interactions";
 import { useNavigate } from "react-router-dom";
-import { deletepost } from "../../../../services/api/postApi";
 
 export const MyPosts = ({ mypost }) => {
   const navigate = useNavigate();

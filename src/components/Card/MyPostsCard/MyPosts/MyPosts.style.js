@@ -1,8 +1,8 @@
 import styled from "styled-components";
 
 export const MyPost = styled.div`
-  width: 23%;
-  height: auto;
+  width: 100%;
+  max-width: 320px;
   background: white;
   border-radius: 10px;
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
@@ -10,26 +10,30 @@ export const MyPost = styled.div`
   display: flex;
   justify-content: center;
   padding: 1%;
-  margin-right: 3%;
-  display: flex;
+  margin: 10px;
   align-items: center;
-  justify-content: flex-start;
   flex-direction: column;
   cursor: pointer;
+
+  @media (max-width: 768px) {
+    width: 100%;
+  }
 `;
 
 export const MypostThumbnail = styled.img`
-  width: 95%;
+  width: 100%;
   height: auto;
+  aspect-ratio: 16/9;
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
   border-radius: 10px;
+  object-fit: cover;
 `;
 
 export const MypostTitleWrap = styled.div`
   display: flex;
   justify-content: space-between;
   width: 100%;
-  margin-top: 5%;
+  margin-top: 10%;
 `;
 
 export const MypostTitle = styled.div`

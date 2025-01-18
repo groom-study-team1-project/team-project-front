@@ -82,7 +82,7 @@ function MyPostsItems({ postCount }) {
         limit,
         memberId
       );
-
+      console.log(posts);
       if (posts.length > 0) {
         setMypost(posts);
         const newLastPostId = posts[posts.length - 1].postId;
