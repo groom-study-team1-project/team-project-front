@@ -7,7 +7,7 @@ export const imageUpload = async (keyType, image) => {
       keyType: keyType,
     };
     const result = await axiosInstance.post(
-      `/open/uploader/presigned-url-generation`,
+      `/open/file/presigned-url-generation`,
       body
     );
     await s3Presigned(result, image);

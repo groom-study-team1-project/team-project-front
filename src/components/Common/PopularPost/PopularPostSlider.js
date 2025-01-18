@@ -13,7 +13,7 @@ import {
     SlideDescription,
     CustomArrowWrapper,
     Arrow,
-    ArrowImage,
+    ArrowImage, CustomDots, Dot,
 } from "./PopularPostSlider.style";
 
 import PrevArrowImage from "../../../assets/images/arrow-left.png";
@@ -25,6 +25,8 @@ const PopularPostSlider = ({ posts }) => {
 
     const screenSize = useSelector((state) => state.screenSize);
 
+    const [currentSlide, setCurrentSlide] = React.useState(0); // 현재 슬라이드 상태 추가
+
     const handlePrevClick = () => sliderRef.current.slickPrev();
     const handleNextClick = () => sliderRef.current.slickNext();
 
@@ -33,15 +35,19 @@ const PopularPostSlider = ({ posts }) => {
     };
 
     const sliderSettings = {
-        dots: true,
+        dots: false,
         infinite: true,
-        speed: 500,
+        speed: 500, // 슬라이드 전환 애니메이션 시간
         slidesToShow: 1,
         slidesToScroll: 1,
-        adaptiveHeight: true,
         autoplay: true,
-        autoplaySpeed: 3000,
-        arrows: false,
+        autoplaySpeed: 3000, // 자동 전환 시간 (3초)
+        pauseOnHover: false, // 호버 시 멈추지 않도록 설정
+        pauseOnFocus: false, // 포커스 시 멈추지 않도록 설정
+        lazyLoad: "ondemand", // 필요한 슬라이드만 로드
+        adaptiveHeight: false, // 높이 변경 비활성화
+        arrows: false, // 화살표는 커스텀 핸들러로 처리
+        beforeChange: (oldIndex, newIndex) => setCurrentSlide(newIndex),
     };
 
     const processContent = (htmlContent) => {
@@ -60,10 +66,10 @@ const PopularPostSlider = ({ posts }) => {
         <SliderContainer $isMobile={screenSize.isMobile}>
             <CustomArrowWrapper>
                 <Arrow className="prev" onClick={handlePrevClick}>
-                    <ArrowImage src={PrevArrowImage} alt="Previous"/>
+                    <ArrowImage src={PrevArrowImage} alt="Previous" />
                 </Arrow>
                 <Arrow className="next" onClick={handleNextClick}>
-                    <ArrowImage src={NextArrowImage} alt="Next"/>
+                    <ArrowImage src={NextArrowImage} alt="Next" />
                 </Arrow>
             </CustomArrowWrapper>
             <Slider ref={sliderRef} {...sliderSettings}>
@@ -88,6 +94,15 @@ const PopularPostSlider = ({ posts }) => {
                     </SlideItem>
                 ))}
             </Slider>
+            <CustomDots>
+                {posts.map((_, index) => (
+                    <Dot
+                        key={index}
+                        onClick={() => sliderRef.current.slickGoTo(index)}
+                        active={currentSlide === index} // 활성 상태 동기화
+                    />
+                ))}
+            </CustomDots>
         </SliderContainer>
     );
 };
