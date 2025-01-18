@@ -79,8 +79,7 @@ export async function fetchPostItems(categoryId, lastPostId, postSortType = "REC
       params: { categoryId, lastPostId, postSortType, limit },
     });
 
-    if (
-        response.data?.status?.code === 1203 &&
+    if (response.data?.status?.code === 1203 &&
         Array.isArray(response.data.result)
     ) {
       console.log("게시글 조회 성공:", response.data.result);
@@ -174,5 +173,107 @@ export const sortPostsByCriteria = async (category_id, sort, post_id) => {
     console.log(category_id, sort, post_id);
   } catch (error) {
     console.error("게시글 정렬 중 오류 발생:", error);
+  }
+};
+
+// ProjectBoard 게시글 조회
+export const fetchProjectPosts = async (categoryId, lastPostId, postSortType = "LATEST", limit = 10) => {
+  try {
+    const response = await axiosInstance.get("/open/posts/project", {
+      params: { categoryId, lastPostId, postSortType, limit },
+    });
+
+    if (response.data.status.code === 1203) {
+      console.log("Project 게시글 조회 성공:", response.data.result);
+      return { posts: response.data.result };
+    }
+
+    console.warn("예상치 못한 응답 구조 또는 결과가 비어 있습니다.");
+    return { posts: [] };
+  } catch (error) {
+    console.error("Project 게시글 조회 중 오류 발생:", error);
+    return { posts: [] };
+  }
+};
+
+// ProjectBoard 상세 게시글 조회
+export const fetchProjectPostDetail = async (postId) => {
+  try {
+    const response = await axiosInstance.get(`/open/posts/project/${postId}`);
+    if (response.data.status.code === 1203) {
+      console.log("Project 게시글 상세 조회 성공:", response.data.result);
+      return response.data.result;
+    } else {
+      throw new Error(response.data.status.message || "상세 조회에 실패했습니다.");
+    }
+  } catch (error) {
+    console.error("Project 게시글 상세 조회 중 오류 발생:", error);
+    throw error;
+  }
+};
+
+// ProjectBoard 게시글 작성
+export const createProjectPost = async (body) => {
+  try {
+    const requestBody = {
+      title: body.title?.trim(),
+      content: body.content?.trim(),
+      categoryId: body.categoryId,
+      hashtags: body.hashtags || [],
+      thumbnailImageUrl: body.thumbnailImageUrl || "posts/thumbnail.png",
+      imageKeys: body.imageKeys || [],
+      slideImageKeys: body.slideImageKeys || [],
+    };
+
+    if (!requestBody.title || !requestBody.content || !requestBody.categoryId) {
+      throw new Error("제목, 내용, 카테고리 ID는 필수 입력 항목입니다.");
+    }
+
+    const result = await axiosInstance.post("/api/posts/project/upload", requestBody);
+    return result.data;
+  } catch (error) {
+    console.error(
+        error.response
+            ? `서버 응답 에러: ${error.response.data}`
+            : error.request
+                ? `응답 없음 에러: ${error.request}`
+                : `예상치 못한 에러: ${error.message}`
+    );
+    throw error;
+  }
+};
+
+// 프로젝트 게시글 수정
+export const editProjectPost = async (postId, body) => {
+  try {
+    const response = await axiosInstance.post(`/api/posts/project/edit/${postId}`, body);
+    return response.data;
+  } catch (error) {
+    console.error(
+        error.response
+            ? `서버 응답 에러: ${error.response.data}`
+            : error.request
+                ? `응답 없음 에러: ${error.request}`
+                : `예상치 못한 에러: ${error.message}`
+    );
+    throw error;
+  }
+};
+
+// 프로젝트 게시글 삭제
+export const deleteProjectPost = async (projectId) => {
+  try {
+    const response = await axiosInstance.delete(`/api/posts/project/remove/${projectId}`);
+    console.log("프로젝트 게시글 삭제 성공:", response.data);
+    return response.data;
+  } catch (error) {
+    console.error(
+        error.response
+            ? `서버 응답 에러: ${error.response.data}`
+            : error.request
+                ? `응답 없음 에러: ${error.request}`
+                : `예상치 못한 에러: ${error.message}`
+    );
+    throw error;
   }
 };

@@ -133,3 +133,28 @@ export const ArrowImage = styled.img`
     object-fit: contain;
     user-select: none;
 `;
+
+export const CustomDots = styled.div`
+    position: absolute;
+    bottom: 20px;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+`;
+
+export const Dot = styled.div`
+    width: 12px;
+    height: 12px;
+    background: ${({ active }) => (active ? "#000" : "rgba(0, 0, 0, 0.3)")};
+    border-radius: 50%;
+    cursor: pointer;
+    transition: background 0.3s;
+
+    &:hover {
+        background: #000;
+    }
+`;
+
+
