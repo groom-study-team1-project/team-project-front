@@ -25,11 +25,6 @@ export const WriteWrap = styled.div`
   margin-bottom: 41px;
 `;
 
-export const Category = styled.div`
-    font-size: 30px;
-    margin-bottom: 10px;
-`;
-
 export const SmallWrite = styled.div`
     font-size: 1rem;
     padding-left: 0.2rem;
@@ -62,7 +57,6 @@ export const TitleWrap = styled.div`
 export const Titleinput = styled.input`
   flex: 10;
   height: 43px;
-<<<<<<< HEAD
   border-radius: 5px;
   border: none;
   margin-right: 1rem;
@@ -92,6 +86,7 @@ export const Categoryselect = styled.select`
 export const EditorWrap = styled.div`
     background: white;
     border-radius: 5px;
+    margin-bottom: 1rem;
 `;
 
 export const Toolbar = styled.div`

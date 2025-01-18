@@ -44,7 +44,7 @@ const WriteBoard = ({ postData, postId, imgList }) => {
     hashtags: [],
     imageKeys: [],
   });
-  const [selectedCategory, setSelectedCategory] = useState(1 || selectedCategoryId);
+  const [selectedCategory, setSelectedCategory] = useState(selectedCategoryId || 1);
   const [slideImgKeys, setSlideImgKeys] = useState([]);
   const navigate = useNavigate();
   const toolbarContainerRef = useRef(null);
