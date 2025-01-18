@@ -5,6 +5,8 @@ import { DecoupledEditor } from "ckeditor5";
 import { editorConfig } from "./editor";
 import {
   createPost,
+  createProjectPost,
+  editProjectPost,
   fetchPostChange,
   uploadAdapter,
 } from "../../../../services/api/postApi";
@@ -31,7 +33,6 @@ import "ckeditor5/ckeditor5.css";
 
 const WriteBoard = ({ postData, postId, imgList }) => {
   const { isMobile } = useSelector((state) => state.screenSize);
-
   const selectedCategoryId = useSelector(
     (state) => state.category.selectedCategoryId
   );
@@ -68,10 +69,14 @@ const WriteBoard = ({ postData, postId, imgList }) => {
         imageUrls: postData.imageUrls || [],
         imageKeys: postData.imageKeys || [],
         thumbnailImageUrl: postData.thumbnailImageUrl || "",
+        slideImageUrls: postData.slideImageUrls || [],
       });
       setSelectedCategory(postData.categoryId);
       if (postData.imageUrls?.length) {
         setImgUrls(postData.imageUrls);
+      }
+      if (postData.categoryId === 2 && postData.slideImageUrls?.length) {
+        setImgUrls(postData.slideImageUrls);
       }
     }
   }, [postData]);
@@ -109,21 +114,23 @@ const WriteBoard = ({ postData, postId, imgList }) => {
         ""
       )
     );
-    const thumbnailImageUrl = imgLinks[0] || "";
 
     setValue((prev) => ({
       ...prev,
       content,
       imageUrls: imgLinks,
       imageKeys,
-      thumbnailImageUrl,
+      thumbnailImageUrl:
+        selectedCategory === 2 && (imgUrls.length > 0 || imgLinks.length > 0)
+          ? imgUrls[0] || imgLinks[0]
+          : imgLinks[0] || "",
     }));
   };
 
   const onSubmit = async (e) => {
     e.preventDefault();
     try {
-      const { title, content, hashtags, imageKeys, thumbnailImageUrl } = form;
+      const { title, content, hashtags, imageKeys } = form;
       const categoryId = Number(selectedCategory);
 
       if (!title.trim() || !content.trim() || !categoryId) {
@@ -136,18 +143,28 @@ const WriteBoard = ({ postData, postId, imgList }) => {
         hashtags,
         categoryId,
         thumbnailImageUrl:
-          thumbnailImageUrl ||
-          "https://deepdiver-community-files-dev.s3.ap-northeast-2.amazonaws.com/default-image/posts/thumbnail.png",
+          form.thumbnailImageUrl || imgUrls[0] || "posts/thumbnail.png",
         imageKeys: imageKeys || [],
       };
 
-      if (postData) {
+      if (categoryId === 2) {
+        body.slideImageKeys = imgUrls.map((url) =>
+          url.replace(
+            "https://deepdiver-community-files-dev.s3.ap-northeast-2.amazonaws.com/",
+            ""
+          )
+        );
+        if (postData) {
+          await editProjectPost(postId, body);
+        } else {
+          await createProjectPost(body);
+        }
+      } else if (postData) {
         await fetchPostChange(body, postId);
       } else {
         await createPost(body);
       }
 
-      // 카테고리 ID에 따라 게시판 페이지로 이동
       const categoryPaths = {
         1: "/board/free",
         2: "/board/projects",
