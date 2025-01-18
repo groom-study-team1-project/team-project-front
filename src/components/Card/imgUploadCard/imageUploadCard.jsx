@@ -12,6 +12,7 @@ import {
   ImgAdd
 } from "./imageUpload.style";
 import {uploadAdapter} from "../../../services/api/postApi";
+import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 
 const ImageUploadCard = ({ slideImg, setSlideImg }) => {
   const { isMobile } = useSelector((state) => state.screenSize);
@@ -108,34 +109,83 @@ const ImageUploadCard = ({ slideImg, setSlideImg }) => {
 
   };
 
+  const handleDragEnd = (result) => {
+    if (!result.destination) return;
+
+    const newImages = Array.from(images);
+    const newSlideImages = Array.from(slideImg);
+
+    const [removedImage] = newImages.splice(result.source.index, 1);
+    newImages.splice(result.destination.index, 0, removedImage);
+
+    const [removedSlideImage] = newSlideImages.splice(result.source.index, 1);
+    newSlideImages.splice(result.destination.index, 0, removedSlideImage);
+
+    setImages(newImages);
+    setSlideImg(newSlideImages);
+  }
+
   return (
       <SlideWrap>
         <SlideArrowWrap onClick={() => handleScroll('left')} $disabled={showLeftArrow}>
           <FontAwesomeIcon icon={faAngleLeft}/>
         </SlideArrowWrap>
-        <ImgWrap ref={slideRef} onScroll={updateArrow}>
-          {[0, 1, 2, 3].map((index) => (
-              <ImgAdd key={index} index={index} onClick={() => handleClickImgAdd(index)} $isMobile={isMobile}>
-                {images[index] ? (
-                    <ImgPreviewWrap>
-                      <ImgPreview src={images[index]} alt={`Preview ${index}`} $isMobile={isMobile} />
-                      <ImgPreviewDelete onClick={(e) => deletePreviewImg(index, e)}>
-                        <FontAwesomeIcon icon={faXmark} />
-                      </ImgPreviewDelete>
-                    </ImgPreviewWrap>
-                ) : (
-                    <FontAwesomeIcon icon={faPhotoFilm} style={{ fontSize: "24px" }} />
-                )}
-                <input
-                    type="file"
-                    style={{ display: "none" }}
-                    accept="image/*"
-                    ref={fileInputs.current[index]}
-                    onChange={handleFileChange(index)}
-                />
-              </ImgAdd>
-          ))}
-        </ImgWrap>
+        <DragDropContext onDragEnd={handleDragEnd}>
+          <Droppable droppableId="slide-image-list" direction="horizontal">
+            {(provided) => (
+                <ImgWrap
+                  ref={(el) => {
+                    slideRef.current = el;
+                    provided.innerRef(el);
+                  }}
+                  onScroll={updateArrow}
+                  {...provided.droppableProps}
+                >
+                  {[0, 1, 2, 3].map((index) => (
+                      <Draggable
+                          key={`img-${index}`}
+                          draggableId={`img-${index}`}
+                          index={index}
+                          isDragDisabled={!images[index]}
+                      >
+                        {(provided, snapshot) => (
+                            <div
+                              ref={provided.innerRef}
+                              {...provided.draggableProps}
+                              {...provided.dragHandleProps}
+                              style={{
+                                ...provided.draggableProps.style,
+                                opacity: snapshot.isDragging ? 0.6 : 1
+                              }}
+                            >
+                              <ImgAdd key={index} index={index} onClick={() => handleClickImgAdd(index)} $isMobile={isMobile}>
+                                {images[index] ? (
+                                    <ImgPreviewWrap>
+                                      <ImgPreview src={images[index]} alt={`Preview ${index}`} $isMobile={isMobile} />
+                                      <ImgPreviewDelete onClick={(e) => deletePreviewImg(index, e)}>
+                                        <FontAwesomeIcon icon={faXmark} />
+                                      </ImgPreviewDelete>
+                                    </ImgPreviewWrap>
+                                ) : (
+                                    <FontAwesomeIcon icon={faPhotoFilm} style={{ fontSize: "24px" }} />
+                                )}
+                                <input
+                                    type="file"
+                                    style={{ display: "none" }}
+                                    accept="image/*"
+                                    ref={fileInputs.current[index]}
+                                    onChange={handleFileChange(index)}
+                                />
+                              </ImgAdd>
+                            </div>
+                        )}
+                      </Draggable>
+                  ))}
+                  {provided.placeholder}
+                </ImgWrap>
+            )}
+          </Droppable>
+        </DragDropContext>
         <SlideArrowWrap onClick={() => handleScroll('right')} $disabled={showRightArrow}>
           <FontAwesomeIcon icon={faAngleRight}/>
         </SlideArrowWrap>
