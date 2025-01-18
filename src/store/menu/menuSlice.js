@@ -1,7 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-  selectedItem: null,
+  selectedItemId: null, // 선택된 항목의 ID만 저장
 };
 
 const menuSlice = createSlice({
@@ -9,7 +9,11 @@ const menuSlice = createSlice({
   initialState,
   reducers: {
     selectMenuItem: (state, action) => {
+<<<<<<< HEAD
       state.selectedItemId = action.payload;
+=======
+      state.selectedItemId = action.payload; // ID만 저장
+>>>>>>> main
     },
   },
 });

@@ -14,7 +14,6 @@ import {
   Categoryselect,
   HashtagWrap,
   Hashtag,
-  SubmitBtn,
   SubmitBtnWrap,
   Titleinput,
   TitleWrap,
@@ -23,7 +22,10 @@ import {
   Write,
   WriteWrap,
   Toolbar,
-  EditorWrap, Hashtags
+  EditorWrap,
+  Hashtags,
+  CancelBtn,
+  ConfirmBtn,
 } from "./BoardWrite.style";
 import { useSelector } from "react-redux";
 import "./App.css";
@@ -131,9 +133,7 @@ const WriteBoard = ({ postData, postId, imgList }) => {
     const parser = new DOMParser();
     const doc = parser.parseFromString(content, "text/html");
     const imgElements = doc.querySelectorAll("img");
-    const imgLinks = Array.from(imgElements)
-        .map((img) => img.src)
-        .filter((src) => src);
+    const imgLinks = Array.from(imgElements).map((img) => img.src).filter((src) => src);
 
     const imageKeys = imgLinks.map((url) =>
         url.replace(
@@ -141,7 +141,7 @@ const WriteBoard = ({ postData, postId, imgList }) => {
             ""
         )
     );
-    const thumbnailImageKey = imageKeys[0] || "";
+    const thumbnailImageKey = imgLinks[0] || "";
 
     setValue((prev) => ({
       ...prev,
@@ -232,8 +232,7 @@ const WriteBoard = ({ postData, postId, imgList }) => {
           content: updatedContent,
           imageUrls: [...(prev.imageUrls || []), uploadedUrl],
           imageKeys: [...(prev.imageKeys || []), fileKey],
-          thumbnailImageKey:
-              prev.thumbnailImageKey || updatedContent[0] || "",
+          thumbnailImageUrl: prev.thumbnailImageUrl || uploadedUrl,
         }));
       });
     };
@@ -241,11 +240,7 @@ const WriteBoard = ({ postData, postId, imgList }) => {
 
   return (
       <>
-        {isMobile ? (
-            <Navbar $isMobile={isMobile} />
-        ) : (
-            <Navbar isMainPage={true} />
-        )}
+        {isMobile ? <Navbar $isMobile={isMobile} /> : <Navbar isMainPage={true} />}
         <Wrap>
           <WriteWrap>
             <SmallWrite>{categoryMap[selectedCategory]}</SmallWrite>
@@ -321,21 +316,21 @@ const WriteBoard = ({ postData, postId, imgList }) => {
               ))}
             </HashtagWrap>
             <SubmitBtnWrap $isMobile={isMobile}>
-              <SubmitBtn
+              <ConfirmBtn
                   $borderColor="#B1CDE9"
                   $bgColor="#B1CDE9"
                   type="submit"
                   $isMobile={isMobile}
               >
                 작성
-              </SubmitBtn>
-              <SubmitBtn
+              </ConfirmBtn>
+              <CancelBtn
                   $borderColor="#929292"
                   $bgColor="transparent"
                   $isMobile={isMobile}
               >
                 취소
-              </SubmitBtn>
+              </CancelBtn>
             </SubmitBtnWrap>
           </form>
         </Wrap>

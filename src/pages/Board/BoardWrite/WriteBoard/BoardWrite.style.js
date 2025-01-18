@@ -5,10 +5,9 @@ export const Wrap = styled.div`
   margin: auto auto;
   font-size: 16px;
   .ck.ck-editor__editable:not(.ck-editor__nested-editable) {
-    min-height: 400px;
-    margin-bottom: 20px;
-    background: white;
-    border-radius: 5px;
+      min-height: 400px;
+      background: white;
+      border-radius: 0 0 10px 10px;
   }
 
   .ck.ck-toolbar {
@@ -26,18 +25,9 @@ export const WriteWrap = styled.div`
   margin-bottom: 41px;
 `;
 
-export const BackImg = styled.img`
-  ${(props) =>
-    props.$isMobile
-      ? `
-  width:30px;
-  height:30px;
-`
-      : `
-  width:40px;
-  height:40px;
-`}
-  cursor: pointer;
+export const Category = styled.div`
+    font-size: 30px;
+    margin-bottom: 10px;
 `;
 
 export const SmallWrite = styled.div`
@@ -50,9 +40,7 @@ export const Write = styled.div`
     props.$isMobile
       ? `
     font-size: 30px;
- 
-`
-      : `
+` : `
   font-size: 40px;
 `}
 `;
@@ -74,6 +62,7 @@ export const TitleWrap = styled.div`
 export const Titleinput = styled.input`
   flex: 10;
   height: 43px;
+<<<<<<< HEAD
   border-radius: 5px;
   border: none;
   margin-right: 1rem;
@@ -88,6 +77,7 @@ export const Categoryselect = styled.select`
   border: none;
   border-radius: 5px;
   background: white;
+    padding-left: 10px;
   color: black;
   ${(props) =>
     props.$isMobile
@@ -151,23 +141,57 @@ export const Hashtags = styled.div`
 
 export const SubmitBtnWrap = styled.div`
   float: right;
-  width: ${(props) => props.$isMobile && "100%"};
+    ${(props) =>
+            props.$isMobile
+                    ? `
+    width: 100%;
+    align-items: center;
+  `
+                    : ""}
 `;
 
-export const SubmitBtn = styled.button`
+export const CancelBtn = styled.button`
   margin-left: 16px;
   height: 40px;
   border-radius: 10px;
-  background: ${(props) => props.$bgColor};
+  background: transparent;
   cursor: pointer;
-  border: 1px solid ${(props) => props.$borderColor};
+  border: 1px solid #929292;
   color: black;
   ${(props) =>
     props.$isMobile
-      ? `width: 50%;
-    margin: 0px;
-    display: inline;`
-      : `
-  width: 132px;
-    `}
+        ? `width: 40%;
+         margin-right: 10px;
+         display: inline;`
+        : `
+         width: 132px;
+      `}
+`;
+
+export const ConfirmBtn = styled.button`
+  margin-left: 16px;
+  height: 40px;
+  border-radius: 10px;
+  background: #b1cde9;
+  cursor: pointer;
+  border: 1px solid #b1cde9;
+  color: black;
+  ${(props) =>
+    props.$isMobile
+        ? `width: 40%;
+         margin: 0px;
+         margin-left: 10px;
+         display: inline;`
+        : `
+         width: 132px;
+      `}
+`;
+
+export const EditorWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+    border: 1px solid #B2ACAC;
+    background: white;
+    border-radius: 10px;
+    margin-bottom: 20px;
 `;
