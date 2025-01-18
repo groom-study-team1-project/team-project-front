@@ -9,11 +9,7 @@ const menuSlice = createSlice({
   initialState,
   reducers: {
     selectMenuItem: (state, action) => {
-<<<<<<< HEAD
       state.selectedItemId = action.payload;
-=======
-      state.selectedItemId = action.payload; // ID만 저장
->>>>>>> main
     },
   },
 });
