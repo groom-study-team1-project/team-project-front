@@ -15,7 +15,9 @@ import {
 } from "./imageUpload.style";
 import {uploadAdapter} from "../../../services/api/postApi";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
+
 const ImageUploadCard = ({ slideImg, setSlideImg }) => {
+
   const { isMobile } = useSelector((state) => state.screenSize);
   const [images, setImages] = useState(Array(4).fill(null));
   const fileInputs = useRef(Array(4).fill(null).map(() => React.createRef()));

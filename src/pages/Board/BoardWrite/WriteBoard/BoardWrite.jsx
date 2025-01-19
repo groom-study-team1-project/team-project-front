@@ -25,7 +25,7 @@ import {
   EditorWrap,
   Hashtags,
   CancelBtn,
-  ConfirmBtn,
+  ConfirmBtn
 } from "./BoardWrite.style";
 import { useSelector } from "react-redux";
 import "./App.css";
@@ -33,9 +33,7 @@ import "ckeditor5/ckeditor5.css";
 
 const WriteBoard = ({ postData, postId, imgList }) => {
   const { isMobile } = useSelector((state) => state.screenSize);
-
   const selectedCategoryId = useSelector((state) => state.category.selectedCategoryId);
-
   const [form, setValue] = useState({
     title: "",
     content: "",
@@ -141,6 +139,7 @@ const WriteBoard = ({ postData, postId, imgList }) => {
             ""
         )
     );
+
     const thumbnailImageKey = imgLinks[0] || "";
 
     setValue((prev) => ({
@@ -154,6 +153,7 @@ const WriteBoard = ({ postData, postId, imgList }) => {
   const onSubmit = async (e) => {
     e.preventDefault();
     try {
+
       const categoryId = Number(selectedCategory);
 
       const { hashtags, imageKeys, title, content, thumbnailImageKey } = form;
@@ -185,6 +185,7 @@ const WriteBoard = ({ postData, postId, imgList }) => {
         };
 
         await createProjectPost(projectBody);
+
       } else {
 
         const body = {

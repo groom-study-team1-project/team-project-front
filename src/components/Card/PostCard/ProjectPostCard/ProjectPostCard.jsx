@@ -21,7 +21,7 @@ function ProjectPostCard({
                              name,
                              job,
                              profileImg,
-                             postImgs = [], // Post images
+                             postImgs = [],
                              count,
                          }) {
     const [imgIndex, setImgIndex] = useState(0);

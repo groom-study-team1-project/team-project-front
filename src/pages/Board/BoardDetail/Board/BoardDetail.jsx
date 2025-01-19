@@ -4,7 +4,7 @@ import { CKEditor } from "@ckeditor/ckeditor5-react";
 import { DecoupledEditor } from "ckeditor5";
 import Slide from "../../../../components/Common/imgSlide";
 import { editorConfig } from "../../BoardWrite/WriteBoard/editor";
-import { fetchPostDetail, deletepost } from "../../../../services/api/postApi";
+import {fetchPostDetail, fetchProjectPostDetail, deletepost, deleteProjectPost} from "../../../../services/api/postApi";
 import { fetchProfileInfo } from "../../../../services/api/authApi";
 import { PostProfileBox } from "../../../../components/Card/PostCard/PostProfile";
 import { Interaction } from "../../../../components/Common/Interactions";
@@ -26,9 +26,10 @@ import useJwt from "../../../../hooks/useJwt";
 
 function BoardDetail() {
   const [post, setPost] = useState(null);
-  const [confirmModalVisible, setConfirmModalVisible] = useState(false); // 삭제 확인 모달 상태
+  const [confirmModalVisible, setConfirmModalVisible] = useState(false);
   const { isMobile } = useSelector((state) => state.screenSize);
   const isLoggedIn = useSelector((state) => state.user.isLoggedIn);
+  const selectedCategoryId = useSelector((state) => state.category.selectedCategoryId);
   const [isMe, setIsMe] = useState(false);
   const navigate = useNavigate();
   const { postId } = useParams();
@@ -39,9 +40,16 @@ function BoardDetail() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const postResponse = await fetchPostDetail(postId);
+        let postResponse;
+
+        if (selectedCategoryId === 2) {
+          postResponse = await fetchProjectPostDetail(postId);
+        } else {
+          postResponse = await fetchPostDetail(postId);
+        }
         setPost(postResponse);
-        if (isLoggedIn) {
+
+        if (isLoggedIn && postResponse) {
           const body = {
             isMe: payload.memberId,
             memberId: postResponse.authorInformation.memberId,
@@ -53,26 +61,33 @@ function BoardDetail() {
         console.error("데이터를 가져오는데 실패", error);
       }
     };
+
     fetchData();
-  }, [postId, isLoggedIn, payload]);
+  }, [postId, selectedCategoryId, isLoggedIn, payload]);
 
   if (!post) {
     return <div>Loading...</div>;
   }
 
   const handleEdit = () => {
-    navigate(`/board/edit/${postId}`);
+    navigate(`/board/edit/${postId}`, { state: { postData: post, categoryId: selectedCategoryId } });
+    console.log("sadd", post);
   };
 
   const handleDelete = async () => {
     try {
-      await deletepost(postId);
+      if (selectedCategoryId === 2) {
+        await deleteProjectPost(postId);
+      } else {
+        await deletepost(postId);
+      }
       setConfirmModalVisible(false);
       navigate(-1);
     } catch (error) {
       console.error("게시글 삭제 중 오류 발생:", error);
     }
   };
+
 
   return (
       <>
@@ -98,10 +113,10 @@ function BoardDetail() {
                   )}
                 </PostheaderRignt>
               </Postheader>
-              {post.categoryTitle === "프로젝트 게시판" &&
-                  post.imageUrls?.length > 0 && (
+              {selectedCategoryId === 2 &&
+                  post.slideImageUrls?.length > 0 && (
                       <div style={{ marginBottom: "20px" }}>
-                        <Slide imgUrls={post.imageUrls} />
+                        <Slide imgUrls={post.slideImageUrls} />
                       </div>
                   )}
               <ContentWrap>

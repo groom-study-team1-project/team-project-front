@@ -38,7 +38,6 @@ function FreeBoard() {
     try {
       const { posts } = await fetchPostItems(categoryId, null, "HOT", 50);
       const filteredPopularPosts = posts
-          .sort((a, b) => b.commentCount - a.commentCount)
           .slice(0, 5);
       setPopularPosts(filteredPopularPosts);
     } catch (error) {
