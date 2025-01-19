@@ -7,12 +7,10 @@ import {
   fetchProfileInfo,
 } from "../../../services/api/authApi";
 import { imageUpload } from "../../../services/api/imageApi";
-import { useNavigate, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import useJwt from "../../../hooks/useJwt";
 import { useSelector } from "react-redux";
 import {
-  PageNameWrap,
-  PageName,
   Container,
   ProfileImageWraps,
   ProfileActions,
@@ -23,12 +21,11 @@ import {
   Input,
   ProfileFooter,
   SubmitBtn,
-  ProfileImageWrapsRight,
-  JobSelect,
   ChecknickName,
+  LabelTitle,
 } from "./EditProfile.style";
 
-const EditProfile = () => {
+const EditProfile = ({ setProfileState }) => {
   const { memberId } = useParams();
   const [form, setForm] = useState({
     nickname: "",
@@ -39,7 +36,7 @@ const EditProfile = () => {
     blogUrl: "",
     job: "",
   });
-  const [fileKey, setFilekey] = useState("");
+  const [fileKey, setFilekey] = useState(null);
   const payload = useJwt(
     useSelector((state) => state.user.userInfo.accessToken)
   );
@@ -70,7 +67,6 @@ const EditProfile = () => {
     fetchData();
   }, [memberId, payload]);
 
-  const navigate = useNavigate();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [checkNickName, setCheckName] = useState(null);
   const [btn, setBtn] = useState(true);
@@ -140,10 +136,10 @@ const EditProfile = () => {
   const handleonSubmit = async (e) => {
     e.preventDefault();
     const body = filterForm();
+    console.log(body);
     try {
       await editProfile(body);
-
-      navigate(`/my-page/${memberId}`);
+      setProfileState("mypost");
     } catch (error) {
       console.log(error);
     }
@@ -152,77 +148,74 @@ const EditProfile = () => {
   return (
     <>
       <form onSubmit={handleonSubmit}>
-        <PageNameWrap>
-          <PageName>프로필 수정</PageName>
-        </PageNameWrap>
         <Container>
           <ProfileImageWraps>
-            <ProfileImage $size={"150px"} src={form.imageUrl} />
-            <ProfileImageWrapsRight>
-              <ProfileActions>
-                <SubmitBtn
-                  type="button"
-                  $bgColor={"#7682FF"}
-                  onClick={() => document.getElementById("imageUpload").click()}
-                >
-                  사진 업로드
-                </SubmitBtn>
-                <input
-                  id="imageUpload"
-                  type="file"
-                  accept="image/*"
-                  style={{ display: "none" }}
-                  onChange={handleImageChange}
-                />
-                <SubmitBtn
-                  type="button"
-                  $Color={"black"}
-                  style={{ border: "1px solid #ACB6E5" }}
-                  onClick={() => {
-                    setForm({
-                      ...form,
-                      imageUrl:
-                        "https://deepdiver-community-files-dev.s3.ap-northeast-2.amazonaws.com/profiles/002da67c_1730807352645.png",
-                    });
-                    setFilekey("profiles/002da67c_1730807352645.png");
-                  }}
-                >
-                  사진 제거
-                </SubmitBtn>
-              </ProfileActions>
-              <JobSelect
-                name="role"
-                onChange={handleOnChange} // 역할 변경 시 상태 업데이트
+            <ProfileImage $size={"5vw"} src={form.imageUrl} />
+            <ProfileActions>
+              <SubmitBtn
+                type="button"
+                $bgColor={"black"}
+                onClick={() => document.getElementById("imageUpload").click()}
               >
-                <option value="NORMAL">NORMAL</option>
-                <option value="STUDENT">STUDENT</option>
-                <option value="GRADUATE">GRADUATE</option>
-              </JobSelect>
-            </ProfileImageWrapsRight>
+                프로필사진 변경
+              </SubmitBtn>
+              <input
+                id="imageUpload"
+                type="file"
+                accept="image/*"
+                style={{ display: "none" }}
+                onChange={handleImageChange}
+              />
+              <SubmitBtn
+                type="button"
+                $Color={"black"}
+                style={{ border: "1px solid black" }}
+                onClick={() => {
+                  setForm({
+                    ...form,
+                    imageUrl:
+                      "https://deepdiver-community-files-dev.s3.ap-northeast-2.amazonaws.com/default-image/users/default-profile.png",
+                  });
+                  setFilekey("default-image/users/default-profile.png");
+                }}
+              >
+                사진 삭제
+              </SubmitBtn>
+            </ProfileActions>
           </ProfileImageWraps>
           <Label>
-            <div>닉네임 *</div>
+            <LabelTitle>닉네임 </LabelTitle>
             <NicknameContainer>
               <Input
-                placeholder="사용자 이름은 띄어쓰기 포함 총 20자"
+                placeholder="띄어쓰기 포함 총 20자로 입력해주세요"
                 value={form.nickname}
                 onChange={handleOnChange}
                 name="nickname"
-                width={"20%"}
+                width={"30%"}
               />
               <CheckButton onClick={handleOnchedknickName} disabled={btn}>
                 중복 확인
               </CheckButton>
             </NicknameContainer>
-
-            {checkNickName === false ? (
-              <ChecknickName>사용 가능한 닉네임입니다</ChecknickName>
-            ) : checkNickName === true ? (
-              <ChecknickName color={"red"}>중복된 닉네임입니다</ChecknickName>
-            ) : null}
           </Label>
+          {checkNickName === false ? (
+            <Label>
+              <LabelTitle></LabelTitle>
+              <div>
+                <ChecknickName>사용 가능한 닉네임입니다</ChecknickName>
+              </div>
+            </Label>
+          ) : checkNickName === true ? (
+            <Label>
+              <LabelTitle></LabelTitle>
+              <div>
+                <ChecknickName color={"red"}>중복된 닉네임입니다</ChecknickName>
+              </div>
+            </Label>
+          ) : null}
+
           <Label>
-            <div>자기소개 *</div>
+            <LabelTitle>자기소개 </LabelTitle>
             <NicknameContainer>
               <Input
                 placeholder="간단한 자기소개를 입력해주세요"
@@ -234,7 +227,19 @@ const EditProfile = () => {
             </NicknameContainer>
           </Label>
           <Label>
-            <div>연락처 *</div>
+            <LabelTitle>직업</LabelTitle>
+            <NicknameContainer>
+              <Input
+                placeholder="직업을 입력해주세요"
+                value={form.job}
+                onChange={handleOnChange}
+                name="job"
+                width={"40%"}
+              />
+            </NicknameContainer>
+          </Label>
+          <Label>
+            <LabelTitle>연락처 </LabelTitle>
             <NicknameContainer>
               <Input
                 placeholder="연락처를 입력해주세요"
@@ -246,7 +251,7 @@ const EditProfile = () => {
             </NicknameContainer>
           </Label>
           <Label>
-            <div>githubUrl</div>
+            <LabelTitle>githubUrl</LabelTitle>
             <NicknameContainer>
               <Input
                 placeholder="github URL"
@@ -258,7 +263,7 @@ const EditProfile = () => {
             </NicknameContainer>
           </Label>
           <Label>
-            <div>blogUrl</div>
+            <LabelTitle>blogUrl</LabelTitle>
             <NicknameContainer>
               <Input
                 placeholder="github URL"
@@ -269,11 +274,16 @@ const EditProfile = () => {
               />
             </NicknameContainer>
           </Label>
+          <Label>
+            <LabelTitle>비밀번호</LabelTitle>
+            <NicknameContainer>
+              <SubmitBtn type="button" $bgColor={"#7682FF"} onClick={openModal}>
+                비밀번호 변경
+              </SubmitBtn>
+            </NicknameContainer>
+          </Label>
         </Container>
         <ProfileFooter>
-          <SubmitBtn type="button" $bgColor={"#7682FF"} onClick={openModal}>
-            비밀번호 변경
-          </SubmitBtn>
           <ButtonGroup>
             <SubmitBtn type="submit" $bgColor={"#7682FF"}>
               확인
@@ -282,7 +292,7 @@ const EditProfile = () => {
               type="button"
               $Color={"#9DABED"}
               onClick={() => {
-                navigate(-1);
+                setProfileState("mypost");
               }}
             >
               취소

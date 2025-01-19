@@ -17,11 +17,17 @@ import search_reverse_Icon from "../../../assets/images/search_reverse.png";
 
 function Search({ placeholder = "검색어를 입력하세요", onSearch }) {
   const [searchTerm, setSearchTerm] = useState("");
+  const [postSortType, setPostSortType] = useState("LATEST");
 
   const handleSearch = () => {
     if (onSearch) {
-      onSearch(searchTerm); // 검색어만 전달
+      onSearch(searchTerm, postSortType); // Pass searchTerm and postSortType to the parent
     }
+  };
+
+  const handleSortChange = (e) => {
+    const value = e.target.value;
+    setPostSortType(value);
   };
 
   return (
@@ -42,9 +48,12 @@ function Search({ placeholder = "검색어를 입력하세요", onSearch }) {
             검색
           </SearchButton>
           <SortDropdown>
-            <select>
-              <option value="최신순">최신순</option>
-              <option value="인기순">인기순</option>
+            <select
+                value={postSortType}
+                onChange={handleSortChange} // Update state directly
+            >
+              <option value="LATEST">최신순</option>
+              <option value="HOT">인기순</option>
             </select>
           </SortDropdown>
         </SearchContainer>

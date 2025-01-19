@@ -16,9 +16,8 @@ import PopularPostCard from "../../components/Card/PopularCard/PopularPostCard/P
 
 function BoardLayout({ isMyPage = false }) {
   const { isMobile, isTablet, isDesktop } = useSelector(
-      (state) => state.screenSize
+    (state) => state.screenSize
   );
-
 
   // State to track accessToken
   const [accessToken, setAccessToken] = useState(
@@ -42,34 +41,23 @@ function BoardLayout({ isMyPage = false }) {
   }, []);
 
   return (
-      <>
-        <GlobalStyle/>
-        <Container>
-          {isDesktop && (
-              <SidebarWrapper>
-                <Sidebar/>
-              </SidebarWrapper>
-          )}
-          <MainContentWrapper>
-            <Navbar key={accessToken}/>{" "}
-            {/* Re-render Navbar when accessToken changes */}
-            <Content>
-              <Outlet/>
-              {!isMyPage && !isMobile ? (
-                  <RightSidebarWrapper>
-                    <PopularCardWrapper>
-                      <PopularPostCard/>
-                    </PopularCardWrapper>
-                    <PopularCardWrapper>
-                      <PopularHashCard/>
-                    </PopularCardWrapper>
-                  </RightSidebarWrapper>
-              ) : null}
-            </Content>
-          </MainContentWrapper>
-        </Container>
-      </>
-
+    <>
+      <GlobalStyle />
+      <Container>
+        {isDesktop && (
+          <SidebarWrapper>
+            <Sidebar />
+          </SidebarWrapper>
+        )}
+        <MainContentWrapper>
+          <Navbar key={accessToken} />{" "}
+          {/* Re-render Navbar when accessToken changes */}
+          <Content>
+            <Outlet />
+          </Content>
+        </MainContentWrapper>
+      </Container>
+    </>
   );
 }
 

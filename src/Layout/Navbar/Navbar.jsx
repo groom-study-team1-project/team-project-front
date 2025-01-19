@@ -13,7 +13,6 @@ import {
 } from "./Navbar.style";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import Modal from "react-modal";
 import ModalLayout from "../../components/Modal/Modal";
 import LoginModal from "../../components/Modal/LoginModal/LoginModal";
 import SignUpModal from "../../components/Modal/SignUpModal/SignUpModal";
@@ -21,9 +20,8 @@ import ChangeUserPw from "../../components/Modal/ChangeUserPwModal/ChangeUserPw"
 import { fetchCategoryItems } from "../../services/api/postApi";
 import { userLogout } from "../../store/user/userSlice";
 import logoImg from "../../assets/images/DEEPDIVERS.png";
-import { selectMenuItem } from "../../store/category/menuSlice";
+import { selectMenuItem } from "../../store/menu/menuSlice";
 import darkmodeIcon from "../../assets/images/darkmode.png";
-import useJwt from "../../hooks/useJwt";
 import ProfileMenu from "./ProfileMenu";
 import { changeTheme } from "../../store/theme/themeSlice";
 import lightmodeIcon from "../../assets/images/lightmode.png";

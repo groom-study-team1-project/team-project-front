@@ -6,10 +6,11 @@ import {
   MypostDate,
   DateCountWrap,
   MypostTitleWrap,
+  Hastags,
 } from "./MyPosts.style";
 import { Interaction } from "../../../Common/Interactions";
-
 import { useNavigate } from "react-router-dom";
+import { deletepost } from "../../../../services/api/postApi";
 
 export const MyPosts = ({ mypost }) => {
   const navigate = useNavigate();
@@ -36,7 +37,7 @@ export const MyPosts = ({ mypost }) => {
       <MyPost
         key={post.id}
         onClick={() => {
-          navigate(`/board/detail/${post.id}`);
+          //navigate(`/board/detail/${post.postId}`);
         }}
       >
         <MypostThumbnail src={post.thumbnail} />
@@ -54,6 +55,15 @@ export const MyPosts = ({ mypost }) => {
             }}
           />
         </DateCountWrap>
+        <Hastags>
+          {post?.hashtags?.length > 0 ? (
+            post.hashtags.map((hashtag, index) => (
+              <div key={index}>#{hashtag}</div>
+            ))
+          ) : (
+            <p>No hashtags available.</p>
+          )}
+        </Hastags>
       </MyPost>
     </>
   );

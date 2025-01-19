@@ -20,8 +20,8 @@ function ProjectPostCard({
                              content,
                              name,
                              job,
-                             profileImg, // Profile image for author's avatar
-                             postImgs = [], // Post images
+                             profileImg,
+                             postImgs = [],
                              count,
                          }) {
     const [imgIndex, setImgIndex] = useState(0);
@@ -65,6 +65,8 @@ function ProjectPostCard({
             : text;
     };
 
+    const defaultThumbnailUrl = "https://deepdiver-community-files-dev.s3.ap-northeast-2.amazonaws.com/posts/thumbnail.png";
+
     return (
         <PostCardContainer onClick={handleNavigation}>
             <ProjectInnerContainer direction="column">
@@ -77,7 +79,7 @@ function ProjectPostCard({
                         />
                     ) : (
                         <img
-                            src="https://deepdiver-community-files-dev.s3.ap-northeast-2.amazonaws.com/posts/thumbnail.png"
+                            src={defaultThumbnailUrl}
                             alt="Default Thumbnail"
                             style={{ maxWidth: "100%", height: "100%", objectFit: "cover" }}
                         />
@@ -100,9 +102,7 @@ function ProjectPostCard({
                     <Divider />
                     <ContentBox>
                         <PostTitle>{truncateText(title, 12)}</PostTitle>{" "}
-                        {/* 제목 글자수 제한 */}
                         <p>{truncateText(processContent(content), 100)}</p>{" "}
-                        {/* 내용 글자수 제한 */}
                     </ContentBox>
                     <Divider />
                     <PostProfileBox

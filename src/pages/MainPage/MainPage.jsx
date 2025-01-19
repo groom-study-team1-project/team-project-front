@@ -17,7 +17,7 @@ import projectBoardCardImg from "../../assets/images/Template Card.png";
 import freeBoardCardImg from "../../assets/images/Story Card Horizontal.png";
 import { fetchCategoryItems } from "../../services/api/postApi";
 import { useDispatch } from "react-redux";
-import { selectMenuItem } from "../../store/category/menuSlice";
+import { selectMenuItem } from "../../store/menu/menuSlice";
 
 function MainPage() {
   const [menuItems, setMenuItems] = useState([]);

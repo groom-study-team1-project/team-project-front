@@ -3,18 +3,15 @@ import { useNavigate, useParams } from "react-router-dom";
 import { CKEditor } from "@ckeditor/ckeditor5-react";
 import { DecoupledEditor } from "ckeditor5";
 import Slide from "../../../../components/Common/imgSlide";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faEllipsisVertical } from "@fortawesome/free-solid-svg-icons";
 import { editorConfig } from "../../BoardWrite/WriteBoard/editor";
-import { fetchPostDetail, deletepost } from "../../../../services/api/postApi";
+import {fetchPostDetail, fetchProjectPostDetail, deletepost, deleteProjectPost} from "../../../../services/api/postApi";
 import { fetchProfileInfo } from "../../../../services/api/authApi";
 import { PostProfileBox } from "../../../../components/Card/PostCard/PostProfile";
 import { Interaction } from "../../../../components/Common/Interactions";
 import Comments from "../../../../components/Common/Comment/Comment";
-import ModalComponent from "../../../../components/Modal/EditDeleteModal/EditDeleteModal"; // 모달 컴포넌트 추가
+import ConfirmDeleteModal from "../../../../components/Modal/ConfirmDeleteModal/ConfirmDeleteModal";
 import { useSelector } from "react-redux";
 import {
-  CategotyWrap,
   Wrap,
   PostWrap,
   Postheader,
@@ -22,62 +19,43 @@ import {
   Modify,
   Title,
   PostFooter,
-  CategoryTitle,
+  ContentWrap,
 } from "./BoardDetail.style";
 import { ContentWrapper } from "../../Board.style";
 import useJwt from "../../../../hooks/useJwt";
 
 function BoardDetail() {
   const [post, setPost] = useState(null);
-  const [modalVisible, setModalVisible] = useState(false); // 모달 상태 관리
+  const [confirmModalVisible, setConfirmModalVisible] = useState(false);
   const { isMobile } = useSelector((state) => state.screenSize);
   const isLoggedIn = useSelector((state) => state.user.isLoggedIn);
-  const [isMe, setIsMe] = useState(false); // isMe 상태 관리
+  const selectedCategoryId = useSelector((state) => state.category.selectedCategoryId);
+  const [isMe, setIsMe] = useState(false);
   const navigate = useNavigate();
   const { postId } = useParams();
-  const [category, setCategory] = useState("");
   const payload = useJwt(
-    useSelector((state) => state.user.userInfo.accessToken)
+      useSelector((state) => state.user.userInfo.accessToken)
   );
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        // 게시글 상세 정보 가져오기
-        const postResponse = await fetchPostDetail(postId);
-        console.log("Fetched Post Detail:", postResponse);
+        let postResponse;
 
+        if (selectedCategoryId === 2) {
+          postResponse = await fetchProjectPostDetail(postId);
+        } else {
+          postResponse = await fetchPostDetail(postId);
+        }
         setPost(postResponse);
 
-        let categoryText = "";
-        switch (postResponse.categoryId) {
-          case 1:
-            categoryText = "자유 게시판";
-            break;
-          case 2:
-            categoryText = "프로젝트 게시판";
-            break;
-          case 3:
-            categoryText = "질문 게시판";
-            break;
-          case 4:
-            categoryText = "공지사항";
-            break;
-          default:
-            categoryText = "정보를 찾지 못했습니다";
-            break;
-        }
-        setCategory(categoryText);
-
-        // 사용자 여부 확인
-        if (isLoggedIn) {
+        if (isLoggedIn && postResponse) {
           const body = {
             isMe: payload.memberId,
             memberId: postResponse.authorInformation.memberId,
           };
           const { isMe } = await fetchProfileInfo(body);
-          setIsMe(isMe); // isMe 설정
-          console.log("isMe Value:", isMe);
+          setIsMe(isMe);
         }
       } catch (error) {
         console.error("데이터를 가져오는데 실패", error);
@@ -85,104 +63,101 @@ function BoardDetail() {
     };
 
     fetchData();
-  }, [postId, isLoggedIn, payload]);
+  }, [postId, selectedCategoryId, isLoggedIn, payload]);
 
   if (!post) {
     return <div>Loading...</div>;
   }
 
-  const formattedDate = new Date(
-    new Date(post.createdAt).getTime() + 9 * 60 * 60 * 1000
-  ).toLocaleString("ko-KR", {
-    year: "numeric",
-    month: "2-digit",
-    day: "2-digit",
-    hour: "2-digit",
-    minute: "2-digit",
-    second: "2-digit",
-    hour12: false, // 24시간 형식
-  });
-
-  const handleModalClose = () => setModalVisible(false);
   const handleEdit = () => {
-    navigate(`/board/edit/${postId}`);
-    setModalVisible(false);
+    navigate(`/board/edit/${postId}`, { state: { postData: post, categoryId: selectedCategoryId } });
+    console.log("sadd", post);
   };
+
   const handleDelete = async () => {
     try {
-      await deletepost(postId); // 게시글 삭제 API 호출
-      setModalVisible(false);
-      navigate(-1); // 이전 페이지로 리다이렉션
+      if (selectedCategoryId === 2) {
+        await deleteProjectPost(postId);
+      } else {
+        await deletepost(postId);
+      }
+      setConfirmModalVisible(false);
+      navigate(-1);
     } catch (error) {
       console.error("게시글 삭제 중 오류 발생:", error);
     }
   };
 
   return (
-    <>
-      <ContentWrapper $isDetail={true}>
-        <Wrap>
-          <CategotyWrap $isMobile={isMobile}>
-            <CategoryTitle $isMobile={isMobile}>{category}</CategoryTitle>
-          </CategotyWrap>
-
-          <PostWrap>
-            <Postheader $isMobile={isMobile}>
-              <PostProfileBox
-                name={post.authorInformation.nickname}
-                job={post.authorInformation.memberJob}
-                email={post.authorInformation.email}
-                imgUrl={"https://deepdiver-community-files-dev.s3.ap-northeast-2.amazonaws.com/" + post.authorInformation.imageUrl}
-              />
-              <PostheaderRignt $isMobile={isMobile}>
-                <div>{formattedDate}</div>
-                {isMe && (
-                  <>
-                    <Modify onClick={() => setModalVisible(true)}>
-                      <FontAwesomeIcon icon={faEllipsisVertical} />
-                    </Modify>
-                    <ModalComponent
-                      isVisible={modalVisible}
-                      onClose={handleModalClose}
-                      onEdit={handleEdit}
-                      onDelete={handleDelete}
-                    />
-                  </>
+      <>
+        <ContentWrapper $isDetail={true}>
+          <Wrap>
+            <PostWrap>
+              <Title $isMobile={isMobile}>{post.title}</Title>
+              <Postheader $isMobile={isMobile}>
+                <PostProfileBox
+                    name={post.authorInformation.nickname}
+                    job={post.authorInformation.memberJob}
+                    email={post.authorInformation.email}
+                    imgUrl={post.authorInformation.imageUrl}
+                />
+                <PostheaderRignt $isMobile={isMobile}>
+                  {isMe && (
+                      <>
+                        <Modify onClick={handleEdit}>수정</Modify>
+                        <Modify onClick={() => setConfirmModalVisible(true)}>
+                          삭제
+                        </Modify>
+                      </>
+                  )}
+                </PostheaderRignt>
+              </Postheader>
+              {selectedCategoryId === 2 &&
+                  post.slideImageUrls?.length > 0 && (
+                      <div style={{ marginBottom: "20px" }}>
+                        <Slide imgUrls={post.slideImageUrls} />
+                      </div>
+                  )}
+              <ContentWrap>
+                <CKEditor
+                    editor={DecoupledEditor}
+                    config={editorConfig}
+                    data={post.content}
+                    disabled={true}
+                />
+              </ContentWrap>
+            </PostWrap>
+            <PostFooter $isMobile={isMobile}>
+              <div>
+                {post.hashtags && post.hashtags.length > 0 ? (
+                    post.hashtags.map((hashtag, index) => (
+                        <span key={index}>{hashtag}</span>
+                    ))
+                ) : (
+                    <span>#</span>
                 )}
-              </PostheaderRignt>
-            </Postheader>
-            {category === "프로젝트 게시판" && post.imageUrls?.length > 0 && (
-              <div style={{ marginBottom: "20px" }}>
-                <Slide imgUrls={post.imageUrls} />
               </div>
-            )}
-            <Title $isMobile={isMobile}>{post.title}</Title>
-            <CKEditor
-              editor={DecoupledEditor}
-              config={editorConfig}
-              data={post.content}
-              disabled={true}
-            />
-          </PostWrap>
-          <PostFooter $isMobile={isMobile}>
-            <div>
-              {post.hashtags &&
-                post.hashtags.map((hashtag, index) => (
-                  <span key={index}>{hashtag}</span>
-                ))}
-            </div>
-            <Interaction
-              count={{
-                viewCount: post.viewCount,
-                likeCount: post.likeCount,
-                commentCount: post.commentCount,
-              }}
-            />
-          </PostFooter>
-          <Comments commentCount={post.commentCount}/>
-        </Wrap>
-      </ContentWrapper>
-    </>
+              <Interaction
+                  count={{
+                    viewCount: post.viewCount,
+                    likeCount: post.likeCount,
+                    commentCount: post.commentCount,
+                  }}
+              />
+            </PostFooter>
+            <Comments />
+          </Wrap>
+        </ContentWrapper>
+        <ConfirmDeleteModal
+            isVisible={confirmModalVisible}
+            onClose={() => setConfirmModalVisible(false)}
+            onConfirm={handleDelete}
+            title="삭제하시겠습니까?"
+            description="이 작업은 되돌릴 수 없습니다."
+            confirmText="확인"
+            cancelText="취소"
+        />
+      </>
   );
 }
 

@@ -4,7 +4,7 @@ import heartIcon from "../../assets/images/heart.png";
 import commentIcon from "../../assets/images/comment.png";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowRight, faArrowLeft } from "@fortawesome/free-solid-svg-icons";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 const InteractionsWrapper = styled.div`
   display: flex;
@@ -13,17 +13,17 @@ const InteractionsWrapper = styled.div`
 const InteractionItemWrapper = styled.div`
   display: flex;
   align-items: center;
-  margin-right: 8px;
+  margin-right: 0.3vw;
 `;
 
 const Icon = styled.img`
-  width: 16px;
-  height: 16px;
-  margin-right: 4px;
+  width: 0.8vw;
+  height: 0.8vw;
+  margin-right: 0.2vw;
 `;
 
 const IconText = styled.span`
-  font-size: 13px;
+  font-size: 0.5vw;
 `;
 
 const ArrowContainer = styled.div`
