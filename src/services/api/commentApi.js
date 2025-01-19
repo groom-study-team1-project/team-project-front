@@ -73,28 +73,33 @@ export const editComment = async (commentId, content) => {
 export const likeComment = async (likeComments ,commentId) => {
     const body = { targetId : commentId };
 
-    if (likeComments.has(commentId)) {
-        try {
-            const response = await axiosInstance.post(`/api/comments/unlike`, body);
-            if (response.data.status.code === 9999) {
-                console.log("좋아요 응답 : ", response.data.code, response.data);
-                return response.data;
-            }
-        } catch (error) {
-            console.error("좋아요를 취소하지 못하였습니다 : ", error);
+    try {
+        const response = await axiosInstance.post(`/api/likes/comments`, body);
+        if (response.data.status.code === 9999) {
+            console.log("좋아요 응답 : ", response.data.code, response.data);
+            return response.data;
         }
-    } else {
-        try {
-            const response = await axiosInstance.post(`/api/comments/like`, body);
-            if (response.data.status.code === 9999) {
-                console.log("좋아요 취소 응답 : ", response.data.code, response.data);
-                return response.data;
-            }
-        } catch (error) {
-            console.error("좋아요를 반영하지 못하였습니다 : ", error);
-        }
+    } catch (error) {
+        console.error("좋아요를 취소하지 못하였습니다 : ", error);
     }
 };
+
+export const unLikeComment = async (commentId) => {
+    try {
+
+        const requestBody = {
+            data: { targetId : commentId }
+        }
+
+        const response = await axiosInstance.delete(`/api/likes/comments`, requestBody);
+        if (response.data.status.code === 9999) {
+            console.log("좋아요 취소 응답 : ", response.data.code, response.data);
+            return response.data;
+        }
+    } catch (error) {
+        console.error("좋아요를 반영하지 못하였습니다 : ", error);
+    }
+}
 
 export const fetchReplyComment = async (commentId, lastCommentId) => {
     const baseEndpoint = `/open/comments/replies/${commentId}`;
