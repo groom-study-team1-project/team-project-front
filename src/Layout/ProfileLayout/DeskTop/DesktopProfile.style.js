@@ -2,7 +2,7 @@ import styled from "styled-components";
 
 export const Wrap = styled.div`
   width: 100%;
-  height: 80%;
+  height: 88%;
   background: rgba(255, 255, 255, 0.4);
   display: flex;
   align-items: center;
@@ -17,6 +17,7 @@ export const Main = styled.div`
   background: rgba(247, 251, 255, 0.6);
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
   display: flex;
+  position: relative;
 `;
 
 export const LeftContent = styled.div`
@@ -38,38 +39,58 @@ export const UserInfoBox = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 1rem;
+  font-size: 1.5rem;
   padding: 3%;
+  span {
+    margin-left: 3%;
+  }
   a {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
     text-decoration: none;
     color: inherit;
   }
 `;
 
-export const ProfileSetting = styled.button`
-  border-radius: 10px;
-  width: 136px;
-  height: 40px;
+export const ProfileSetting = styled.div`
+  width: 80%;
+  height: 5%;
   background-color: #b1cde9;
+  border-radius: 30px;
+  padding: 3%;
   color: white;
   border: none;
   cursor: pointer;
   margin-top: 10%;
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.3rem;
+  span {
+    margin-left: 10%;
+  }
 `;
 
 export const RightContentWrap = styled.div`
   width: 100%;
-  height: 100%; /* 부모 높이를 기준으로 설정 */
-  background: white;
+  height: 100%;
+  background: rgba(255, 255, 255, 0.6);
   border-radius: 10px;
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
-  overflow: hidden; /* 자식이 범위를 벗어나지 않도록 설정 */
   display: flex;
   flex-direction: column;
+  flex: 1;
+  min-height: 0;
+  overflow: auto;
 `;
 
 export const RightContent = styled.div`
-  margin: 1%;
-  height: 100%;
+  width: 100%;
+  max-width: 98%;
+  min-height: 100%;
+  overflow-y: auto;
+  padding: 20px 10px;
 `;

@@ -143,7 +143,9 @@ const WriteBoard = ({ postData, postId, imgList }) => {
         hashtags,
         categoryId,
         thumbnailImageUrl:
-          form.thumbnailImageUrl || imgUrls[0] || "posts/thumbnail.png",
+          form.thumbnailImageUrl ||
+          imgUrls[0] ||
+          "https://deepdiver-community-files-dev.s3.ap-northeast-2.amazonaws.com/default-image/posts/thumbnail.png",
         imageKeys: imageKeys || [],
       };
 

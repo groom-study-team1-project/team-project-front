@@ -26,13 +26,15 @@ export const ProfileActions = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-right: 3%;
-  width: 120%;
+  width: 50%;
   button {
     margin: 4%;
-    margin-right: 17%;
     height: 40px;
   }
+`;
+
+export const EditProfileacticle = styled.div`
+  width: 100%;
 `;
 
 export const Label = styled.label`
@@ -53,11 +55,13 @@ export const NicknameContainer = styled.div`
   width: 100%;
   display: flex;
   align-items: center;
+  flex: 8;
 `;
 
 export const LabelTitle = styled.div`
   display: flex;
   width: 10%;
+  flex: 1;
 `;
 
 // 입력 필드 스타일
@@ -88,22 +92,24 @@ export const CheckButton = styled.button`
 `;
 
 export const ProfileFooter = styled.div`
-  display: flex;
-  justify-content: space-between;
-  margin-top: 10px;
-  margin-right: 0%;
   position: absolute;
+  right: 0;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  width: auto;
+  padding: 10px;
 `;
 
 export const ButtonGroup = styled.div`
   display: flex;
   justify-content: flex-start; /* 왼쪽 정렬 */
   align-items: center;
-
+  margin-top: 10px;
   button {
     margin-right: 10px;
-    padding: 10px 20px;
-    border-radius: 5px;
+    padding: 10px 30px;
+    border-radius: 10px;
   }
 `;
 

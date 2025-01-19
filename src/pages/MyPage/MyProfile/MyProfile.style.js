@@ -104,7 +104,6 @@ export const CategoryList = styled.li`
   justify-content: space-between;
   align-items: center;
   border: 1px solid black;
-
   padding: 4%;
   border-radius: 8px;
   margin-top: 10%;
@@ -130,9 +129,9 @@ export const MyPostCardwrap = styled.div`
   display: flex;
   flex-wrap: wrap;
   align-items: ${({ $Nopost }) => ($Nopost ? "center" : "flex-start")};
-  justify-content: ${({ $Nopost }) => ($Nopost ? "center" : "space-between")};
-  margin-left: 5%;
-  gap: 3%;
+  justify-content: ${({ $Nopost }) => ($Nopost ? "center" : "flex-start")};
+  margin-left: 3%;
+  gap: 1rem;
   flex: 5;
   overflow-y: auto;
   height: 90%;
@@ -155,7 +154,7 @@ export const NopostWrap = styled.div`
   justify-content: center;
   flex-direction: column;
   align-items: center;
-
+  margin-top: 3%;
   div {
     margin-top: 3%;
     font-size: clamp(1rem, 2vw, 1.5rem);

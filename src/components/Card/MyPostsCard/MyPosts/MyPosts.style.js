@@ -1,29 +1,24 @@
 import styled from "styled-components";
 
 export const MyPost = styled.div`
-  width: 100%;
-  max-width: 320px;
+  width: 28%;
+  max-width: 30%;
+  aspect-ratio: 4/3.5;
   background: white;
   border-radius: 10px;
-  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
-  border: 1px solid black;
+  box-shadow: 10px 10px 10px rgba(0, 0, 0, 0.25);
   display: flex;
   justify-content: center;
   padding: 1%;
-  margin: 10px;
+  margin-right: 1%;
   align-items: center;
   flex-direction: column;
   cursor: pointer;
-
-  @media (max-width: 768px) {
-    width: 100%;
-  }
 `;
 
 export const MypostThumbnail = styled.img`
-  width: 100%;
-  height: auto;
-  aspect-ratio: 16/9;
+  width: 95%;
+  height: 55%;
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
   border-radius: 10px;
   object-fit: cover;

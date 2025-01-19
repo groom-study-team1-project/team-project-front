@@ -38,7 +38,7 @@ function MyPostsItems({ postCount }) {
   const navigate = useNavigate();
   const { memberId } = useParams();
 
-  const limit = 5;
+  const limit = 6;
 
   const fetchData = useCallback(async () => {
     if (loading || !hasMore) return;
