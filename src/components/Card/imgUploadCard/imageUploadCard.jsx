@@ -1,6 +1,6 @@
 import React, {useEffect, useRef, useState} from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {faAngleLeft, faAngleRight, faPhotoFilm, faXmark} from "@fortawesome/free-solid-svg-icons";
+import {faAngleLeft, faAngleRight, faPhotoFilm, faXmark, faSquarePlus} from "@fortawesome/free-solid-svg-icons";
 import { useSelector } from "react-redux";
 import {
   SlideWrap,
@@ -9,11 +9,12 @@ import {
   ImgPreviewWrap,
   ImgPreview,
   ImgPreviewDelete,
-  ImgAdd
+  ImgAdd,
+  AddSlide,
+  AddWrite
 } from "./imageUpload.style";
 import {uploadAdapter} from "../../../services/api/postApi";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
-
 const ImageUploadCard = ({ slideImg, setSlideImg }) => {
   const { isMobile } = useSelector((state) => state.screenSize);
   const [images, setImages] = useState(Array(4).fill(null));
@@ -21,6 +22,7 @@ const ImageUploadCard = ({ slideImg, setSlideImg }) => {
   const slideRef = useRef(null);
   const [showLeftArrow, setShowLeftArrow] = useState(false);
   const [showRightArrow, setShowRightArrow] = useState(true);
+  const [slideImgIndex, setSlideImgIndex] = useState([0, 1, 2, 3]);
 
   useEffect(() => {
     if (slideImg.length > 0) {
@@ -125,6 +127,13 @@ const ImageUploadCard = ({ slideImg, setSlideImg }) => {
     setSlideImg(newSlideImages);
   }
 
+  const handleAddSlide = () => {
+    setImages(prevImage => [...prevImage, null]);
+    setSlideImg(prevSlideImg => [...prevSlideImg, null]);
+    setSlideImgIndex(prevIndex => [...prevIndex, prevIndex.length]);
+    fileInputs.current = [...fileInputs.current, React.createRef()];
+  }
+
   return (
       <SlideWrap>
         <SlideArrowWrap onClick={() => handleScroll('left')} $disabled={showLeftArrow}>
@@ -141,7 +150,7 @@ const ImageUploadCard = ({ slideImg, setSlideImg }) => {
                   onScroll={updateArrow}
                   {...provided.droppableProps}
                 >
-                  {[0, 1, 2, 3].map((index) => (
+                  {slideImgIndex.map((index) => (
                       <Draggable
                           key={`img-${index}`}
                           draggableId={`img-${index}`}
@@ -182,10 +191,22 @@ const ImageUploadCard = ({ slideImg, setSlideImg }) => {
                       </Draggable>
                   ))}
                   {provided.placeholder}
+                  <AddSlide onClick={handleAddSlide} $isMoblie={isMobile}>
+                    <FontAwesomeIcon icon={faSquarePlus}
+                                     style={{ display: "flex",
+                                              alignItems: "center",
+                                              width: "50px",
+                                              height: "auto",
+                                              color: "skyblue"
+                                     }}
+                    />
+                    <AddWrite>추가</AddWrite>
+                  </AddSlide>
                 </ImgWrap>
             )}
           </Droppable>
         </DragDropContext>
+
         <SlideArrowWrap onClick={() => handleScroll('right')} $disabled={showRightArrow}>
           <FontAwesomeIcon icon={faAngleRight}/>
         </SlideArrowWrap>

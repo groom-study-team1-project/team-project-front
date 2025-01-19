@@ -106,3 +106,31 @@ export const ImgPreviewDelete = styled.div`
     transform: scale(1.1);
   }
 `;
+
+export const AddSlide = styled.div`
+  width: ${props => props.$isMobile ? '144px' : '288px'};
+  display: flex;
+  flex: 0 0 auto;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  border-radius: 5px;
+  border: 2px dashed #ccc;
+  background: none;
+  transition: all 0.2s ease;
+  ${(props) =>
+      props.$isMobile
+          ? `width: 144px; height: 80px;`
+          : `width: 288px; height: 160px;`
+  }
+  &:hover {
+    background-color: #f8f8f8;
+    transition: all 0.2s ease;
+    transform: translateY(-2px);
+  }
+`;
+
+export const AddWrite = styled.div`
+  display: flex;
+  font-weight: bold;
+`;
