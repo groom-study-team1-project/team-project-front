@@ -29,6 +29,32 @@ export const LeftContent = styled.div`
   margin-top: 3%;
 `;
 
+export const IntroDuce = styled.div`
+  width: 80%;
+  height: 10%;
+  font-size: 100%;
+  padding: 3%;
+  position: relative; /* 가상 요소를 위한 설정 */
+  margin-top: 10%;
+  &::before,
+  &::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    width: 100%;
+    height: 1px;
+    background: linear-gradient(to right, transparent, black, transparent);
+  }
+
+  &::before {
+    top: 0;
+  }
+
+  &::after {
+    bottom: 0;
+  }
+`;
+
 export const UserInfoBox = styled.div`
   width: 80%;
   height: 10%;

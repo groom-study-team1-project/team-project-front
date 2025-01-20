@@ -21,6 +21,7 @@ import { selectMenuItem } from "../../store/menu/menuSlice";
 
 function Sidebar() {
   const [menuItems, setMenuItems] = useState([]);
+  const [category, setCategory] = useState(1);
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const selectedItemId = useSelector(
@@ -41,7 +42,8 @@ function Sidebar() {
   }, [selectedItemId, dispatch]);
 
   const handleMenuClick = (item) => {
-    dispatch(selectMenuItem(item.id)); // Redux 상태에 ID만 저장
+    setCategory(item.id);
+    dispatch(selectMenuItem(item.id));
     handleNavigation(item.id);
   };
 
@@ -85,9 +87,7 @@ function Sidebar() {
               >
                 <SidebarLink
                   className="link"
-                  $isSelected={
-                    selectedItemId !== null && selectedItemId === item.id
-                  }
+                  $isSelected={category === item.id}
                 >
                   <SidebarTitle>{item.title}</SidebarTitle>
                   {iconMapping[item.title]}

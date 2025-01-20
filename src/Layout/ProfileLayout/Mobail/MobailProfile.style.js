@@ -2,6 +2,7 @@ import styled from "styled-components";
 
 export const Wrap = styled.div`
   width: 100%;
+  height: 100vh;
   background: rgba(255, 255, 255, 0.4);
   display: flex;
   align-items: center;
@@ -107,14 +108,10 @@ export const UserInfoBox = styled.div`
 
 export const RightContentWrap = styled.div`
   width: 100%;
-  height: 100%;
+  height: 150%;
   background: rgba(255, 255, 255, 0.6);
   border-radius: 10px;
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
-  display: flex;
-  flex-direction: column;
-  flex: 1;
-  min-height: 0;
   overflow: auto;
 `;
 

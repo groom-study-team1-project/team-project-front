@@ -26,8 +26,9 @@ import {
   EditProfileForm,
   EditProfileacticle,
 } from "./EditProfile.style";
-
+import { useMediaQuery } from "react-responsive";
 const EditProfile = ({ setProfileState }) => {
+  const isSmallDesktop = useMediaQuery({ maxWidth: 1480 });
   const { memberId } = useParams();
   const [form, setForm] = useState({
     nickname: "",
@@ -294,7 +295,7 @@ const EditProfile = ({ setProfileState }) => {
             </Label>
           </EditProfileacticle>
         </Container>
-        <ProfileFooter>
+        <ProfileFooter $mobail={isSmallDesktop}>
           <ButtonGroup>
             <SubmitBtn type="submit" $bgColor={"#B1CDE9"} $Color={"black"}>
               확인

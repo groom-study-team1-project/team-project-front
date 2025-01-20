@@ -1,8 +1,9 @@
 import styled from "styled-components";
 
 export const MyPost = styled.div`
-  width: 28%;
-  max-width: 30%;
+  width: ${({ $isSmallDesktop, $isTablet }) =>
+    $isTablet ? "80%" : $isSmallDesktop ? "40%" : "28%"};
+
   aspect-ratio: 4/3.5;
   background: white;
   border-radius: 10px;
@@ -32,6 +33,8 @@ export const MypostTitleWrap = styled.div`
 `;
 
 export const MypostTitle = styled.div`
+  font-size: ${({ $isSmallDesktop, $isTablet }) =>
+    $isTablet ? "2rem" : $isSmallDesktop ? "1rem" : "1rem"};
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -51,6 +54,8 @@ export const MypostDate = styled.div`
   font-weight: bold;
   font-size: 0.8rem;
   white-space: nowrap;
+  font-size: ${({ $isSmallDesktop, $isTablet }) =>
+    $isTablet ? "1.3rem" : $isSmallDesktop ? "1rem" : "1rem"};
 `;
 
 export const Hastags = styled.div`

@@ -92,7 +92,7 @@ export const CheckButton = styled.button`
 `;
 
 export const ProfileFooter = styled.div`
-  position: absolute;
+  position: ${(props) => (props.$mobail ? "relative" : "absolute")};
   right: 0;
   display: flex;
   justify-content: flex-start;

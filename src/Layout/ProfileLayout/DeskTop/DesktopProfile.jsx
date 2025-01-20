@@ -7,9 +7,10 @@ import {
   UserInfoBox,
   RightContentWrap,
   RightContent,
+  IntroDuce,
 } from "./DesktopProfile.style";
 import { BigProfileBox } from "../../../components/Card/PostCard/PostProfile";
-import MyPostsItems from "../../../pages/MyPage/MyProfile/MyProfile";
+import MyPostsItems from "../../../pages/MyPage/MyProfile/DeskTop/MyProfile";
 import { faUser } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faGithub, faBlogger } from "@fortawesome/free-brands-svg-icons";
@@ -31,11 +32,11 @@ const DesktopProfile = ({
               job={profileData.job}
               src={profileData.imageUrl}
             />
-            <UserInfoBox>
+            <IntroDuce>
               {profileData.aboutMe === ""
                 ? "자기소개를 작성해주세요"
                 : profileData.aboutMe}
-            </UserInfoBox>
+            </IntroDuce>
             <UserInfoBox>
               {profileData.githubUrl === "" ? (
                 "GitHub url을 추가하세요"

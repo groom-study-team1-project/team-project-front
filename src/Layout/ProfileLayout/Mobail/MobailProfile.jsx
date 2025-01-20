@@ -11,7 +11,7 @@ import {
   RightContent,
 } from "./MobailProfile.style";
 import { BigProfileBox } from "../../../components/Card/PostCard/PostProfile";
-import MyPostsItems from "../../../pages/MyPage/MyProfile/MyProfile";
+import MyPostsItems from "../../../pages/MyPage/MyProfile/Mobail/MyProfile";
 import EditProfile from "../../../pages/MyPage/EditProfile/EditProfile";
 import { faUser } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
