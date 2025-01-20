@@ -14,10 +14,12 @@ import {
 } from "./Search.style";
 import searchIcon from "../../../assets/images/search.png";
 import search_reverse_Icon from "../../../assets/images/search_reverse.png";
+import {useSelector} from "react-redux";
 
 function Search({ placeholder = "검색어를 입력하세요", onSearch }) {
   const [searchTerm, setSearchTerm] = useState("");
   const [postSortType, setPostSortType] = useState("LATEST");
+  const isDarkMode = useSelector((state) => state.theme.isDarkMode);
 
   const handleSearch = () => {
     if (onSearch) {
@@ -31,7 +33,7 @@ function Search({ placeholder = "검색어를 입력하세요", onSearch }) {
   };
 
   return (
-      <SearchTagsContainer>
+      <SearchTagsContainer isDarkMode={isDarkMode}>
         <SearchContainer>
           <SearchInputWrapper>
             <PlaceholderIconWrapper>

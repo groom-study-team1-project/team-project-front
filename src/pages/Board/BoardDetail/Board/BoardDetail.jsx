@@ -4,7 +4,12 @@ import { CKEditor } from "@ckeditor/ckeditor5-react";
 import { DecoupledEditor } from "ckeditor5";
 import Slide from "../../../../components/Common/imgSlide";
 import { editorConfig } from "../../BoardWrite/WriteBoard/editor";
-import {fetchPostDetail, fetchProjectPostDetail, deletepost, deleteProjectPost} from "../../../../services/api/postApi";
+import {
+  fetchPostDetail,
+  fetchProjectPostDetail,
+  deletepost,
+  deleteProjectPost,
+} from "../../../../services/api/postApi";
 import { fetchProfileInfo } from "../../../../services/api/authApi";
 import { PostProfileBox } from "../../../../components/Card/PostCard/PostProfile";
 import { Interaction } from "../../../../components/Common/Interactions";
@@ -20,6 +25,8 @@ import {
   Title,
   PostFooter,
   ContentWrap,
+  HashtagCardContainer,
+  HashtagCard,
 } from "./BoardDetail.style";
 import { ContentWrapper } from "../../Board.style";
 import useJwt from "../../../../hooks/useJwt";
@@ -38,13 +45,12 @@ function BoardDetail() {
   const isDarkMode = useSelector((state) => state.theme.isDarkMode);
 
   useEffect(() => {
-    console.log("Fetching data for postId:", postId);
-
     let isCancelled = false;
 
     const fetchData = async () => {
       try {
-        const fetchDetail = selectedCategoryId === 2 ? fetchProjectPostDetail : fetchPostDetail;
+        const fetchDetail =
+            selectedCategoryId === 2 ? fetchProjectPostDetail : fetchPostDetail;
         const postResponse = await fetchDetail(postId);
 
         if (!isCancelled) {
@@ -76,7 +82,9 @@ function BoardDetail() {
   }
 
   const handleEdit = () => {
-    navigate(`/board/edit/${postId}`, { state: { postData: post, categoryId: selectedCategoryId } });
+    navigate(`/board/edit/${postId}`, {
+      state: { postData: post, categoryId: selectedCategoryId },
+    });
   };
 
   const handleDelete = async () => {
@@ -130,15 +138,15 @@ function BoardDetail() {
               </ContentWrap>
             </PostWrap>
             <PostFooter $isMobile={isMobile}>
-              <div>
+              <HashtagCardContainer isDarkMode={isDarkMode}>
                 {post.hashtags && post.hashtags.length > 0 ? (
                     post.hashtags.map((hashtag, index) => (
-                        <span key={index}>{hashtag}</span>
+                        <HashtagCard key={index} isDarkMode={isDarkMode}>#{hashtag}</HashtagCard>
                     ))
                 ) : (
-                    <span>#</span>
+                    <HashtagCard isDarkMode={isDarkMode}>해시 태그 없음</HashtagCard>
                 )}
-              </div>
+              </HashtagCardContainer>
               <Interaction
                   count={{
                     viewCount: post.viewCount,

@@ -1,13 +1,20 @@
 import styled from "styled-components";
 
-export const SearchWrapper = styled.div`
+export const SearchTagsContainer = styled.div`
     display: flex;
-    flex-direction: column;
-    width: 100%;
-    gap: 10px;
+    flex-direction: column; /* 세로로 구성 */
+    padding: 10px 20px;
+    background: ${({ isDarkMode }) =>
+            isDarkMode
+                    ? "linear-gradient(\n    to bottom,\n    rgba(0, 0, 0, 0.6),\n    rgba(0, 0, 0, 0.5)\n  );"
+                    : "linear-gradient(to right, #e5e5f7, #ACB6E5)"};
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    position: relative;
+    margin-bottom: 48px;
 `;
 
-export const SearchBox = styled.div`
+export const SearchContainer = styled.div`
     display: flex;
     align-items: center;
     gap: 10px;
@@ -17,92 +24,11 @@ export const SearchBox = styled.div`
             rgba(255, 255, 255, 0.6),
             rgba(255, 255, 255, 0.5)
     );
+    backdrop-filter: blur(20px);
     border-radius: 10px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-`;
-
-export const InnerSearch = styled.input`
-    flex: 1;
-    padding: 10px 15px;
-    border: none;
-    border-radius: 20px;
-    background-color: white;
-    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
-    font-size: 14px;
-    outline: none;
-
-    ::placeholder {
-        color: #a0a0a0;
-    }
-`;
-
-export const OptionContainer = styled.div`
     position: relative;
-`;
-
-export const OptionToggle = styled.div`
-    padding: 10px 15px;
-    border-radius: 20px;
-    background: linear-gradient(
-            to bottom,
-            rgba(255, 255, 255, 0.9),
-            rgba(255, 255, 255, 0.5)
-    );
-    cursor: pointer;
-`;
-
-export const OptionList = styled.ul`
-    position: absolute;
-    top: 100%;
-    left: 0;
-    width: 100%;
-    margin: 5px 0;
-    padding: 10px;
-    border-radius: 10px;
-    background: linear-gradient(
-            to bottom,
-            rgba(255, 255, 255, 0.6),
-            rgba(255, 255, 255, 0.5)
-    );
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-`;
-
-export const OptionItem = styled.li`
-    padding: 8px 10px;
-    cursor: pointer;
-    &:hover {
-        font-weight: bold;
-        background-color: rgba(255, 255, 255, 0.8);
-        border-radius: 10px;
-    }
-`;
-
-export const SearchTagsContainer = styled.div`
-  display: flex;
-  flex-direction: column; /* 세로로 구성 */
-  padding: 10px 20px;
-  background: linear-gradient(to right, #e5e5f7, #ACB6E5);
-  border-radius: 10px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  position: relative;
-  margin-bottom: 48px;
-`;
-
-export const SearchContainer = styled.div`
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  padding: 10px 20px;
-  background: linear-gradient(
-      to bottom,
-      rgba(255, 255, 255, 0.6),
-      rgba(255, 255, 255, 0.5)
-  );
-  backdrop-filter: blur(20px);
-  border-radius: 10px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  position: relative;
-  flex-shrink: 0; /* 너비 고정을 위해 줄바꿈 방지 */
+    flex-shrink: 0; /* 너비 고정을 위해 줄바꿈 방지 */
 `;
 
 export const SearchButton = styled.button`
@@ -129,62 +55,59 @@ export const SearchButton = styled.button`
 
 
 export const SortDropdown = styled.div`
-  display: flex;
-  align-items: center;
-  position: relative;
-  flex-shrink: 0; /* 정렬 옵션 크기 고정 */
+    display: flex;
+    align-items: center;
+    position: relative;
+    flex-shrink: 0; /* 정렬 옵션 크기 고정 */
 
-  select {
-    padding: 8px 10px;
-    border: 1px solid #ddd;
-    border-radius: 20px;
-    font-size: 14px;
-    background-color: white;
-    cursor: pointer;
+    select {
+        padding: 8px 10px;
+        border: 1px solid #ddd;
+        border-radius: 20px;
+        font-size: 14px;
+        background-color: white;
+        cursor: pointer;
 
-    &:hover {
-      border-color: #aaa;
+        &:hover {
+            border-color: #aaa;
+        }
     }
-  }
 `;
 
 export const TagsContainer = styled.div`
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  margin-top: 10px;
-  flex-wrap: wrap;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 10px;
+    flex-wrap: wrap;
 `;
 
 export const TagName = styled.div`
-  padding: 10px 15px;
-  border: none;
-  border-radius: 20px;
-  background-color: white;
-  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
-  font-size: 14px;
-  outline: none;
-
-  ::placeholder {
-    color: #a0a0a0;
-  }
+    padding: 10px 15px;
+    border: none;
+    border-radius: 20px;
+    background-color: white;
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
+    font-size: 14px;
+    outline: none;
+    color: black;
 `;
 
 export const Tag = styled.div`
-  display: inline-flex;
-  align-items: center;
-  padding: 5px 12px;
-  background-color: white;
-  border: 1px solid #ddd;
-  border-radius: 20px;
-  font-size: 12px;
-  color: #555;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    padding: 5px 12px;
+    background-color: white;
+    border: 1px solid #ddd;
+    border-radius: 20px;
+    font-size: 12px;
+    color: #555;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
 
-  &:hover {
-    background-color: #f5f5f5;
-  }
+    &:hover {
+        background-color: #f5f5f5;
+    }
 `;
 
 export const SearchInputWrapper = styled.div`
@@ -195,30 +118,30 @@ export const SearchInputWrapper = styled.div`
 `;
 
 export const PlaceholderIconWrapper = styled.div`
-  position: absolute;
-  left: 12px; /* 아이콘 위치 설정 */
-  top: 50%;
-  transform: translateY(-50%);
-  pointer-events: none; /* 클릭 불가 */
+    position: absolute;
+    left: 12px; /* 아이콘 위치 설정 */
+    top: 50%;
+    transform: translateY(-50%);
+    pointer-events: none; /* 클릭 불가 */
 `;
 
 export const SearchInput = styled.input`
-  flex: 1;
-  padding: 10px 15px 10px 40px; /* 왼쪽 패딩으로 아이콘 공간 확보 */
-  border: none;
-  border-radius: 20px;
-  background-color: white;
-  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
-  font-size: 14px;
-  outline: none;
+    flex: 1;
+    padding: 10px 15px 10px 40px; /* 왼쪽 패딩으로 아이콘 공간 확보 */
+    border: none;
+    border-radius: 20px;
+    background-color: white;
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
+    font-size: 14px;
+    outline: none;
 
-  ::placeholder {
-    color: #a0a0a0;
-  }
+    ::placeholder {
+        color: #a0a0a0;
+    }
 `;
 
 export const SearchIcon = styled.img`
-  width: 16px;
-  height: 16px;
+    width: 16px;
+    height: 16px;
 `;
 

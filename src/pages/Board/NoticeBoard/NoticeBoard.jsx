@@ -99,7 +99,6 @@ function NoticeBoard() {
   return (
       <ContentWrapper $isMobile={isMobile} $isTablet={isTablet}>
         <Search onSearch={handleSearch} placeholder="공지사항 검색" />
-        <PopularPostSlider posts={popularPosts} />
         <PostCardWrapper $isMobile={isMobile} $isTablet={isTablet} $noticePage={true}>
           {filteredPosts.map((postItem) => (
               <NoticePostCard

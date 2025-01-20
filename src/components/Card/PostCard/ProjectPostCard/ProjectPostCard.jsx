@@ -29,7 +29,7 @@ function ProjectPostCard({
         useSelector((state) => state.user.userInfo.accessToken)
     );
     const memberId = payload.memberId;
-
+    const isDarkMode = useSelector((state) => state.theme.isDarkMode);
     const navigate = useNavigate();
 
     const handleNavigation = () => {
@@ -69,7 +69,7 @@ function ProjectPostCard({
 
     return (
         <PostCardContainer onClick={handleNavigation}>
-            <ProjectInnerContainer direction="column">
+            <ProjectInnerContainer direction="column" isDarkMode={isDarkMode}>
                 <CustomThumbnail>
                     {postImgs.length > 0 ? (
                         <img

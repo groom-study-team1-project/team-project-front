@@ -21,12 +21,15 @@ import {
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faFire } from "@fortawesome/free-solid-svg-icons";
 
-import PrevArrowImage from "../../../assets/images/arrow-left.png";
-import NextArrowImage from "../../../assets/images/arrow-right.png";
+import PrevArrowImageLight from "../../../assets/images/arrow-left.png";
+import PrevArrowImageDark from "../../../assets/images/arrow-left-dark.png";
+import NextArrowImageLight from "../../../assets/images/arrow-right.png";
+import NextArrowImageDark from "../../../assets/images/arrow-right-dark.png";
+
 const PopularPostSlider = ({ posts }) => {
   const sliderRef = React.useRef(null);
   const navigate = useNavigate();
-
+  const isDarkMode = useSelector((state) => state.theme.isDarkMode);
   const screenSize = useSelector((state) => state.screenSize);
 
   const [currentSlide, setCurrentSlide] = React.useState(0); // 현재 슬라이드 상태 추가
@@ -62,66 +65,73 @@ const PopularPostSlider = ({ posts }) => {
 
   const truncateText = (text, maxLength) => {
     return text.length > maxLength
-      ? text.substring(0, maxLength) + "..."
-      : text;
+        ? text.substring(0, maxLength) + "..."
+        : text;
   };
 
   const defaultThumbnailUrl =
-    "https://deepdiver-community-files-dev.s3.ap-northeast-2.amazonaws.com/default-image/posts/thumbnail.png";
+      "https://deepdiver-community-files-dev.s3.ap-northeast-2.amazonaws.com/default-image/posts/thumbnail.png";
 
   return (
-    <SliderContainer $isMobile={screenSize.isMobile}>
-      <CustomArrowWrapper>
-        <Arrow className="prev" onClick={handlePrevClick}>
-          <ArrowImage src={PrevArrowImage} alt="Previous" />
-        </Arrow>
-        <Arrow className="next" onClick={handleNextClick}>
-          <ArrowImage src={NextArrowImage} alt="Next" />
-        </Arrow>
-      </CustomArrowWrapper>
-      <Slider ref={sliderRef} {...sliderSettings}>
-        {posts.map((post, index) => (
-          <SlideItem key={post.postId} $isMobile={screenSize.isMobile}>
-            <SlideImage
-              src={
-                post.thumbnail === "posts/thumbnail.png" || !post.thumbnail
-                  ? defaultThumbnailUrl
-                  : post.thumbnail
-              }
-              alt={post.title}
-              onClick={() => handleNavigateToPost(post.postId)}
-              $isMobile={screenSize.isMobile}
+      <SliderContainer $isMobile={screenSize.isMobile} isDarkMode={isDarkMode}>
+        <CustomArrowWrapper>
+          <Arrow className="prev" onClick={handlePrevClick}>
+            <ArrowImage
+                src={isDarkMode ? PrevArrowImageDark : PrevArrowImageLight}
+                alt="Previous"
             />
-            <SlideContent
-              onClick={() => handleNavigateToPost(post.postId)}
-              $isMobile={screenSize.isMobile}
-            >
-              <Ranking>
-                <FontAwesomeIcon
-                  icon={faFire}
-                  size="2xl"
-                  style={{ color: "rgba(255, 0, 0, 0.5)" }}
+          </Arrow>
+          <Arrow className="next" onClick={handleNextClick}>
+            <ArrowImage
+                src={isDarkMode ? NextArrowImageDark : NextArrowImageLight}
+                alt="Next"
+            />
+          </Arrow>
+        </CustomArrowWrapper>
+        <Slider ref={sliderRef} {...sliderSettings}>
+          {posts.map((post, index) => (
+              <SlideItem key={post.postId} $isMobile={screenSize.isMobile}>
+                <SlideImage
+                    src={
+                      post.thumbnail === "posts/thumbnail.png" || !post.thumbnail
+                          ? defaultThumbnailUrl
+                          : post.thumbnail
+                    }
+                    alt={post.title}
+                    onClick={() => handleNavigateToPost(post.postId)}
+                    $isMobile={screenSize.isMobile}
                 />
-                <span>{index + 1}</span>
-              </Ranking>
-              <SlideTitle>{truncateText(post.title, 30)}</SlideTitle>
-              <SlideDescription>
-                {truncateText(processContent(post.content), 100)}
-              </SlideDescription>
-            </SlideContent>
-          </SlideItem>
-        ))}
-      </Slider>
-      <CustomDots>
-        {posts.map((_, index) => (
-          <Dot
-            key={index}
-            onClick={() => sliderRef.current.slickGoTo(index)}
-            active={currentSlide === index} // 활성 상태 동기화
-          />
-        ))}
-      </CustomDots>
-    </SliderContainer>
+                <SlideContent
+                    onClick={() => handleNavigateToPost(post.postId)}
+                    $isMobile={screenSize.isMobile}
+                >
+                  <Ranking>
+                    <FontAwesomeIcon
+                        icon={faFire}
+                        size="2xl"
+                        style={{ color: "rgba(255, 0, 0, 0.5)" }}
+                    />
+                    <span>{index + 1}</span>
+                  </Ranking>
+                  <SlideTitle isDarkMode={isDarkMode}>{truncateText(post.title, 30)}</SlideTitle>
+                  <SlideDescription isDarkMode={isDarkMode}>
+                    {truncateText(processContent(post.content), 100)}
+                  </SlideDescription>
+                </SlideContent>
+              </SlideItem>
+          ))}
+        </Slider>
+        <CustomDots>
+          {posts.map((_, index) => (
+              <Dot
+                  key={index}
+                  onClick={() => sliderRef.current.slickGoTo(index)}
+                  active={currentSlide === index}
+                  isDarkMode={isDarkMode}
+              />
+          ))}
+        </CustomDots>
+      </SliderContainer>
   );
 };
 
