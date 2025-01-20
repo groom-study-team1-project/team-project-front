@@ -3,7 +3,8 @@ import styled from "styled-components";
 export const SliderContainer = styled.div`
   display: block;
   width: 100%;
-  height: ${({ $isMobile }) => ($isMobile ? "300px" : "400px")};
+  aspect-ratio: ${({ $isMobile }) => ($isMobile ? "4 / 3" : "7 / 2")};
+  max-height: ${({ $isMobile }) => ($isMobile ? "300px" : "650px")};
   margin: 0 auto 48px;
   position: relative;
   border-radius: ${({ $isMobile }) => ($isMobile ? "8px" : "10px")};
@@ -57,7 +58,8 @@ export const SlideItem = styled.div`
   display: flex !important;
   flex-direction: ${({ $isMobile }) => ($isMobile ? "column" : "row")};
   align-items: center;
-  height: ${({ $isMobile }) => ($isMobile ? "300px" : "400px")};
+  aspect-ratio: ${({ $isMobile }) => ($isMobile ? "4 / 3" : "7 / 2")};
+  max-height: ${({ $isMobile }) => ($isMobile ? "300px" : "650px")};
   justify-content: center;
   border-radius: 10px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
