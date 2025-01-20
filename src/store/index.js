@@ -6,6 +6,7 @@ import themeReducer from "./theme/themeSlice";
 import postReducer from "./post/postSlice";
 import screenSizeReducer from "./screenResize/screenSlice";
 import categoryReducer from "./category/categorySlice"
+
 const store = configureStore({
   reducer: {
     user: userReducer,
