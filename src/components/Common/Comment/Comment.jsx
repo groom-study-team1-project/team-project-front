@@ -36,7 +36,6 @@ import {
 import {
     fetchCommentList,
     likeCommentThunk,
-    replyToggleThunk,
     createCommentThunk,
     deleteCommentThunk,
     submitEditCommentThunk,
@@ -57,6 +56,8 @@ const Comments = () => {
     const [modalIndex, setModalIndex] = useState(null);
     const [editContentId, setEditContentId] = useState(null);
     const [editContent, setEditContent] = useState("");
+    const [replyOpenMap, setReplyOpenMap] = useState({});
+    const [visibleCount, setVisibleCount] = useState(5);
 
     const {
         comments,
@@ -141,12 +142,16 @@ const Comments = () => {
     const handleModalClose = () => setModalIndex(null);
 
     const handleReplyOpen = (commentId) => {
-        dispatch(replyToggleThunk(commentId));
+        setReplyOpenMap(prev => ({
+            ...prev,
+            [commentId]: !prev[commentId]
+        }));
     }
 
     const handleMoreComment = (postId, lastCommentId) => {
         if (lastCommentId) {
             dispatch(fetchCommentList(postId, lastCommentId));
+            setVisibleCount(prev => prev + 5);
         }
     }
 
@@ -175,7 +180,7 @@ const Comments = () => {
                     </CommentInputWrap>
                 </CommentInputForm>
                 <CommentHr />
-                {comments?.map((commentData, index) => (
+                {comments?.slice(0, visibleCount).map((commentData, index) => (
                     <CommentWrap key={commentData.id}>
                         <CommentBox>
                             <Comment>
@@ -271,7 +276,7 @@ const Comments = () => {
                             </CommentRight>
                         </CommentBox>
                         <ReplyList>
-                            {new Set(openReplies).has(commentData.id) && (
+                            {replyOpenMap[commentData.id] && (
                                 <ReplyComment
                                     commentId={commentData.id}
                                     getReplyTime={getTime}
@@ -282,7 +287,8 @@ const Comments = () => {
                 ))}
                 {!isEndComment && comments.length > 5 && !isLoading ? (
                     <SomeMoreCommentButton onClick={() => {
-                        const lastCommentId = comments[comments.length-1].id
+                        const lastCommentId = comments[visibleCount - 1].id;
+                        console.log("마지막 댓글 아이디 : ", lastCommentId);
                         handleMoreComment(postId, lastCommentId);
                     }}>
                         더보기

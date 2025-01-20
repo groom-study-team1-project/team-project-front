@@ -60,6 +60,7 @@ let dummyCommentsData = [
 // 조회
 export const fetchComment = async (postId, lastCommentId) => {
     const mainComments = dummyCommentsData.filter(comment => comment.parentId === null);
+    console.log(mainComments);
     return {
         status: { code: 9999, message: "응답 성공" },
         comments: mainComments

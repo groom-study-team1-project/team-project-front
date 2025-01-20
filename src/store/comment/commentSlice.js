@@ -31,7 +31,6 @@
             isEndComment: false
         },
         meta: {
-            openReplies: new Set(JSON.parse(localStorage.getItem('openReplies')) || []),
             commentCount: Number(localStorage.getItem('commentCount')) || 0
         }
     };
@@ -76,6 +75,12 @@
                 const { commentId, replies } = action.payload;
                 state.replies[commentId] = replies;
             },
+            appendReplies: (state, action) => {
+                const addReply = action.payload.filter(reply =>
+                    !state.comments.some(existing => existing.id === reply.id)
+                );
+                state.comments = [...state.comments, ...addReply];
+            },
             toggleLike: (state, action) => {
                 console.log("action : ", action.payload);
                 const { commentId, updatedComment } = action.payload;
@@ -84,19 +89,6 @@
                     comment.likedMe = updatedComment.likedMe;
                     comment.likeCount = updatedComment.likeCount;
                 }
-            },
-            toggleReplyView: (state, action) => {
-                const commentId = action.payload;
-                const replySet = new Set(state.meta.openReplies);
-
-                if (replySet.has(commentId)) {
-                    replySet.delete(commentId);
-                } else {
-                    replySet.add(commentId);
-                }
-
-                state.meta.openReplies = Array.from(replySet);
-                localStorage.setItem('openReplies', JSON.stringify(state.openReplies));
             },
             addReplies: (state, action) => {
                 const { commentId, replies } = action.payload;
@@ -113,7 +105,7 @@
         dispatch(setUIState({ isLoading : true }));
         try {
             const result = await fetchComment(postId, lastCommentId);
-            dispatch(lastCommentId ? appendComment(result.comments) : setComments(result.comments))
+            dispatch(lastCommentId ? appendComment(result.comments) : setComments(result.comments));
             dispatch(setUIState({
                 isEndComment: result.length < 5,
                 isLoading: false
@@ -160,49 +152,6 @@
         }
     }
 
-    export const replyToggleThunk = (commentId) => async (dispatch, getState) => {
-        const { openReplies, replies } = getState().comments;
-        const replySet = new Set(openReplies);
-        const isOpening = !replySet.has(commentId);
-
-        if (isOpening && !replies[commentId]) {
-            dispatch(setUIState({
-                isLoading: true
-            }));
-            try {
-                const result = await fetchReplyComment(commentId, null);
-                dispatch(setReplies({ commentId, replies: result.comments }));
-                dispatch(setUIState({
-                    isEndComment: result.length < 5,
-                }));
-            } catch (error) {
-                dispatch(setUIState({
-                    error: error.message
-                }));
-                return false;
-            }
-        }
-
-        dispatch(toggleReplyView(commentId));
-        return true;
-    };
-
-    export const createReplyThunk = (commentId, content) => async (dispatch) => {
-        try {
-            const result = await createReplyComment(commentId, content);
-            if (result.status?.code === 9999) {
-                dispatch(addReplies(result.result));
-                return true;
-            }
-            return false;
-        } catch (error) {
-            dispatch(setUIState({
-                error : error.message
-            }));
-            return false;
-        }
-    };
-
     export const createCommentThunk = (postId, content) => async (dispatch) => {
         try {
             const result = await createComment(postId, content);
@@ -248,8 +197,8 @@
     export const fetchReplyList = (commentId, lastCommentId) => async (dispatch) => {
         dispatch(setUIState({ isLoading : true }));
         try {
-            const result = await fetchComment(commentId, lastCommentId);
-            dispatch(lastCommentId ? appendComment(result.comments) : setComments(result.comments))
+            const result = await fetchReplyComment(commentId, lastCommentId);
+            dispatch(lastCommentId ? appendReplies(result.comments) : setReplies(result.comments))
             dispatch(setUIState({
                 isEndComment: result.length < 5,
                 isLoading: false
@@ -262,6 +211,22 @@
         }
     };
 
+    export const createReplyThunk = (commentId, content) => async (dispatch) => {
+        try {
+            const result = await createReplyComment(commentId, content);
+            if (result.status?.code === 9999) {
+                dispatch(addReplies(result.result));
+                return true;
+            }
+            return false;
+        } catch (error) {
+            dispatch(setUIState({
+                error : error.message
+            }));
+            return false;
+        }
+    };
+
     export const {
         setComments,
         addComment,
@@ -270,8 +235,8 @@
         updateComment,
         toggleLike,
         setReplies,
-        toggleReplyView,
         addReplies,
+        appendReplies,
         setUIState
     } = commentSlice.actions;
 
