@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -61,8 +61,7 @@ const Comments = () => {
 
     const {
         comments,
-        ui: { isLoading, error, isEndComment },
-        meta: { openReplies, commentCount }
+        ui: { isLoading, error, isEndComment }
     } = useSelector(state => state.comments);
 
     useEffect(() => {

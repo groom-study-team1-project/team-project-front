@@ -38,14 +38,12 @@ import {
     submitEditCommentThunk,
     likeCommentThunk,
     unlikeCommentThunk,
-    setUIState,
-
+    setUIState
 } from '../../../store/comment/commentSlice';
 import { faHeart as regularHeart } from "@fortawesome/free-regular-svg-icons";
 import {Modify} from "../../../pages/Board/BoardDetail/Board/BoardDetail.style";
 import ModalComponent from "../../Modal/EditDeleteModal/EditDeleteModal";
 import {useDispatch, useSelector} from "react-redux";
-import {fetchReplyComment} from "../../../services/api/mockCommentApi";
 
 const ReplyComment = ({ commentId, getReplyTime }) => {
     const dispatch = useDispatch();
@@ -54,7 +52,6 @@ const ReplyComment = ({ commentId, getReplyTime }) => {
     const [editReplyId, setEditReplyId] = useState(null);
     const [editReplyContent, setEditReplyContent] = useState("");
     const [newReply, setNewReply] = useState("");
-    const [replyReloaded, setReplyReloaded] = useState(false);
 
     const replies = useSelector(state => state.comments.replies[commentId] || []);
     const isLoading = useSelector(state => state.comments.isLoading);
@@ -66,15 +63,24 @@ const ReplyComment = ({ commentId, getReplyTime }) => {
             dispatch(fetchCommentList(commentId));
             dispatch(initializeCommentCount(commentCount));
         }
-    }, [dispatch, userInfo, isUserInfoLoading, postId, commentCount]);*/
+    }, [dispatch, userInfo, isUserInfoLoading, commentCount]);*/
 
     const handleSubmitReply = async (e) => {
         e.preventDefault();
         if (!newReply.trim()) return;
 
-        const writeReply = await dispatch(createReplyThunk(commentId, newReply.trim()));
-        if (writeReply) setNewReply("");
-    }
+        try {
+            dispatch(setUIState({ isLoading: true }));
+            const success = await dispatch(createReplyThunk(commentId, newReply.trim()));
+            if (success) {
+                setNewReply("");
+            }
+        } catch (error) {
+            console.error('Error creating comment:', error);
+        } finally {
+            dispatch(setUIState({ isLoading: false }));
+        }
+    };
 
     const handleEditReply = async (commentId) => {
         if (!editReplyContent.trim()) return;
@@ -95,23 +101,33 @@ const ReplyComment = ({ commentId, getReplyTime }) => {
 
     const handleModalClose = () => setModalIndex(null);
 
-        const handleMoreReply = async (commentId, lastCommentId) => {
-            /* 댓글 컴포넌트에서 토글과 동시에 조회가 되도록 하여 답글 부분에서 더보기를 실행할 경우에는
-            따로 답글조회 함수를 새로 생성해서 이용해야 되는거야?
-            dispatch(fetchReplyList(commentId, lastCommentId));
-            */
-            await fetchReplyComment(commentId, lastCommentId);
-            const minReplyId = Math.min(...replies.map(comment => comment.id));
+    const handleMoreReply = async (commentId, lastCommentId) => {
+        dispatch(fetchReplyList(commentId, lastCommentId));
+        const minReplyId = Math.min(...replies.map(comment => comment.id));
 
-            if (lastCommentId === minReplyId) {
-                dispatch(setUIState({ isEndComment : true }));
-            }
-        };
+        if (lastCommentId === minReplyId) {
+            dispatch(setUIState({ isEndComment : true }));
+        }
+    };
 
     if (isLoading) return <div>Loading...</div>;
 
     return (
         <div>
+            <ReplyInputForm onSubmit={handleSubmitReply}>
+                <ReplyInputWrap>
+                    <ReplyInput
+                        value={newReply}
+                        onChange={onChange}
+                        placeholder="답글 작성"
+                    />
+                    <ReplySubmitButton
+                        src={commentSubmit}
+                        alt="답글 제출"
+                        onClick={handleSubmitReply}
+                    />
+                </ReplyInputWrap>
+            </ReplyInputForm>
             <RepliesWrap>
                 {replies.map((reply, index) => (
                     <Reply key={reply.id}>
@@ -206,21 +222,6 @@ const ReplyComment = ({ commentId, getReplyTime }) => {
                     <div style={{alignItems : "center", width: "100%"}}> </div>
                 )}
             </RepliesWrap>
-
-            <ReplyInputForm onSubmit={handleSubmitReply}>
-                <ReplyInputWrap>
-                    <ReplyInput
-                        value={newReply}
-                        onChange={onChange}
-                        placeholder="답글 작성"
-                    />
-                    <ReplySubmitButton
-                        src={commentSubmit}
-                        alt="답글 제출"
-                        onClick={handleSubmitReply}
-                    />
-                </ReplyInputWrap>
-            </ReplyInputForm>
         </div>
     );
 };

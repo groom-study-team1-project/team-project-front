@@ -92,7 +92,14 @@
             },
             addReplies: (state, action) => {
                 const { commentId, replies } = action.payload;
-                state.replies[commentId] = [...(state.replies[commentId] || []), ...replies];
+                if (!state.replies[commentId]) {
+                    state.replies[commentId] = [];
+                }
+
+                state.replies[commentId] = [
+                    ...(state.replies[commentId] || []),
+                    ...replies
+                ];
             },
             // 에러, 로딩 등의 ui 묶은 것들의 상태를 한번에 관리할 수 있게 함
             setUIState: (state, action) => {
@@ -215,7 +222,10 @@
         try {
             const result = await createReplyComment(commentId, content);
             if (result.status?.code === 9999) {
-                dispatch(addReplies(result.result));
+                dispatch(addReplies({
+                    commentId: commentId,
+                    replies: [result.result]
+                }));
                 return true;
             }
             return false;

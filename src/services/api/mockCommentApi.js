@@ -122,11 +122,6 @@ export const createReplyComment = async (commentId, content) => {
         parentId: commentId
     };
     dummyCommentsData.push(newReply);
-
-    // 부모 댓글의 replyCount 증가
-    const parentComment = dummyCommentsData.find(c => c.id === commentId);
-    if (parentComment) parentComment.replyCount++;
-
     return {
         status: { code: 9999, message: "응답 성공" },
         result: newReply
