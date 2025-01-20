@@ -40,7 +40,7 @@ import {
     createCommentThunk,
     deleteCommentThunk,
     submitEditCommentThunk,
-    setUIState
+    setUIState, unlikeCommentThunk
 } from '../../../store/comment/commentSlice';
 import { ProfileImage } from "../../Card/PostCard/PostProfile";
 import { Modify } from "../../../pages/Board/BoardDetail/Board/BoardDetail.style";
@@ -251,7 +251,9 @@ const Comments = () => {
                                         <LikedButton onClick={(e) => {
                                             e.preventDefault();
                                             console.log("commentDataid : ", commentData.id);
-                                            dispatch(likeCommentThunk(commentData.id))
+                                            commentData.likedMe
+                                                ? (dispatch(unlikeCommentThunk(commentData.id)))
+                                                : (dispatch(likeCommentThunk(commentData.id)));
                                         }}>
                                             {commentData.likedMe ? (
                                                 <FontAwesomeIcon
