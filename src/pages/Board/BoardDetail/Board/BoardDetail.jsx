@@ -4,7 +4,12 @@ import { CKEditor } from "@ckeditor/ckeditor5-react";
 import { DecoupledEditor } from "ckeditor5";
 import Slide from "../../../../components/Common/imgSlide";
 import { editorConfig } from "../../BoardWrite/WriteBoard/editor";
-import {fetchPostDetail, fetchProjectPostDetail, deletepost, deleteProjectPost} from "../../../../services/api/postApi";
+import {
+  fetchPostDetail,
+  fetchProjectPostDetail,
+  deletepost,
+  deleteProjectPost,
+} from "../../../../services/api/postApi";
 import { fetchProfileInfo } from "../../../../services/api/authApi";
 import { PostProfileBox } from "../../../../components/Card/PostCard/PostProfile";
 import { Interaction } from "../../../../components/Common/Interactions";
@@ -29,12 +34,14 @@ function BoardDetail() {
   const [confirmModalVisible, setConfirmModalVisible] = useState(false);
   const { isMobile } = useSelector((state) => state.screenSize);
   const isLoggedIn = useSelector((state) => state.user.isLoggedIn);
-  const selectedCategoryId = useSelector((state) => state.category.selectedCategoryId);
+  const selectedCategoryId = useSelector(
+    (state) => state.category.selectedCategoryId
+  );
   const [isMe, setIsMe] = useState(false);
   const navigate = useNavigate();
   const { postId } = useParams();
   const payload = useJwt(
-      useSelector((state) => state.user.userInfo.accessToken)
+    useSelector((state) => state.user.userInfo.accessToken)
   );
 
   useEffect(() => {
@@ -70,7 +77,9 @@ function BoardDetail() {
   }
 
   const handleEdit = () => {
-    navigate(`/board/edit/${postId}`, { state: { postData: post, categoryId: selectedCategoryId } });
+    navigate(`/board/edit/${postId}`, {
+      state: { postData: post, categoryId: selectedCategoryId },
+    });
     console.log("sadd", post);
   };
 
@@ -88,77 +97,75 @@ function BoardDetail() {
     }
   };
 
-
   return (
-      <>
-        <ContentWrapper $isDetail={true}>
-          <Wrap>
-            <PostWrap>
-              <Title $isMobile={isMobile}>{post.title}</Title>
-              <Postheader $isMobile={isMobile}>
-                <PostProfileBox
-                    name={post.authorInformation.nickname}
-                    job={post.authorInformation.memberJob}
-                    email={post.authorInformation.email}
-                    imgUrl={post.authorInformation.imageUrl}
-                />
-                <PostheaderRignt $isMobile={isMobile}>
-                  {isMe && (
-                      <>
-                        <Modify onClick={handleEdit}>수정</Modify>
-                        <Modify onClick={() => setConfirmModalVisible(true)}>
-                          삭제
-                        </Modify>
-                      </>
-                  )}
-                </PostheaderRignt>
-              </Postheader>
-              {selectedCategoryId === 2 &&
-                  post.slideImageUrls?.length > 0 && (
-                      <div style={{ marginBottom: "20px" }}>
-                        <Slide imgUrls={post.slideImageUrls} />
-                      </div>
-                  )}
-              <ContentWrap>
-                <CKEditor
-                    editor={DecoupledEditor}
-                    config={editorConfig}
-                    data={post.content}
-                    disabled={true}
-                />
-              </ContentWrap>
-            </PostWrap>
-            <PostFooter $isMobile={isMobile}>
-              <div>
-                {post.hashtags && post.hashtags.length > 0 ? (
-                    post.hashtags.map((hashtag, index) => (
-                        <span key={index}>{hashtag}</span>
-                    ))
-                ) : (
-                    <span>#</span>
-                )}
-              </div>
-              <Interaction
-                  count={{
-                    viewCount: post.viewCount,
-                    likeCount: post.likeCount,
-                    commentCount: post.commentCount,
-                  }}
+    <>
+      <ContentWrapper $isDetail={true}>
+        <Wrap>
+          <PostWrap>
+            <Title $isMobile={isMobile}>{post.title}</Title>
+            <Postheader $isMobile={isMobile}>
+              <PostProfileBox
+                name={post.authorInformation.nickname}
+                job={post.authorInformation.memberJob}
+                email={post.authorInformation.email}
+                imgUrl={post.authorInformation.imageUrl}
               />
-            </PostFooter>
-            <Comments />
-          </Wrap>
-        </ContentWrapper>
-        <ConfirmDeleteModal
-            isVisible={confirmModalVisible}
-            onClose={() => setConfirmModalVisible(false)}
-            onConfirm={handleDelete}
-            title="삭제하시겠습니까?"
-            description="이 작업은 되돌릴 수 없습니다."
-            confirmText="확인"
-            cancelText="취소"
-        />
-      </>
+              <PostheaderRignt $isMobile={isMobile}>
+                {isMe && (
+                  <>
+                    <Modify onClick={handleEdit}>수정</Modify>
+                    <Modify onClick={() => setConfirmModalVisible(true)}>
+                      삭제
+                    </Modify>
+                  </>
+                )}
+              </PostheaderRignt>
+            </Postheader>
+            {selectedCategoryId === 2 && post.slideImageUrls?.length > 0 && (
+              <div style={{ marginBottom: "20px" }}>
+                <Slide imgUrls={post.slideImageUrls} />
+              </div>
+            )}
+            <ContentWrap>
+              <CKEditor
+                editor={DecoupledEditor}
+                config={editorConfig}
+                data={post.content}
+                disabled={true}
+              />
+            </ContentWrap>
+          </PostWrap>
+          <PostFooter $isMobile={isMobile}>
+            <div>
+              {post.hashtags && post.hashtags.length > 0 ? (
+                post.hashtags.map((hashtag, index) => (
+                  <span key={index}>{hashtag}</span>
+                ))
+              ) : (
+                <span>#</span>
+              )}
+            </div>
+            <Interaction
+              count={{
+                viewCount: post.viewCount,
+                likeCount: post.likeCount,
+                commentCount: post.commentCount,
+              }}
+            />
+          </PostFooter>
+          <Comments />
+        </Wrap>
+      </ContentWrapper>
+      <ConfirmDeleteModal
+        isVisible={confirmModalVisible}
+        onClose={() => setConfirmModalVisible(false)}
+        onConfirm={handleDelete}
+        title="삭제하시겠습니까?"
+        description="이 작업은 되돌릴 수 없습니다."
+        confirmText="확인"
+        cancelText="취소"
+      />
+    </>
   );
 }
 

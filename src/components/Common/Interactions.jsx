@@ -13,17 +13,17 @@ const InteractionsWrapper = styled.div`
 const InteractionItemWrapper = styled.div`
   display: flex;
   align-items: center;
-  margin-right: 0.3vw;
+  margin-right: 10%;
 `;
 
 const Icon = styled.img`
-  width: 0.8vw;
-  height: 0.8vw;
-  margin-right: 0.2vw;
+  width: 80%;
+  height: 80%;
+  margin-right: 10%;
 `;
 
 const IconText = styled.span`
-  font-size: 0.5vw;
+  font-size: 100%;
 `;
 
 const ArrowContainer = styled.div`

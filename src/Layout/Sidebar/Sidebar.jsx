@@ -21,24 +21,29 @@ import { selectMenuItem } from "../../store/menu/menuSlice";
 
 function Sidebar() {
   const [menuItems, setMenuItems] = useState([]);
+  const [category, setCategory] = useState(1);
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const selectedItemId = useSelector((state) => state.menu?.selectedItem || null);
+  const selectedItemId = useSelector(
+    (state) => state.menu?.selectedItem || null
+  );
 
   useEffect(() => {
     try {
       const fetchData = async () => {
         const response = await fetchCategoryItems();
         setMenuItems(response);
+        console.log(selectedItemId);
       };
       fetchData();
     } catch (error) {
       console.log(error);
     }
-  }, []);
+  }, [selectedItemId, dispatch]);
 
   const handleMenuClick = (item) => {
-    dispatch(selectMenuItem(item.id)); // Redux 상태에 ID만 저장
+    setCategory(item.id);
+    dispatch(selectMenuItem(item.id));
     handleNavigation(item.id);
   };
 
@@ -81,12 +86,9 @@ function Sidebar() {
                 }}
               >
                 <SidebarLink
-                    className="link"
-                    $isSelected={
-                        selectedItemId !== null && selectedItemId === item.id
-                    }
+                  className="link"
+                  $isSelected={category === item.id}
                 >
-
                   <SidebarTitle>{item.title}</SidebarTitle>
                   {iconMapping[item.title]}
                 </SidebarLink>

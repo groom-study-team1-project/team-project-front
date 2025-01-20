@@ -5,8 +5,8 @@ import menuReducer from "./menu/menuSlice";
 import themeReducer from "./theme/themeSlice";
 import postReducer from "./post/postSlice";
 import screenSizeReducer from "./screenResize/screenSlice";
-import categoryReducer from "./category/categorySlice"
-
+import categoryReducer from "./category/categorySlice";
+import commentReducer from "./comment/commentSlice";
 const store = configureStore({
   reducer: {
     user: userReducer,
@@ -14,6 +14,7 @@ const store = configureStore({
     menu: menuReducer,
     theme: themeReducer,
     post: postReducer,
+    comments: commentReducer,
     screenSize: screenSizeReducer,
     category: categoryReducer,
   },

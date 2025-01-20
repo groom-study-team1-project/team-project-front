@@ -11,14 +11,14 @@ import {
   Nopost,
   NopostWrap,
   EndPost,
+  StyledIcon,
 } from "./MyProfile.style";
-import NopostImg from "../../../assets/images/Nopost.png";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import NopostImg from "../../../../assets/images/Nopost.png";
 import { faChevronRight } from "@fortawesome/free-solid-svg-icons";
-import { MyPosts } from "../../../components/Card/MyPostsCard/MyPosts/MyPosts";
-import { postInfo } from "../../../services/api/authApi";
+import { MyPosts } from "../../../../components/Card/MyPostsCard/MyPosts/MyPosts";
+import { postInfo } from "../../../../services/api/authApi";
 import { useNavigate, useParams } from "react-router-dom";
-import { BarLoading } from "../../../components/Common/LodingSpinner";
+import { BarLoading } from "../../../../components/Common/LodingSpinner";
 
 function MyPostsItems({ postCount }) {
   const [categorys] = useState([
@@ -38,7 +38,7 @@ function MyPostsItems({ postCount }) {
   const navigate = useNavigate();
   const { memberId } = useParams();
 
-  const limit = 5;
+  const limit = 6;
 
   const fetchData = useCallback(async () => {
     if (loading || !hasMore) return;
@@ -82,7 +82,7 @@ function MyPostsItems({ postCount }) {
         limit,
         memberId
       );
-
+      console.log(posts);
       if (posts.length > 0) {
         setMypost(posts);
         const newLastPostId = posts[posts.length - 1].postId;
@@ -145,6 +145,7 @@ function MyPostsItems({ postCount }) {
                 onClick={() => {
                   setCategoryId(category.id);
                 }}
+                $select={categoryId === category.id}
               >
                 <div>
                   <CategoryTitle>{category.title}</CategoryTitle>
@@ -152,7 +153,11 @@ function MyPostsItems({ postCount }) {
                     {myPost.length}개의 게시글
                   </CategoryCount>
                 </div>
-                <FontAwesomeIcon icon={faChevronRight} />
+                <StyledIcon
+                  icon={faChevronRight}
+                  size="2xl"
+                  $click={categoryId === category.id}
+                />
               </CategoryList>
             ))}
           </ul>

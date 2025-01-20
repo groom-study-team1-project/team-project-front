@@ -4,11 +4,6 @@ export const CommentsWrap = styled.div`
   margin-top: 50px;
 `;
 
-export const CommetHr = styled.hr`
-  width: 15%;
-  float: left;
-`;
-
 export const CommentWrap = styled.div`
   width: 100%;
   height: 65px;
@@ -19,7 +14,10 @@ export const CommentWrap = styled.div`
   padding: 0px 12px;
   border-radius: 15px;
   margin-bottom: 16px;
-  background: white;
+  background: none;  
+  div {
+    padding-bottom: 1rem;    
+  }  
 `;
 
 export const Comment = styled.div`
@@ -43,7 +41,7 @@ export const TimeAndLike = styled.div`
 
 export const CommentInputWrap = styled.div`
   position: relative;
-  width: 100%;
+  width: 110%;
   margin-top: 16px;
 `;
 

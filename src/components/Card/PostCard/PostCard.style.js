@@ -4,6 +4,7 @@ export const ContentBox = styled.div`
   flex-grow: 1;
   overflow: hidden; /* ContentBox 안에서 내용이 넘치지 않도록 설정 */
   text-overflow: ellipsis; /* 텍스트가 넘칠 경우 생략 표시 */
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
 `;
 
 export const Thumbnail = styled.div`
@@ -32,11 +33,12 @@ export const PostCardContainer = styled.div`
   height: ${({ height }) => height || "auto"};
   aspect-ratio: 1/1.5;
   cursor: pointer;
-  transition: transform 450ms;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
 
-  /* &:hover {
-      transform: scale(1.025);
-    } */
+  &:hover {
+    transform: translateY(-10px);
+    box-shadow: 15px 15px 15px rgba(0, 0, 0, 0.2);
+  }
 `;
 
 export const PostTitle = styled.h1`

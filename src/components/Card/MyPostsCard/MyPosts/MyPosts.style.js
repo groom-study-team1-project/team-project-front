@@ -1,37 +1,45 @@
 import styled from "styled-components";
 
 export const MyPost = styled.div`
-  width: 23%;
-  height: auto;
+  width: ${({ $isSmallDesktop, $isTablet, $isMobile }) =>
+    $isTablet || $isMobile ? "80%" : $isSmallDesktop ? "40%" : "28%"};
+
+  aspect-ratio: 4/3.5;
   background: white;
   border-radius: 10px;
-  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
-  border: 1px solid black;
+  box-shadow: 10px 10px 10px rgba(0, 0, 0, 0.25);
   display: flex;
   justify-content: center;
   padding: 1%;
-  margin-right: 3%;
-  display: flex;
+  margin-right: 1%;
   align-items: center;
-  justify-content: flex-start;
   flex-direction: column;
   cursor: pointer;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  &:hover {
+    transform: translateY(-10px);
+    box-shadow: 15px 15px 15px rgba(0, 0, 0, 0.2);
+  }
 `;
 
 export const MypostThumbnail = styled.img`
   width: 95%;
-  height: auto;
+  height: 55%;
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  border-radius: 10px;
+  object-fit: cover;
 `;
 
 export const MypostTitleWrap = styled.div`
   display: flex;
   justify-content: space-between;
   width: 100%;
-  margin-top: 5%;
+  margin-top: 10%;
 `;
 
 export const MypostTitle = styled.div`
+  font-size: ${({ $isSmallDesktop, $isTablet }) =>
+    $isTablet ? "2rem" : $isSmallDesktop ? "1rem" : "1rem"};
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -51,6 +59,8 @@ export const MypostDate = styled.div`
   font-weight: bold;
   font-size: 0.8rem;
   white-space: nowrap;
+  font-size: ${({ $isSmallDesktop, $isTablet }) =>
+    $isTablet ? "1.3rem" : $isSmallDesktop ? "1rem" : "1rem"};
 `;
 
 export const Hastags = styled.div`

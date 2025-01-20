@@ -1,140 +1,222 @@
 import React, {useCallback, useEffect, useState} from "react";
-import axiosInstance from "../../../services/axiosConfig";
 import commentSubmit from "../../../assets/images/commentsubmit.png";
 import {
-    ReplyWrap, Reply, ReplyContent,
-    ReplyInputWrap, ReplyInput, InputImg
+    RepliesWrap,
+    Reply,
+    Nickname,
+    ReplyContent,
+    ReplyText,
+    ReplyTimeText,
+    EditReplyWrap,
+    ReplyInputForm,
+    ReplyInputWrap,
+    ReplyInput,
+    ReplySubmitButton,
+    SomeMoreReplyButton
 } from "./replyComment.style";
+import {
+    CommentButton,
+    CommnetModalIcon,
+    TimeAndModal,
+    TimeAndLike,
+    IconWrap,
+    LikedButton,
+    CommentRight,
+    EditCommentInput
+} from "../Comment/Comment.style";
 import { ProfileImage } from "../../Card/PostCard/PostProfile";
-import outlineHeart from "../../../assets/images/heart.png";
-import fullHeart from "../../../assets/images/fullheart.png";
+import useUserInfo from "../../../hooks/useUserInfo";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+    faEllipsisVertical,
+    faHeart as solidHeart,
+} from "@fortawesome/free-solid-svg-icons";
+import {
+    handleCreateReply,
+    handleDeleteComment,
+    submitEditComment,
+    handleLikeComment, setEndComment, fetchCommentList, initializeCommentCount
+} from '../../../store/comment/commentSlice';
+import { faHeart as regularHeart } from "@fortawesome/free-regular-svg-icons";
+import {Modify} from "../../../pages/Board/BoardDetail/Board/BoardDetail.style";
+import ModalComponent from "../../Modal/EditDeleteModal/EditDeleteModal";
+import {useDispatch, useSelector} from "react-redux";
+import {fetchReplyComment} from "../../../services/api/mockCommentApi";
 
-const ReplyComment = ({ commentId, replyAdded }) => {
-    const [repliesData, setRepliesData] = useState([]);
-    const [replyContent, setReplyContent] = useState("");
-    const [likedReply, setLikedReply] = useState(new Set());
+const ReplyComment = ({ commentId, getReplyTime }) => {
+    const dispatch = useDispatch();
+    const { userInfo, isUserInfoLoading } = useUserInfo();
     const [modalIndex, setModalIndex] = useState(null);
+    const [editReplyId, setEditReplyId] = useState(null);
+    const [editReplyContent, setEditReplyContent] = useState("");
+    const [newReply, setNewReply] = useState("");
+    const [replyReloaded, setReplyReloaded] = useState(false);
 
-    const fetchReplyComments = useCallback(() => {
+    const replies = useSelector(state => state.comments.replies[commentId] || []);
+    const isLoading = useSelector(state => state.comments.isLoading);
+    const error = useSelector(state => state.comments.error);
+    const isEndComment = useSelector(state => state.comments.isEndComment);
 
-        axiosInstance.get(`/comments/replies/${commentId}`)
-            .then((response) => {
-                setRepliesData(response.data.result);
-                const likedSet = new Set(
-                    response.data.result.filter(reply => reply.likedMe).map(reply => reply.id)
-                );
-                setLikedReply(likedSet);
-            })
-            .catch((error) => console.error("답글을 가져오지 못했습니다 : ", error));
-    }, [commentId]);
+    /*useEffect(() => {
+        if (!isUserInfoLoading && userInfo) {
+            dispatch(fetchCommentList(commentId));
+            dispatch(initializeCommentCount(commentCount));
+        }
+    }, [dispatch, userInfo, isUserInfoLoading, postId, commentCount]);*/
 
-    const handleSubmitReply = () => {
-        if (!replyContent.trim()) return;
+    const handleSubmitReply = async (e) => {
+        e.preventDefault();
+        if (!newReply.trim()) return;
 
-        const replyData = {
-            commentId,
-            content: replyContent.trim()
+        const writeReply = await dispatch(handleCreateReply(commentId, newReply.trim()));
+        if (writeReply) setNewReply("");
+    }
+
+    const handleEditReply = async (commentId) => {
+        if (!editReplyContent.trim()) return;
+        const success = await dispatch(submitEditComment(commentId, editReplyContent.trim()));
+        if (success) {
+            setEditReplyContent("");
+            setEditReplyId(null);
+            setModalIndex(null);
+        }
+    }
+
+    const editReplyCancel = () => {
+        setEditReplyId(null);
+        setEditReplyContent("");
+    }
+
+    const onChange = (e) => setNewReply(e.target.value);
+
+    const handleModalClose = () => setModalIndex(null);
+
+        const handleMoreReply = async (commentId, lastCommentId) => {
+            /* 댓글 컴포넌트에서 토글과 동시에 조회가 되도록 하여 답글 부분에서 더보기를 실행할 경우에는
+            따로 답글조회 함수를 새로 생성해서 이용해야 되는거야?
+            dispatch(fetchReplyList(commentId, lastCommentId));
+            */
+            await fetchReplyComment(commentId, lastCommentId);
+            const minReplyId = Math.min(...replies.map(comment => comment.id));
+
+            if (lastCommentId === minReplyId) {
+                dispatch(setEndComment(true));
+            }
         };
 
-        axiosInstance.post(`/api/comments/write/reply`, {replyData})
-            .then((response) => {
-                setReplyContent("");
-                if(replyAdded) replyAdded();
-                fetchReplyComments()
-            }).catch(error => {
-                console.error("답글 작성을 실패하였습니다 : ", error);
-            }
-        );
-    };
-
-    const handleDelete = () => {
-        axiosInstance.delete(`/api/comments/reply/remove`)
-            .then(() => {
-                fetchReplyComments();
-                setModalIndex(null);
-            })
-            .catch(error => {
-                console.error("답글 삭제에 실패했습니다:", error);
-            }
-        );
-    };
-
-    useEffect(() => {
-        fetchReplyComments();
-    }, [fetchReplyComments]);
-
-    const getReplyTime = (createdTime) => {
-        const now = new Date();
-        const created = new Date(createdTime);
-        created.setHours(created.getHours() + 9);
-
-        const differTime = Math.floor((now - created) / 1000);
-        if (differTime < 60) return "now";
-
-        const minutes = Math.floor(differTime / 60);
-        if (minutes < 60) return `${minutes}minute ago`;
-
-        const hours = Math.floor(differTime / (60 * 60));
-        if (hours < 24) return `${hours}hour ago`;
-
-        const days = Math.floor(differTime / (60 * 60 * 24));
-        if (days < 7) return `${days}day ago`;
-
-        const weeks = Math.floor(days / 7);
-        if (days < 30) return `${weeks}week ago`;
-
-        const months = Math.floor(days / 30);
-        if (months < 12) return `${months}week ago`;
-
-        const years = Math.floor(months / 12);
-        return `${years}year ago`;
-    }
+    if (isLoading) return <div>Loading...</div>;
 
     return (
         <div>
-            {repliesData.map((reply, index) => (
-                <ReplyWrap key={reply.id}>
-                    <Reply>
+            <RepliesWrap>
+                {replies.map((reply, index) => (
+                    <Reply key={reply.id}>
                         <ProfileImage src={reply.memberImageUrl} />
                         <ReplyContent>
-                            <div><strong>{reply.memberNickname}</strong></div>
-                            <div>{reply.content}</div>
-                            <div>
-                                <small>{getReplyTime(reply.createdAt)}</small>
-                                <button>
-                                    <InputImg
-                                        src={likedReply.has(reply.id) ? fullHeart : outlineHeart}
-                                        alt="좋아요"
-                                    />
-                                    <span>{reply.likeCount}</span>
-                                </button>
-                            </div>
+                            {editReplyId === reply.id ? (
+                                <>
+                                    <EditReplyWrap>
+                                        <EditCommentInput
+                                            value={editReplyContent}
+                                            onChange = {(e) => setEditReplyContent(e.target.value)}
+                                        />
+                                        <CommentButton
+                                            onClick={() => handleEditReply(reply.id, editReplyContent)}
+                                        >
+                                            수정
+                                        </CommentButton>
+                                        <CommentButton
+                                            onClick = {editReplyCancel}
+                                        >
+                                            취소
+                                        </CommentButton>
+                                    </EditReplyWrap>
+                                </>
+                            ) : (
+                                <>
+                                    <Nickname>{reply.memberNickname}</Nickname>
+                                    <ReplyText>{reply.content}</ReplyText>
+                                </>
+                            )}
                         </ReplyContent>
-                    </Reply>
-                    {/*{reply.isModified && (
-                        <div>
-                            <button onClick={() => setModalIndex(index)}>
-                                <FontAwesomeIcon icon={faEllipsisVertical} />
-                            </button>
-                        </div>
-                    )}*/}
-                </ReplyWrap>
-            ))}
 
-            <form onSubmit={handleSubmitReply}>
+                        <CommentRight>
+                            <TimeAndLike>
+                                <TimeAndModal>
+                                    <ReplyTimeText>{getReplyTime(reply.createdAt)}</ReplyTimeText>
+                                    {reply.author && (
+                                        <CommnetModalIcon>
+                                            <Modify onClick={() => setModalIndex(reply.id)}>
+                                                <FontAwesomeIcon icon={faEllipsisVertical} />
+                                            </Modify>
+                                            {modalIndex === reply.id && (
+                                                <ModalComponent
+                                                    isVisible={true}
+                                                    onClose={() => handleModalClose(reply.id)}
+                                                    onEdit={() => {
+                                                        console.log(
+                                                            "수정 대상 게시글 : ",
+                                                            reply.id,
+                                                            reply.content
+                                                        );
+                                                        handleEditReply(reply.id, reply.content);
+                                                    }}
+                                                    onDelete={() => {
+                                                        console.log(
+                                                            "삭제할 게시글 아이디 : ",
+                                                            reply.id
+                                                        );
+                                                        dispatch(handleDeleteComment(reply.id));
+                                                    }}
+                                                />
+                                            )}
+                                        </CommnetModalIcon>
+                                    )}
+                                </TimeAndModal>
+                                <IconWrap>
+                                    <LikedButton onClick={() => { handleLikeComment(reply?.id, userInfo); }}>
+                                        {reply.likedMe ? (
+                                            <FontAwesomeIcon
+                                                icon={solidHeart}
+                                                style={{ color: "#ff1900" }}
+                                                size="2xl"
+                                            />
+                                        ) : (
+                                            <FontAwesomeIcon icon={regularHeart} size="2xl" />
+                                        )}
+                                    </LikedButton>
+                                    <span>{reply.likeCount}</span>
+                                </IconWrap>
+                            </TimeAndLike>
+                        </CommentRight>
+                    </Reply>
+                ))}
+                {!isEndComment && replies.length > 5 && !isLoading ? (
+                    <SomeMoreReplyButton onClick={() => {
+                        const lastCommentId = replies[replies.length - 1].id;
+                        handleMoreReply(commentId, lastCommentId);
+                    }}>
+                        더보기
+                    </SomeMoreReplyButton>
+                ) : (
+                    <div style={{alignItems : "center", width: "100%"}}> </div>
+                )}
+            </RepliesWrap>
+
+            <ReplyInputForm onSubmit={handleSubmitReply}>
                 <ReplyInputWrap>
                     <ReplyInput
-                        value={replyContent}
-                        onChange={(e) => setReplyContent(e.target.value)}
+                        value={newReply}
+                        onChange={onChange}
                         placeholder="답글 작성"
                     />
-                    <InputImg
+                    <ReplySubmitButton
                         src={commentSubmit}
                         alt="답글 제출"
                         onClick={handleSubmitReply}
                     />
                 </ReplyInputWrap>
-            </form>
+            </ReplyInputForm>
         </div>
     );
 };

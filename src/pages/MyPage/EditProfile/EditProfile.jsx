@@ -23,9 +23,12 @@ import {
   SubmitBtn,
   ChecknickName,
   LabelTitle,
+  EditProfileForm,
+  EditProfileacticle,
 } from "./EditProfile.style";
-
+import { useMediaQuery } from "react-responsive";
 const EditProfile = ({ setProfileState }) => {
+  const isSmallDesktop = useMediaQuery({ maxWidth: 1480 });
   const { memberId } = useParams();
   const [form, setForm] = useState({
     nickname: "",
@@ -147,10 +150,10 @@ const EditProfile = ({ setProfileState }) => {
 
   return (
     <>
-      <form onSubmit={handleonSubmit}>
+      <EditProfileForm onSubmit={handleonSubmit}>
         <Container>
           <ProfileImageWraps>
-            <ProfileImage $size={"5vw"} src={form.imageUrl} />
+            <ProfileImage $size={"13%"} src={form.imageUrl} />
             <ProfileActions>
               <SubmitBtn
                 type="button"
@@ -183,114 +186,125 @@ const EditProfile = ({ setProfileState }) => {
               </SubmitBtn>
             </ProfileActions>
           </ProfileImageWraps>
-          <Label>
-            <LabelTitle>닉네임 </LabelTitle>
-            <NicknameContainer>
-              <Input
-                placeholder="띄어쓰기 포함 총 20자로 입력해주세요"
-                value={form.nickname}
-                onChange={handleOnChange}
-                name="nickname"
-                width={"30%"}
-              />
-              <CheckButton onClick={handleOnchedknickName} disabled={btn}>
-                중복 확인
-              </CheckButton>
-            </NicknameContainer>
-          </Label>
-          {checkNickName === false ? (
+          <EditProfileacticle>
             <Label>
-              <LabelTitle></LabelTitle>
-              <div>
-                <ChecknickName>사용 가능한 닉네임입니다</ChecknickName>
-              </div>
+              <LabelTitle>닉네임 </LabelTitle>
+              <NicknameContainer>
+                <Input
+                  placeholder="띄어쓰기 포함 총 20자로 입력해주세요"
+                  value={form.nickname}
+                  onChange={handleOnChange}
+                  name="nickname"
+                  width={"30%"}
+                />
+                <CheckButton onClick={handleOnchedknickName} disabled={btn}>
+                  중복 확인
+                </CheckButton>
+              </NicknameContainer>
             </Label>
-          ) : checkNickName === true ? (
-            <Label>
-              <LabelTitle></LabelTitle>
-              <div>
-                <ChecknickName color={"red"}>중복된 닉네임입니다</ChecknickName>
-              </div>
-            </Label>
-          ) : null}
+            {checkNickName === false ? (
+              <Label>
+                <LabelTitle></LabelTitle>
+                <NicknameContainer>
+                  <ChecknickName>사용 가능한 닉네임입니다</ChecknickName>
+                </NicknameContainer>
+              </Label>
+            ) : checkNickName === true ? (
+              <Label>
+                <LabelTitle></LabelTitle>
+                <NicknameContainer>
+                  <ChecknickName color={"red"}>
+                    중복된 닉네임입니다
+                  </ChecknickName>
+                </NicknameContainer>
+              </Label>
+            ) : null}
 
-          <Label>
-            <LabelTitle>자기소개 </LabelTitle>
-            <NicknameContainer>
-              <Input
-                placeholder="간단한 자기소개를 입력해주세요"
-                value={form.aboutMe}
-                onChange={handleOnChange}
-                name="aboutMe"
-                width={"40%"}
-              />
-            </NicknameContainer>
-          </Label>
-          <Label>
-            <LabelTitle>직업</LabelTitle>
-            <NicknameContainer>
-              <Input
-                placeholder="직업을 입력해주세요"
-                value={form.job}
-                onChange={handleOnChange}
-                name="job"
-                width={"40%"}
-              />
-            </NicknameContainer>
-          </Label>
-          <Label>
-            <LabelTitle>연락처 </LabelTitle>
-            <NicknameContainer>
-              <Input
-                placeholder="연락처를 입력해주세요"
-                value={form.phoneNumber}
-                onChange={handleOnChange}
-                name="phoneNumber"
-                width={"40%"}
-              />
-            </NicknameContainer>
-          </Label>
-          <Label>
-            <LabelTitle>githubUrl</LabelTitle>
-            <NicknameContainer>
-              <Input
-                placeholder="github URL"
-                value={form.githubUrl}
-                onChange={handleOnChange}
-                name="githubUrl"
-                width={"40%"}
-              />
-            </NicknameContainer>
-          </Label>
-          <Label>
-            <LabelTitle>blogUrl</LabelTitle>
-            <NicknameContainer>
-              <Input
-                placeholder="github URL"
-                value={form.blogUrl}
-                onChange={handleOnChange}
-                name="blogUrl"
-                width={"40%"}
-              />
-            </NicknameContainer>
-          </Label>
-          <Label>
-            <LabelTitle>비밀번호</LabelTitle>
-            <NicknameContainer>
-              <SubmitBtn type="button" $bgColor={"#7682FF"} onClick={openModal}>
-                비밀번호 변경
-              </SubmitBtn>
-            </NicknameContainer>
-          </Label>
+            <Label>
+              <LabelTitle>자기소개 </LabelTitle>
+              <NicknameContainer>
+                <Input
+                  placeholder="간단한 자기소개를 입력해주세요"
+                  value={form.aboutMe}
+                  onChange={handleOnChange}
+                  name="aboutMe"
+                  width={"40%"}
+                />
+              </NicknameContainer>
+            </Label>
+            <Label>
+              <LabelTitle>직업</LabelTitle>
+              <NicknameContainer>
+                <Input
+                  placeholder="직업을 입력해주세요"
+                  value={form.job}
+                  onChange={handleOnChange}
+                  name="job"
+                  width={"40%"}
+                />
+              </NicknameContainer>
+            </Label>
+            <Label>
+              <LabelTitle>연락처 </LabelTitle>
+              <NicknameContainer>
+                <Input
+                  placeholder="연락처를 입력해주세요"
+                  value={form.phoneNumber}
+                  onChange={handleOnChange}
+                  name="phoneNumber"
+                  width={"40%"}
+                />
+              </NicknameContainer>
+            </Label>
+            <Label>
+              <LabelTitle>githubUrl</LabelTitle>
+              <NicknameContainer>
+                <Input
+                  placeholder="github URL"
+                  value={form.githubUrl}
+                  onChange={handleOnChange}
+                  name="githubUrl"
+                  width={"40%"}
+                />
+              </NicknameContainer>
+            </Label>
+            <Label>
+              <LabelTitle>blogUrl</LabelTitle>
+              <NicknameContainer>
+                <Input
+                  placeholder="github URL"
+                  value={form.blogUrl}
+                  onChange={handleOnChange}
+                  name="blogUrl"
+                  width={"40%"}
+                />
+              </NicknameContainer>
+            </Label>
+            <Label>
+              <LabelTitle>비밀번호</LabelTitle>
+              <NicknameContainer>
+                <SubmitBtn
+                  type="button"
+                  style={{ padding: "1%" }}
+                  $bgColor={"red"}
+                  onClick={openModal}
+                >
+                  비밀번호 변경
+                </SubmitBtn>
+              </NicknameContainer>
+            </Label>
+          </EditProfileacticle>
         </Container>
-        <ProfileFooter>
+        <ProfileFooter $mobail={isSmallDesktop}>
           <ButtonGroup>
-            <SubmitBtn type="submit" $bgColor={"#7682FF"}>
+            <SubmitBtn type="submit" $bgColor={"#B1CDE9"} $Color={"black"}>
               확인
             </SubmitBtn>
             <SubmitBtn
               type="button"
-              $Color={"#9DABED"}
+              $Color={"black"}
+              $bgColor={"transparent"}
+              style={{ border: "1px solid black" }}
               onClick={() => {
                 setProfileState("mypost");
               }}
@@ -299,7 +313,7 @@ const EditProfile = ({ setProfileState }) => {
             </SubmitBtn>
           </ButtonGroup>
         </ProfileFooter>
-      </form>
+      </EditProfileForm>
 
       {isModalOpen && <PasswordChange setIsModalOpen={setIsModalOpen} />}
     </>
