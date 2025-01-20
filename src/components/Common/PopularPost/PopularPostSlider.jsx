@@ -16,11 +16,13 @@ import {
   ArrowImage,
   CustomDots,
   Dot,
+  Ranking,
 } from "./PopularPostSlider.style";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faFire } from "@fortawesome/free-solid-svg-icons";
 
 import PrevArrowImage from "../../../assets/images/arrow-left.png";
 import NextArrowImage from "../../../assets/images/arrow-right.png";
-
 const PopularPostSlider = ({ posts }) => {
   const sliderRef = React.useRef(null);
   const navigate = useNavigate();
@@ -78,7 +80,7 @@ const PopularPostSlider = ({ posts }) => {
         </Arrow>
       </CustomArrowWrapper>
       <Slider ref={sliderRef} {...sliderSettings}>
-        {posts.map((post) => (
+        {posts.map((post, index) => (
           <SlideItem key={post.postId} $isMobile={screenSize.isMobile}>
             <SlideImage
               src={
@@ -94,6 +96,14 @@ const PopularPostSlider = ({ posts }) => {
               onClick={() => handleNavigateToPost(post.postId)}
               $isMobile={screenSize.isMobile}
             >
+              <Ranking>
+                <FontAwesomeIcon
+                  icon={faFire}
+                  size="2xl"
+                  style={{ color: "rgba(255, 0, 0, 0.5)" }}
+                />
+                <span>{index + 1}</span>
+              </Ranking>
               <SlideTitle>{truncateText(post.title, 30)}</SlideTitle>
               <SlideDescription>
                 {truncateText(processContent(post.content), 100)}

@@ -43,6 +43,7 @@ export const MyPosts = ({ mypost }) => {
         }}
         $isSmallDesktop={isSmallDesktop}
         $isTablet={isTablet}
+        $isMobile={isMobile}
       >
         <MypostThumbnail src={post.thumbnail} />
         <MypostTitleWrap>

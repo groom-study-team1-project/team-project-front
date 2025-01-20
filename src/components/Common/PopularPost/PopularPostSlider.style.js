@@ -9,8 +9,6 @@ export const SliderContainer = styled.div`
   position: relative;
   border-radius: ${({ $isMobile }) => ($isMobile ? "8px" : "10px")};
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  background: linear-gradient(to right, #e5e5f7, #acb6e5);
-
   .slick-dots {
     position: absolute;
     bottom: 20px;
@@ -63,7 +61,31 @@ export const SlideItem = styled.div`
   justify-content: center;
   border-radius: 10px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  background: linear-gradient(to right, #e5e5f7, #acb6e5);
+  background: linear-gradient(
+    to top,
+    rgba(244, 244, 244, 0.7),
+    rgba(244, 244, 244, 0.3)
+  );
+  //background: linear-gradient(to right, #e5e5f7, #acb6e5);
+  position: relative;
+`;
+
+export const Ranking = styled.div`
+  display: flex;
+  position: absolute;
+  width: 3.5%;
+  top: 3%;
+  left: 1%;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50px;
+  aspect-ratio: 1/1;
+  padding: 0.5%;
+  background: rgba(255, 255, 255, 0.3);
+  span {
+    font-size: 130%;
+    margin-left: 10%;
+  }
 `;
 
 export const SlideImage = styled.img`
@@ -75,6 +97,7 @@ export const SlideImage = styled.img`
 `;
 
 export const SlideContent = styled.div`
+  margin-bottom: 7%;
   width: ${({ $isMobile }) => ($isMobile ? "100%" : "30%")};
   height: ${({ $isMobile }) => ($isMobile ? "30%" : "auto")};
   display: flex;
@@ -84,7 +107,7 @@ export const SlideContent = styled.div`
 `;
 
 export const SlideTitle = styled.h4`
-  font-size: 20px;
+  font-size: 2rem;
   font-weight: bold;
   color: #333;
   margin-bottom: 20px;

@@ -1,8 +1,8 @@
 import styled from "styled-components";
 
 export const MyPost = styled.div`
-  width: ${({ $isSmallDesktop, $isTablet }) =>
-    $isTablet ? "80%" : $isSmallDesktop ? "40%" : "28%"};
+  width: ${({ $isSmallDesktop, $isTablet, $isMobile }) =>
+    $isTablet || $isMobile ? "80%" : $isSmallDesktop ? "40%" : "28%"};
 
   aspect-ratio: 4/3.5;
   background: white;
@@ -15,6 +15,11 @@ export const MyPost = styled.div`
   align-items: center;
   flex-direction: column;
   cursor: pointer;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  &:hover {
+    transform: translateY(-10px);
+    box-shadow: 15px 15px 15px rgba(0, 0, 0, 0.2);
+  }
 `;
 
 export const MypostThumbnail = styled.img`
