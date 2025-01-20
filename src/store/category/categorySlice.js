@@ -1,7 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-    selectedCategoryId: null, // Redux state for category ID
+    selectedCategoryId: null,
 };
 
 const categorySlice = createSlice({
@@ -9,10 +9,12 @@ const categorySlice = createSlice({
     initialState,
     reducers: {
         setCategoryId: (state, action) => {
-            state.selectedCategoryId = action.payload; // Update selectedCategoryId
+            state.selectedCategoryId = action.payload;
         },
     },
 });
 
 export const { setCategoryId } = categorySlice.actions;
+
 export default categorySlice.reducer;
+

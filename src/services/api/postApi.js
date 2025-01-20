@@ -5,15 +5,14 @@ import { GrUserSettings } from "react-icons/gr";
 import { BsPatchQuestion } from "react-icons/bs";
 import { imageUpload } from "./imageApi";
 
-// 새 게시글 생성
 export const createPost = async (body) => {
   try {
     const requestBody = {
       title: body.title?.trim(),
       content: body.content?.trim(),
+      thumbnailImageUrl: body.thumbnailImageKey || "",
       categoryId: body.categoryId,
       hashtags: body.hashtags || [],
-      thumbnailImageUrl: body.thumbnailImageUrl || "posts/thumbnail.png",
       imageKeys: body.imageKeys || [],
     };
 
@@ -35,7 +34,6 @@ export const createPost = async (body) => {
   }
 };
 
-// 게시글 이미지 업로드 어댑터
 export const uploadAdapter = (loader, onImageUploaded) => {
   const uploadImage = async (file) => {
     if (!file) {
@@ -72,7 +70,6 @@ export const uploadAdapter = (loader, onImageUploaded) => {
   };
 };
 
-// 게시글 목록 조회
 export async function fetchPostItems(
   categoryId,
   lastPostId,
@@ -100,7 +97,6 @@ export async function fetchPostItems(
   }
 }
 
-// 게시글 상세 조회
 export const fetchPostDetail = async (postId) => {
   try {
     const response = await axiosInstance.get(`/open/posts/${postId}`);
@@ -134,7 +130,6 @@ export const fetchPostChange = async (body, postId) => {
   }
 };
 
-// 게시글 삭제
 export const deletepost = async (postId) => {
   try {
     const response = await axiosInstance.patch(`/api/posts/remove/${postId}`);
@@ -152,7 +147,6 @@ export const deletepost = async (postId) => {
   }
 };
 
-// 카테고리 조회
 export async function fetchCategoryItems() {
   try {
     const response = await axiosInstance.get("/open/categories");
@@ -184,7 +178,6 @@ export const sortPostsByCriteria = async (category_id, sort, post_id) => {
   }
 };
 
-// ProjectBoard 게시글 조회
 export const fetchProjectPosts = async (
   categoryId,
   lastPostId,
@@ -209,7 +202,6 @@ export const fetchProjectPosts = async (
   }
 };
 
-// ProjectBoard 상세 게시글 조회
 export const fetchProjectPostDetail = async (postId) => {
   try {
     const response = await axiosInstance.get(`/open/posts/project/${postId}`);
@@ -227,15 +219,14 @@ export const fetchProjectPostDetail = async (postId) => {
   }
 };
 
-// ProjectBoard 게시글 작성
 export const createProjectPost = async (body) => {
   try {
     const requestBody = {
       title: body.title?.trim(),
       content: body.content?.trim(),
+      thumbnailImageUrl: body.thumbnailImageUrl || "posts/thumbnail.png",
       categoryId: body.categoryId,
       hashtags: body.hashtags || [],
-      thumbnailImageUrl: body.thumbnailImageUrl || "posts/thumbnail.png",
       imageKeys: body.imageKeys || [],
       slideImageKeys: body.slideImageKeys || [],
     };
@@ -244,24 +235,26 @@ export const createProjectPost = async (body) => {
       throw new Error("제목, 내용, 카테고리 ID는 필수 입력 항목입니다.");
     }
 
+    console.log(requestBody);
     const result = await axiosInstance.post(
       "/api/posts/project/upload",
       requestBody
     );
+
+    console.log("게시글 생성 성공:", result.data);
     return result.data;
   } catch (error) {
     console.error(
       error.response
-        ? `서버 응답 에러: ${error.response.data}`
+        ? "서버 응답 에러: " + error.response.data
         : error.request
-        ? `응답 없음 에러: ${error.request}`
-        : `예상치 못한 에러: ${error.message}`
+        ? "응답 없음 에러: " + error.request
+        : "예상치 못한 에러: " + error.message
     );
     throw error;
   }
 };
 
-// 프로젝트 게시글 수정
 export const editProjectPost = async (postId, body) => {
   try {
     const response = await axiosInstance.post(
@@ -281,7 +274,6 @@ export const editProjectPost = async (postId, body) => {
   }
 };
 
-// 프로젝트 게시글 삭제
 export const deleteProjectPost = async (projectId) => {
   try {
     const response = await axiosInstance.delete(
