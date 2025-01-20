@@ -18,14 +18,16 @@ export const Wrap = styled.div`
 
 export const WriteWrap = styled.div`
   display: flex;
-    flex-direction: column;
+  flex-direction: column;
+  align-items: start;
+  font-weight: bold;
   margin-top: 111px;
   margin-bottom: 41px;
 `;
 
-export const Category = styled.div`
-    font-size: 30px;
-    margin-bottom: 10px;
+export const SmallWrite = styled.div`
+    font-size: 1rem;
+    padding-left: 0.2rem;
 `;
 
 export const Write = styled.div`
@@ -40,56 +42,96 @@ export const Write = styled.div`
 
 export const TitleWrap = styled.div`
   display: flex;
+  width: 100%;
   ${(props) =>
     props.$isMobile
       ? `
-    flex-direction: column;
-    margin-bottom: 10px;
-    justify-content: none;
-` : `
-    justify-content: space-between;
-`}
+        flex-direction: column;
+        margin-bottom: 10px;
+        justify-content: none;
+        ` 
+      : ``
+  }
 `;
 
 export const Titleinput = styled.input`
+  flex: 10;
   height: 43px;
-  border-radius: 10px;
-    border: 1px solid #B2ACAC;
+  border-radius: 5px;
+  border: none;
+  margin-right: 1rem;
   margin-bottom: 32px;
-  padding-left: 10px;
-  width: 30vw;
-    ${(props) => 
-            props.$isMobile ? `
-     width: 100%;
-` : ``}
+  padding-left: 1rem;
+  width: ${(props) => (props.$isMobile ? "100%" : "30vw")};
 `;
 
 export const Categoryselect = styled.select`
+  width: 30%;
   height: 43px;
-    border: 1px solid #B2ACAC;
-  border-radius: 10px;
+  border: none;
+  border-radius: 5px;
   background: white;
     padding-left: 10px;
   color: black;
   ${(props) =>
-    props.$isMobile ? `
-     width: 100%;
-    margin-top: -20px;
-` : ``}
+    props.$isMobile
+      ? `
+          width: 100%;
+          margin-top: -20px;
+      `
+      : ``
+  }
+`;
+
+export const EditorWrap = styled.div`
+    background: white;
+    border-radius: 5px;
+    margin-bottom: 1rem;
+`;
+
+export const Toolbar = styled.div`
+  margin-bottom: 0px;
+  border-bottom: 1px solid gray;
+`;
+
+export const HashtagWrap = styled.div`
+    display: flex;
+    flex: 1;
 `;
 
 export const Hashtag = styled.input`
-  border: 1px solid #B2ACAC;
+  border: none;
   background: white;
-  border-radius: 10px;
-  padding: 10px;
+  border-radius: 5px;
+  padding: 0.5rem 0.5rem 0.5rem 0.5rem;
+  margin-right: 1rem;
+  margin-bottom: 0.5rem;  
   ${(props) =>
     props.$isMobile
       ? `
-    width: 50%;
-    margin-bottom: 20px;
-`   
-      : ``}
+        width: 50%;
+        margin-bottom: 20px;
+      `
+      : ``
+  }
+`;
+
+export const Hashtags = styled.div`
+    padding: 0.3rem;
+    margin-right: 0.5rem;
+    margin-bottom: 0.5rem;
+    border: none;
+    border-radius: 5px;
+    background: white;
+    cursor: pointer;
+    ${(props) =>
+            props.$isMobile
+                    ? `
+        width: 50%;
+        margin-bottom: 20px;
+      `
+                    : ``
+    }
 `;
 
 export const SubmitBtnWrap = styled.div`
@@ -101,10 +143,6 @@ export const SubmitBtnWrap = styled.div`
     align-items: center;
   `
                     : ""}
-`;
-
-export const Toolbar = styled.div`
-    border-bottom: 1px solid #B2ACAC;
 `;
 
 export const CancelBtn = styled.button`
@@ -152,5 +190,3 @@ export const EditorWrapper = styled.div`
     border-radius: 10px;
     margin-bottom: 20px;
 `;
-
-
