@@ -35,12 +35,12 @@ import {
 } from "../Comment/Comment.style";
 import {
     fetchCommentList,
-    handleCreateComment,
-    handleDeleteComment,
-    submitEditComment,
-    handleLikeComment,
-    toggleReply,
-    initializeCommentCount, setEndComment, handleReplyToggle,
+    likeCommentThunk,
+    replyToggleThunk,
+    createCommentThunk,
+    deleteCommentThunk,
+    submitEditCommentThunk,
+    setUIState
 } from '../../../store/comment/commentSlice';
 import { ProfileImage } from "../../Card/PostCard/PostProfile";
 import { Modify } from "../../../pages/Board/BoardDetail/Board/BoardDetail.style";
@@ -49,7 +49,7 @@ import commentsubmit from "../../../assets/images/commentsubmit.png";
 import ReplyComment from "../ReplyComment/replyComment";
 import useUserInfo from "../../../hooks/useUserInfo";
 
-const Comments = ({ commentCount }) => {
+const Comments = () => {
     const dispatch = useDispatch();
     const { userInfo, isUserInfoLoading } = useUserInfo();
     const { postId } = useParams();
@@ -60,18 +60,15 @@ const Comments = ({ commentCount }) => {
 
     const {
         comments,
-        isLoading,
-        error,
-        openReplies,
-        isEndComment
+        ui: { isLoading, error, isEndComment },
+        meta: { openReplies, commentCount }
     } = useSelector(state => state.comments);
 
     useEffect(() => {
         if (!isUserInfoLoading && userInfo) {
             dispatch(fetchCommentList(postId));
-            dispatch(initializeCommentCount(commentCount));
         }
-    }, [dispatch, userInfo, isUserInfoLoading, postId, commentCount]);
+    }, [dispatch, userInfo, isUserInfoLoading, postId]);
 
     const getTime = (createdTime) => {
         const now = new Date();
@@ -104,8 +101,17 @@ const Comments = ({ commentCount }) => {
         e.preventDefault();
         if (!newComment.trim()) return;
 
-        const writeComment = await dispatch(handleCreateComment(postId, newComment.trim()));
-        if (writeComment) setNewComment("");
+        try {
+            dispatch(setUIState({ isLoading: true }));
+            const success = await dispatch(createCommentThunk(postId, newComment.trim()));
+            if (success) {
+                setNewComment("");
+            }
+        } catch (error) {
+            console.error('Error creating comment:', error);
+        } finally {
+            dispatch(setUIState({ isLoading: false }));
+        }
     };
 
     const onChange = (e) => {
@@ -114,11 +120,16 @@ const Comments = ({ commentCount }) => {
 
     const handleEditSubmit = async (commentId) => {
         if (!editContent.trim()) return;
-        const success = await dispatch(submitEditComment(commentId, editContent.trim()));
-        if (success) {
-            setEditContent("");
-            setEditContentId(null);
-            setModalIndex(null);
+
+        try {
+            const success = await dispatch(submitEditCommentThunk(commentId, editContent.trim()));
+            if (success) {
+                setEditContent("");
+                setEditContentId(null);
+                setModalIndex(null);
+            }
+        } finally {
+            dispatch(setUIState({ isLoading: false }));
         }
     };
 
@@ -130,17 +141,12 @@ const Comments = ({ commentCount }) => {
     const handleModalClose = () => setModalIndex(null);
 
     const handleReplyOpen = (commentId) => {
-        dispatch(handleReplyToggle(commentId));
+        dispatch(replyToggleThunk(commentId));
     }
 
     const handleMoreComment = (postId, lastCommentId) => {
         if (lastCommentId) {
             dispatch(fetchCommentList(postId, lastCommentId));
-            const minCommentId = Math.min(...comments.map(comment => comment.id));
-
-            if (lastCommentId === minCommentId) {
-                dispatch(setEndComment(true));
-            }
         }
     }
 
@@ -234,7 +240,7 @@ const Comments = ({ commentCount }) => {
                                                                 "삭제할 게시글 아이디 : ",
                                                                 commentData.id
                                                             );
-                                                            dispatch(handleDeleteComment(commentData.id));
+                                                            dispatch(deleteCommentThunk(commentData.id));
                                                         }}
                                                     />
                                                 )}
@@ -245,7 +251,7 @@ const Comments = ({ commentCount }) => {
                                         <LikedButton onClick={(e) => {
                                             e.preventDefault();
                                             console.log("commentDataid : ", commentData.id);
-                                            dispatch(handleLikeComment(commentData.id))
+                                            dispatch(likeCommentThunk(commentData.id))
                                         }}>
                                             {commentData.likedMe ? (
                                                 <FontAwesomeIcon

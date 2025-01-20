@@ -32,10 +32,14 @@ import {
     faHeart as solidHeart,
 } from "@fortawesome/free-solid-svg-icons";
 import {
-    handleCreateReply,
-    handleDeleteComment,
-    submitEditComment,
-    handleLikeComment, setEndComment, fetchCommentList, initializeCommentCount
+    fetchReplyList,
+    createReplyThunk,
+    deleteCommentThunk,
+    submitEditCommentThunk,
+    likeCommentThunk,
+    unlikeCommentThunk,
+    setUIState,
+
 } from '../../../store/comment/commentSlice';
 import { faHeart as regularHeart } from "@fortawesome/free-regular-svg-icons";
 import {Modify} from "../../../pages/Board/BoardDetail/Board/BoardDetail.style";
@@ -68,13 +72,13 @@ const ReplyComment = ({ commentId, getReplyTime }) => {
         e.preventDefault();
         if (!newReply.trim()) return;
 
-        const writeReply = await dispatch(handleCreateReply(commentId, newReply.trim()));
+        const writeReply = await dispatch(createReplyThunk(commentId, newReply.trim()));
         if (writeReply) setNewReply("");
     }
 
     const handleEditReply = async (commentId) => {
         if (!editReplyContent.trim()) return;
-        const success = await dispatch(submitEditComment(commentId, editReplyContent.trim()));
+        const success = await dispatch(submitEditCommentThunk(commentId, editReplyContent.trim()));
         if (success) {
             setEditReplyContent("");
             setEditReplyId(null);
@@ -100,7 +104,7 @@ const ReplyComment = ({ commentId, getReplyTime }) => {
             const minReplyId = Math.min(...replies.map(comment => comment.id));
 
             if (lastCommentId === minReplyId) {
-                dispatch(setEndComment(true));
+                dispatch(setUIState({ isEndComment : true }));
             }
         };
 
@@ -166,7 +170,7 @@ const ReplyComment = ({ commentId, getReplyTime }) => {
                                                             "삭제할 게시글 아이디 : ",
                                                             reply.id
                                                         );
-                                                        dispatch(handleDeleteComment(reply.id));
+                                                        dispatch(deleteCommentThunk(reply.id));
                                                     }}
                                                 />
                                             )}
@@ -174,7 +178,7 @@ const ReplyComment = ({ commentId, getReplyTime }) => {
                                     )}
                                 </TimeAndModal>
                                 <IconWrap>
-                                    <LikedButton onClick={() => { handleLikeComment(reply?.id, userInfo); }}>
+                                    <LikedButton onClick={() => { likeCommentThunk(reply?.id, userInfo); }}>
                                         {reply.likedMe ? (
                                             <FontAwesomeIcon
                                                 icon={solidHeart}

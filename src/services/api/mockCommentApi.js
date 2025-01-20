@@ -176,7 +176,6 @@ export const editComment = async (commentId, content) => {
     }
 }
 
-
 export const likeComment = async (commentId) => {
     try {
         const comment = dummyCommentsData.findIndex(c => {
@@ -201,19 +200,14 @@ export const likeComment = async (commentId) => {
         const updatedComment = {
             ...commentData,
             likedMe: !commentData.likedMe,
-            likeCount: commentData.likedMe ?
-                commentData.likeCount - 1 :
-                commentData.likeCount + 1
+            likeCount: commentData.likeCount + 1
         };
 
-        // 불변성을 유지하면서 데이터 업데이트
-        const updatedCommentsData = [
+        dummyCommentsData = [
             ...dummyCommentsData.slice(0, comment),
             updatedComment,
             ...dummyCommentsData.slice(comment + 1)
         ];
-
-        dummyCommentsData = updatedCommentsData;
 
         console.log("좋아요 처리 후:", {
             id: updatedComment.id,
@@ -225,6 +219,7 @@ export const likeComment = async (commentId) => {
             status: {code: 9999, message: "좋아요 작업 성공"},
             result: updatedComment
         };
+
     } catch (error) {
         console.error("좋아요 처리 중 오류 발생:", error);
         return {
@@ -232,3 +227,52 @@ export const likeComment = async (commentId) => {
         };
     }
 };
+
+export const unLikeComment = async (commentId) => {
+    try {
+        const comment = dummyCommentsData.findIndex(c => {
+            console.log("좋아요 작업 댓글 아이디 : ", c?.id);
+            return c?.id === commentId;
+        });
+
+        if (comment === -1) {
+            return {
+                status: { code: 4004, message: "댓글을 찾을 수 없습니다." }
+            };
+        }
+
+        const commentData = dummyCommentsData[comment];
+
+        console.log("좋아요 처리 전:", {
+            id: commentData?.id,
+            likedMe: commentData?.likedMe,
+            likeCount: commentData?.likeCount
+        });
+
+        const updatedComment = {
+            ...commentData,
+            likedMe: !commentData.likedMe,
+            likeCount: commentData.likeCount - 1
+        };
+
+        dummyCommentsData = [
+            ...dummyCommentsData.slice(0, comment),
+            updatedComment,
+            ...dummyCommentsData.slice(comment + 1)
+        ];
+
+        console.log("좋아요 처리 후:", {
+            id: updatedComment.id,
+            likedMe: updatedComment.likedMe,
+            likeCount: updatedComment.likeCount
+        });
+
+        return {
+            status: {code: 9999, message: "좋아요 작업 성공"},
+            result: updatedComment
+        };
+
+    } catch (error) {
+        console.error()
+    }
+}
