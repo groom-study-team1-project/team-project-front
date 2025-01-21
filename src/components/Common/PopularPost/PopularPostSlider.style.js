@@ -9,11 +9,11 @@ export const SliderContainer = styled.div`
   position: relative;
   border-radius: ${({ $isMobile }) => ($isMobile ? "8px" : "10px")};
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    background: ${({ isDarkMode }) =>
-            isDarkMode
-                    ? "linear-gradient(\n    to bottom,\n    rgba(0, 0, 0, 0.6),\n    rgba(0, 0, 0, 0.5)\n  );"
-                    : "linear-gradient(\n    to top,\n    rgba(244, 244, 244, 0.7),\n    rgba(244, 244, 244, 0.3)\n  );"};
-    
+  background: ${({ isDarkMode }) =>
+    isDarkMode
+      ? "linear-gradient(\n    to bottom,\n    rgba(0, 0, 0, 0.6),\n    rgba(0, 0, 0, 0.5)\n  );"
+      : "linear-gradient(\n    to top,\n    rgba(244, 244, 244, 0.7),\n    rgba(244, 244, 244, 0.3)\n  );"};
+
   .slick-dots {
     position: absolute;
     bottom: 20px;
@@ -77,15 +77,14 @@ export const Ranking = styled.div`
   left: 1%;
   align-items: center;
   justify-content: center;
-  border-radius: 50px;
-  aspect-ratio: 1/1;
+  border-radius: 10px;
   padding: 0.5%;
-  background: rgba(255, 255, 255, 0.3);
+  background: rgba(0, 0, 0, 0.7);
+  color: white;
   span {
     font-size: 130%;
     margin-left: 10%;
   }
-    color: black;
 `;
 
 export const SlideImage = styled.img`
@@ -110,10 +109,7 @@ export const SlideTitle = styled.h4`
   font-size: 2rem;
   font-weight: bold;
   margin-bottom: 20px;
-    color: ${({isDarkMode}) =>
-            isDarkMode
-                    ? "while"
-                    : "#333"};
+  color: ${({ isDarkMode }) => (isDarkMode ? "while" : "#333")};
 `;
 
 export const SlideDescription = styled.p`
@@ -124,10 +120,7 @@ export const SlideDescription = styled.p`
   display: -webkit-box;
   -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
-    color: ${({ isDarkMode }) =>
-            isDarkMode
-                    ? "while"
-                    : "#666"};
+  color: ${({ isDarkMode }) => (isDarkMode ? "while" : "#666")};
 `;
 
 export const CustomArrowWrapper = styled.div`
@@ -175,16 +168,20 @@ export const CustomDots = styled.div`
 `;
 
 export const Dot = styled.div`
-    width: 12px;
-    height: 12px;
-    background: ${({ active, isDarkMode }) =>
-            isDarkMode
-                    ? (active ? "#fff" : "rgba(0, 0, 0, 0.3)")
-                    : (active ? "#000" : "rgba(0, 0, 0, 0.3)")};
-    border-radius: 50%;
-    cursor: pointer;
-    transition: background 0.3s;
-    
+  width: 12px;
+  height: 12px;
+  background: ${({ active, isDarkMode }) =>
+    isDarkMode
+      ? active
+        ? "#fff"
+        : "rgba(0, 0, 0, 0.3)"
+      : active
+      ? "#000"
+      : "rgba(0, 0, 0, 0.3)"};
+  border-radius: 50%;
+  cursor: pointer;
+  transition: background 0.3s;
+
   &:hover {
     background: #000;
   }
