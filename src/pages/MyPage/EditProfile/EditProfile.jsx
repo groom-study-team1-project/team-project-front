@@ -7,7 +7,7 @@ import {
   fetchProfileInfo,
 } from "../../../services/api/authApi";
 import { imageUpload } from "../../../services/api/imageApi";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import useJwt from "../../../hooks/useJwt";
 import { useSelector } from "react-redux";
 import {
@@ -27,7 +27,8 @@ import {
   EditProfileacticle,
 } from "./EditProfile.style";
 import { useMediaQuery } from "react-responsive";
-const EditProfile = ({ setProfileState }) => {
+
+const EditProfile = ({ setProfileState, isMeData }) => {
   const isSmallDesktop = useMediaQuery({ maxWidth: 1480 });
   const { memberId } = useParams();
   const [form, setForm] = useState({
@@ -40,17 +41,20 @@ const EditProfile = ({ setProfileState }) => {
     job: "",
   });
   const [fileKey, setFilekey] = useState(null);
-  const payload = useJwt(
-    useSelector((state) => state.user.userInfo.accessToken)
-  );
+  const navigate = useNavigate();
+  const payload = useJwt(localStorage.getItem("accessToken"));
+
+  useEffect(() => {
+    if (!isMeData) {
+      alert("본인 정보가 아닙니다.");
+      navigate("/", { replace: true });
+    }
+  }, [isMeData, navigate]);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const body = {
-          isMe: payload.memberId,
-          memberId: memberId,
-        };
+        const body = { isMe: payload?.userInfo?.id, memberId };
         const { data } = await fetchProfileInfo(body);
         const response = data.result;
         setForm({
@@ -68,7 +72,7 @@ const EditProfile = ({ setProfileState }) => {
       }
     };
     fetchData();
-  }, [memberId, payload]);
+  }, [memberId, payload.userInfo]);
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [checkNickName, setCheckName] = useState(null);
@@ -147,7 +151,9 @@ const EditProfile = ({ setProfileState }) => {
       console.log(error);
     }
   };
-
+  if (!isMeData) {
+    return null;
+  }
   return (
     <>
       <EditProfileForm onSubmit={handleonSubmit}>

@@ -20,6 +20,7 @@ export const MyPost = styled.div`
     transform: translateY(-10px);
     box-shadow: 15px 15px 15px rgba(0, 0, 0, 0.2);
   }
+  overflow: hidden;
 `;
 
 export const MypostThumbnail = styled.img`

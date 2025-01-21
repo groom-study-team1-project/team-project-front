@@ -18,7 +18,7 @@ import questionIcon from "../../assets/images/User Settings.png";
 import fileIcon from "../../assets/images/File Multiple.png";
 import { useDispatch, useSelector } from "react-redux";
 import { selectMenuItem } from "../../store/menu/menuSlice";
-
+import { useLocation } from "react-router-dom";
 function Sidebar() {
   const [menuItems, setMenuItems] = useState([]);
   const [category, setCategory] = useState(1);
@@ -27,22 +27,39 @@ function Sidebar() {
   const selectedItemId = useSelector(
     (state) => state.menu?.selectedItem || null
   );
+  const location = useLocation();
+  const paths = location.pathname.split("/");
+  const lastPath = paths[paths.length - 1];
 
   useEffect(() => {
+    switch (lastPath) {
+      case "free":
+        setCategory(1);
+        break;
+      case "projects":
+        setCategory(2);
+        break;
+      case "questions":
+        setCategory(3);
+        break;
+      case "notices":
+        setCategory(4);
+        break;
+      default:
+        setCategory(null);
+    }
     try {
       const fetchData = async () => {
         const response = await fetchCategoryItems();
         setMenuItems(response);
-        console.log(selectedItemId);
       };
       fetchData();
     } catch (error) {
       console.log(error);
     }
-  }, [selectedItemId, dispatch]);
+  }, [selectedItemId, dispatch, lastPath]);
 
   const handleMenuClick = (item) => {
-    setCategory(item.id);
     dispatch(selectMenuItem(item.id));
     handleNavigation(item.id);
   };

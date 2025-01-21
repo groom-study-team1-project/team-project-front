@@ -73,6 +73,7 @@ export const Ranking = styled.div`
   display: flex;
   position: absolute;
   width: 3.5%;
+  min-width: 50px;
   top: 3%;
   left: 1%;
   align-items: center;
