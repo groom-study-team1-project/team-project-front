@@ -58,13 +58,6 @@ const ReplyComment = ({ commentId, getReplyTime }) => {
     const error = useSelector(state => state.comments.error);
     const isEndComment = useSelector(state => state.comments.isEndComment);
 
-    /*useEffect(() => {
-        if (!isUserInfoLoading && userInfo) {
-            dispatch(fetchCommentList(commentId));
-            dispatch(initializeCommentCount(commentCount));
-        }
-    }, [dispatch, userInfo, isUserInfoLoading, commentCount]);*/
-
     const handleSubmitReply = async (e) => {
         e.preventDefault();
         if (!newReply.trim()) return;
@@ -82,9 +75,10 @@ const ReplyComment = ({ commentId, getReplyTime }) => {
         }
     };
 
-    const handleEditReply = async (commentId) => {
+    const handleEditReply = async (e, commentId) => {
+        e.preventDefault();
         if (!editReplyContent.trim()) return;
-        const success = await dispatch(submitEditCommentThunk(commentId, editReplyContent.trim()));
+        const success = await dispatch(submitEditCommentThunk(commentId, editReplyContent, false));
         if (success) {
             setEditReplyContent("");
             setEditReplyId(null);
@@ -141,7 +135,7 @@ const ReplyComment = ({ commentId, getReplyTime }) => {
                                             onChange = {(e) => setEditReplyContent(e.target.value)}
                                         />
                                         <CommentButton
-                                            onClick={() => handleEditReply(reply.id, editReplyContent)}
+                                            onClick={(e) => handleEditReply(e, reply.id)}
                                         >
                                             수정
                                         </CommentButton>
@@ -179,14 +173,17 @@ const ReplyComment = ({ commentId, getReplyTime }) => {
                                                             reply.id,
                                                             reply.content
                                                         );
-                                                        handleEditReply(reply.id, reply.content);
+                                                        setEditReplyId(reply.id);
+                                                        setEditReplyContent(reply.content);
+                                                        handleModalClose(reply.id);
+                                                        setModalIndex(null);
                                                     }}
                                                     onDelete={() => {
                                                         console.log(
                                                             "삭제할 게시글 아이디 : ",
                                                             reply.id
                                                         );
-                                                        dispatch(deleteCommentThunk(reply.id));
+                                                        dispatch(deleteCommentThunk(reply.id, false));
                                                     }}
                                                 />
                                             )}
@@ -194,7 +191,13 @@ const ReplyComment = ({ commentId, getReplyTime }) => {
                                     )}
                                 </TimeAndModal>
                                 <IconWrap>
-                                    <LikedButton onClick={() => { likeCommentThunk(reply?.id, userInfo); }}>
+                                    <LikedButton onClick={(e) => {
+                                        e.preventDefault();
+                                        console.log("replyId : ", reply.id);
+                                        reply.likedMe
+                                            ? (dispatch(unlikeCommentThunk(reply.id)))
+                                            : (dispatch(likeCommentThunk(reply.id)));
+                                    }}>
                                         {reply.likedMe ? (
                                             <FontAwesomeIcon
                                                 icon={solidHeart}

@@ -81,6 +81,28 @@
                 );
                 state.comments = [...state.comments, ...addReply];
             },
+            updateReply: (state, action) => {
+                const { id, content } = action.payload;
+                Object.keys(state.replies).forEach(commentId => {
+                    const replyIndex = state.replies[commentId].findIndex(reply => reply.id === id);
+                    if (replyIndex !== -1) {
+                        state.replies[commentId][replyIndex] = {
+                            ...state.replies[commentId][replyIndex],
+                            content,
+                            modified: true
+                        };
+                    }
+                });
+            },
+            removeReply: (state, action) => {
+                Object.keys(state.replies).forEach(commentId => {
+                    state.replies[commentId] = state.replies[commentId].filter(
+                        reply => reply.id !== action.payload
+                    );
+                });
+                state.meta.commentCount -= 1;
+                localStorage.setItem('commentCount', state.meta.commentCount);
+            },
             toggleLike: (state, action) => {
                 console.log("action : ", action.payload);
                 const { commentId, updatedComment } = action.payload;
@@ -173,12 +195,19 @@
         }
     };
 
-    export const deleteCommentThunk = (commentId) => async (dispatch) => {
+    export const deleteCommentThunk = (id, isComment = true) => async (dispatch) => {
         try {
-            const result = await deleteComment(commentId);
-            if (result.status?.code === 9999) {
-                dispatch(removeComment(commentId));
-                return true;
+            const result = await deleteComment(id);
+            if (isComment) {
+                if (result.status?.code === 9999) {
+                    dispatch(removeComment(id));
+                    return true;
+                }
+            } else {
+                if (result.status?.code === 9999) {
+                    dispatch(removeReply(id));
+                    return true;
+                }
             }
             return false;
         } catch (error) {
@@ -187,11 +216,21 @@
         }
     };
 
-    export const submitEditCommentThunk = (commentId, content) => async (dispatch) => {
+    export const submitEditCommentThunk = (id, content, isComment = true) => async (dispatch) => {
         try {
-            const result = await editComment(commentId, content);
+            const result = await editComment(id, content);
             if (result.status?.code === 9999) {
-                dispatch(updateComment(result.result));
+                if (isComment) {
+                    dispatch(updateComment({
+                        id,
+                        content: result.result.content
+                    }));
+                } else {
+                    dispatch(updateReply({
+                        id,
+                        content: result.result.content
+                    }))
+                }
                 return true;
             }
             return false;
@@ -247,6 +286,8 @@
         setReplies,
         addReplies,
         appendReplies,
+        updateReply,
+        removeReply,
         setUIState
     } = commentSlice.actions;
 
