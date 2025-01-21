@@ -75,12 +75,6 @@
                 const { commentId, replies } = action.payload;
                 state.replies[commentId] = replies;
             },
-            appendReplies: (state, action) => {
-                const addReply = action.payload.filter(reply =>
-                    !state.comments.some(existing => existing.id === reply.id)
-                );
-                state.comments = [...state.comments, ...addReply];
-            },
             updateReply: (state, action) => {
                 const { id, content } = action.payload;
                 Object.keys(state.replies).forEach(commentId => {
@@ -105,11 +99,24 @@
             },
             toggleLike: (state, action) => {
                 console.log("action : ", action.payload);
-                const { commentId, updatedComment } = action.payload;
-                const comment = state.comments.find(c => c.id === commentId);
-                if (comment) {
-                    comment.likedMe = updatedComment.likedMe;
-                    comment.likeCount = updatedComment.likeCount;
+                const { commentId, updatedComment, updateReply } = action.payload;
+                if (updatedComment) {
+                    const comment = state.comments.find(c => c.id === commentId);
+                    if (comment) {
+                        comment.likedMe = updatedComment.likedMe;
+                        comment.likeCount = updatedComment.likeCount;
+                    }
+                } else if (updateReply) {
+                    Object.keys(state.replies).forEach(key => {
+                        const replyIndex = state.replies[key].findIndex(reply => reply.id === commentId);
+                        if (replyIndex !== -1) {
+                            state.replies[key][replyIndex] = {
+                                ...state.replies[key][replyIndex],
+                                likedMe: updateReply.likedMe,
+                                likeCount: updateReply.likeCount
+                            };
+                        }
+                    });
                 }
             },
             addReplies: (state, action) => {
@@ -117,10 +124,12 @@
                 if (!state.replies[commentId]) {
                     state.replies[commentId] = [];
                 }
+                const existingIds = new Set(state.replies[commentId].map(reply => reply.id));
+                const newReplies = replies.filter(reply => !existingIds.has(reply.id));
 
                 state.replies[commentId] = [
-                    ...(state.replies[commentId] || []),
-                    ...replies
+                    ...newReplies,
+                    ...state.replies[commentId]
                 ];
             },
             // 에러, 로딩 등의 ui 묶은 것들의 상태를 한번에 관리할 수 있게 함
@@ -147,13 +156,13 @@
         }
     };
 
-    export const likeCommentThunk = (commentId) => async (dispatch) => {
+    export const likeCommentThunk = (commentId, isComment = true) => async (dispatch) => {
         try {
             const result= await likeComment(commentId);
             if (result.status?.code === 9999) {
                 dispatch(toggleLike({
                     commentId,
-                    updatedComment : result.result
+                    ...(isComment ? { updatedComment : result.result } : { updateReply : result.result})
                 }));
                 return true;
             }
@@ -164,13 +173,13 @@
         }
     };
 
-    export const unlikeCommentThunk = (commentId) => async (dispatch) => {
+    export const unlikeCommentThunk = (commentId, isComment = true) => async (dispatch) => {
         try {
             const result = await unLikeComment(commentId);
             if (result.status?.code === 9999) {
                 dispatch(toggleLike({
                     commentId,
-                    updatedComment : result.result
+                    ...(isComment ? { updatedComment : result.result } : { updateReply : result.result})
                 }));
                 return true;
             }
@@ -229,7 +238,7 @@
                     dispatch(updateReply({
                         id,
                         content: result.result.content
-                    }))
+                    }));
                 }
                 return true;
             }
@@ -244,9 +253,19 @@
         dispatch(setUIState({ isLoading : true }));
         try {
             const result = await fetchReplyComment(commentId, lastCommentId);
-            dispatch(lastCommentId ? appendReplies(result.comments) : setReplies(result.comments))
+            if (lastCommentId) {
+                dispatch(addReplies({
+                    commentId,
+                    replies: result.comments
+                }));
+            } else {
+                dispatch(setReplies({
+                    commentId,
+                    replies: result.comments
+                }));
+            }
             dispatch(setUIState({
-                isEndComment: result.length < 5,
+                isEndComment: result.comments.length < 5,
                 isLoading: false
             }));
         } catch (error) {
@@ -285,7 +304,6 @@
         toggleLike,
         setReplies,
         addReplies,
-        appendReplies,
         updateReply,
         removeReply,
         setUIState

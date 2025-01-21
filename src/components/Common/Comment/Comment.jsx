@@ -147,10 +147,16 @@ const Comments = () => {
         }));
     }
 
-    const handleMoreComment = (postId, lastCommentId) => {
+    const handleMoreComment = (data, postId, lastCommentId) => {
+        const minReplyId = Math.min(...data.map(d => d.id));
+
         if (lastCommentId) {
             dispatch(fetchCommentList(postId, lastCommentId));
             setVisibleCount(prev => prev + 5);
+        }
+
+        if (lastCommentId === minReplyId) {
+            dispatch(setUIState({ isEndComment : true }));
         }
     }
 
@@ -288,7 +294,7 @@ const Comments = () => {
                     <SomeMoreCommentButton onClick={() => {
                         const lastCommentId = comments[visibleCount - 1].id;
                         console.log("마지막 댓글 아이디 : ", lastCommentId);
-                        handleMoreComment(postId, lastCommentId);
+                        handleMoreComment(comments, postId, lastCommentId);
                     }}>
                         더보기
                     </SomeMoreCommentButton>

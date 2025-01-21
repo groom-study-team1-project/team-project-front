@@ -52,6 +52,7 @@ const ReplyComment = ({ commentId, getReplyTime }) => {
     const [editReplyId, setEditReplyId] = useState(null);
     const [editReplyContent, setEditReplyContent] = useState("");
     const [newReply, setNewReply] = useState("");
+    const [visibleCount, setVisibleCount] = useState(5);
 
     const replies = useSelector(state => state.comments.replies[commentId] || []);
     const isLoading = useSelector(state => state.comments.isLoading);
@@ -95,12 +96,20 @@ const ReplyComment = ({ commentId, getReplyTime }) => {
 
     const handleModalClose = () => setModalIndex(null);
 
-    const handleMoreReply = async (commentId, lastCommentId) => {
-        dispatch(fetchReplyList(commentId, lastCommentId));
-        const minReplyId = Math.min(...replies.map(comment => comment.id));
+    const handleMoreReply = async (data, commentId, lastCommentId) => {
+        try {
+            if (!lastCommentId) return;
 
-        if (lastCommentId === minReplyId) {
-            dispatch(setUIState({ isEndComment : true }));
+            await dispatch(fetchReplyList(commentId, lastCommentId));
+            setVisibleCount(prev => prev + 5);
+            const remainReply = data.slice(visibleCount);
+
+            if (remainReply.length < 5) {
+                setUIState({ isEndComment: true});
+            }
+
+        } catch (error) {
+            console.error("더보기 기능 실패 오류 : ", error);
         }
     };
 
@@ -123,7 +132,7 @@ const ReplyComment = ({ commentId, getReplyTime }) => {
                 </ReplyInputWrap>
             </ReplyInputForm>
             <RepliesWrap>
-                {replies.map((reply, index) => (
+                {replies.slice(0, visibleCount).map((reply, index) => (
                     <Reply key={reply.id}>
                         <ProfileImage src={reply.memberImageUrl} />
                         <ReplyContent>
@@ -195,8 +204,8 @@ const ReplyComment = ({ commentId, getReplyTime }) => {
                                         e.preventDefault();
                                         console.log("replyId : ", reply.id);
                                         reply.likedMe
-                                            ? (dispatch(unlikeCommentThunk(reply.id)))
-                                            : (dispatch(likeCommentThunk(reply.id)));
+                                            ? (dispatch(unlikeCommentThunk(reply.id, false)))
+                                            : (dispatch(likeCommentThunk(reply.id, false)));
                                     }}>
                                         {reply.likedMe ? (
                                             <FontAwesomeIcon
@@ -215,9 +224,10 @@ const ReplyComment = ({ commentId, getReplyTime }) => {
                     </Reply>
                 ))}
                 {!isEndComment && replies.length > 5 && !isLoading ? (
-                    <SomeMoreReplyButton onClick={() => {
-                        const lastCommentId = replies[replies.length - 1].id;
-                        handleMoreReply(commentId, lastCommentId);
+                    <SomeMoreReplyButton onClick={(e) => {
+                        e.preventDefault();
+                        const lastCommentId = replies[visibleCount - 1]?.id;
+                        handleMoreReply(replies, commentId, lastCommentId);
                     }}>
                         더보기
                     </SomeMoreReplyButton>
