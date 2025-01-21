@@ -16,7 +16,7 @@ import NopostImg from "../../../../assets/images/Nopost.png";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronRight } from "@fortawesome/free-solid-svg-icons";
 import { MyPosts } from "../../../../components/Card/MyPostsCard/MyPosts/MyPosts";
-import { postInfo } from "../../../../services/api/authApi";
+import { postInfo, ProjectPostInfo } from "../../../../services/api/authApi";
 import { useNavigate, useParams } from "react-router-dom";
 import { BarLoading } from "../../../../components/Common/LodingSpinner";
 
@@ -40,27 +40,33 @@ function MyPostsItems({ postCount }) {
 
   const limit = 6;
 
+  const Postsfetch = async (postFunction, lastPostIdByCategory) => {
+    const posts = await postFunction(
+      categoryId,
+      lastPostIdByCategory,
+      limit,
+      memberId
+    );
+    if (posts.length > 0) {
+      setMypost((prevPosts) => [...prevPosts, ...posts]);
+
+      const newLastPostId = posts[posts.length - 1].postId;
+      setLastPostIdByCategory(newLastPostId);
+    }
+
+    if (posts.length < limit) {
+      setHasMore(false);
+    }
+  };
+
   const fetchData = useCallback(async () => {
     if (loading || !hasMore) return;
-
     setLoading(true);
-
     try {
-      const posts = await postInfo(
-        categoryId,
-        lastPostIdByCategory,
-        limit,
-        memberId
-      );
-      if (posts.length > 0) {
-        setMypost((prevPosts) => [...prevPosts, ...posts]);
-
-        const newLastPostId = posts[posts.length - 1].postId;
-        setLastPostIdByCategory(newLastPostId);
-      }
-
-      if (posts.length < limit) {
-        setHasMore(false);
+      if (categoryId === 2) {
+        await Postsfetch(ProjectPostInfo, lastPostIdByCategory);
+      } else {
+        await Postsfetch(postInfo, lastPostIdByCategory);
       }
     } catch (error) {
       console.error("Error fetching posts:", error);
@@ -76,21 +82,10 @@ function MyPostsItems({ postCount }) {
     setLoading(true);
 
     try {
-      const posts = await postInfo(
-        categoryId,
-        Number.MAX_SAFE_INTEGER,
-        limit,
-        memberId
-      );
-      console.log(posts);
-      if (posts.length > 0) {
-        setMypost(posts);
-        const newLastPostId = posts[posts.length - 1].postId;
-        setLastPostIdByCategory(newLastPostId);
-      }
-
-      if (posts.length < limit) {
-        setHasMore(false);
+      if (categoryId === 2) {
+        await Postsfetch(ProjectPostInfo, Number.MAX_SAFE_INTEGER);
+      } else {
+        await Postsfetch(postInfo, Number.MAX_SAFE_INTEGER);
       }
     } catch (error) {
       console.error("Error fetching initial posts:", error);
