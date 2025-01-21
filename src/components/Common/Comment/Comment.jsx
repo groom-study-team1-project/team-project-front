@@ -65,10 +65,8 @@ const Comments = () => {
     } = useSelector(state => state.comments);
 
     useEffect(() => {
-        if (!isUserInfoLoading && userInfo) {
-            dispatch(fetchCommentList(postId));
-        }
-    }, [dispatch, userInfo, isUserInfoLoading, postId]);
+        dispatch(fetchCommentList(postId));
+    }, [dispatch, postId]);
 
     const getTime = (createdTime) => {
         const now = new Date();
@@ -105,6 +103,7 @@ const Comments = () => {
             dispatch(setUIState({ isLoading: true }));
             const success = await dispatch(createCommentThunk(postId, newComment.trim()));
             if (success) {
+                dispatch(fetchCommentList(postId));
                 setNewComment("");
             }
         } catch (error) {
@@ -168,7 +167,7 @@ const Comments = () => {
             <CommentsWrap>
                 <CommentTitle>
                     <span style={{ fontSize: "24px", paddingRight: "0.5rem" }}>댓글</span>
-                    <span>{comments.length}</span>
+                        <span>{comments.length}</span>
                 </CommentTitle>
                 <CommentInputForm onSubmit={handleSubmit}>
                     <CommentInputWrap>
