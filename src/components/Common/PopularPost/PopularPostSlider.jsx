@@ -65,73 +65,68 @@ const PopularPostSlider = ({ posts }) => {
 
   const truncateText = (text, maxLength) => {
     return text.length > maxLength
-        ? text.substring(0, maxLength) + "..."
-        : text;
+      ? text.substring(0, maxLength) + "..."
+      : text;
   };
 
   const defaultThumbnailUrl =
-      "https://deepdiver-community-files-dev.s3.ap-northeast-2.amazonaws.com/default-image/posts/thumbnail.png";
+    "https://deepdiver-community-files-dev.s3.ap-northeast-2.amazonaws.com/default-image/posts/thumbnail.png";
 
   return (
-      <SliderContainer $isMobile={screenSize.isMobile} isDarkMode={isDarkMode}>
-        <CustomArrowWrapper>
-          <Arrow className="prev" onClick={handlePrevClick}>
-            <ArrowImage
-                src={isDarkMode ? PrevArrowImageDark : PrevArrowImageLight}
-                alt="Previous"
+    <SliderContainer $isMobile={screenSize.isMobile} isDarkMode={isDarkMode}>
+      <CustomArrowWrapper>
+        <Arrow className="prev" onClick={handlePrevClick}>
+          <ArrowImage
+            src={isDarkMode ? PrevArrowImageDark : PrevArrowImageLight}
+            alt="Previous"
+          />
+        </Arrow>
+        <Arrow className="next" onClick={handleNextClick}>
+          <ArrowImage
+            src={isDarkMode ? NextArrowImageDark : NextArrowImageLight}
+            alt="Next"
+          />
+        </Arrow>
+      </CustomArrowWrapper>
+      <Slider ref={sliderRef} {...sliderSettings}>
+        {posts.map((post, index) => (
+          <SlideItem key={post.postId} $isMobile={screenSize.isMobile}>
+            <SlideImage
+              src={
+                post.thumbnail === "posts/thumbnail.png" || !post.thumbnail
+                  ? defaultThumbnailUrl
+                  : post.thumbnail
+              }
+              alt={post.title}
+              onClick={() => handleNavigateToPost(post.postId)}
+              $isMobile={screenSize.isMobile}
             />
-          </Arrow>
-          <Arrow className="next" onClick={handleNextClick}>
-            <ArrowImage
-                src={isDarkMode ? NextArrowImageDark : NextArrowImageLight}
-                alt="Next"
-            />
-          </Arrow>
-        </CustomArrowWrapper>
-        <Slider ref={sliderRef} {...sliderSettings}>
-          {posts.map((post, index) => (
-              <SlideItem key={post.postId} $isMobile={screenSize.isMobile}>
-                <SlideImage
-                    src={
-                      post.thumbnail === "posts/thumbnail.png" || !post.thumbnail
-                          ? defaultThumbnailUrl
-                          : post.thumbnail
-                    }
-                    alt={post.title}
-                    onClick={() => handleNavigateToPost(post.postId)}
-                    $isMobile={screenSize.isMobile}
-                />
-                <SlideContent
-                    onClick={() => handleNavigateToPost(post.postId)}
-                    $isMobile={screenSize.isMobile}
-                >
-                  <Ranking>
-                    <FontAwesomeIcon
-                        icon={faFire}
-                        size="2xl"
-                        style={{ color: "rgba(255, 0, 0, 0.5)" }}
-                    />
-                    <span>{index + 1}</span>
-                  </Ranking>
-                  <SlideTitle isDarkMode={isDarkMode}>{truncateText(post.title, 30)}</SlideTitle>
-                  <SlideDescription isDarkMode={isDarkMode}>
-                    {truncateText(processContent(post.content), 100)}
-                  </SlideDescription>
-                </SlideContent>
-              </SlideItem>
-          ))}
-        </Slider>
-        <CustomDots>
-          {posts.map((_, index) => (
-              <Dot
-                  key={index}
-                  onClick={() => sliderRef.current.slickGoTo(index)}
-                  active={currentSlide === index}
-                  isDarkMode={isDarkMode}
-              />
-          ))}
-        </CustomDots>
-      </SliderContainer>
+            <SlideContent
+              onClick={() => handleNavigateToPost(post.postId)}
+              $isMobile={screenSize.isMobile}
+            >
+              <Ranking>TOP {index + 1}</Ranking>
+              <SlideTitle isDarkMode={isDarkMode}>
+                {truncateText(post.title, 30)}
+              </SlideTitle>
+              <SlideDescription isDarkMode={isDarkMode}>
+                {truncateText(processContent(post.content), 100)}
+              </SlideDescription>
+            </SlideContent>
+          </SlideItem>
+        ))}
+      </Slider>
+      <CustomDots>
+        {posts.map((_, index) => (
+          <Dot
+            key={index}
+            onClick={() => sliderRef.current.slickGoTo(index)}
+            active={currentSlide === index}
+            isDarkMode={isDarkMode}
+          />
+        ))}
+      </CustomDots>
+    </SliderContainer>
   );
 };
 

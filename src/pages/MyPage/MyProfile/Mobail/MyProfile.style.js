@@ -81,8 +81,10 @@ export const StyledIcon = styled(FontAwesomeIcon)`
 export const MyPostCardwrap = styled.div`
   display: flex;
   flex-wrap: wrap;
-  align-items: ${({ $Nopost }) => ($Nopost ? "center" : "center")};
-  justify-content: ${({ $Nopost }) => ($Nopost ? "center" : "center")};
+  align-items: ${({ $Nopost, $isTablet, $isMobail }) =>
+    $Nopost ? "center" : $isTablet || $isMobail ? "center" : "flex-start"};
+  justify-content: ${({ $Nopost, $isTablet, $isMobail }) =>
+    $Nopost ? "center" : $isTablet || $isMobail ? "center" : "flex-start"};
   margin-left: 3%;
   overflow-y: auto;
   height: 90%;

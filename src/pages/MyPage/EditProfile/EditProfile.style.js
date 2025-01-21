@@ -12,7 +12,6 @@ export const Container = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
-  align-items: center;
 `;
 
 export const ProfileImageWraps = styled.div`
@@ -26,9 +25,10 @@ export const ProfileActions = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 50%;
+  width: 100%;
+  margin-right: 50px;
   button {
-    margin: 4%;
+    margin: 1%;
     height: 40px;
   }
 `;

@@ -36,7 +36,9 @@ function BoardDetail() {
   const [confirmModalVisible, setConfirmModalVisible] = useState(false);
   const { isMobile } = useSelector((state) => state.screenSize);
   const isLoggedIn = useSelector((state) => state.user.isLoggedIn);
-  const selectedCategoryId = useSelector((state) => state.category.selectedCategoryId);
+  const selectedCategoryId = useSelector(
+    (state) => state.category.selectedCategoryId
+  );
   const [isMe, setIsMe] = useState(false);
   const navigate = useNavigate();
   const { postId } = useParams();
@@ -51,7 +53,7 @@ function BoardDetail() {
     const fetchData = async () => {
       try {
         const fetchDetail =
-            selectedCategoryId === 2 ? fetchProjectPostDetail : fetchPostDetail;
+          selectedCategoryId === 2 ? fetchProjectPostDetail : fetchPostDetail;
         const postResponse = await fetchDetail(postId);
 
         if (!isCancelled) {
@@ -92,7 +94,8 @@ function BoardDetail() {
 
   const handleDelete = async () => {
     try {
-      const deleteFunc = selectedCategoryId === 2 ? deleteProjectPost : deletepost;
+      const deleteFunc =
+        selectedCategoryId === 2 ? deleteProjectPost : deletepost;
       await deleteFunc(postId);
       setConfirmModalVisible(false);
       navigate(-1);
@@ -102,75 +105,78 @@ function BoardDetail() {
   };
 
   return (
-      <>
-        <ContentWrapper $isDetail={true}>
-          <Wrap>
-            <PostWrap isDarkMode={isDarkMode}>
-              <Title $isMobile={isMobile}>{post.title}</Title>
-              <Postheader $isMobile={isMobile}>
-                <PostProfileBox
-                    name={post.authorInformation.nickname}
-                    job={post.authorInformation.memberJob}
-                    email={post.authorInformation.email}
-                    imgUrl={post.authorInformation.imageUrl}
-                />
-                <PostheaderRignt $isMobile={isMobile}>
-                  {isMe && (
-                      <>
-                        <Modify onClick={handleEdit}>수정</Modify>
-                        <Modify onClick={() => setConfirmModalVisible(true)}>
-                          삭제
-                        </Modify>
-                      </>
-                  )}
-                </PostheaderRignt>
-              </Postheader>
-              {selectedCategoryId === 2 &&
-                  post.slideImageUrls?.length > 0 && (
-                      <div style={{ marginBottom: "20px" }}>
-                        <Slide imgUrls={post.slideImageUrls} />
-                      </div>
-                  )}
-              <ContentWrap>
-                <CKEditor
-                    editor={DecoupledEditor}
-                    config={editorConfig}
-                    data={post.content}
-                    disabled={true}
-                />
-              </ContentWrap>
-            </PostWrap>
-            <PostFooter $isMobile={isMobile}>
-              <HashtagCardContainer isDarkMode={isDarkMode}>
-                {post.hashtags && post.hashtags.length > 0 ? (
-                    post.hashtags.map((hashtag, index) => (
-                        <HashtagCard key={index} isDarkMode={isDarkMode}>#{hashtag}</HashtagCard>
-                    ))
-                ) : (
-                    <HashtagCard isDarkMode={isDarkMode}>해시 태그 없음</HashtagCard>
-                )}
-              </HashtagCardContainer>
-              <Interaction
-                  count={{
-                    viewCount: post.viewCount,
-                    likeCount: post.likeCount,
-                    commentCount: post.commentCount,
-                  }}
+    <>
+      <ContentWrapper $isDetail={true}>
+        <Wrap>
+          <PostWrap isDarkMode={isDarkMode}>
+            <Title $isMobile={isMobile}>{post.title}</Title>
+            <Postheader $isMobile={isMobile}>
+              <PostProfileBox
+                name={post.authorInformation.nickname}
+                job={post.authorInformation.memberJob}
+                email={post.authorInformation.email}
+                imgUrl={post.authorInformation.imageUrl}
               />
-            </PostFooter>
-            <Comments />
-          </Wrap>
-        </ContentWrapper>
-        <ConfirmDeleteModal
-            isVisible={confirmModalVisible}
-            onClose={() => setConfirmModalVisible(false)}
-            onConfirm={handleDelete}
-            title="삭제하시겠습니까?"
-            description="이 작업은 되돌릴 수 없습니다."
-            confirmText="확인"
-            cancelText="취소"
-        />
-      </>
+              <PostheaderRignt $isMobile={isMobile}>
+                {isMe && (
+                  <>
+                    <Modify onClick={handleEdit}>수정</Modify>
+                    <Modify onClick={() => setConfirmModalVisible(true)}>
+                      삭제
+                    </Modify>
+                  </>
+                )}
+              </PostheaderRignt>
+            </Postheader>
+            {selectedCategoryId === 2 && post.slideImageUrls?.length > 0 && (
+              <div style={{ marginBottom: "20px" }}>
+                <Slide imgUrls={post.slideImageUrls} />
+              </div>
+            )}
+            <ContentWrap>
+              <CKEditor
+                editor={DecoupledEditor}
+                config={editorConfig}
+                data={post.content}
+                disabled={true}
+              />
+            </ContentWrap>
+          </PostWrap>
+          <PostFooter $isMobile={isMobile}>
+            <HashtagCardContainer isDarkMode={isDarkMode}>
+              {post.hashtags && post.hashtags.length > 0 ? (
+                post.hashtags.map((hashtag, index) => (
+                  <HashtagCard key={index} isDarkMode={isDarkMode}>
+                    #{hashtag}
+                  </HashtagCard>
+                ))
+              ) : (
+                <HashtagCard isDarkMode={isDarkMode}>
+                  해시 태그 없음
+                </HashtagCard>
+              )}
+            </HashtagCardContainer>
+            <Interaction
+              count={{
+                viewCount: post.viewCount,
+                likeCount: post.likeCount,
+                commentCount: post.commentCount,
+              }}
+            />
+          </PostFooter>
+          <Comments />
+        </Wrap>
+      </ContentWrapper>
+      <ConfirmDeleteModal
+        isVisible={confirmModalVisible}
+        onClose={() => setConfirmModalVisible(false)}
+        onConfirm={handleDelete}
+        title="삭제하시겠습니까?"
+        description="이 작업은 되돌릴 수 없습니다."
+        confirmText="확인"
+        cancelText="취소"
+      />
+    </>
   );
 }
 
