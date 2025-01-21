@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from "react";
+import React, { useState, useEffect} from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { CKEditor } from "@ckeditor/ckeditor5-react";
 import { DecoupledEditor } from "ckeditor5";
@@ -42,8 +42,9 @@ function BoardDetail() {
   const [isMe, setIsMe] = useState(false);
   const navigate = useNavigate();
   const { postId } = useParams();
-  const payload = useSelector((state) => state.user.userInfo.accessToken);
-  const memberId = useMemo(() => payload?.memberId, [payload]);
+  const token = useSelector((state) => state.user.userInfo.accessToken);
+  const { memberId } = useJwt(token) || {};
+  console.log('payload2:', memberId);
   const isDarkMode = useSelector((state) => state.theme.isDarkMode);
 
   useEffect(() => {
@@ -59,6 +60,8 @@ function BoardDetail() {
           setPost(postResponse);
 
           if (isLoggedIn && postResponse) {
+            console.log('memberId:', memberId);
+            console.log('authorMemberId:', postResponse.authorInformation.memberId);
             const body = {
               isMe: memberId,
               memberId: postResponse.authorInformation.memberId,
