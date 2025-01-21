@@ -4,7 +4,9 @@ import { CKEditor } from "@ckeditor/ckeditor5-react";
 import { DecoupledEditor } from "ckeditor5";
 import { editorConfig } from "./editor";
 import {
-  createPost, createProjectPost, editProjectPost,
+  createPost,
+  createProjectPost,
+  editProjectPost,
   fetchPostChange,
   uploadAdapter,
 } from "../../../../services/api/postApi";
@@ -22,12 +24,12 @@ import {
   Toolbar,
   CancelBtn,
   ConfirmBtn,
-  EditorWrapper,
-  Category, SmallWrite, EditorWrap, HashtagWrap, Hashtags,
+  SmallWrite, EditorWrap, HashtagWrap, Hashtags,
 } from "./BoardWrite.style";
 import { useSelector } from "react-redux";
 import "./App.css";
 import "ckeditor5/ckeditor5.css";
+import {post} from "axios";
 
 const WriteBoard = ({ postData, postId, imgList }) => {
   const { isMobile } = useSelector((state) => state.screenSize);
@@ -45,7 +47,6 @@ const WriteBoard = ({ postData, postId, imgList }) => {
   const [selectedCategory, setSelectedCategory] = useState(selectedCategoryId || 1);
   const [imgUrls, setImgUrls] = useState([]);
   const [slideImg, setSlideImg] = useState([]);
-  const [imgLinks, setImgLinks] = useState([]);
   const toolbarContainerRef = useRef(null);
   const editorContainerRef = useRef(null);
 
@@ -58,6 +59,7 @@ const WriteBoard = ({ postData, postId, imgList }) => {
 
   useEffect(() => {
     if (postData) {
+      console.log("[Effect] postData loaded:", postData);
       setValue({
         title: postData.title || "",
         content: postData.content || "",
@@ -65,7 +67,6 @@ const WriteBoard = ({ postData, postId, imgList }) => {
         imageUrls: postData.imageUrls || [],
         imageKeys: postData.imageKeys || [],
         thumbnailImageUrl: postData.thumbnailImageUrl || "",
-        slideImageUrls: postData.slideImageUrls || [],
       });
       setSelectedCategory(postData.categoryId);
       if (postData.imageUrls?.length) {
@@ -93,7 +94,6 @@ const WriteBoard = ({ postData, postId, imgList }) => {
 
       const tag = hashtagStr.startsWith("#") ? hashtagStr : `#${hashtagStr}`;
 
-      // 중복 확인 후 추가
       setValue((prev) => {
         if (prev.hashtags.includes(tag)) {
           alert("이미 추가된 해시태그입니다.");
@@ -105,10 +105,9 @@ const WriteBoard = ({ postData, postId, imgList }) => {
         };
       });
 
-      e.target.value = ""; // 입력 필드 초기화
+      e.target.value = "";
     }
   };
-
 
   const removeHashtag = (indexToRemove) => {
     setValue((prev) => ({
@@ -122,62 +121,62 @@ const WriteBoard = ({ postData, postId, imgList }) => {
   };
 
   const syncImagesWithContent = (content) => {
+    console.log("[syncImagesWithContent] Content:", content);
     const parser = new DOMParser();
     const doc = parser.parseFromString(content, "text/html");
     const imgElements = doc.querySelectorAll("img");
     const imgLinks = Array.from(imgElements).map((img) => img.src).filter((src) => src);
 
-    // 이미지 키 추출
     const imageKeys = imgLinks.map((url) =>
         url.replace(
             "https://deepdiver-community-files-dev.s3.ap-northeast-2.amazonaws.com/",
             ""
         )
     );
-    console.log("imageKeys : " + imageKeys);
-    console.log("test2 : " + imgLinks[0]);
-    setValue((prev) => ({
-      ...prev,
+
+    console.log("[syncImagesWithContent] Image Links:", imgLinks);
+    console.log("[syncImagesWithContent] Image Keys:", imageKeys);
+
+    return {
       content,
       imageUrls: imgLinks,
-      imageKeys: [...new Set([...prev.imageKeys, ...imageKeys])], // 기존 imageKeys와 새 imageKeys를 병합 후 중복 제거
+      imageKeys: [...new Set(imageKeys)],
       thumbnailImageUrl:
-          selectedCategory === 2 && (imgUrls.length > 0 || imgLinks.length > 0)
+          selectedCategory === 2 && slideImg.length > 0
               ? slideImg[0]?.accessImage || "posts/thumbnail.png"
-              : imgUrls[0] || "posts/thumbnail.png",
-    }));
+              : imgLinks[0] || "posts/thumbnail.png",
+    };
   };
 
   const onSubmit = async (e) => {
     e.preventDefault();
     try {
-      const { title, content, hashtags, imageKeys } = form;
+      const { title, content, hashtags } = form;
       const categoryId = Number(selectedCategory);
-
-      syncImagesWithContent(content);
 
       if (!title.trim() || !content.trim() || !categoryId) {
         throw new Error("제목, 내용, 카테고리는 필수 입력 항목입니다.");
       }
 
-      // 해시태그 처리: # 제거 후 전송
+      // 해시태그에서 '#' 제거
       const processedHashtags = hashtags.map((item) => item.replace("#", ""));
 
+      // 콘텐츠와 이미지 동기화
+      const syncedContent = syncImagesWithContent(content);
+
+      // 최종 요청 데이터 생성
       const body = {
         title: title.trim(),
-        content: content.trim(),
+        content: syncedContent.content.trim(),
         hashtags: processedHashtags,
         categoryId,
-        thumbnailImageUrl:
-            selectedCategory === 2 && (imgUrls.length > 0 || imgLinks.length > 0)
-                ? slideImg[0]?.accessImage || "posts/thumbnail.png"
-                : imgUrls[0] || "posts/thumbnail.png",
-
-        imageKeys: imageKeys || [],
+        thumbnailImageUrl: syncedContent.thumbnailImageUrl, // 최신 값 반영
+        imageKeys: syncedContent.imageKeys,
       };
-      console.log("test : " + imgLinks);
 
-      // API 호출
+      console.log("[onSubmit] Final body:", body);
+
+      // 프로젝트 게시판의 경우 추가 이미지 처리
       if (categoryId === 2) {
         body.slideImageKeys = slideImg.map((img) =>
             img.accessImage.replace(
@@ -185,18 +184,21 @@ const WriteBoard = ({ postData, postId, imgList }) => {
                 ""
             )
         );
-
         if (postData) {
           await editProjectPost(postId, body);
         } else {
           await createProjectPost(body);
         }
-      } else if (postData) {
+      }
+      else if (postData) {
         await fetchPostChange(body, postId);
       } else {
         await createPost(body);
+        console.log("[onSubmit] confrim postData : " + postData);
+        console.log("[onSubmit] confrim body : " + body);
       }
 
+      // 카테고리별 경로로 리다이렉트
       const categoryPaths = {
         1: "/board/free",
         2: "/board/projects",
@@ -206,7 +208,7 @@ const WriteBoard = ({ postData, postId, imgList }) => {
 
       navigate(categoryPaths[categoryId] || "/");
     } catch (error) {
-      console.error("Error on Submit:", error.message);
+      console.error("[onSubmit] Error:", error.message);
       alert(error.message || "게시글 저장 중 오류가 발생했습니다.");
     }
   };
@@ -214,7 +216,14 @@ const WriteBoard = ({ postData, postId, imgList }) => {
 
   const getDataFromCKEditor = (event, editor) => {
     const data = editor.getData();
-    syncImagesWithContent(data);
+    const syncedContent = syncImagesWithContent(data);
+    setValue((prev) => ({
+      ...prev,
+      content: syncedContent.content,
+      imageUrls: syncedContent.imageUrls,
+      imageKeys: syncedContent.imageKeys,
+      thumbnailImageUrl: syncedContent.thumbnailImageUrl,
+    }));
   };
 
   function uploadPlugin(editor) {
@@ -225,12 +234,16 @@ const WriteBoard = ({ postData, postId, imgList }) => {
         const updatedContent = `${currentContent}<p>${newImageHtml}</p>`;
         editor.setData(updatedContent);
 
+        console.log("[uploadPlugin] Uploaded Image URL:", uploadedUrl);
+        console.log("[uploadPlugin] File Key:", fileKey);
+
+        const syncedContent = syncImagesWithContent(updatedContent);
         setValue((prev) => ({
           ...prev,
-          content: updatedContent,
-          imageUrls: [...(prev.imageUrls || []), uploadedUrl],
-          imageKeys: [...(prev.imageKeys || []), fileKey],
-          thumbnailImageUrl: prev.thumbnailImageUrl || uploadedUrl,
+          content: syncedContent.content,
+          imageUrls: syncedContent.imageUrls,
+          imageKeys: syncedContent.imageKeys,
+          thumbnailImageUrl: syncedContent.thumbnailImageUrl,
         }));
       });
     };
