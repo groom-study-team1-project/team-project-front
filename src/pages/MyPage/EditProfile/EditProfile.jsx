@@ -153,7 +153,7 @@ const EditProfile = ({ setProfileState }) => {
       <EditProfileForm onSubmit={handleonSubmit}>
         <Container>
           <ProfileImageWraps>
-            <ProfileImage $size={"13%"} src={form.imageUrl} />
+            <ProfileImage $size={"10%"} src={form.imageUrl} />
             <ProfileActions>
               <SubmitBtn
                 type="button"

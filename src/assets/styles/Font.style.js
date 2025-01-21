@@ -9,6 +9,7 @@ export const FontDefault = createGlobalStyle`
 
   body{
     font-family: 'Pretendard';
-    font-size: calc(10px + (16 - 4) * ((100vw - 320px) / (1920 - 320)));
+    //font-size: calc(10px + (16 - 4) * ((100vw - 320px) / (1920 - 320)));
+    font-size:16px;
   }
 `;

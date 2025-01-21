@@ -100,6 +100,7 @@ export async function fetchPostItems(
 export const fetchPostDetail = async (postId) => {
   try {
     const response = await axiosInstance.get(`/open/posts/${postId}`);
+    console.log(response);
     if (response.data.status.code === 1203) {
       return response.data.result;
     } else {
