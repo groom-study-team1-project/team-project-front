@@ -9,6 +9,11 @@ export const SliderContainer = styled.div`
   position: relative;
   border-radius: ${({ $isMobile }) => ($isMobile ? "8px" : "10px")};
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    background: ${({ isDarkMode }) =>
+            isDarkMode
+                    ? "linear-gradient(\n    to bottom,\n    rgba(0, 0, 0, 0.6),\n    rgba(0, 0, 0, 0.5)\n  );"
+                    : "linear-gradient(\n    to top,\n    rgba(244, 244, 244, 0.7),\n    rgba(244, 244, 244, 0.3)\n  );"};
+    
   .slick-dots {
     position: absolute;
     bottom: 20px;
@@ -61,12 +66,6 @@ export const SlideItem = styled.div`
   justify-content: center;
   border-radius: 10px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  background: linear-gradient(
-    to top,
-    rgba(244, 244, 244, 0.7),
-    rgba(244, 244, 244, 0.3)
-  );
-  //background: linear-gradient(to right, #e5e5f7, #acb6e5);
   position: relative;
 `;
 
@@ -86,6 +85,7 @@ export const Ranking = styled.div`
     font-size: 130%;
     margin-left: 10%;
   }
+    color: black;
 `;
 
 export const SlideImage = styled.img`
@@ -109,19 +109,25 @@ export const SlideContent = styled.div`
 export const SlideTitle = styled.h4`
   font-size: 2rem;
   font-weight: bold;
-  color: #333;
   margin-bottom: 20px;
+    color: ${({isDarkMode}) =>
+            isDarkMode
+                    ? "while"
+                    : "#333"};
 `;
 
 export const SlideDescription = styled.p`
   margin: 0;
   font-size: 16px;
-  color: #666;
   overflow: hidden;
   text-overflow: ellipsis;
   display: -webkit-box;
   -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
+    color: ${({ isDarkMode }) =>
+            isDarkMode
+                    ? "while"
+                    : "#666"};
 `;
 
 export const CustomArrowWrapper = styled.div`
@@ -169,13 +175,16 @@ export const CustomDots = styled.div`
 `;
 
 export const Dot = styled.div`
-  width: 12px;
-  height: 12px;
-  background: ${({ active }) => (active ? "#000" : "rgba(0, 0, 0, 0.3)")};
-  border-radius: 50%;
-  cursor: pointer;
-  transition: background 0.3s;
-
+    width: 12px;
+    height: 12px;
+    background: ${({ active, isDarkMode }) =>
+            isDarkMode
+                    ? (active ? "#fff" : "rgba(0, 0, 0, 0.3)")
+                    : (active ? "#000" : "rgba(0, 0, 0, 0.3)")};
+    border-radius: 50%;
+    cursor: pointer;
+    transition: background 0.3s;
+    
   &:hover {
     background: #000;
   }

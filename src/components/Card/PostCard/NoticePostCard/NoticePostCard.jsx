@@ -7,17 +7,18 @@ import {Interaction} from "../../../Common/Interactions";
 import { useNavigate } from "react-router-dom";
 import { InnerContainer, PostCardContainer } from "../PostCard.style";
 import React from "react";
+import {useSelector} from "react-redux";
 
 function NoticePostCard({ id, title, date, count }) {
   const navigate = useNavigate();
-
+    const isDarkMode = useSelector((state) => state.theme.isDarkMode);
   const handleNavigation = () => {
     navigate(`/board/detail/${id}`);
   };
 
   return (
     <PostCardContainer height="40px" onClick={handleNavigation}>
-      <InnerContainer>
+      <InnerContainer isDarkMode={isDarkMode}>
         <PostContainer>{id}</PostContainer>
         <PostTitle>{title}</PostTitle>
         <PostContainer>{date}</PostContainer>

@@ -1,6 +1,6 @@
-import React, {useEffect, useRef, useState} from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {faAngleLeft, faAngleRight, faPhotoFilm, faXmark, faSquarePlus} from "@fortawesome/free-solid-svg-icons";
+import { faAngleLeft, faAngleRight, faPhotoFilm, faXmark, faSquarePlus } from "@fortawesome/free-solid-svg-icons";
 import { useSelector } from "react-redux";
 import {
   SlideWrap,
@@ -11,32 +11,29 @@ import {
   ImgPreviewDelete,
   ImgAdd,
   AddSlide,
-  AddWrite
+  AddWrite,
 } from "./imageUpload.style";
-import {uploadAdapter} from "../../../services/api/postApi";
+import { uploadAdapter } from "../../../services/api/postApi";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 
 const ImageUploadCard = ({ slideImg, setSlideImg }) => {
-
   const { isMobile } = useSelector((state) => state.screenSize);
-  const [images, setImages] = useState(Array(4).fill(null));
-  const fileInputs = useRef(Array(4).fill(null).map(() => React.createRef()));
+  const [images, setImages] = useState([]);
+  const fileInputs = useRef([]);
   const slideRef = useRef(null);
   const [showLeftArrow, setShowLeftArrow] = useState(false);
   const [showRightArrow, setShowRightArrow] = useState(true);
-  const [slideImgIndex, setSlideImgIndex] = useState([0, 1, 2, 3]);
 
   useEffect(() => {
+    // Initialize images from slideImg
     if (slideImg.length > 0) {
-      const initialImage = Array(4).fill(null);
-      slideImg.forEach((item, index) => {
-        if (item?.accessImage) {
-          initialImage[index] = item.accessImage;
-        }
-      });
-      setImages(initialImage);
+      const initialImages = slideImg.map((item) => item.accessImage || null);
+      setImages(initialImages);
+
+      // Ensure fileInputs has the same length as images
+      fileInputs.current = initialImages.map(() => React.createRef());
     }
-  }, []);
+  }, [slideImg]);
 
   const handleClickImgAdd = (index) => {
     fileInputs.current[index].current.click();
@@ -44,7 +41,6 @@ const ImageUploadCard = ({ slideImg, setSlideImg }) => {
 
   const updateArrow = (e) => {
     const { scrollLeft, scrollWidth, clientWidth } = e.target;
-
     setShowLeftArrow(scrollLeft > 0);
     setShowRightArrow(scrollLeft < scrollWidth - clientWidth - 1);
   };
@@ -52,28 +48,27 @@ const ImageUploadCard = ({ slideImg, setSlideImg }) => {
   const handleScroll = (direction) => {
     if (!slideRef.current) return;
 
-    const scrollAmount = isMobile ? 144 + 16 : 288 + 16; // 이미지 너비 + 간격
-
+    const scrollAmount = isMobile ? 144 + 16 : 288 + 16; // Image width + margin
     slideRef.current.scrollTo({
-      left: slideRef.current.scrollLeft + (direction === 'left' ? -scrollAmount : scrollAmount),
-      behavior: 'smooth'
+      left: slideRef.current.scrollLeft + (direction === "left" ? -scrollAmount : scrollAmount),
+      behavior: "smooth",
     });
   };
 
   const handleImgUpload = (index) => (accessImage, fileKey) => {
-    const newImage = [...images];
-    newImage[index] = accessImage;
-    setImages(newImage);
+    const newImages = [...images];
+    newImages[index] = accessImage;
+    setImages(newImages);
 
-    const newSlideImage = [...slideImg];
-    newSlideImage[index] = {
-      accessImage: accessImage,
-      fileKey: fileKey,
+    const newSlideImg = [...slideImg];
+    newSlideImg[index] = {
+      accessImage,
+      fileKey,
     };
-    setSlideImg(newSlideImage);
-  }
+    setSlideImg(newSlideImg);
+  };
 
-  const handleFileChange = (index) => async (e)=> {
+  const handleFileChange = (index) => async (e) => {
     const file = e.target.files[0];
     if (file) {
       try {
@@ -82,35 +77,28 @@ const ImageUploadCard = ({ slideImg, setSlideImg }) => {
         newImages[index] = tempImage;
         setImages(newImages);
 
-        const loader = {
-          file: Promise.resolve(file)
-        };
+        const loader = { file: Promise.resolve(file) };
         const adaptor = uploadAdapter(loader, handleImgUpload(index));
         await adaptor.upload();
-
       } catch (error) {
-        console.error('Error uploading image: ', error);
+        console.error("Error uploading image:", error);
 
         const newImages = [...images];
         newImages[index] = null;
         setImages(newImages);
-        console.log("미리보기 이미지 : ", setImages);
       }
     }
   };
 
   const deletePreviewImg = (indexToDelete, e) => {
-
     e.stopPropagation();
-
     const newImages = [...images];
     newImages[indexToDelete] = null;
     setImages(newImages);
 
-    setSlideImg(prevSlideImg =>
-      prevSlideImg.filter((_, index) => index !== indexToDelete)
+    setSlideImg((prevSlideImg) =>
+        prevSlideImg.filter((_, index) => index !== indexToDelete)
     );
-
   };
 
   const handleDragEnd = (result) => {
@@ -127,52 +115,51 @@ const ImageUploadCard = ({ slideImg, setSlideImg }) => {
 
     setImages(newImages);
     setSlideImg(newSlideImages);
-  }
+  };
 
   const handleAddSlide = () => {
-    setImages(prevImage => [...prevImage, null]);
-    setSlideImg(prevSlideImg => [...prevSlideImg, null]);
-    setSlideImgIndex(prevIndex => [...prevIndex, prevIndex.length]);
+    setImages((prevImages) => [...prevImages, null]);
+    setSlideImg((prevSlideImg) => [...prevSlideImg, { accessImage: null, fileKey: null }]);
     fileInputs.current = [...fileInputs.current, React.createRef()];
-  }
+  };
 
   return (
       <SlideWrap>
-        <SlideArrowWrap onClick={() => handleScroll('left')} $disabled={showLeftArrow}>
-          <FontAwesomeIcon icon={faAngleLeft}/>
+        <SlideArrowWrap onClick={() => handleScroll("left")} $disabled={!showLeftArrow}>
+          <FontAwesomeIcon icon={faAngleLeft} />
         </SlideArrowWrap>
         <DragDropContext onDragEnd={handleDragEnd}>
           <Droppable droppableId="slide-image-list" direction="horizontal">
             {(provided) => (
                 <ImgWrap
-                  ref={(el) => {
-                    slideRef.current = el;
-                    provided.innerRef(el);
-                  }}
-                  onScroll={updateArrow}
-                  {...provided.droppableProps}
+                    ref={(el) => {
+                      slideRef.current = el;
+                      provided.innerRef(el);
+                    }}
+                    onScroll={updateArrow}
+                    {...provided.droppableProps}
                 >
-                  {slideImgIndex.map((index) => (
+                  {images.map((url, index) => (
                       <Draggable
                           key={`img-${index}`}
                           draggableId={`img-${index}`}
                           index={index}
-                          isDragDisabled={!images[index]}
+                          isDragDisabled={!url}
                       >
                         {(provided, snapshot) => (
                             <div
-                              ref={provided.innerRef}
-                              {...provided.draggableProps}
-                              {...provided.dragHandleProps}
-                              style={{
-                                ...provided.draggableProps.style,
-                                opacity: snapshot.isDragging ? 0.6 : 1
-                              }}
+                                ref={provided.innerRef}
+                                {...provided.draggableProps}
+                                {...provided.dragHandleProps}
+                                style={{
+                                  ...provided.draggableProps.style,
+                                  opacity: snapshot.isDragging ? 0.6 : 1,
+                                }}
                             >
                               <ImgAdd key={index} index={index} onClick={() => handleClickImgAdd(index)} $isMobile={isMobile}>
-                                {images[index] ? (
+                                {url ? (
                                     <ImgPreviewWrap>
-                                      <ImgPreview src={images[index]} alt={`Preview ${index}`} $isMobile={isMobile} />
+                                      <ImgPreview src={url} alt={`Preview ${index}`} $isMobile={isMobile} />
                                       <ImgPreviewDelete onClick={(e) => deletePreviewImg(index, e)}>
                                         <FontAwesomeIcon icon={faXmark} />
                                       </ImgPreviewDelete>
@@ -193,24 +180,16 @@ const ImageUploadCard = ({ slideImg, setSlideImg }) => {
                       </Draggable>
                   ))}
                   {provided.placeholder}
-                  <AddSlide onClick={handleAddSlide} $isMoblie={isMobile}>
-                    <FontAwesomeIcon icon={faSquarePlus}
-                                     style={{ display: "flex",
-                                              alignItems: "center",
-                                              width: "50px",
-                                              height: "auto",
-                                              color: "skyblue"
-                                     }}
-                    />
+                  <AddSlide onClick={handleAddSlide}>
+                    <FontAwesomeIcon icon={faSquarePlus} style={{ fontSize: "24px", color: "skyblue" }} />
                     <AddWrite>추가</AddWrite>
                   </AddSlide>
                 </ImgWrap>
             )}
           </Droppable>
         </DragDropContext>
-
-        <SlideArrowWrap onClick={() => handleScroll('right')} $disabled={showRightArrow}>
-          <FontAwesomeIcon icon={faAngleRight}/>
+        <SlideArrowWrap onClick={() => handleScroll("right")} $disabled={!showRightArrow}>
+          <FontAwesomeIcon icon={faAngleRight} />
         </SlideArrowWrap>
       </SlideWrap>
   );
