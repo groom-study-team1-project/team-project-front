@@ -118,12 +118,13 @@ const Comments = () => {
         setNewComment(e.target.value);
     };
 
-    const handleEditSubmit = async (commentId) => {
+    const handleEditSubmit = async (commentId, content) => {
         if (!editContent.trim()) return;
 
         try {
-            const success = await dispatch(submitEditCommentThunk(commentId, editContent.trim()));
+            const success = await dispatch(submitEditCommentThunk(commentId, content.trim()));
             if (success) {
+                await(dispatch(fetchCommentList(postId)));
                 setEditContent("");
                 setEditContentId(null);
                 setModalIndex(null);
@@ -197,7 +198,7 @@ const Comments = () => {
                                             />
                                             <CommentButton
                                                 onClick={() =>
-                                                    handleEditSubmit(commentData.id)
+                                                    handleEditSubmit(commentData.id, editContent)
                                                 }
                                             >
                                                 수정

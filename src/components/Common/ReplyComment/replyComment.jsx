@@ -78,9 +78,9 @@ const ReplyComment = ({ commentId, getReplyTime }) => {
         }
     };
 
-    const handleEditReply = async (commentId) => {
+    const handleEditReply = async (commentId, content) => {
         if (!editReplyContent.trim()) return;
-        const success = await dispatch(submitEditCommentThunk(commentId, editReplyContent, false));
+        const success = await dispatch(submitEditCommentThunk(commentId, content, false));
         if (success) {
             setEditReplyContent("");
             setEditReplyId(null);
@@ -145,7 +145,7 @@ const ReplyComment = ({ commentId, getReplyTime }) => {
                                             onChange = {(e) => setEditReplyContent(e.target.value)}
                                         />
                                         <CommentButton
-                                            onClick={(e) => handleEditReply(reply.id)}
+                                            onClick={(e) => handleEditReply(reply.id, editReplyContent)}
                                         >
                                             수정
                                         </CommentButton>
