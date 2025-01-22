@@ -145,6 +145,7 @@ const Comments = () => {
             ...prev,
             [commentId]: !prev[commentId]
         }));
+    }
 
     const handleMoreComment = (data, postId, lastCommentId) => {
 
