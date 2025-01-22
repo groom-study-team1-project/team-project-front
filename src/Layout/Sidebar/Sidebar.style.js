@@ -30,7 +30,7 @@ export const SidebarLi = styled.li`
   cursor: pointer;
   border-bottom: 1px solid rgba(0, 0, 0, 0.1);
   list-style: none;
-    
+
   &:last-child {
     border-bottom: none;
   }
@@ -55,8 +55,11 @@ export const SidebarLink = styled.div`
   align-items: center;
   text-decoration: none;
   color: black;
-  border-left: 2px solid
-    ${($isSelected) => ($isSelected ? "#2670e9" : "transparent")};
+  border-left: 2px solid #2670e9;
+  background: ${(props) =>
+    props.$isSelected
+      ? "linear-gradient(to right, rgba(38, 112, 233, 0.7), rgba(38, 112, 233, 0))"
+      : "transparent"};
 
   &::after {
     content: "";
@@ -64,7 +67,7 @@ export const SidebarLink = styled.div`
 
     background: linear-gradient(
       to right,
-      rgba(38, 112, 233, 1),
+      rgba(38, 112, 233, 0.5),
       rgba(38, 112, 233, 0)
     );
     opacity: 0.3;

@@ -33,10 +33,14 @@ export const PostCardContainer = styled.div`
   aspect-ratio: 1/1.5;
   cursor: pointer;
   transition: transform 450ms;
-
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  &:hover {
+    transform: translateY(-10px);
+    box-shadow: 15px 15px 15px rgba(0, 0, 0, 0.2);
+  }
   /* &:hover {
-      transform: scale(1.025);
-    } */
+        transform: scale(1.025);
+      } */
 `;
 
 export const PostTitle = styled.h1`
@@ -44,84 +48,43 @@ export const PostTitle = styled.h1`
 `;
 
 export const InnerContainer = styled.div`
-  display: flex;
-  flex-direction: ${({ direction }) => direction || "row"};
-  flex-grow: 1;
-  padding: 16px;
-  border-radius: 10px;
-  background: linear-gradient(
-    to bottom,
-    rgba(255, 255, 255, 0.6),
-    rgba(255, 255, 255, 0.5)
-  );
-  backdrop-filter: blur(20px);
-
-  &::before {
-    z-index: -1;
-    content: "";
-    position: absolute;
-    inset: 0;
+    display: flex;
+    flex-direction: ${({ direction }) => direction || "row"};
+    flex-grow: 1;
+    padding: 16px;
     border-radius: 10px;
-    border: 1px solid transparent;
-    background: linear-gradient(
-        10deg,
-        rgba(255, 255, 255, 0),
-        rgba(255, 255, 255, 1)
-      )
-      border-box;
-    -webkit-mask: linear-gradient(#fff 0 0) padding-box,
-      linear-gradient(#fff 0 0);
-    mask: linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0);
-    -webkit-mask-composite: destination-out;
-    mask-composite: exclude;
-  }
+    background: ${({ $isDarkMode }) =>
+      $isDarkMode
+        ? "linear-gradient(\n    to bottom,\n    rgba(0, 0, 0, 0.6),\n    rgba(0, 0, 0, 0.5)\n  );"
+        : "linear-gradient(\n    to bottom,\n    rgba(255, 255, 255, 0.6),\n    rgba(255, 255, 255, 0.5)\n  );"};
+    backdrop-filter: blur(20px);
 
-  & > div:first-child {
+    }
+
+& > div:first-child {
     flex: 1; /* CustomThumbnail의 비율 */
-  }
+}
 
-  & > div:last-child {
+& > div:last-child {
     flex: 2; /* CustomBody의 비율 */
-  }
+}
 `;
 
 export const ProjectInnerContainer = styled.div`
-  display: flex;
-  flex-direction: ${({ direction }) => direction || "row"};
-  flex-grow: 1;
-  padding: 16px;
-  border-radius: 10px;
-  background: linear-gradient(
-    to bottom,
-    rgba(255, 255, 255, 0.6),
-    rgba(255, 255, 255, 0.5)
-  );
-  max-width: 800px;
-  overflow: hidden;
-
-  /* box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1), 0 15px 30px rgba(0, 0, 0, 0.1),
-      0 20px 40px rgba(0, 0, 0, 0.15); */
-  backdrop-filter: blur(20px);
-
-  &::before {
-    z-index: -1;
-    content: "";
-    position: absolute;
-    inset: 0;
+    display: flex;
+    flex-direction: ${({ direction }) => direction || "row"};
+    flex-grow: 1;
+    padding: 16px;
     border-radius: 10px;
-    border: 1px solid transparent;
-    background: linear-gradient(
-        10deg,
-        rgba(255, 255, 255, 0),
-        rgba(255, 255, 255, 1)
-      )
-      border-box;
-    -webkit-mask: linear-gradient(#fff 0 0) padding-box,
-      linear-gradient(#fff 0 0);
-    mask: linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0);
-    -webkit-mask-composite: destination-out;
-    mask-composite: exclude;
-  }
+    background: ${({ $isDarkMode }) =>
+      $isDarkMode
+        ? "linear-gradient(\n    to bottom,\n    rgba(0, 0, 0, 0.6),\n    rgba(0, 0, 0, 0.5)\n  );"
+        : "linear-gradient(\n    to bottom,\n    rgba(255, 255, 255, 0.6),\n    rgba(255, 255, 255, 0.5)\n  );"};
+    max-width: 800px;
+    overflow: hidden;
+    backdrop-filter: blur(20px);
+
+}
 `;
 
 export const Body = styled.div`

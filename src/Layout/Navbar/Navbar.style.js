@@ -5,6 +5,7 @@ export const NavbarWrapper = styled.nav`
   justify-content: center;
   width: 100%;
   height: 80px;
+  font-size: 16px;
   /* position: fixed; */
 `;
 

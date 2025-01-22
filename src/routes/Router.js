@@ -1,4 +1,4 @@
-import { Route, Routes } from "react-router-dom";
+import { Route, Routes, Navigate } from "react-router-dom";
 import MyProfile from "../Layout/ProfileLayout/ProfileLayout";
 import MainPage from "../pages/MainPage/MainPage";
 import FreeBoard from "../pages/Board/FreeBoard/FreeBoard";
@@ -30,6 +30,7 @@ function Router() {
             <Route path=":memberId" element={<MyProfile />} />
           </Route>
         </Route>
+        <Route path="*" element={<Navigate to="/" replace />} />
       </Route>
     </Routes>
   );

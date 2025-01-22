@@ -3,35 +3,35 @@ import { useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
-    faEllipsisVertical,
-    faHeart as solidHeart,
+  faEllipsisVertical,
+  faHeart as solidHeart,
 } from "@fortawesome/free-solid-svg-icons";
 import { faHeart as regularHeart } from "@fortawesome/free-regular-svg-icons";
 import {
-    CommentsWrap,
-    CommentTitle,
-    Bold,
-    CommentInput,
-    CommentInputWrap,
-    CommentHr,
-    CommentRight,
-    Comment,
-    CommentText,
-    CommentWrap,
-    CommentButton,
-    CommnetModalIcon,
-    IconWrap,
-    InputImg,
-    TimeAndLike,
-    LikedButton,
-    ReplyButton,
-    EditCommentWrap,
-    EditCommentInput,
-    CommentInputForm,
-    TimeAndModal,
-    CommentBox,
-    ReplyList,
-    SomeMoreCommentButton
+  CommentsWrap,
+  CommentTitle,
+  Bold,
+  CommentInput,
+  CommentInputWrap,
+  CommentHr,
+  CommentRight,
+  Comment,
+  CommentText,
+  CommentWrap,
+  CommentButton,
+  CommnetModalIcon,
+  IconWrap,
+  InputImg,
+  TimeAndLike,
+  LikedButton,
+  ReplyButton,
+  EditCommentWrap,
+  EditCommentInput,
+  CommentInputForm,
+  TimeAndModal,
+  CommentBox,
+  ReplyList,
+  SomeMoreCommentButton,
 } from "../Comment/Comment.style";
 import {
     fetchCommentList,
@@ -41,6 +41,7 @@ import {
     submitEditCommentThunk,
     setUIState, unlikeCommentThunk
 } from '../../../store/comment/commentSlice';
+
 import { ProfileImage } from "../../Card/PostCard/PostProfile";
 import { Modify } from "../../../pages/Board/BoardDetail/Board/BoardDetail.style";
 import ModalComponent from "../../Modal/EditDeleteModal/EditDeleteModal";
@@ -144,7 +145,6 @@ const Comments = () => {
             ...prev,
             [commentId]: !prev[commentId]
         }));
-    }
 
     const handleMoreComment = (data, postId, lastCommentId) => {
 
@@ -157,9 +157,6 @@ const Comments = () => {
             }
         }
     }
-
-    if (isLoading) return <div>Loading...</div>;
-    if (error) return <div>Error: {error}</div>;
 
     return (
         <div>
@@ -302,7 +299,7 @@ const Comments = () => {
                 )}
             </CommentsWrap>
         </div>
-    );
+  );
 };
 
 export default Comments;

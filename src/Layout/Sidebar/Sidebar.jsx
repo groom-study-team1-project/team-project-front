@@ -18,14 +18,36 @@ import questionIcon from "../../assets/images/User Settings.png";
 import fileIcon from "../../assets/images/File Multiple.png";
 import { useDispatch, useSelector } from "react-redux";
 import { selectMenuItem } from "../../store/menu/menuSlice";
-
+import { useLocation } from "react-router-dom";
 function Sidebar() {
   const [menuItems, setMenuItems] = useState([]);
+  const [category, setCategory] = useState(1);
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const selectedItemId = useSelector((state) => state.menu?.selectedItem || null);
+  const selectedItemId = useSelector(
+    (state) => state.menu?.selectedItem || null
+  );
+  const location = useLocation();
+  const paths = location.pathname.split("/");
+  const lastPath = paths[paths.length - 1];
 
   useEffect(() => {
+    switch (lastPath) {
+      case "free":
+        setCategory(1);
+        break;
+      case "projects":
+        setCategory(2);
+        break;
+      case "questions":
+        setCategory(3);
+        break;
+      case "notices":
+        setCategory(4);
+        break;
+      default:
+        setCategory(null);
+    }
     try {
       const fetchData = async () => {
         const response = await fetchCategoryItems();
@@ -35,10 +57,10 @@ function Sidebar() {
     } catch (error) {
       console.log(error);
     }
-  }, []);
+  }, [selectedItemId, dispatch, lastPath]);
 
   const handleMenuClick = (item) => {
-    dispatch(selectMenuItem(item.id)); // Redux 상태에 ID만 저장
+    dispatch(selectMenuItem(item.id));
     handleNavigation(item.id);
   };
 
@@ -81,12 +103,9 @@ function Sidebar() {
                 }}
               >
                 <SidebarLink
-                    className="link"
-                    $isSelected={
-                        selectedItemId !== null && selectedItemId === item.id
-                    }
+                  className="link"
+                  $isSelected={category === item.id}
                 >
-
                   <SidebarTitle>{item.title}</SidebarTitle>
                   {iconMapping[item.title]}
                 </SidebarLink>

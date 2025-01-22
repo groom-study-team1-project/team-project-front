@@ -21,8 +21,17 @@ import {
 } from '../../services/api/mockCommentApi';*/
 import {enableMapSet} from 'immer';
 import {useSelector} from "react-redux";
-
 enableMapSet();
+
+const parseJSON = (key, defaultValue) => {
+  try {
+    const value = localStorage.getItem(key);
+    return value ? JSON.parse(value) : defaultValue;
+  } catch (error) {
+    console.error(`Error parsing JSON for key "${key}":`, error);
+    return defaultValue;
+  }
+};
 
 const initialState = {
     comments: [],

@@ -8,7 +8,7 @@ const ProfileWrapper = styled.div`
 
 export const ProfileImage = styled.img`
   width: ${({ $size }) => $size || "30px"};
-  height: ${({ $size }) => $size || "30px"};
+  aspect-ratio: 1/1;
   border: 1px solid;
   border-radius: 50%;
   margin-right: ${({ $isBig }) => ($isBig ? "20px" : "10px")};
@@ -28,6 +28,7 @@ const ProfileInfoJob = styled.div`
   font-size: ${({ $isBig }) => ($isBig ? "16px" : "13px")};
   margin-top: 5%;
   margin-left: 5%;
+  white-space: nowrap;
 `;
 
 const ProfileBox = ({ name, job, size, isBig, onClick, imgUrl }) => (

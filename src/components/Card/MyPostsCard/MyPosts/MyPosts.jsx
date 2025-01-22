@@ -10,11 +10,13 @@ import {
 } from "./MyPosts.style";
 import { Interaction } from "../../../Common/Interactions";
 import { useNavigate } from "react-router-dom";
-import { deletepost } from "../../../../services/api/postApi";
+import { useMediaQuery } from "react-responsive";
+import { useSelector } from "react-redux";
 
 export const MyPosts = ({ mypost }) => {
   const navigate = useNavigate();
-
+  const isSmallDesktop = useMediaQuery({ maxWidth: 1480 });
+  const { isMobile, isTablet } = useSelector((state) => state.screenSize);
   const [post, setPost] = useState("");
   const [postDate, setPostdate] = useState("");
   useEffect(() => {
@@ -37,16 +39,23 @@ export const MyPosts = ({ mypost }) => {
       <MyPost
         key={post.id}
         onClick={() => {
-          //navigate(`/board/detail/${post.postId}`);
+          navigate(`/board/detail/${post.postId}`);
         }}
+        $isSmallDesktop={isSmallDesktop}
+        $isTablet={isTablet}
+        $isMobile={isMobile}
       >
         <MypostThumbnail src={post.thumbnail} />
         <MypostTitleWrap>
-          <MypostTitle>{post.title}</MypostTitle>
+          <MypostTitle $isSmallDesktop={isSmallDesktop} $isTablet={isTablet}>
+            {post.title}
+          </MypostTitle>
           <div></div>
         </MypostTitleWrap>
         <DateCountWrap>
-          <MypostDate>{postDate}</MypostDate>
+          <MypostDate $isSmallDesktop={isSmallDesktop} $isTablet={isTablet}>
+            {postDate}
+          </MypostDate>
           <Interaction
             count={{
               viewCount: post.viewCount,

@@ -1,41 +1,84 @@
 import styled from "styled-components";
-import Slider from "react-slick";
 
-export const ImgWrap = styled.div`
+export const SlideWrap = styled.div`
+  display: flex;
   background: rgba(239, 239, 239, 0.5);
+  padding: 15px;
+  border-radius: 8px;
+  align-items: center;
   margin-bottom: 16px;
-  border-radius: 10px;
-  padding: 10px;
+  position: relative;
+  gap: 1rem;
 `;
 
-export const CustomSlider = styled(Slider)`
-  .slick-slide {
+export const ImgWrap = styled.div`
+  display:flex;
+  flex: 1;
+  background: rgba(239, 239, 239, 0.5);
+  padding: 20px;
+  border-radius: 8px;
+  align-items: center;
+  margin-bottom: 16px;
+  position: relative;
+  overflow-x: auto;
+  flex-shrink: 0;
+  
+  &::-webkit-scrollbar {
+    display: none;
+  }
+`;
+
+export const SlideArrowWrap = styled.div`
+    width: 2rem;
+    height: 2rem;
     display: flex;
-    align-items: center;
     justify-content: center;
-  }
-
-  .slick-list {
-    overflow: hidden;
-  }
-
-  .slick-track {
-    display: flex;
     align-items: center;
-  }
+    border-radius: 100px;
+    background: white;
+    z-index: 1;
+    cursor: ${props => props.$disabled ? 'pointer' : 'default'};
+    opacity: ${props => props.$disabled ? '1' : '0.2'};
+    &:hover {
+      opacity: ${props => props.$disabled? '0.7' : '0.2'};
+      zoom: ${props => props.$disabled ? '1.2' : '1'};
+    }
+`;
 
-  .slick-arrow {
-    z-index: 2;
+export const ImgAdd = styled.div`
+  width: ${props => props.$isMobile ? '144px' : '288px'};
+  display: flex;
+  flex: 0 0 auto;
+  align-items: center;  
+  justify-content: center;
+  margin: 0.5rem;
+  background: #fff;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  ${(props) =>
+    props.$isMobile
+        ? `width: 144px; height: 80px;`
+        : `width: 288px; height: 160px;`}
+
+  &:hover {
+    background-color: #f8f8f8;
+    transition: all 0.2s ease;
+    transform: translateY(-2px);
   }
 `;
 
 export const ImgPreviewWrap = styled.div`
+  flex: 0 0 auto;
   position: relative;
-  margin-right: 10px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 `;
 
 export const ImgPreview = styled.img`
-  object-fit: cover;
+  object-fit: fill;  
+  border-radius: 5px;
   ${(props) =>
       props.$isMobile
           ? `width: 144px; height: 80px;`
@@ -44,52 +87,50 @@ export const ImgPreview = styled.img`
 
 export const ImgPreviewDelete = styled.div`
   position: absolute;
-  z-index: 30;
-  top: 0;
-  cursor: pointer;
+  top: 8px;
+  right: 8px;
+  width: 24px;
+  height: 24px;
   border-radius: 50%;
-  background-color: gray;
-  color: black;
-  width: 20px;
-  height: 20px;
-  align-items: center;
+  background-color: rgba(255, 255, 255, 0.9);
+  color: #666;
   display: flex;
+  align-items: center;
   justify-content: center;
-  opacity: 0.5;
-  right: 0;
+  cursor: pointer;
+  transition: all 0.2s ease;
+
   &:hover {
-    opacity: 1;
-    color: white;
+    background-color: #fff;
+    color: #ff4444;
+    transform: scale(1.1);
   }
 `;
 
-export const ImgAddWrap = styled.div`
+export const AddSlide = styled.div`
+  width: ${props => props.$isMobile ? '144px' : '288px'};
   display: flex;
-  align-items: center;
+  flex: 0 0 auto;
+  flex-direction: column;
   justify-content: center;
-`;
-
-export const ImgAdd = styled.div`
-  width: 288px;
-  height: 160px;
-  background: #fff;
-  display: flex;
   align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  border: 1px solid #ccc;
+  border-radius: 5px;
+  border: 2px dashed #ccc;
+  background: none;
+  transition: all 0.2s ease;
   ${(props) =>
-    props.$isMobile
-        ? `width: 144px; height: 80px;`
-        : `width: 288px; height: 160px;`}
+      props.$isMobile
+          ? `width: 144px; height: 80px;`
+          : `width: 288px; height: 160px;`
+  }
+  &:hover {
+    background-color: #f8f8f8;
+    transition: all 0.2s ease;
+    transform: translateY(-2px);
+  }
 `;
 
-export const CustomArrow = styled.div`
-  width: 30px;
-  height: 30px;
+export const AddWrite = styled.div`
   display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 20px;
-  cursor: pointer;
+  font-weight: bold;
 `;

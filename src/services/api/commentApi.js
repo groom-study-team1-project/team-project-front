@@ -4,12 +4,14 @@ export const fetchComment = async (postId, lastCommentId, accessToken, isLogin) 
     const baseEndpoint = `/open/comments/${postId}`;
     const queryParams = new URLSearchParams();
 
-    if (lastCommentId) queryParams.append('lastCommentId', lastCommentId);
 
-    const endpoint = queryParams.toString() ?
-        `${baseEndpoint}?${queryParams.toString()}` : baseEndpoint;
+  if (lastCommentId) queryParams.append("lastCommentId", lastCommentId);
 
-    console.log(endpoint);
+  const endpoint = queryParams.toString()
+    ? `${baseEndpoint}?${queryParams.toString()}`
+    : baseEndpoint;
+
+  console.log(endpoint);
 
     try {
         if (isLogin) {
@@ -37,22 +39,24 @@ export const fetchComment = async (postId, lastCommentId, accessToken, isLogin) 
 };
 
 export const createComment = async (postId, content) => {
-    const body = {
-        postId : postId,
-        content : content.trim()
-    };
+  const body = {
+    postId: postId,
+    content: content.trim(),
+  };
 
-    try {
-        const response = await axiosInstance.post(`/api/comments/write`, body);
-        if (response.data.status.code === 1400 && response.data) {
-            console.log(response.data);
-            return response.data;
-        }
+  try {
 
-    } catch (error) {
+    const response = await axiosInstance.post(`/api/comments/write`, body);
+
+    if (response.data.status.code === 1400 && response.data) {
+        console.log(response.data);
+        return response.data;
+    }
+
+  } catch (error) {
         console.error("댓글 작성을 하지 못하였습니다 : ", error);
         throw error;
-    }
+  }
 };
 
 export const deleteComment = async (commentId) => {
@@ -69,16 +73,18 @@ export const deleteComment = async (commentId) => {
 };
 
 export const editComment = async (commentId, content) => {
-    const body = {
-        commentId : commentId,
-        content : content.trim()
-    };
+  const body = {
+    commentId: commentId,
+    content: content.trim(),
+  };
 
-    try {
+  try {
+
         const response = await axiosInstance.post(`/api/comments/edit`, body);
         if (response.data.status.code === 1402 && response.data) {
             return response.data;
         }
+
     } catch (error) {
         console.error("댓글 수정을 하지 못하였습니다 : ", error);
     }
@@ -121,7 +127,7 @@ export const fetchReplyComment = async (commentId, lastCommentId, accessToken, i
     const baseEndpoint = `/open/comments/replies/${commentId}`;
     const queryParams = new URLSearchParams();
 
-    if (lastCommentId) queryParams.append('lastCommentId', lastCommentId);
+    if (lastCommentId) queryParams.append("lastCommentId", lastCommentId);
 
     const endpoint = queryParams.toString()
         ? `${baseEndpoint}?${queryParams.toString()}`
@@ -146,18 +152,17 @@ export const fetchReplyComment = async (commentId, lastCommentId, accessToken, i
 };
 
 export const createReplyComment = async (commentId, content) => {
-    const body = {
-        commentId : commentId,
-        content : content.trim()
-    };
-
-    try {
+  const body = {
+    commentId: commentId,
+    content: content.trim(),
+  };
+  try {
         const response = await axiosInstance.post(`/api/comments/write/reply`, body);
         if (response.data.status.code === 1401) {
             console.log("답글 생성 :", response.data);
             return response.data;
         }
-    } catch (error) {
+  } catch (error) {
         console.error("답글을 작성하지 못하였습니다 : ", error);
-    }
+  }
 };

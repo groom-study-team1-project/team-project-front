@@ -11,14 +11,15 @@ import {
   Nopost,
   NopostWrap,
   EndPost,
+  StyledIcon,
 } from "./MyProfile.style";
-import NopostImg from "../../../assets/images/Nopost.png";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import NopostImg from "../../../../assets/images/Nopost.png";
 import { faChevronRight } from "@fortawesome/free-solid-svg-icons";
-import { MyPosts } from "../../../components/Card/MyPostsCard/MyPosts/MyPosts";
-import { postInfo } from "../../../services/api/authApi";
+import { MyPosts } from "../../../../components/Card/MyPostsCard/MyPosts/MyPosts";
+import { postInfo, ProjectPostInfo } from "../../../../services/api/authApi";
 import { useNavigate, useParams } from "react-router-dom";
-import { BarLoading } from "../../../components/Common/LodingSpinner";
+import { BarLoading } from "../../../../components/Common/LodingSpinner";
+import { useSelector } from "react-redux";
 
 function MyPostsItems({ postCount }) {
   const [categorys] = useState([
@@ -26,7 +27,7 @@ function MyPostsItems({ postCount }) {
     { id: 2, title: "프로젝트 자랑 게시판" },
     { id: 3, title: "질문 게시판" },
   ]);
-
+  const { isMobile, isTablet } = useSelector((state) => state.screenSize);
   const [lastPostIdByCategory, setLastPostIdByCategory] = useState(
     Number.MAX_SAFE_INTEGER
   );
@@ -38,7 +39,26 @@ function MyPostsItems({ postCount }) {
   const navigate = useNavigate();
   const { memberId } = useParams();
 
-  const limit = 5;
+  const limit = 6;
+
+  const Postsfetch = async (postFunction, lastPostIdByCategory) => {
+    const posts = await postFunction(
+      categoryId,
+      lastPostIdByCategory,
+      limit,
+      memberId
+    );
+    if (posts.length > 0) {
+      setMypost((prevPosts) => [...prevPosts, ...posts]);
+
+      const newLastPostId = posts[posts.length - 1].postId;
+      setLastPostIdByCategory(newLastPostId);
+    }
+
+    if (posts.length < limit) {
+      setHasMore(false);
+    }
+  };
 
   const fetchData = useCallback(async () => {
     if (loading || !hasMore) return;
@@ -46,21 +66,10 @@ function MyPostsItems({ postCount }) {
     setLoading(true);
 
     try {
-      const posts = await postInfo(
-        categoryId,
-        lastPostIdByCategory,
-        limit,
-        memberId
-      );
-      if (posts.length > 0) {
-        setMypost((prevPosts) => [...prevPosts, ...posts]);
-
-        const newLastPostId = posts[posts.length - 1].postId;
-        setLastPostIdByCategory(newLastPostId);
-      }
-
-      if (posts.length < limit) {
-        setHasMore(false);
+      if (categoryId === 2) {
+        await Postsfetch(ProjectPostInfo, lastPostIdByCategory);
+      } else {
+        await Postsfetch(postInfo, lastPostIdByCategory);
       }
     } catch (error) {
       console.error("Error fetching posts:", error);
@@ -76,21 +85,10 @@ function MyPostsItems({ postCount }) {
     setLoading(true);
 
     try {
-      const posts = await postInfo(
-        categoryId,
-        Number.MAX_SAFE_INTEGER,
-        limit,
-        memberId
-      );
-
-      if (posts.length > 0) {
-        setMypost(posts);
-        const newLastPostId = posts[posts.length - 1].postId;
-        setLastPostIdByCategory(newLastPostId);
-      }
-
-      if (posts.length < limit) {
-        setHasMore(false);
+      if (categoryId === 2) {
+        await Postsfetch(ProjectPostInfo, Number.MAX_SAFE_INTEGER);
+      } else {
+        await Postsfetch(postInfo, Number.MAX_SAFE_INTEGER);
       }
     } catch (error) {
       console.error("Error fetching initial posts:", error);
@@ -145,6 +143,7 @@ function MyPostsItems({ postCount }) {
                 onClick={() => {
                   setCategoryId(category.id);
                 }}
+                $select={categoryId === category.id}
               >
                 <div>
                   <CategoryTitle>{category.title}</CategoryTitle>
@@ -152,12 +151,20 @@ function MyPostsItems({ postCount }) {
                     {myPost.length}개의 게시글
                   </CategoryCount>
                 </div>
-                <FontAwesomeIcon icon={faChevronRight} />
+                <StyledIcon
+                  icon={faChevronRight}
+                  size="2xl"
+                  $click={categoryId === category.id}
+                />
               </CategoryList>
             ))}
           </ul>
         </CategoryLi>
-        <MyPostCardwrap $Nopost={myPost.length === 0}>
+        <MyPostCardwrap
+          $Nopost={myPost.length === 0}
+          $isTablet={isTablet}
+          $isMobile={isMobile}
+        >
           {myPost.length === 0 ? (
             <NopostWrap>
               <Nopost src={NopostImg} />

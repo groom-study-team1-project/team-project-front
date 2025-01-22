@@ -32,15 +32,10 @@ export const PostWrap = styled.div`
     padding: 20px;
     border-radius: 10px;
     width: 100%;
-    background: linear-gradient(
-            to bottom,
-            rgba(255, 255, 255, 0.6),
-            rgba(255, 255, 255, 0.5)
-    );
-    .ck.ck-editor__editable:not(.ck-editor__nested-editable) {
-        min-height: 0px;
-        margin-bottom: 0px;
-    }
+    background: ${({ isDarkMode }) =>
+            isDarkMode
+                    ? "linear-gradient(to bottom, rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.5))"
+                    : "linear-gradient(to bottom, rgba(255, 255, 255, 0.6), rgba(255, 255, 255, 0.5))"};
 `;
 
 export const ContentWrap = styled.div`
@@ -50,10 +45,7 @@ export const ContentWrap = styled.div`
     padding: 10px;
     border-radius: 10px;
     background: white;
-    .ck.ck-editor__editable:not(.ck-editor__nested-editable) {
-        min-height: 0px;
-        margin-bottom: 0px;
-    }
+    color: black;
 `;
 
 export const Title = styled.div`
@@ -70,5 +62,23 @@ export const PostFooter = styled.div`
     width: ${(props) => (props.$isMobile ? `115%;` : `103%;`)};
 `;
 
+export const HashtagCardContainer = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+`;
 
-
+export const HashtagCard = styled.div`
+  padding: 5px 10px;
+  border-radius: 10px;
+  font-size: 14px;
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+    background: ${({ isDarkMode }) =>
+            isDarkMode
+                    ? "linear-gradient(to bottom, rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.5))"
+                    : "linear-gradient(to bottom, rgba(255, 255, 255, 0.6), rgba(255, 255, 255, 0.5))"};
+    color: ${({ isDarkMode }) =>
+            isDarkMode
+                    ? "white"
+                    : "#333"};
+`;

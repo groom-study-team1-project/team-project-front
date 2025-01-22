@@ -1,9 +1,9 @@
-import  React, { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Container,
   MainContentWrapper,
   SidebarWrapper,
-  Content, RightSidebarWrapper, PopularCardWrapper,
+  Content,
 } from "./BoardLayout.style";
 import Sidebar from "../Sidebar/Sidebar";
 import Navbar from "../Navbar/Navbar";
@@ -11,8 +11,6 @@ import GlobalStyle from "../../assets/styles/GlobalStyle";
 
 import { useSelector } from "react-redux";
 import { Outlet } from "react-router-dom";
-import PopularHashCard from "../../components/Card/PopularCard/PopularHashCard/PopularHashCard";
-import PopularPostCard from "../../components/Card/PopularCard/PopularPostCard/PopularPostCard";
 
 function BoardLayout({ isMyPage = false }) {
   const { isMobile, isTablet, isDesktop } = useSelector(

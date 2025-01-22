@@ -8,19 +8,24 @@ import {
   Form,
   ModalTitle,
 } from "../../Modal.style";
-import { ProfileImgDiv } from "../SignUpModal.style";
+import {
+  ProfileImgDiv,
+  ProfileImgContainer,
+  CameraIcon,
+  ImageCancel,
+} from "../SignUpModal.style";
 import {
   checkDuplicatedNickname,
   signUp,
-  uploadProfileImage,
 } from "../../../../services/api/authApi";
+import { imageUpload } from "../../../../services/api/imageApi";
 import profileIcon from "../../../../assets/images/profileImg.png";
 import cameraIcon from "../../../../assets/images/camera.png";
 import { ProfileImg } from "./UserDetailsInputForm.style";
 import { ErrMsg } from "../../../../assets/styles/ErrMsg.style";
 function UserDetailsInputForm({ email, closeModal, changeModal }) {
   const [previewImage, setPreviewImage] = useState(null);
-  const [profileImg, setProfileImg] = useState(null);
+  const [profileImg, setProfileImg] = useState("");
   const [nickname, setNickname] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -54,19 +59,6 @@ function UserDetailsInputForm({ email, closeModal, changeModal }) {
       return Object.keys(errors).length === 0;
     } catch (err) {
       errors.nickname = err.message || "닉네임 관련 에러가 발생했습니다.";
-    }
-  };
-
-  const uploadImageAndGetUrl = async () => {
-    try {
-      const formData = new FormData();
-      formData.append("file", profileImg);
-
-      const response = await uploadProfileImage(formData);
-      return response.imageUrl;
-    } catch (err) {
-      console.error("이미지 업로드 실패:", err);
-      return null;
     }
   };
 
@@ -112,13 +104,12 @@ function UserDetailsInputForm({ email, closeModal, changeModal }) {
 
     if (isValid) {
       try {
-        const profileImgUrl = await uploadImageAndGetUrl();
-        if (profileImgUrl) {
+        if (profileImg === "") {
           let body = {
             email,
             password,
             nickname,
-            imageUrl: profileImgUrl,
+            imageKey: "default-image/users/default-profile.png",
             phoneNumber,
           };
           const response = await signUp(body);
@@ -128,8 +119,7 @@ function UserDetailsInputForm({ email, closeModal, changeModal }) {
             email,
             password,
             nickname,
-            imageUrl:
-              "https://deepdiver-community-files-dev.s3.ap-northeast-2.amazonaws.com/profiles/002da67c_1730807352645.png",
+            imageKey: profileImg,
             phoneNumber,
           };
           const response = await signUp(body);
@@ -145,12 +135,24 @@ function UserDetailsInputForm({ email, closeModal, changeModal }) {
     }
   }
 
-  const handleImageChange = (e) => {
+  const handleImageChange = async (e) => {
     const file = e.target.files[0];
-    if (file) {
-      const imageUrl = URL.createObjectURL(file);
-      setProfileImg(file);
-      setPreviewImage(imageUrl);
+    if (!file) {
+      alert("파일을 선택해주세요.");
+      return;
+    }
+    try {
+      const response = await imageUpload("PROFILE", file);
+      if (response?.fileKey) {
+        setPreviewImage(response.accessImage);
+        setProfileImg(response.fileKey);
+      } else {
+        console.error("Invalid response format:", response);
+        alert("이미지 업로드 실패: 서버 응답 오류");
+      }
+    } catch (error) {
+      console.error("Image upload failed:", error);
+      alert("이미지 업로드에 실패했습니다. 다시 시도해주세요.");
     }
   };
 
@@ -161,33 +163,14 @@ function UserDetailsInputForm({ email, closeModal, changeModal }) {
       </ModalTitle>
       <Form onSubmit={handleSignUp}>
         <ProfileImgDiv>
-          <div
-            style={{
-              width: "120px",
-              height: "120px",
-              boxSizing: "border-box",
-              overflow: "hidden",
-              marginRight: "20px",
-              marginBottom: "10px",
-              position: "relative",
-            }}
-          >
+          <ProfileImgContainer>
             <label htmlFor="profileImgInput">
               <ProfileImg
                 src={previewImage ? previewImage : profileIcon}
                 alt="프로필사진"
-                style={{ width: "150px", height: "150px" }}
+                $default={!previewImage}
               />
-              <img
-                src={cameraIcon}
-                alt="카메라 아이콘"
-                style={{
-                  position: "absolute",
-                  bottom: "30px",
-                  right: "15px",
-                  cursor: "pointer",
-                }}
-              />
+              <CameraIcon src={cameraIcon} alt="카메라 아이콘" />
             </label>
             <input
               id="profileImgInput"
@@ -195,7 +178,16 @@ function UserDetailsInputForm({ email, closeModal, changeModal }) {
               onChange={handleImageChange}
               style={{ display: "none" }}
             />
-          </div>
+          </ProfileImgContainer>
+
+          <ImageCancel
+            onClick={() => {
+              setPreviewImage(null);
+              setProfileImg("");
+            }}
+          >
+            취소
+          </ImageCancel>
         </ProfileImgDiv>
         <div>
           <FormInputField
