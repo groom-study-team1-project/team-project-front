@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import axiosInstance from "../services/axiosConfig";
 
 const useUserInfo = () => {
+
   const [userInfo, setUserInfo] = useState(null);
   const [userError, setUserError] = useState(null);
   const [isUserInfoLoading, setIsUserInfoLoading] = useState(true);

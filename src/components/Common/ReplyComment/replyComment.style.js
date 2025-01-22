@@ -1,6 +1,7 @@
 import styled from "styled-components";
 
 export const RepliesWrap = styled.div`
+    margin-top: 1rem;
     margin-left: 2rem;
     margin-right: 1rem;
     display: flex;
@@ -75,3 +76,16 @@ export const SomeMoreReplyButton = styled.button`
         font-weight: bold;
     }
 `;
+
+export const LikeWrap = styled.div`
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 2px;
+    
+    span {
+        margin-left: 0.5rem;
+    }
+`;
+

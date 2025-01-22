@@ -7,6 +7,7 @@ import postReducer from "./post/postSlice";
 import screenSizeReducer from "./screenResize/screenSlice";
 import categoryReducer from "./category/categorySlice";
 import commentReducer from "./comment/commentSlice";
+
 const store = configureStore({
   reducer: {
     user: userReducer,

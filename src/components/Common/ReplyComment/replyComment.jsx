@@ -12,14 +12,14 @@ import {
     ReplyInputWrap,
     ReplyInput,
     ReplySubmitButton,
-    SomeMoreReplyButton
+    SomeMoreReplyButton,
+    LikeWrap
 } from "./replyComment.style";
 import {
     CommentButton,
     CommnetModalIcon,
     TimeAndModal,
     TimeAndLike,
-    IconWrap,
     LikedButton,
     CommentRight,
     EditCommentInput
@@ -32,16 +32,18 @@ import {
     faHeart as solidHeart,
 } from "@fortawesome/free-solid-svg-icons";
 import {
-    handleCreateReply,
-    handleDeleteComment,
-    submitEditComment,
-    handleLikeComment, setEndComment, fetchCommentList, initializeCommentCount
+    fetchReplyList,
+    createReplyThunk,
+    deleteCommentThunk,
+    submitEditCommentThunk,
+    likeCommentThunk,
+    unlikeCommentThunk,
+    setUIState
 } from '../../../store/comment/commentSlice';
 import { faHeart as regularHeart } from "@fortawesome/free-regular-svg-icons";
 import {Modify} from "../../../pages/Board/BoardDetail/Board/BoardDetail.style";
 import ModalComponent from "../../Modal/EditDeleteModal/EditDeleteModal";
 import {useDispatch, useSelector} from "react-redux";
-import {fetchReplyComment} from "../../../services/api/mockCommentApi";
 
 const ReplyComment = ({ commentId, getReplyTime }) => {
     const dispatch = useDispatch();
@@ -50,31 +52,35 @@ const ReplyComment = ({ commentId, getReplyTime }) => {
     const [editReplyId, setEditReplyId] = useState(null);
     const [editReplyContent, setEditReplyContent] = useState("");
     const [newReply, setNewReply] = useState("");
-    const [replyReloaded, setReplyReloaded] = useState(false);
+    const [visibleCount, setVisibleCount] = useState(5);
 
     const replies = useSelector(state => state.comments.replies[commentId] || []);
     const isLoading = useSelector(state => state.comments.isLoading);
     const error = useSelector(state => state.comments.error);
     const isEndComment = useSelector(state => state.comments.isEndComment);
 
-    /*useEffect(() => {
-        if (!isUserInfoLoading && userInfo) {
-            dispatch(fetchCommentList(commentId));
-            dispatch(initializeCommentCount(commentCount));
-        }
-    }, [dispatch, userInfo, isUserInfoLoading, postId, commentCount]);*/
-
     const handleSubmitReply = async (e) => {
         e.preventDefault();
         if (!newReply.trim()) return;
 
-        const writeReply = await dispatch(handleCreateReply(commentId, newReply.trim()));
-        if (writeReply) setNewReply("");
-    }
+        try {
+            dispatch(setUIState({ isLoading: true }));
+            console.log("유저 정보 : ", userInfo);
+            const success = await dispatch(createReplyThunk(commentId, newReply.trim(),
+                userInfo.nickname, userInfo.imageUrl));
+            if (success) {
+                setNewReply("");
+            }
+        } catch (error) {
+            console.error('Error creating comment:', error);
+        } finally {
+            dispatch(setUIState({ isLoading: false }));
+        }
+    };
 
-    const handleEditReply = async (commentId) => {
+    const handleEditReply = async (commentId, content) => {
         if (!editReplyContent.trim()) return;
-        const success = await dispatch(submitEditComment(commentId, editReplyContent.trim()));
+        const success = await dispatch(submitEditCommentThunk(commentId, content, false));
         if (success) {
             setEditReplyContent("");
             setEditReplyId(null);
@@ -91,26 +97,44 @@ const ReplyComment = ({ commentId, getReplyTime }) => {
 
     const handleModalClose = () => setModalIndex(null);
 
-        const handleMoreReply = async (commentId, lastCommentId) => {
-            /* 댓글 컴포넌트에서 토글과 동시에 조회가 되도록 하여 답글 부분에서 더보기를 실행할 경우에는
-            따로 답글조회 함수를 새로 생성해서 이용해야 되는거야?
-            dispatch(fetchReplyList(commentId, lastCommentId));
-            */
-            await fetchReplyComment(commentId, lastCommentId);
-            const minReplyId = Math.min(...replies.map(comment => comment.id));
+    const handleMoreReply = async (data, commentId, lastCommentId) => {
+        try {
+            if (!lastCommentId) return;
 
-            if (lastCommentId === minReplyId) {
-                dispatch(setEndComment(true));
+            await dispatch(fetchReplyList(commentId, lastCommentId));
+            setVisibleCount(prev => prev + 5);
+            const remainReply = data.slice(visibleCount);
+
+            if (remainReply.length < 5) {
+                setUIState({ isEndComment: true});
             }
-        };
+
+        } catch (error) {
+            console.error("더보기 기능 실패 오류 : ", error);
+        }
+    };
 
     if (isLoading) return <div>Loading...</div>;
 
     return (
         <div>
+            <ReplyInputForm onSubmit={handleSubmitReply}>
+                <ReplyInputWrap>
+                    <ReplyInput
+                        value={newReply}
+                        onChange={onChange}
+                        placeholder="답글 작성"
+                    />
+                    <ReplySubmitButton
+                        src={commentSubmit}
+                        alt="답글 제출"
+                        onClick={handleSubmitReply}
+                    />
+                </ReplyInputWrap>
+            </ReplyInputForm>
             <RepliesWrap>
-                {replies.map((reply, index) => (
-                    <Reply key={reply.id}>
+                {replies.slice(0, visibleCount).map((reply, index) => (
+                    <Reply key={index} index={reply.id}>
                         <ProfileImage src={reply.memberImageUrl} />
                         <ReplyContent>
                             {editReplyId === reply.id ? (
@@ -121,7 +145,7 @@ const ReplyComment = ({ commentId, getReplyTime }) => {
                                             onChange = {(e) => setEditReplyContent(e.target.value)}
                                         />
                                         <CommentButton
-                                            onClick={() => handleEditReply(reply.id, editReplyContent)}
+                                            onClick={(e) => handleEditReply(reply.id, editReplyContent)}
                                         >
                                             수정
                                         </CommentButton>
@@ -159,42 +183,52 @@ const ReplyComment = ({ commentId, getReplyTime }) => {
                                                             reply.id,
                                                             reply.content
                                                         );
-                                                        handleEditReply(reply.id, reply.content);
+                                                        setEditReplyId(reply.id);
+                                                        setEditReplyContent(reply.content);
+                                                        handleModalClose(reply.id);
+                                                        setModalIndex(null);
                                                     }}
                                                     onDelete={() => {
                                                         console.log(
                                                             "삭제할 게시글 아이디 : ",
                                                             reply.id
                                                         );
-                                                        dispatch(handleDeleteComment(reply.id));
+                                                        dispatch(deleteCommentThunk(reply.id, false, reply.id));
                                                     }}
                                                 />
                                             )}
                                         </CommnetModalIcon>
                                     )}
                                 </TimeAndModal>
-                                <IconWrap>
-                                    <LikedButton onClick={() => { handleLikeComment(reply?.id, userInfo); }}>
+                                <LikeWrap>
+                                    <LikedButton onClick={(e) => {
+                                        e.preventDefault();
+                                        console.log("replyId : ", reply.id);
+                                        reply.likedMe
+                                            ? (dispatch(unlikeCommentThunk(reply.id, false)))
+                                            : (dispatch(likeCommentThunk(reply.id, false)));
+                                    }}>
                                         {reply.likedMe ? (
                                             <FontAwesomeIcon
                                                 icon={solidHeart}
                                                 style={{ color: "#ff1900" }}
-                                                size="2xl"
+                                                size="xl"
                                             />
                                         ) : (
-                                            <FontAwesomeIcon icon={regularHeart} size="2xl" />
+                                            <FontAwesomeIcon icon={regularHeart} size="xl" />
                                         )}
                                     </LikedButton>
                                     <span>{reply.likeCount}</span>
-                                </IconWrap>
+                                </LikeWrap>
                             </TimeAndLike>
                         </CommentRight>
                     </Reply>
                 ))}
                 {!isEndComment && replies.length > 5 && !isLoading ? (
-                    <SomeMoreReplyButton onClick={() => {
-                        const lastCommentId = replies[replies.length - 1].id;
-                        handleMoreReply(commentId, lastCommentId);
+                    <SomeMoreReplyButton onClick={(e) => {
+                        e.preventDefault();
+                        const lastCommentId = replies[visibleCount - 1]?.id;
+                        handleMoreReply(replies, commentId, lastCommentId);
                     }}>
                         더보기
                     </SomeMoreReplyButton>
@@ -202,21 +236,6 @@ const ReplyComment = ({ commentId, getReplyTime }) => {
                     <div style={{alignItems : "center", width: "100%"}}> </div>
                 )}
             </RepliesWrap>
-
-            <ReplyInputForm onSubmit={handleSubmitReply}>
-                <ReplyInputWrap>
-                    <ReplyInput
-                        value={newReply}
-                        onChange={onChange}
-                        placeholder="답글 작성"
-                    />
-                    <ReplySubmitButton
-                        src={commentSubmit}
-                        alt="답글 제출"
-                        onClick={handleSubmitReply}
-                    />
-                </ReplyInputWrap>
-            </ReplyInputForm>
         </div>
     );
 };

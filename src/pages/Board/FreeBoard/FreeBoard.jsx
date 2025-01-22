@@ -36,9 +36,12 @@ function FreeBoard() {
 
   const fetchPopularPosts = useCallback(async () => {
     try {
+
       const { posts } = await fetchPostItems(categoryId, null, "HOT", 50);
       const filteredPopularPosts = posts.slice(0, 5);
+
       setPopularPosts(filteredPopularPosts);
+
     } catch (error) {
       console.error("Error fetching popular posts:", error);
     }
