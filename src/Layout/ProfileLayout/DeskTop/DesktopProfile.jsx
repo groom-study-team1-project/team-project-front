@@ -73,7 +73,10 @@ const DesktopProfile = ({
               {profileState === "mypost" ? (
                 <MyPostsItems postCount={profileData.postCount} />
               ) : (
-                <EditProfile setProfileState={setProfileState} />
+                <EditProfile
+                  setProfileState={setProfileState}
+                  isMeData={isMeData}
+                />
               )}
             </RightContent>
           </RightContentWrap>

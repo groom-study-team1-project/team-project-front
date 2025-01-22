@@ -59,21 +59,21 @@ function CommunityPostCard({
       <PostCardContainer
         height="232px"
         onClick={handleNavigation}
-        isDarkMode={isDarkMode}
+        $isDarkMode={isDarkMode}
       >
-        <InnerContainer isDarkMode={isDarkMode}>
+        <InnerContainer $isDarkMode={isDarkMode}>
           <CustomThumbnail>
             {thumbnail && thumbnail !== "posts/thumbnail.png" ? (
               <img
                 src={thumbnail}
-                alt={`Thumbnail`}
-                style={{ maxWidth: "100%", height: "100%", objectFit: "cover" }}
+                alt="Thumbnail"
+                style={{ width: "100%", height: "100%", objectFit: "cover" }}
               />
             ) : (
               <img
                 src={defaultThumbnailUrl}
                 alt="Default Thumbnail"
-                style={{ maxWidth: "100%", height: "100%", objectFit: "cover" }}
+                style={{ width: "100%", height: "100%", objectFit: "cover" }}
               />
             )}
           </CustomThumbnail>

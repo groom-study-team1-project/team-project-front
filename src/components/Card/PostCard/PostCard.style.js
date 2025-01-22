@@ -32,11 +32,15 @@ export const PostCardContainer = styled.div`
   height: ${({ height }) => height || "auto"};
   aspect-ratio: 1/1.5;
   cursor: pointer;
+  transition: transform 450ms;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
   &:hover {
     transform: translateY(-10px);
     box-shadow: 15px 15px 15px rgba(0, 0, 0, 0.2);
   }
+  /* &:hover {
+        transform: scale(1.025);
+      } */
 `;
 
 export const PostTitle = styled.h1`
@@ -49,13 +53,13 @@ export const InnerContainer = styled.div`
     flex-grow: 1;
     padding: 16px;
     border-radius: 10px;
-    background: ${({ isDarkMode }) =>
-      isDarkMode
+    background: ${({ $isDarkMode }) =>
+      $isDarkMode
         ? "linear-gradient(\n    to bottom,\n    rgba(0, 0, 0, 0.6),\n    rgba(0, 0, 0, 0.5)\n  );"
         : "linear-gradient(\n    to bottom,\n    rgba(255, 255, 255, 0.6),\n    rgba(255, 255, 255, 0.5)\n  );"};
     backdrop-filter: blur(20px);
 
-}
+    }
 
 & > div:first-child {
     flex: 1; /* CustomThumbnail의 비율 */
@@ -72,8 +76,8 @@ export const ProjectInnerContainer = styled.div`
     flex-grow: 1;
     padding: 16px;
     border-radius: 10px;
-    background: ${({ isDarkMode }) =>
-      isDarkMode
+    background: ${({ $isDarkMode }) =>
+      $isDarkMode
         ? "linear-gradient(\n    to bottom,\n    rgba(0, 0, 0, 0.6),\n    rgba(0, 0, 0, 0.5)\n  );"
         : "linear-gradient(\n    to bottom,\n    rgba(255, 255, 255, 0.6),\n    rgba(255, 255, 255, 0.5)\n  );"};
     max-width: 800px;

@@ -10,17 +10,15 @@ function MyProfile() {
   const [profileData, setProfileData] = useState(null);
   const [isMeData, setIsMe] = useState(false);
   const [profileState, setProfileState] = useState("mypost");
-  const isLoggedIn = useSelector((state) => state.user.isLoggedIn);
   const { memberId } = useParams();
   const isSmallDesktop = useMediaQuery({ maxWidth: 1480 });
   const payload = useJwt(localStorage.getItem("accessToken"));
-  console.log(isSmallDesktop);
   useEffect(() => {
     const fetchProfileData = async () => {
       try {
+        console.log(payload?.userInfo?.id);
         const body = { isMe: payload?.userInfo?.id, memberId };
         const { isMe, data } = await fetchProfileInfo(body);
-        console.log(data);
         if (data.status.code === 1002) {
           setIsMe(isMe);
           setProfileData(data.result);
@@ -31,7 +29,7 @@ function MyProfile() {
     };
 
     fetchProfileData();
-  }, [isLoggedIn, memberId, payload.userInfo, profileState]);
+  }, [memberId, payload.userInfo, profileState]);
 
   if (!profileData) {
     return <div>Loading...</div>;

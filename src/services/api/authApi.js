@@ -161,6 +161,36 @@ export const postInfo = async (
   }
 };
 
+export const ProjectPostInfo = async (
+  categoryId,
+  lastPostIdByCategory,
+  limit,
+  memberId
+) => {
+  try {
+    const response = await axiosInstance.get(
+      `/open/posts/project/me/${memberId}`,
+      {
+        params: {
+          categoryId: categoryId,
+          lastPostId: lastPostIdByCategory,
+          postSortType: "LATEST",
+          limit: limit,
+        },
+      }
+    );
+    console.log(response);
+    if (response.data.status.code === 1203) {
+      return response.data.result;
+    } else {
+      throw new Error(response.message || "내가 작성한 글 불러오기 실패");
+    }
+  } catch (error) {
+    console.error("사용자 정보를 불러오는데 실패했습니다.", error);
+    throw error;
+  }
+};
+
 // 인증 코드 검사
 export const verifyEmailCode = async (body) => {
   try {

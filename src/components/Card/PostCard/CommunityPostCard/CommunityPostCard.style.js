@@ -7,11 +7,19 @@ export const CustomBody = styled(Body)`
   gap: 10px;
   padding: 10px 10px 10px 20px;
 `;
-
 export const CustomThumbnail = styled(Thumbnail)`
-  flex-grow: 1;
-  width: 100%;
-  min-width: 200px;
-  max-width: 260px; /* 최대 너비를 설정하여 비율 유지 */
-  max-height: 200px;
+  flex-grow: 0;
+  flex-shrink: 0;
+  width: 30%;
+  height: 100%;
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
 `;
