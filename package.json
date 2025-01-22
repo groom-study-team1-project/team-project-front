@@ -32,8 +32,8 @@
     "web-vitals": "^2.1.4"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "cross-env NODE_ENV=production babel src --out-dir dist --copy-files",
+    "start": "webpack serve --open",
+    "build": "cross-env NODE_ENV=production webpack --mode production",
     "dev": "cross-env NODE_ENV=development babel src --out-dir dist --copy-files --watch",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
@@ -65,6 +65,10 @@
     "babel-loader": "^9.2.1",
     "babel-plugin-transform-remove-console": "^6.9.4",
     "cross-env": "^7.0.3",
+    "css-loader": "^7.1.2",
+    "file-loader": "^6.2.0",
+    "html-webpack-plugin": "^5.6.3",
+    "style-loader": "^4.0.0",
     "webpack": "^5.97.1",
     "webpack-cli": "^6.0.1"
   }

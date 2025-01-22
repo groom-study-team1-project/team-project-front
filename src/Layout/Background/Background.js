@@ -1,3 +1,4 @@
+import React from "react";
 import { Outlet } from "react-router-dom";
 import { Container } from "./Background.style";
 import useCanvas from "../../hooks/useCanvas";
