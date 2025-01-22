@@ -66,7 +66,7 @@ function ProjectPostCard({
   };
 
   const defaultThumbnailUrl =
-    "https://deepdiver-community-files-dev.s3.ap-northeast-2.amazonaws.com/posts/thumbnail.png";
+    "https://deepdiver-community-files-dev.s3.ap-northeast-2.amazonaws.com/default-image/posts/thumbnail.png";
 
   return (
     <PostCardContainer onClick={handleNavigation}>
