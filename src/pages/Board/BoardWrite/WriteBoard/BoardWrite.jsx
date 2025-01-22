@@ -24,16 +24,21 @@ import {
   Toolbar,
   CancelBtn,
   ConfirmBtn,
-  SmallWrite, EditorWrap, HashtagWrap, Hashtags,
+  SmallWrite,
+  EditorWrap,
+  HashtagWrap,
+  Hashtags,
 } from "./BoardWrite.style";
 import { useSelector } from "react-redux";
 import "./App.css";
 import "ckeditor5/ckeditor5.css";
-import {post} from "axios";
+import { post } from "axios";
 
 const WriteBoard = ({ postData, postId, imgList }) => {
   const { isMobile } = useSelector((state) => state.screenSize);
-  const selectedCategoryId = useSelector((state) => state.category.selectedCategoryId);
+  const selectedCategoryId = useSelector(
+    (state) => state.category.selectedCategoryId
+  );
 
   const navigate = useNavigate();
   const [form, setValue] = useState({
@@ -44,7 +49,9 @@ const WriteBoard = ({ postData, postId, imgList }) => {
     imageKeys: [],
     thumbnailImageUrl: "",
   });
-  const [selectedCategory, setSelectedCategory] = useState(selectedCategoryId || 1);
+  const [selectedCategory, setSelectedCategory] = useState(
+    selectedCategoryId || 1
+  );
   const [imgUrls, setImgUrls] = useState([]);
   const [slideImg, setSlideImg] = useState([]);
   const toolbarContainerRef = useRef(null);
@@ -73,7 +80,9 @@ const WriteBoard = ({ postData, postId, imgList }) => {
         setImgUrls(postData.imageUrls);
       }
       if (postData.categoryId === 2 && postData.slideImageUrls?.length) {
-        setSlideImg(postData.slideImageUrls.map((url) => ({ accessImage: url })));
+        setSlideImg(
+          postData.slideImageUrls.map((url) => ({ accessImage: url }))
+        );
       }
       if (postData.content) {
         syncImagesWithContent(postData.content);
@@ -125,13 +134,15 @@ const WriteBoard = ({ postData, postId, imgList }) => {
     const parser = new DOMParser();
     const doc = parser.parseFromString(content, "text/html");
     const imgElements = doc.querySelectorAll("img");
-    const imgLinks = Array.from(imgElements).map((img) => img.src).filter((src) => src);
+    const imgLinks = Array.from(imgElements)
+      .map((img) => img.src)
+      .filter((src) => src);
 
     const imageKeys = imgLinks.map((url) =>
-        url.replace(
-            "https://deepdiver-community-files-dev.s3.ap-northeast-2.amazonaws.com/",
-            ""
-        )
+      url.replace(
+        "https://deepdiver-community-files-dev.s3.ap-northeast-2.amazonaws.com/",
+        ""
+      )
     );
 
     console.log("[syncImagesWithContent] Image Links:", imgLinks);
@@ -142,9 +153,11 @@ const WriteBoard = ({ postData, postId, imgList }) => {
       imageUrls: imgLinks,
       imageKeys: [...new Set(imageKeys)],
       thumbnailImageUrl:
-          selectedCategory === 2 && slideImg.length > 0
-              ? slideImg[0]?.accessImage || "posts/thumbnail.png"
-              : imgLinks[0] || "posts/thumbnail.png",
+        selectedCategory === 2 && slideImg.length > 0
+          ? slideImg[0]?.accessImage ||
+            "https://deepdiver-community-files-dev.s3.ap-northeast-2.amazonaws.com/default-image/posts/thumbnail.png"
+          : imgLinks[0] ||
+            "https://deepdiver-community-files-dev.s3.ap-northeast-2.amazonaws.com/default-image/posts/thumbnail.png",
     };
   };
 
@@ -179,18 +192,17 @@ const WriteBoard = ({ postData, postId, imgList }) => {
       // 프로젝트 게시판의 경우 추가 이미지 처리
       if (categoryId === 2) {
         body.slideImageKeys = slideImg.map((img) =>
-            img.accessImage.replace(
-                "https://deepdiver-community-files-dev.s3.ap-northeast-2.amazonaws.com/",
-                ""
-            )
+          img.accessImage.replace(
+            "https://deepdiver-community-files-dev.s3.ap-northeast-2.amazonaws.com/",
+            ""
+          )
         );
         if (postData) {
           await editProjectPost(postId, body);
         } else {
           await createProjectPost(body);
         }
-      }
-      else if (postData) {
+      } else if (postData) {
         await fetchPostChange(body, postId);
       } else {
         await createPost(body);
@@ -212,7 +224,6 @@ const WriteBoard = ({ postData, postId, imgList }) => {
       alert(error.message || "게시글 저장 중 오류가 발생했습니다.");
     }
   };
-
 
   const getDataFromCKEditor = (event, editor) => {
     const data = editor.getData();
@@ -250,88 +261,96 @@ const WriteBoard = ({ postData, postId, imgList }) => {
   }
 
   return (
-      <>
-        {isMobile ? <Navbar $isMobile={isMobile} /> : <Navbar isMainPage={true} />}
-        <Wrap>
-          <WriteWrap>
-            <SmallWrite>{categoryMap[selectedCategory]}</SmallWrite>
-            <Write $isMobile={isMobile}>글 작성</Write>
-          </WriteWrap>
-          <form onSubmit={onSubmit}>
-            <TitleWrap $isMobile={isMobile}>
-              <Titleinput
-                  type="text"
-                  placeholder="제목을 입력하세요"
-                  onChange={handleTitleChange}
-                  value={form.title}
-                  $isMobile={isMobile}
-              />
-              <Categoryselect
-                  onChange={handleCategoryChange}
-                  value={selectedCategory}
-                  $isMobile={isMobile}
-              >
-                <option value={1}>자유 게시판</option>
-                <option value={2}>프로젝트 자랑 게시판</option>
-                <option value={3}>질문 게시판</option>
-                <option value={4}>공지 게시판</option>
-              </Categoryselect>
-            </TitleWrap>
-            {Number(selectedCategory) === 2 && (
-                <ImageUploadCard slideImg={slideImg} setSlideImg={setSlideImg} />
-            )}
+    <>
+      {isMobile ? (
+        <Navbar $isMobile={isMobile} />
+      ) : (
+        <Navbar isMainPage={true} />
+      )}
+      <Wrap>
+        <WriteWrap>
+          <SmallWrite>{categoryMap[selectedCategory]}</SmallWrite>
+          <Write $isMobile={isMobile}>글 작성</Write>
+        </WriteWrap>
+        <form onSubmit={onSubmit}>
+          <TitleWrap $isMobile={isMobile}>
+            <Titleinput
+              type="text"
+              placeholder="제목을 입력하세요"
+              onChange={handleTitleChange}
+              value={form.title}
+              $isMobile={isMobile}
+            />
+            <Categoryselect
+              onChange={handleCategoryChange}
+              value={selectedCategory}
+              $isMobile={isMobile}
+            >
+              <option value={1}>자유 게시판</option>
+              <option value={2}>프로젝트 자랑 게시판</option>
+              <option value={3}>질문 게시판</option>
+              <option value={4}>공지 게시판</option>
+            </Categoryselect>
+          </TitleWrap>
+          {Number(selectedCategory) === 2 && (
+            <ImageUploadCard slideImg={slideImg} setSlideImg={setSlideImg} />
+          )}
 
-            <EditorWrap ref={editorContainerRef}>
-              <Toolbar ref={toolbarContainerRef}></Toolbar>
-              <CKEditor
-                  editor={DecoupledEditor}
-                  config={{
-                    ...editorConfig,
-                    extraPlugins: [uploadPlugin],
-                  }}
-                  data={form.content}
-                  onReady={(editor) => {
-                    const toolbarElement = editor.ui.view.toolbar.element;
-                    if (toolbarContainerRef.current.firstChild !== toolbarElement) {
-                      toolbarContainerRef.current.innerHTML = "";
-                      toolbarContainerRef.current.appendChild(toolbarElement);
-                    }
-                    const editableElement = editor.ui.view.editable.element;
-                    if (!editorContainerRef.current.contains(editableElement)) {
-                      editorContainerRef.current.appendChild(editableElement);
-                    }
-                  }}
-                  onBlur={getDataFromCKEditor}
-              />
-            </EditorWrap>
-            <HashtagWrap>
-              <Hashtag
-                  type="text"
-                  placeholder="#태그입력"
-                  onKeyDown={(e) => handleHashtagChange(e)}
-                  $isMobile={isMobile}
-              />
-              {form.hashtags.map((tag, index) => (
-                  <Hashtags
-                      key={index}
-                      onClick={() => removeHashtag(index)}
-                      $isMobile={isMobile}
-                  >
-                    {tag}
-                  </Hashtags>
-              ))}
-            </HashtagWrap>
-            <SubmitBtnWrap $isMobile={isMobile}>
-              <CancelBtn $isMobile={isMobile} type="button" onClick={() => navigate(-1)}>
-                취 소
-              </CancelBtn>
-              <ConfirmBtn $isMobile={isMobile} type="submit">
-                확 인
-              </ConfirmBtn>
-            </SubmitBtnWrap>
-          </form>
-        </Wrap>
-      </>
+          <EditorWrap ref={editorContainerRef}>
+            <Toolbar ref={toolbarContainerRef}></Toolbar>
+            <CKEditor
+              editor={DecoupledEditor}
+              config={{
+                ...editorConfig,
+                extraPlugins: [uploadPlugin],
+              }}
+              data={form.content}
+              onReady={(editor) => {
+                const toolbarElement = editor.ui.view.toolbar.element;
+                if (toolbarContainerRef.current.firstChild !== toolbarElement) {
+                  toolbarContainerRef.current.innerHTML = "";
+                  toolbarContainerRef.current.appendChild(toolbarElement);
+                }
+                const editableElement = editor.ui.view.editable.element;
+                if (!editorContainerRef.current.contains(editableElement)) {
+                  editorContainerRef.current.appendChild(editableElement);
+                }
+              }}
+              onBlur={getDataFromCKEditor}
+            />
+          </EditorWrap>
+          <HashtagWrap>
+            <Hashtag
+              type="text"
+              placeholder="#태그입력"
+              onKeyDown={(e) => handleHashtagChange(e)}
+              $isMobile={isMobile}
+            />
+            {form.hashtags.map((tag, index) => (
+              <Hashtags
+                key={index}
+                onClick={() => removeHashtag(index)}
+                $isMobile={isMobile}
+              >
+                {tag}
+              </Hashtags>
+            ))}
+          </HashtagWrap>
+          <SubmitBtnWrap $isMobile={isMobile}>
+            <CancelBtn
+              $isMobile={isMobile}
+              type="button"
+              onClick={() => navigate(-1)}
+            >
+              취 소
+            </CancelBtn>
+            <ConfirmBtn $isMobile={isMobile} type="submit">
+              확 인
+            </ConfirmBtn>
+          </SubmitBtnWrap>
+        </form>
+      </Wrap>
+    </>
   );
 };
 
