@@ -12,14 +12,14 @@ import {
     ReplyInputWrap,
     ReplyInput,
     ReplySubmitButton,
-    SomeMoreReplyButton
+    SomeMoreReplyButton,
+    LikeWrap
 } from "./replyComment.style";
 import {
     CommentButton,
     CommnetModalIcon,
     TimeAndModal,
     TimeAndLike,
-    IconWrap,
     LikedButton,
     CommentRight,
     EditCommentInput
@@ -200,7 +200,7 @@ const ReplyComment = ({ commentId, getReplyTime }) => {
                                         </CommnetModalIcon>
                                     )}
                                 </TimeAndModal>
-                                <IconWrap>
+                                <LikeWrap>
                                     <LikedButton onClick={(e) => {
                                         e.preventDefault();
                                         console.log("replyId : ", reply.id);
@@ -212,14 +212,14 @@ const ReplyComment = ({ commentId, getReplyTime }) => {
                                             <FontAwesomeIcon
                                                 icon={solidHeart}
                                                 style={{ color: "#ff1900" }}
-                                                size="2xl"
+                                                size="xl"
                                             />
                                         ) : (
-                                            <FontAwesomeIcon icon={regularHeart} size="2xl" />
+                                            <FontAwesomeIcon icon={regularHeart} size="xl" />
                                         )}
                                     </LikedButton>
                                     <span>{reply.likeCount}</span>
-                                </IconWrap>
+                                </LikeWrap>
                             </TimeAndLike>
                         </CommentRight>
                     </Reply>

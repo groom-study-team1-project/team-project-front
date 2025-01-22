@@ -331,6 +331,7 @@ export const createReplyThunk = (commentId, content, nickname, profileImage) => 
                 id: Date.now(),
                 content: content,
                 memberNickname: nickname,
+                createdAt: Date.now(),
                 memberImageUrl: profileImage,
                 likeCount: 0,
                 likedMe: false,
