@@ -147,15 +147,14 @@ const Comments = () => {
     }
 
     const handleMoreComment = (data, postId, lastCommentId) => {
-        const minReplyId = Math.min(...data.map(d => d.id));
 
         if (lastCommentId) {
             dispatch(fetchCommentList(postId, lastCommentId));
             setVisibleCount(prev => prev + 5);
-        }
 
-        if (lastCommentId === minReplyId) {
-            dispatch(setUIState({ isEndComment : true }));
+            if (data.length < 5) {
+                dispatch(setUIState({ isEndComment : true }));
+            }
         }
     }
 
@@ -185,6 +184,7 @@ const Comments = () => {
                 </CommentInputForm>
                 <CommentHr />
                 {comments?.slice(0, visibleCount).map((commentData, index) => (
+
                     <CommentWrap key={commentData.id}>
                         <CommentBox>
                             <Comment>

@@ -65,7 +65,9 @@ const ReplyComment = ({ commentId, getReplyTime }) => {
 
         try {
             dispatch(setUIState({ isLoading: true }));
-            const success = await dispatch(createReplyThunk(commentId, newReply.trim()));
+            console.log("유저 정보 : ", userInfo);
+            const success = await dispatch(createReplyThunk(commentId, newReply.trim(),
+                userInfo.nickname, userInfo.imageUrl));
             if (success) {
                 setNewReply("");
             }
@@ -76,8 +78,7 @@ const ReplyComment = ({ commentId, getReplyTime }) => {
         }
     };
 
-    const handleEditReply = async (e, commentId) => {
-        e.preventDefault();
+    const handleEditReply = async (commentId) => {
         if (!editReplyContent.trim()) return;
         const success = await dispatch(submitEditCommentThunk(commentId, editReplyContent, false));
         if (success) {
@@ -133,7 +134,7 @@ const ReplyComment = ({ commentId, getReplyTime }) => {
             </ReplyInputForm>
             <RepliesWrap>
                 {replies.slice(0, visibleCount).map((reply, index) => (
-                    <Reply key={reply.id}>
+                    <Reply key={index} index={reply.id}>
                         <ProfileImage src={reply.memberImageUrl} />
                         <ReplyContent>
                             {editReplyId === reply.id ? (
@@ -144,7 +145,7 @@ const ReplyComment = ({ commentId, getReplyTime }) => {
                                             onChange = {(e) => setEditReplyContent(e.target.value)}
                                         />
                                         <CommentButton
-                                            onClick={(e) => handleEditReply(e, reply.id)}
+                                            onClick={(e) => handleEditReply(reply.id)}
                                         >
                                             수정
                                         </CommentButton>
@@ -192,7 +193,7 @@ const ReplyComment = ({ commentId, getReplyTime }) => {
                                                             "삭제할 게시글 아이디 : ",
                                                             reply.id
                                                         );
-                                                        dispatch(deleteCommentThunk(reply.id, false));
+                                                        dispatch(deleteCommentThunk(reply.id, false, reply.id));
                                                     }}
                                                 />
                                             )}

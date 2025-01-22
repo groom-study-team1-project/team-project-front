@@ -45,6 +45,7 @@ export const createComment = async (postId, content) => {
     try {
         const response = await axiosInstance.post(`/api/comments/write`, body);
         if (response.data.status.code === 1400 && response.data) {
+            console.log(response.data);
             return response.data;
         }
 
@@ -122,25 +123,25 @@ export const fetchReplyComment = async (commentId, lastCommentId, accessToken, i
 
     if (lastCommentId) queryParams.append('lastCommentId', lastCommentId);
 
-    const endpoint = queryParams.toString() ?
-        `${baseEndpoint}?${queryParams.toString()}` : baseEndpoint;
+    const endpoint = queryParams.toString()
+        ? `${baseEndpoint}?${queryParams.toString()}`
+        : baseEndpoint;
 
     try {
-        if (isLogin) {
-            const response = await axiosInstance.get(endpoint, {
-                headers: {
-                    'Authorization': 'Bearer ' + accessToken
-                }
-            });
-            console.log(response.data);
-            return response.data;
-        } else {
-            const response = await axiosInstance.get(endpoint);
-            console.log(response.data);
+
+        const response = await axiosInstance.get(endpoint, {
+            headers: {
+                Authorization: isLogin ? `Bearer ${accessToken}` : '',
+            },
+        });
+        if (response.data.status.code === 1401) {
+            console.log("답글 조회 : ", response.data);
             return response.data;
         }
+
     } catch (error) {
-        console.error("답글을 가져오지 못했습니다 : ", error);
+        console.error('답글 가져오기 실패:', error);
+        throw error;
     }
 };
 
@@ -153,6 +154,7 @@ export const createReplyComment = async (commentId, content) => {
     try {
         const response = await axiosInstance.post(`/api/comments/write/reply`, body);
         if (response.data.status.code === 1401) {
+            console.log("답글 생성 :", response.data);
             return response.data;
         }
     } catch (error) {

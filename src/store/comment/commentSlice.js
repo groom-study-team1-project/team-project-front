@@ -46,6 +46,7 @@ const commentSlice = createSlice({
             state.comments = action.payload;
         },
         addComment: (state, action) => {
+            console.log('addComment', action.payload);
             state.comments.unshift(action.payload);
             state.meta.commentCount += 1;
             localStorage.setItem('commentCount', state.meta.commentCount);
@@ -71,34 +72,7 @@ const commentSlice = createSlice({
                 };
             }
         },
-        setReplies: (state, action) => {
-            const { commentId, replies } = action.payload;
-            state.replies[commentId] = replies;
-        },
-        updateReply: (state, action) => {
-            const { id, content } = action.payload;
-            Object.keys(state.replies).forEach(commentId => {
-                const replyIndex = state.replies[commentId].findIndex(reply => reply.id === id);
-                if (replyIndex !== -1) {
-                    state.replies[commentId][replyIndex] = {
-                        ...state.replies[commentId][replyIndex],
-                        content,
-                        modified: true
-                    };
-                }
-            });
-        },
-        removeReply: (state, action) => {
-            Object.keys(state.replies).forEach(commentId => {
-                state.replies[commentId] = state.replies[commentId].filter(
-                    reply => reply.id !== action.payload
-                );
-            });
-            state.meta.commentCount -= 1;
-            localStorage.setItem('commentCount', state.meta.commentCount);
-        },
         toggleLike: (state, action) => {
-            console.log("action : ", action);
             const { commentId, isComment, likeCount } = action.payload;
             if (isComment) {
                 const comment = state.comments.find(c => c.id === commentId);
@@ -119,18 +93,43 @@ const commentSlice = createSlice({
                 });
             }
         },
-        addReplies: (state, action) => {
+        setReplies: (state, action) => {
             const { commentId, replies } = action.payload;
+            state.replies[commentId] = replies;
+        },
+        addReplies: (state, action) => {
+            console.log("답글 액션 : ", action.payload);
+            const { commentId, content } = action.payload;
+
             if (!state.replies[commentId]) {
                 state.replies[commentId] = [];
             }
-            const existingIds = new Set(state.replies[commentId].map(reply => reply.id));
-            const newReplies = replies.filter(reply => !existingIds.has(reply.id));
 
-            state.replies[commentId] = [
-                ...newReplies,
-                ...state.replies[commentId]
-            ];
+            state.replies[commentId].unshift(content);
+            console.log(state.replies[commentId]);
+            state.meta.commentCount += 1;
+            localStorage.setItem('commentCount', state.meta.commentCount);
+        },
+        updateReply: (state, action) => {
+            const { commentId, replyId, content } = action.payload;
+            if (state.replies[commentId]) {
+                const replyIndex = state.replies[commentId].findIndex(reply => reply.id === replyId);
+                if (replyIndex !== -1) {
+                    state.replies[commentId][replyIndex] = {
+                        ...state.replies[commentId][replyIndex],
+                        content,
+                        modified: true
+                    };
+                }
+            }
+        },
+        removeReply: (state, action) => {
+            const { commentId, replyId } = action.payload;
+            if (state.replies[commentId]) {
+                state.replies[commentId] = state.replies[commentId].filter(
+                    reply => reply.id !== replyId
+                );
+            }
         },
         // 에러, 로딩 등의 ui 묶은 것들의 상태를 한번에 관리할 수 있게 함
         setUIState: (state, action) => {
@@ -148,7 +147,20 @@ export const fetchCommentList = (postId, lastCommentId) => async (dispatch, getS
         const response = await fetchComment(postId, lastCommentId, accessToken, isLogin);
         const comments = response.result || [];
 
-        dispatch(lastCommentId ? appendComment(comments) : setComments(comments));
+        if (lastCommentId) {
+            const currentComments = getState().comments.comments;
+            const mergedComments = [
+                ...currentComments,
+                ...comments.filter(newComment =>
+                    !currentComments.some(existingComment => existingComment.id === newComment.id)
+                )
+            ];
+
+            dispatch(setComments(mergedComments));
+        } else {
+            dispatch(setComments(comments));
+        }
+
         dispatch(setUIState({
             isEndComment: comments.length < 5,
             isLoading: false,
@@ -166,12 +178,12 @@ export const createCommentThunk = (postId, content) => async (dispatch) => {
     try {
 
         const response = await createComment(postId, content);
-        console.log('API 응답:', response);
+        console.log('API 응답:', content);
 
-        dispatch(addComment(response.result));
-        dispatch(fetchCommentList(postId));
+        dispatch(addComment(content));
         dispatch(setUIState({
-            successMessage: response.data.message
+            successMessage: response.status.message,
+            isLoading: false
         }));
         return true;
 
@@ -182,16 +194,16 @@ export const createCommentThunk = (postId, content) => async (dispatch) => {
     }
 };
 
-export const deleteCommentThunk = (id, isComment = true) => async (dispatch) => {
+export const deleteCommentThunk = (commentId, isComment = true, replyId=null) => async (dispatch) => {
     try {
-        const response = await deleteComment(id);
+        const response = await deleteComment(commentId);
 
-        if (response.status?.code === 9999) {
-            if (isComment) {
-                dispatch(removeComment(id));
-            } else {
-                dispatch(removeReply(id));
-            }
+        if (isComment) {
+            dispatch(removeComment(commentId));
+        } else {
+            dispatch(removeReply({
+                commentId, replyId
+            }));
         }
 
         dispatch(setUIState({
@@ -220,35 +232,31 @@ export const likeCommentThunk = (commentId, isComment = true) => async (dispatch
     }
 };
 
-export const submitEditCommentThunk = (id, content, isComment = true) => async (dispatch) => {
+export const submitEditCommentThunk = (
+    commentId,
+    content,
+    isComment = true,
+    replyId = null
+) => async (dispatch) => {
     try {
-        const response = await editComment(id, content);
-        if (response.status?.code === 1406) {
-            if (isComment) {
-                dispatch(updateComment({
-                    id,
-                    content: response.result.content
-                }));
-            } else {
-                dispatch(updateReply({
-                    id,
-                    content: response.result.content
-                }));
-            }
+        await editComment(commentId, content);
 
-            dispatch(setUIState({
-                successMessage: response.status.message || '댓글이 수정되었습니다.'
+        if (isComment) {
+            dispatch(updateComment({
+                commentId: commentId,
+                content: content
             }));
-
-            return true;
         } else {
-            dispatch(setUIState({
-                error: response.status?.message || '댓글 수정에 실패했습니다.'
+            dispatch(updateReply({
+                commentId: commentId,
+                content: content,
+                replyId: replyId
             }));
-            return false;
         }
+
+        return true;
     } catch (error) {
-        dispatch(setUIState({ error: error.message || '댓글 삭제 중 오류가 발생했습니다.' }));
+        dispatch(setUIState({ error: error.message || '댓글 수정 중 오류가 발생했습니다.' }));
         return false;
     }
 };
@@ -274,60 +282,64 @@ export const unlikeCommentThunk = (commentId, isComment = true) => async (dispat
 }
 
 export const fetchReplyList = (commentId, lastCommentId) => async (dispatch, getState) => {
-    dispatch(setUIState({ isLoading : true }));
-    const accessToken = getState().user.userInfo.accessToken;
-    const isLogin = getState().user.isLoggedIn;
+    dispatch(setUIState({ isLoading: true }));
     try {
-        const response = await fetchReplyComment(commentId, lastCommentId, accessToken, isLogin);
-
-        const replies = response.result || [];
-
+        const { userInfo, isLoggedIn } = getState().user;
+        const response = await fetchReplyComment(commentId, lastCommentId, userInfo.accessToken, isLoggedIn);
+        console.log(response);
         if (lastCommentId) {
             dispatch(addReplies({
-                commentId,
-                replies: replies
+                commentId: commentId,
+                content: response.result
             }));
         } else {
             dispatch(setReplies({
-                commentId,
-                replies: replies
+                commentId: commentId,
+                replies: response.result
             }));
         }
 
         dispatch(setUIState({
-            isEndComment: replies.length < 5,
+            isEndComment: response.result.length < 5,
             isLoading: false,
-            successMessage: response.status.message
+            successMessage: response.status.message,
         }));
-
     } catch (error) {
         dispatch(setUIState({
             error: error.message,
-            isLoading: false
+            isLoading: false,
         }));
     }
 };
 
-export const createReplyThunk = (commentId, content) => async (dispatch) => {
+export const createReplyThunk = (commentId, content, nickname, profileImage) => async (dispatch) => {
     try {
         const response = await createReplyComment(commentId, content);
-        if (response.status?.code === 9999) {
+        console.log("유저 정보 : ", nickname, profileImage);
+
+        if (response?.status?.code === 1401) {
+            const newReply = {
+                id: Date.now(),
+                content: content,
+                memberNickname: nickname,
+                memberImageUrl: profileImage,
+                likeCount: 0,
+                likedMe: false,
+                author: true
+            };
+
             dispatch(addReplies({
                 commentId: commentId,
-                replies: [response.result]
+                content: newReply
             }));
 
             dispatch(setUIState({
-                successMessage: response.status.message || '답글이 성공적으로 작성되었습니다.'
+                successMessage: response.status.message || "댓글 작성 성공적",
+                isLoading: false
             }));
-
             return true;
-        } else {
-            dispatch(setUIState({
-                error: response.status?.message || '답글 작성에 실패했습니다.'
-            }));
-            return false;
         }
+        return false;
     } catch (error) {
         dispatch(setUIState({
             error: error.message || '답글 작성 중 오류가 발생했습니다.'
