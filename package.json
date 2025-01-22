@@ -2,6 +2,20 @@
   "name": "team-project-front",
   "version": "0.1.0",
   "private": true,
+  "babel": {
+    "env": {
+      "production": {
+        "plugins": [
+          [
+            "transform-remove-console",
+            {
+              "exclude": []
+            }
+          ]
+        ]
+      }
+    }
+  },
   "dependencies": {
     "@ckeditor/ckeditor5-react": "^9.2.0",
     "@fortawesome/free-brands-svg-icons": "^6.7.2",
@@ -32,10 +46,9 @@
     "web-vitals": "^2.1.4"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "cross-env NODE_ENV=production babel src --out-dir dist --copy-files",
-    "dev": "cross-env NODE_ENV=development babel src --out-dir dist --copy-files --watch",
-    "test": "react-scripts test",
+    "start": "craco start",
+    "build": "craco build",
+    "test": "craco test",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {
@@ -62,6 +75,7 @@
     "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
     "@babel/preset-env": "^7.26.0",
     "@babel/preset-react": "^7.26.3",
+    "@craco/craco": "^7.1.0",
     "babel-loader": "^9.2.1",
     "babel-plugin-transform-remove-console": "^6.9.4",
     "cross-env": "^7.0.3",

@@ -6,12 +6,7 @@ export const CustomBody = styled(Body)`
   min-width: 200px;
   gap: 10px;
   padding: 10px 10px 10px 20px;
-  overflow: hidden;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
 `;
-
 export const CustomThumbnail = styled(Thumbnail)`
   flex-grow: 0;
   flex-shrink: 0;
